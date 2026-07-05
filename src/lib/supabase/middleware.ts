@@ -32,12 +32,22 @@ export async function updateSession(request: NextRequest) {
   // ── Route protection ──
   const { pathname } = request.nextUrl;
 
+  // Create a server client with service_role key for bypassing RLS
+  function getRoleQuery() {
+    return createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!,
+      { cookies: { getAll: () => [], setAll: () => {} } }
+    );
+  }
+
   // Protected admin routes
   if (pathname.startsWith('/admin')) {
     if (!user) {
       return NextResponse.redirect(new URL('/auth/login', request.url));
     }
-    const { data: profile } = await supabase
+    const adminSupabase = getRoleQuery();
+    const { data: profile } = await adminSupabase
       .from('profiles')
       .select('role')
       .eq('id', user.id)
@@ -53,7 +63,8 @@ export async function updateSession(request: NextRequest) {
     if (!user) {
       return NextResponse.redirect(new URL('/auth/login', request.url));
     }
-    const { data: profile } = await supabase
+    const adminSupabase = getRoleQuery();
+    const { data: profile } = await adminSupabase
       .from('profiles')
       .select('role')
       .eq('id', user.id)
@@ -66,7 +77,8 @@ export async function updateSession(request: NextRequest) {
 
   // Redirect logged-in users away from auth pages
   if (pathname.startsWith('/auth') && user) {
-    const { data: profile } = await supabase
+    const adminSupabase = getRoleQuery();
+    const { data: profile } = await adminSupabase
       .from('profiles')
       .select('role')
       .eq('id', user.id)
