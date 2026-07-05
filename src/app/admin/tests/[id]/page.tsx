@@ -25,6 +25,7 @@ export default function AdminTestEditPage({ params }: PageProps) {
   const [activeSection, setActiveSection] = useState<string>('');
   const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
+  const [reviewAll, setReviewAll] = useState(false);
   const router = useRouter();
   const supabase = createClient();
 
@@ -122,10 +123,27 @@ export default function AdminTestEditPage({ params }: PageProps) {
     }));
   };
 
+  const handleMarkAllReviewed = async () => {
+    const allQuestions = Object.values(questionsBySection).flat();
+    const unreviewed = allQuestions.filter((q) => !q.reviewed);
+    for (const q of unreviewed) {
+      await supabase.from('questions').update({ reviewed: true }).eq('id', q.id);
+    }
+    // Update local state
+    const updated: Record<string, Question[]> = {};
+    for (const [secId, qs] of Object.entries(questionsBySection)) {
+      updated[secId] = qs.map((q) => ({ ...q, reviewed: true }));
+    }
+    setQuestionsBySection(updated);
+  };
+
   if (loading) return <div className="p-8 text-center text-gray-500">Loading...</div>;
   if (!test) return null;
 
   const activeQuestions = questionsBySection[activeSection] ?? [];
+  const allQuestions = Object.values(questionsBySection).flat();
+  const totalPending = allQuestions.filter((q) => !q.reviewed).length;
+  const allReviewed = allQuestions.length > 0 && totalPending === 0;
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-8">
@@ -143,7 +161,17 @@ export default function AdminTestEditPage({ params }: PageProps) {
 
       {/* Section tabs */}
       <div className="flex gap-2 mb-6 overflow-x-auto">
-        {sections.map((s) => {
+        <button
+          onClick={() => { setReviewAll(!reviewAll); setActiveSection(''); }}
+          className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition ${
+            reviewAll
+              ? 'bg-green-100 text-green-800 border border-green-300'
+              : 'bg-white border border-dashed border-gray-400 text-gray-600 hover:bg-gray-50'
+          }`}
+        >
+          📋 Review All ({allQuestions.length}Q, {totalPending} pending)
+        </button>
+        {!reviewAll && sections.map((s) => {
           const count = (questionsBySection[s.id] ?? []).length;
           return (
             <button
@@ -164,34 +192,39 @@ export default function AdminTestEditPage({ params }: PageProps) {
       {/* Actions bar */}
       <div className="flex items-center justify-between mb-4">
         <p className="text-sm text-gray-500">
-          {activeQuestions.length} of 10 questions
+          {reviewAll
+            ? `${allQuestions.length} total questions`
+            : `${activeQuestions.length} of 10 questions`}
         </p>
         <div className="flex gap-2">
-          <button
-            onClick={handleGenerate}
-            disabled={generating || activeQuestions.length >= 10}
-            className="bg-purple-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-purple-700 disabled:opacity-50 transition"
-          >
-            {generating ? 'Generating...' : '🪄 Generate with AI'}
-          </button>
+          {reviewAll && (
+            <button
+              onClick={handleMarkAllReviewed}
+              disabled={allReviewed}
+              className="bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-700 disabled:opacity-50 transition"
+            >
+              {allReviewed ? '✅ All Reviewed' : '✅ Mark All Reviewed'}
+            </button>
+          )}
+          {!reviewAll && (
+            <button
+              onClick={handleGenerate}
+              disabled={generating || activeQuestions.length >= 10}
+              className="bg-purple-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-purple-700 disabled:opacity-50 transition"
+            >
+              {generating ? 'Generating...' : '🪄 Generate with AI'}
+            </button>
+          )}
         </div>
       </div>
 
       {/* Question list */}
       <div className="space-y-4">
-        {activeQuestions.length === 0 ? (
+        {(reviewAll ? allQuestions : activeQuestions).length === 0 ? (
           <div className="bg-white border rounded-xl p-10 text-center text-gray-400">
             <p className="mb-3">No questions in this section yet.</p>
-            <button
-              onClick={handleGenerate}
-              disabled={generating}
-              className="bg-indigo-600 text-white px-5 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition"
-            >
-              Generate Questions
-            </button>
           </div>
-        ) : (
-          activeQuestions.map((q, idx) => (
+        ) : (reviewAll ? allQuestions : activeQuestions).map((q, idx) => (
             <div key={q.id} className="bg-white border rounded-xl p-5 shadow-sm">
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center gap-2">
