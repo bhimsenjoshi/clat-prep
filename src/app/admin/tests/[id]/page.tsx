@@ -225,10 +225,12 @@ export default function AdminTestEditPage({ params }: PageProps) {
           <div className="bg-white border rounded-xl p-10 text-center text-gray-400">
             <p className="mb-3">No questions in this section yet.</p>
           </div>
-        ) : displayQs.map((q, idx) => (
-            <div key={q.id} className="bg-white border rounded-xl p-5 shadow-sm">
+        ) : displayQs.map((q, idx) => {
+          const section = sections.find((s) => s.id === q.section_id);
+          return <div key={q.id} className="bg-white border rounded-xl p-5 shadow-sm">
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center gap-2">
+                  {reviewAll && section && <span className="text-xs font-medium text-gray-400 mr-1">[{section.name}]</span>}
                   <span className="text-xs font-bold text-gray-400 bg-gray-100 rounded-full w-6 h-6 flex items-center justify-center">
                     {idx + 1}
                   </span>
@@ -239,74 +241,35 @@ export default function AdminTestEditPage({ params }: PageProps) {
                   </span>
                 </div>
                 <div className="flex gap-2">
-                  <button
-                    onClick={() => updateQuestion(q.id, 'reviewed', !q.reviewed)}
-                    className={`text-xs px-2 py-1 rounded ${
-                      q.reviewed ? 'text-yellow-600 hover:bg-yellow-50' : 'text-green-600 hover:bg-green-50'
-                    }`}
-                  >
+                  <button onClick={() => updateQuestion(q.id, 'reviewed', !q.reviewed)}
+                    className={`text-xs px-2 py-1 rounded ${q.reviewed ? 'text-yellow-600 hover:bg-yellow-50' : 'text-green-600 hover:bg-green-50'}`}>
                     {q.reviewed ? 'Mark Unreviewed' : 'Mark Reviewed'}
                   </button>
-                  <button
-                    onClick={() => deleteQuestion(q.id)}
-                    className="text-xs text-red-600 hover:bg-red-50 px-2 py-1 rounded"
-                  >
-                    Delete
-                  </button>
+                  <button onClick={() => deleteQuestion(q.id)}
+                    className="text-xs text-red-600 hover:bg-red-50 px-2 py-1 rounded">Delete</button>
                 </div>
               </div>
-
-              {/* Editable question text */}
-              <textarea
-                value={q.question_text}
+              <textarea value={q.question_text}
                 onChange={(e) => updateQuestion(q.id, 'question_text', e.target.value)}
-                className="w-full border rounded-lg p-2 text-sm mb-3 resize-none focus:outline-none focus:ring-1 focus:ring-indigo-400"
-                rows={2}
-              />
-
-              {/* Options */}
+                className="w-full border rounded-lg p-2 text-sm mb-3 resize-none focus:outline-none focus:ring-1 focus:ring-indigo-400" rows={2} />
               <div className="grid grid-cols-2 gap-2 mb-3">
                 {(['A', 'B', 'C', 'D'] as const).map((opt) => (
-                  <label
-                    key={opt}
-                    className={`flex items-center gap-2 border rounded-lg px-3 py-2 text-sm cursor-pointer ${
-                      q.correct_option === opt
-                        ? 'border-green-400 bg-green-50'
-                        : 'hover:bg-gray-50'
-                    }`}
-                  >
-                    <input
-                      type="radio"
-                      name={`correct_${q.id}`}
-                      checked={q.correct_option === opt}
-                      onChange={() => updateQuestion(q.id, 'correct_option', opt)}
-                      className="accent-green-600"
-                    />
+                  <label key={opt}
+                    className={`flex items-center gap-2 border rounded-lg px-3 py-2 text-sm cursor-pointer ${q.correct_option === opt ? 'border-green-400 bg-green-50' : 'hover:bg-gray-50'}`}>
+                    <input type="radio" name={`correct_${q.id}`} checked={q.correct_option === opt}
+                      onChange={() => updateQuestion(q.id, 'correct_option', opt)} className="accent-green-600" />
                     <span className="font-semibold mr-1">{opt}.</span>
-                    <input
-                      type="text"
-                      value={q.options[opt]}
-                      onChange={(e) => {
-                        const newOpts = { ...q.options, [opt]: e.target.value };
-                        updateQuestion(q.id, 'options', JSON.stringify(newOpts));
-                      }}
-                      className="flex-1 bg-transparent focus:outline-none"
-                    />
+                    <input type="text" value={q.options[opt]}
+                      onChange={(e) => { const newOpts = { ...q.options, [opt]: e.target.value }; updateQuestion(q.id, 'options', JSON.stringify(newOpts)); }}
+                      className="flex-1 bg-transparent focus:outline-none" />
                   </label>
                 ))}
               </div>
-
-              {/* Explanation */}
-              <textarea
-                value={q.explanation ?? ''}
+              <textarea value={q.explanation ?? ''}
                 onChange={(e) => updateQuestion(q.id, 'explanation', e.target.value)}
-                placeholder="Explanation (optional)"
-                className="w-full border rounded-lg p-2 text-xs text-gray-600 resize-none focus:outline-none focus:ring-1 focus:ring-indigo-400"
-                rows={2}
-              />
-            </div>
-          ))
-      )}
+                placeholder="Explanation" className="w-full border rounded-lg p-2 text-xs text-gray-600 resize-none focus:outline-none focus:ring-1 focus:ring-indigo-400" rows={2} />
+            </div>;
+        })}
       </div>
     </div>
   );
