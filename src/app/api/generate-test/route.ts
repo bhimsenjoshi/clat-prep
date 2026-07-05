@@ -1,7 +1,7 @@
+import { createClient } from '@supabase/supabase-js';
+import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 import { generateSection, type SectionName } from '@/lib/ai/generate';
-import { createServerClient } from '@supabase/ssr';
-import { cookies } from 'next/headers';
 
 export async function POST(request: NextRequest) {
   try {
@@ -14,25 +14,29 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Verify admin auth
-    const cookieStore = await cookies();
-    const supabase = createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      {
-        cookies: {
-          getAll: () => cookieStore.getAll(),
-          setAll: () => {},
-        },
-      }
-    );
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+    const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    // Read auth token from custom cookie
+    const cookieStore = await cookies();
+    const accessToken = cookieStore.get('clat-at')?.value;
+
+    if (!accessToken) {
+      return NextResponse.json({ error: 'Unauthorized — no session' }, { status: 401 });
     }
 
-    const { data: profile } = await supabase
+    // Verify the token
+    const supabase = createClient(supabaseUrl, supabaseKey);
+    const { data: { user } } = await supabase.auth.getUser(accessToken);
+
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized — invalid token' }, { status: 401 });
+    }
+
+    // Check admin role via service_key
+    const adminClient = createClient(supabaseUrl, serviceKey);
+    const { data: profile } = await adminClient
       .from('profiles')
       .select('role')
       .eq('id', user.id)
@@ -52,7 +56,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Insert generated questions into DB
+    // Insert generated questions into DB (using service_key to bypass RLS)
     const questionRows = result.questions.map((q) => ({
       section_id: sectionId,
       question_text: q.question_text,
@@ -65,7 +69,7 @@ export async function POST(request: NextRequest) {
       reviewed: false,
     }));
 
-    const { data: inserted, error: dbError } = await supabase
+    const { data: inserted, error: dbError } = await adminClient
       .from('questions')
       .insert(questionRows)
       .select();
