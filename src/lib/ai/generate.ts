@@ -111,14 +111,81 @@ Return ONLY a JSON array of question objects.`,
 
 // ─── Validation ───
 
-function validateQuestion(q: any): boolean {
-  if (!q || typeof q !== 'object') return false;
-  if (typeof q.question_text !== 'string' || q.question_text.length < 10) return false;
-  if (!q.options || typeof q.options !== 'object') return false;
-  if (!['A', 'B', 'C', 'D'].every((k) => typeof q.options[k] === 'string' && q.options[k].length > 0)) return false;
-  if (!['A', 'B', 'C', 'D'].includes(q.correct_option)) return false;
-  if (typeof q.explanation !== 'string' || q.explanation.length < 5) return false;
-  return true;
+/** Normalise a question into our standard format, handling variations in AI output. */
+function normaliseQuestion(q: any): GeneratedQuestion | null {
+  if (!q || typeof q !== 'object') return null;
+
+  // Question text
+  const question_text = typeof q.question_text === 'string' && q.question_text.length >= 5
+    ? q.question_text
+    : (typeof q.question === 'string' ? q.question : null);
+  if (!question_text) return null;
+
+  // Passage
+  const passage = typeof q.passage === 'string' ? q.passage
+    : typeof q.context === 'string' ? q.context : null;
+
+  // Options — handle both {A, B, C, D} and {1, 2, 3, 4} and arrays
+  let options: Record<string, string> = {};
+  if (q.options && typeof q.options === 'object') {
+    const keys = Object.keys(q.options);
+    const alphaKeys = ['A', 'B', 'C', 'D'];
+    // Convert numeric keys to alpha
+    if (keys.every((k) => /^[0-9]+$/.test(k))) {
+      alphaKeys.forEach((letter, i) => {
+        const val = q.options[String(i + 1)] || q.options[i];
+        if (val) options[letter] = String(val);
+      });
+    } else {
+      // Already alpha or some other keys
+      alphaKeys.forEach((letter) => {
+        const val = q.options[letter] !== undefined ? String(q.options[letter]) : null;
+        if (val) options[letter] = val;
+      });
+    }
+  } else if (Array.isArray(q.options)) {
+    // Array format [optA, optB, optC, optD]
+    ['A', 'B', 'C', 'D'].forEach((letter, i) => {
+      if (q.options[i] !== undefined && q.options[i] !== null) {
+        options[letter] = String(q.options[i]);
+      }
+    });
+  }
+  if (Object.keys(options).length < 2) return null;
+
+  // Correct option — handle A, 1, "a", etc.
+  let correct_option: string | null = null;
+  let rawCorrect: any = q.correct_option !== undefined ? q.correct_option : q.answer;
+  if (rawCorrect !== undefined && rawCorrect !== null) {
+    const str = String(rawCorrect).toUpperCase().trim();
+    if (['A', 'B', 'C', 'D'].includes(str)) {
+      correct_option = str;
+    } else if (/^[0-4]$/.test(str)) {
+      correct_option = ['A', 'B', 'C', 'D'][parseInt(str, 10) - 1] || ['A', 'B', 'C', 'D'][parseInt(str, 10)] || 'A';
+    }
+  }
+  if (!correct_option && Object.keys(options).length > 0) {
+    correct_option = Object.keys(options)[0]; // fallback to first option
+  }
+  if (!correct_option) return null;
+
+  // Explanation
+  const explanation = typeof q.explanation === 'string' && q.explanation.length >= 5
+    ? q.explanation
+    : (typeof q.explanation_text === 'string' ? q.explanation_text
+      : 'No explanation provided.');
+
+  // Difficulty
+  const difficulty = ['easy', 'medium', 'hard'].includes(q.difficulty) ? q.difficulty : 'medium';
+
+  return {
+    question_text,
+    passage,
+    options: options as { A: string; B: string; C: string; D: string },
+    correct_option: correct_option as 'A' | 'B' | 'C' | 'D',
+    explanation,
+    difficulty: difficulty as 'easy' | 'medium' | 'hard',
+  };
 }
 
 function parseJSONResponse(raw: string): any[] {
@@ -171,7 +238,7 @@ async function callDeepSeek(
   const questions = parseJSONResponse(raw);
   if (!Array.isArray(questions)) throw new Error('DeepSeek response is not an array');
 
-  return questions.filter(validateQuestion).slice(0, 10);
+  return questions.map(normaliseQuestion).filter(Boolean).slice(0, 10);
 }
 
 // ─── Gemini Fallback ───
@@ -206,7 +273,7 @@ async function callGemini(
 
   const questions = parseJSONResponse(raw);
   if (!Array.isArray(questions)) throw new Error('Gemini response is not an array');
-  return questions.filter(validateQuestion).slice(0, 10);
+  return questions.map(normaliseQuestion).filter(Boolean).slice(0, 10);
 }
 
 // ─── Orchestrator ───
