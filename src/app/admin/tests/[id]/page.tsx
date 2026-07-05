@@ -144,6 +144,7 @@ export default function AdminTestEditPage({ params }: PageProps) {
   const allQuestions = Object.values(questionsBySection).flat();
   const totalPending = allQuestions.filter((q) => !q.reviewed).length;
   const allReviewed = allQuestions.length > 0 && totalPending === 0;
+  const displayQs = reviewAll ? allQuestions : activeQuestions;
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-8">
@@ -220,11 +221,11 @@ export default function AdminTestEditPage({ params }: PageProps) {
 
       {/* Question list */}
       <div className="space-y-4">
-        {(reviewAll ? allQuestions : activeQuestions).length === 0 ? (
+        {displayQs.length === 0 ? (
           <div className="bg-white border rounded-xl p-10 text-center text-gray-400">
             <p className="mb-3">No questions in this section yet.</p>
           </div>
-        ) : (reviewAll ? allQuestions : activeQuestions).map((q, idx) => (
+        ) : displayQs.map((q, idx) => (
             <div key={q.id} className="bg-white border rounded-xl p-5 shadow-sm">
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center gap-2">
@@ -305,7 +306,7 @@ export default function AdminTestEditPage({ params }: PageProps) {
               />
             </div>
           ))
-        )}
+      )}
       </div>
     </div>
   );
