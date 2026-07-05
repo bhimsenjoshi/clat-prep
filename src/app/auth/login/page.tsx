@@ -26,14 +26,28 @@ export default function LoginPage() {
       return;
     }
 
-    // Fetch role to route correctly
+    // Fetch role to route correctly — retry once if profile is null (RLS timing)
+    let role = 'student';
     const { data: profile } = await supabase
       .from('profiles')
       .select('role')
       .eq('id', data.user.id)
       .single();
 
-    router.push(profile?.role === 'admin' ? '/admin/dashboard' : '/student/dashboard');
+    if (profile?.role === 'admin') {
+      role = 'admin';
+    } else if (!profile) {
+      // Retry after a brief delay (auth session may not be propagated yet)
+      await new Promise((r) => setTimeout(r, 500));
+      const { data: retryProfile } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', data.user.id)
+        .single();
+      if (retryProfile?.role === 'admin') role = 'admin';
+    }
+
+    router.push(role === 'admin' ? '/admin/dashboard' : '/student/dashboard');
   };
 
   return (
