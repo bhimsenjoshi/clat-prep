@@ -8,10 +8,14 @@ export default async function AdminStudentsPage() {
   const adminClient = createClient(supabaseUrl, serviceKey);
 
   // All profiles (bypass RLS with service_role key)
-  const { data: students } = await adminClient
+  const { data: students, error: profilesError } = await adminClient
     .from('profiles')
     .select('*')
-    .order('created_at', { ascending: false });
+    .order('created_at', { ascending: false })
+    .limit(100);
+
+  // Debug: log count for verification
+  console.log('[Admin Analytics] Profiles count:', students?.length, 'Error:', profilesError?.message);
 
   // For each student, get their attempt stats
   const studentStats = await Promise.all(
