@@ -238,7 +238,7 @@ async function callDeepSeek(
   const questions = parseJSONResponse(raw);
   if (!Array.isArray(questions)) throw new Error('DeepSeek response is not an array');
 
-  return questions.map(normaliseQuestion).filter(Boolean).slice(0, 10);
+  return questions.map(normaliseQuestion).filter((q): q is GeneratedQuestion => q !== null).slice(0, 10);
 }
 
 // ─── Gemini Fallback ───
@@ -273,7 +273,7 @@ async function callGemini(
 
   const questions = parseJSONResponse(raw);
   if (!Array.isArray(questions)) throw new Error('Gemini response is not an array');
-  return questions.map(normaliseQuestion).filter(Boolean).slice(0, 10);
+  return questions.map(normaliseQuestion).filter((q): q is GeneratedQuestion => q !== null).slice(0, 10);
 }
 
 // ─── Orchestrator ───
