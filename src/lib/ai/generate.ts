@@ -60,62 +60,100 @@ Return ONLY a valid JSON array. Example:
   "difficulty": "medium"
 }]`,
 
-  'Current Affairs': `You are a CLAT Current Affairs / GK question generator for mid-2026.
+  'Current Affairs': `You are a CLAT Current Affairs & GK question generator for mid-2026.
 
-Generate 10 multiple-choice questions testing knowledge of:
-- Major national (India) and international events (2025-2026)
-- Government schemes and policies
-- Appointments, awards, honors
-- Sports, science & technology news
-- Important legal judgments or constitutional developments
+CRITICAL: In CLAT, ALL Current Affairs questions are PASSAGE-BASED (extracts from recent newspapers, press releases, or government statements). There are NO isolated GK questions.
 
-Each question must have exactly 4 options (A, B, C, D) with one correct answer.
-Include a brief explanation. All answers must be factually accurate.
-Return ONLY a JSON array of question objects.`,
+Generate 10 multiple-choice questions spread across 2-3 short passages (150-250 words each).
+Each passage should be an extract from a RECENT news article, government press release, or policy statement on:
+- Indian politics and governance (recent policies, bills, judgments)
+- International relations (treaties, summits, bilateral ties)
+- Sports, science & technology, environment
+- Economy and trade
+
+For each passage, generate 3-5 questions testing:
+- Comprehension of the passage content
+- Related general knowledge (e.g., if passage is about SCO, ask about SCO members/secretariat)
+- Vocabulary or specific terms from the passage
+- Inference based on the passage
+
+Each question must have 4 options (A-D) with one correct answer and an explanation.
+Return ONLY a valid JSON array.`,
 
   'Legal Reasoning': `You are a CLAT Legal Reasoning question generator.
 
-Generate 10 questions following the CLAT "Principle + Facts" format:
-- State a legal principle (from contract law, torts, criminal law, constitutional law, etc.)
-- Present a factual situation
-- Ask the student to select the correct application
+CRITICAL: CLAT Legal Reasoning includes TWO question types:
+1. Passage-based questions about legal texts (excerpts from Supreme Court judgments, constitutional articles, legal commentary) with comprehension/analysis questions
+2. Principle + Facts questions where a legal principle is given and applied to a factual situation
 
-The 'passage' field should contain the principle.
-The 'question_text' should contain the facts and the question.
-Each question must have exactly 4 options (A, B, C, D) with one correct answer.
-Include an explanation of why the correct answer follows from the principle.
+Generate 10 questions across 2-3 of the following formats:
 
-Principles should be simplified but legally accurate for the CLAT level.
-Return ONLY a JSON array of question objects.`,
+FORMAT A (Passage-based, 4-6 questions per passage):
+Provide a passage (250-350 words) that is an extract from:
+- A real Supreme Court judgment (e.g., Manoj Narula v. Union of India)
+- A legal scholar's analysis
+- A constitutional provision commentary
+- A recent landmark judgment
+Followed by questions testing understanding, application, and inference from the passage.
+
+FORMAT B (Principle + Facts, 3-4 questions):
+- 'passage' field contains the legal principle (from contract, torts, criminal, constitutional law)
+- 'question_text' contains facts requiring application of the principle
+- Questions test the ability to apply the principle to new facts
+
+All answers must be legally accurate. Include explanations.
+Return ONLY a valid JSON array.`,
 
   'Logical Reasoning': `You are a CLAT Logical Reasoning question generator.
 
-Generate 10 questions covering:
-- Syllogisms and deductive reasoning
-- Analogies and classification
-- Blood relations and family trees
-- Directions and distance
-- Coding-decoding
-- Logical sequences
-- Argument analysis (strengthen/weaken/assumption/flaw)
+CRITICAL: In CLAT, ALL Logical Reasoning questions are PASSAGE-EMBEDDED. Each set of questions is based on a short passage describing a puzzle, scenario, or logical problem.
 
-Each question must have exactly 4 options (A, B, C, D) with one correct answer.
-The correct answer must be unambiguously correct.
-Include explanations. Make sure all puzzles have unique answers.
-Return ONLY a JSON array of question objects.`,
+Generate 10 questions spread across 2-3 passages covering these CLAT-style patterns:
+
+PATTERN 1 (Word Transformation / Coding puzzles, 4-6 questions per passage):
+A short passage (100-180 words) describing a word puzzle, coding scheme, or letter transformation problem. Questions test step-by-step application of the rules.
+
+PATTERN 2 (Deductive Reasoning / Logic Puzzles, 3-5 questions per passage):
+A passage (200-300 words) describing a scenario with suspects, schedules, or constraints, with multiple facts/conditions. Questions test:
+- Identifying the most likely conclusion
+- Evaluating alibis and constraints
+- Identifying logical flaws in arguments
+- Making inferences from given facts
+
+PATTERN 3 (Blood Relations / Family Trees, 2-3 questions per passage):
+A short passage (130-180 words) describing family relationships using symbols or code. Questions test ability to trace relationships.
+
+PATTERN 4 (Scheduling / Arrangement Puzzles, 5-8 questions per passage):
+A passage (170-220 words) describing a tournament, schedule, or arrangement with specific rules. Questions test ability to apply constraints and deduce the correct arrangement.
+
+All questions must have 4 options (A-D) with one unambiguously correct answer. Include explanations.
+Return ONLY a valid JSON array.`,
 
   'Quantitative Techniques': `You are a CLAT Quantitative Techniques question generator.
 
-Generate 10 questions covering:
-- Arithmetic (percentages, profit-loss, ratios, averages, time-speed-distance)
-- Data interpretation (include data in the 'passage' field)
-- Basic algebra and number systems
-- Probability and permutations (basic level)
+CRITICAL: In CLAT, ALL Quant questions are DATA INTERPRETATION based on tables, charts, or data sets in a passage. There are NO isolated arithmetic questions.
 
-Each question must have exactly 4 options (A, B, C, D) with one correct answer.
-The correct answer must be mathematically verified.
-Include step-by-step explanations.
-Return ONLY a JSON array of question objects.`,
+Generate 10 questions spread across 2 passages, each containing:
+- A data table, chart description, or survey summary (150-250 words describing the data)
+- The 'passage' field must contain BOTH the data description AND any data tables
+
+Data types to use:
+- Health/insurance survey data with percentages and breakdowns (urban/rural, etc.)
+- Energy/industry production data by quarter/source
+- Population/demographic statistics
+- Economic data (budgets, GDP, trade)
+
+Question types (5-6 per data set):
+- Ratio and proportion calculations
+- Percentage change and comparison
+- Finding totals from given percentages
+- "If X grows by Y%..." scenario questions
+- Identifying highest/lowest values
+- Multi-step computation requiring 2-3 operations
+
+Each question must have exactly 4 options (A-D) with one mathematically verified correct answer.
+Include step-by-step numerical explanations showing all working.
+Return ONLY a valid JSON array.`,
 };
 
 // ─── Validation ───
