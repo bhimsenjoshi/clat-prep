@@ -1,92 +1,33 @@
-import { createServerClient } from '@supabase/ssr';
+import { createClient } from '@supabase/supabase-js';
 import { NextResponse, type NextRequest } from 'next/server';
 
 export async function updateSession(request: NextRequest) {
-  let supabaseResponse = NextResponse.next({ request });
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return request.cookies.getAll();
-        },
-        setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value }) =>
-            request.cookies.set(name, value)
-          );
-          supabaseResponse = NextResponse.next({ request });
-          cookiesToSet.forEach(({ name, value, options }) =>
-            supabaseResponse.cookies.set(name, value, options)
-          );
-        },
-      },
-    }
-  );
+  // Read auth tokens from custom cookies (set by browser client after sign-in)
+  const accessToken = request.cookies.get('clat-at')?.value;
+  const refreshToken = request.cookies.get('clat-rt')?.value;
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  let user = null;
+  if (accessToken) {
+    // Verify the token with Supabase
+    const supabase = createClient(supabaseUrl, supabaseKey);
+    const { data } = await supabase.auth.getUser(accessToken);
+    user = data?.user ?? null;
+  }
 
-  // ── Route protection ──
   const { pathname } = request.nextUrl;
 
-  // Create a server client with service_role key for bypassing RLS
-  function getRoleQuery() {
-    return createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!,
-      { cookies: { getAll: () => [], setAll: () => {} } }
-    );
+  // Protected routes → redirect to login if not authenticated
+  if (!user && (pathname.startsWith('/admin') || pathname.startsWith('/student'))) {
+    return NextResponse.redirect(new URL('/auth/login', request.url));
   }
 
-  // Protected admin routes
-  if (pathname.startsWith('/admin')) {
-    if (!user) {
-      return NextResponse.redirect(new URL('/auth/login', request.url));
-    }
-    const adminSupabase = getRoleQuery();
-    const { data: profile } = await adminSupabase
-      .from('profiles')
-      .select('role')
-      .eq('id', user.id)
-      .single();
-
-    if (profile?.role !== 'admin') {
-      return NextResponse.redirect(new URL('/student/dashboard', request.url));
-    }
+  // Auth page + logged in → redirect to admin dashboard
+  if (user && pathname.startsWith('/auth')) {
+    return NextResponse.redirect(new URL('/admin/dashboard', request.url));
   }
 
-  // Protected student routes — also redirect admins to admin dashboard
-  if (pathname.startsWith('/student')) {
-    if (!user) {
-      return NextResponse.redirect(new URL('/auth/login', request.url));
-    }
-    const adminSupabase = getRoleQuery();
-    const { data: profile } = await adminSupabase
-      .from('profiles')
-      .select('role')
-      .eq('id', user.id)
-      .single();
-
-    if (profile?.role === 'admin') {
-      return NextResponse.redirect(new URL('/admin/dashboard', request.url));
-    }
-  }
-
-  // Redirect logged-in users away from auth pages
-  if (pathname.startsWith('/auth') && user) {
-    const adminSupabase = getRoleQuery();
-    const { data: profile } = await adminSupabase
-      .from('profiles')
-      .select('role')
-      .eq('id', user.id)
-      .single();
-
-    const dest = profile?.role === 'admin' ? '/admin/dashboard' : '/student/dashboard';
-    return NextResponse.redirect(new URL(dest, request.url));
-  }
-
-  return supabaseResponse;
+  return NextResponse.next({ request });
 }
