@@ -18,6 +18,7 @@ export default function AdminTestsPage() {
   const [loading, setLoading] = useState(true);
   const [newTitle, setNewTitle] = useState('');
   const [creating, setCreating] = useState(false);
+  const [error, setError] = useState('');
   const router = useRouter();
   const supabase = createClient();
 
@@ -37,29 +38,43 @@ export default function AdminTestsPage() {
   const handleCreate = async () => {
     if (!newTitle.trim()) return;
     setCreating(true);
+    setError('');
 
-    const { data: { user } } = await supabase.auth.getUser();
-    const { data: test } = await supabase
+    const { data: { user }, error: userErr } = await supabase.auth.getUser();
+    if (userErr || !user) {
+      setError('Not authenticated. Try signing out and back in.');
+      setCreating(false);
+      return;
+    }
+
+    const { data: test, error: testErr } = await supabase
       .from('tests')
-      .insert({ title: newTitle, created_by: user?.id })
+      .insert({ title: newTitle, created_by: user.id })
       .select()
       .single();
 
-    if (test) {
-      // Create 5 empty sections
-      const sectionNames = [
-        'English',
-        'Current Affairs',
-        'Legal Reasoning',
-        'Logical Reasoning',
-        'Quantitative Techniques',
-      ];
-      const sections = sectionNames.map((name, i) => ({
-        test_id: test.id,
-        name,
-        order_index: i,
-      }));
-      await supabase.from('sections').insert(sections);
+    if (testErr || !test) {
+      setError(`Failed to create test: ${testErr?.message || 'Unknown error'}`);
+      setCreating(false);
+      return;
+    }
+
+    // Create 5 empty sections
+    const sectionNames = [
+      'English',
+      'Current Affairs',
+      'Legal Reasoning',
+      'Logical Reasoning',
+      'Quantitative Techniques',
+    ];
+    const sections = sectionNames.map((name, i) => ({
+      test_id: test.id,
+      name,
+      order_index: i,
+    }));
+    const { error: secErr } = await supabase.from('sections').insert(sections);
+    if (secErr) {
+      setError(`Test created but sections failed: ${secErr.message}`);
     }
 
     setNewTitle('');
@@ -110,6 +125,7 @@ export default function AdminTestsPage() {
             {creating ? 'Creating...' : 'Create'}
           </button>
         </div>
+        {error && <p className="text-red-600 text-sm mt-3">{error}</p>}
       </div>
 
       {/* Test list */}
