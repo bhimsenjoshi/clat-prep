@@ -1,8 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { createClient } from '@/lib/supabase/client';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 export default function LoginPage() {
@@ -10,25 +8,36 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
-  const supabase = createClient();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError('');
 
-    const { error: authError } = await supabase.auth.signInWithPassword({ email, password });
+    try {
+      const res = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
 
-    if (authError) {
-      setError(authError.message);
+      if (!res.ok) {
+        const data = await res.json();
+        setError(data.error || 'Login failed');
+        setLoading(false);
+        return;
+      }
+
+      const data = await res.json();
+      
+      // The Set-Cookie headers from the response are now in the browser's cookie jar.
+      // Do a full page load to the correct dashboard — this forces the server
+      // and middleware to re-read the auth session from cookies.
+      window.location.href = data.redirectTo;
+    } catch (err: any) {
+      setError(err.message);
       setLoading(false);
-      return;
     }
-
-    // Redirect to a server-side page that will read the session
-    // from cookies and determine the correct dashboard based on role
-    router.push('/auth/redirect');
   };
 
   return (
