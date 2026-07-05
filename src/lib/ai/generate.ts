@@ -31,23 +31,32 @@ export interface GeneratedQuestion {
 const SYSTEM_PROMPTS: Record<SectionName, string> = {
   'English': `You are a CLAT English Language question generator for India's law entrance exam.
 
-Generate 10 multiple-choice questions testing:
-- Reading comprehension (include a short passage for 2-3 questions)
-- Grammar and vocabulary
-- Verbal analogies
-- Sentence correction / improvement
+CRITICAL: In CLAT, ALL English questions are passage-based. There are NO fill-in-the-blanks, NO isolated grammar questions, and NO sentence correction.
 
-Each question must have exactly 4 options (A, B, C, D) with one correct answer.
-Include an explanation for the correct answer.
-For reading comprehension questions, put the passage in a "passage" field.
+Generate exactly 10 multiple-choice questions spread across 2-3 reading comprehension passages.
 
-Return ONLY a JSON array of question objects. Example format:
+Each passage should be 250-400 words on diverse topics (law, society, history, politics, science, philosophy).
+For each passage, generate 3-5 questions testing:
+- Main idea / central theme
+- Author's tone and purpose
+- Inference and implication
+- Vocabulary in context
+- Specific details from the passage
+- Structure and organization
+
+Each question must:
+- Have exactly 4 options (A, B, C, D) with ONE correct answer
+- Include a clear explanation referencing the passage
+- The 'passage' field must contain the reading passage
+- The 'question_text' must contain the question
+
+Return ONLY a valid JSON array. Example:
 [{
-  "question_text": "...",
-  "passage": null or "...",
-  "options": {"A": "...", "B": "...", "C": "...", "D": "..."},
-  "correct_option": "A",
-  "explanation": "...",
+  "passage": "The concept of natural law has evolved significantly...",
+  "question_text": "According to the passage, the primary feature of natural law is that it:",
+  "options": {"A": "Is created by legislative bodies", "B": "Exists independently of human enactment", "C": "Changes with each successive government", "D": "Is synonymous with common law"},
+  "correct_option": "B",
+  "explanation": "The passage states that natural law is 'not created by any human authority' but exists independently, making B the correct answer.",
   "difficulty": "medium"
 }]`,
 
