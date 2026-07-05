@@ -29,131 +29,134 @@ export interface GeneratedQuestion {
 // ─── Sub-agent prompts ───
 
 const SYSTEM_PROMPTS: Record<SectionName, string> = {
-  'English': `You are a CLAT English Language question generator for India's law entrance exam.
+  'English': `You are a CLAT English Language content creator.
 
-CRITICAL: In CLAT, ALL English questions are passage-based. There are NO fill-in-the-blanks, NO isolated grammar questions, and NO sentence correction.
+CRITICAL: CLAT English (Section I) consists ENTIRELY of reading comprehension passages. Each passage is followed by 4-5 questions based SOLELY on that passage.
 
-Generate exactly 10 multiple-choice questions spread across 2-3 reading comprehension passages.
+Generate 2 reading comprehension passages. Each passage should:
+- Be 300-450 words long
+- Cover diverse topics: history, politics, law, philosophy, science, literature (like the CLAT 2026 paper which had passages on Non-Cooperation Movement, Yuval Harari's Sapiens, Freedom House/Tagore, Fukuyama, and George Orwell's Animal Farm)
+- Be drawn from real books, academic texts, or quality journalism
+- Include the source/author at the end
 
-Each passage should be 250-400 words on diverse topics (law, society, history, politics, science, philosophy).
-For each passage, generate 3-5 questions testing:
-- Main idea / central theme
-- Author's tone and purpose
-- Inference and implication
-- Vocabulary in context
-- Specific details from the passage
-- Structure and organization
+For EACH passage, generate 4-5 questions testing:
+- Central theme / main idea (e.g., "The main idea of the passage is:")
+- Inference and implication ("From the passage it is evident that:")
+- Vocabulary in context ("The term 'X' in the passage refers to:")
+- Specific detail / true statements ("Which of the following is true?")
+- Author's tone or purpose ("Which best describes the tone of the passage?")
+- Literary device identification
 
-Each question must:
-- Have exactly 4 options (A, B, C, D) with ONE correct answer
-- Include a clear explanation referencing the passage
-- The 'passage' field must contain the reading passage
-- The 'question_text' must contain the question
+Each question must have exactly 4 options (A-D). 'passage' field = full passage text. 'question_text' = the question.
+Return ONLY a valid JSON array of question objects.
 
-Return ONLY a valid JSON array. Example:
-[{
-  "passage": "The concept of natural law has evolved significantly...",
-  "question_text": "According to the passage, the primary feature of natural law is that it:",
-  "options": {"A": "Is created by legislative bodies", "B": "Exists independently of human enactment", "C": "Changes with each successive government", "D": "Is synonymous with common law"},
-  "correct_option": "B",
-  "explanation": "The passage states that natural law is 'not created by any human authority' but exists independently, making B the correct answer.",
-  "difficulty": "medium"
-}]`,
+IMPORTANT: Every question in your output MUST have the 'passage' field filled with the relevant reading passage text. Questions from the same passage should share identical passage text.`,
 
-  'Current Affairs': `You are a CLAT Current Affairs & GK question generator for mid-2026.
+  'Current Affairs': `You are a CLAT Current Affairs and General Knowledge content creator.
 
-CRITICAL: In CLAT, ALL Current Affairs questions are PASSAGE-BASED (extracts from recent newspapers, press releases, or government statements). There are NO isolated GK questions.
+CRITICAL: CLAT GK consists ENTIRELY of passage-based questions. Each passage is a recent news extract (150-250 words) from a newspaper, press release, or government statement. Questions test comprehension AND related static GK tied to the passage.
 
-Generate 10 multiple-choice questions spread across 2-3 short passages (150-250 words each).
-Each passage should be an extract from a RECENT news article, government press release, or policy statement on:
-- Indian politics and governance (recent policies, bills, judgments)
-- International relations (treaties, summits, bilateral ties)
-- Sports, science & technology, environment
-- Economy and trade
+Generate 2-3 short news-based passages on the MOST IMPORTANT recent events of 2025-2026, selected based on CLAT past trends:
 
-For each passage, generate 3-5 questions testing:
-- Comprehension of the passage content
-- Related general knowledge (e.g., if passage is about SCO, ask about SCO members/secretariat)
-- Vocabulary or specific terms from the passage
-- Inference based on the passage
+HIGH-YIELD 2025-2026 TOPICS (select 2-3):
+- US-India relations (H-1B visas, tariffs, trade deals, Chabahar port)
+- Chess/Indian sports achievements (World Cup wins, Olympiad)
+- Operation Sindoor / India-Pakistan relations after Pahalgam (Art 370, Indus Water Treaty)
+- SCO Summit 2025 (Tianjin), China-India relations
+- Air India / aviation sector developments
+- One Nation policies (GST, One Nation One Election, One Nation One Ration Card)
+- Supreme Court judgments (Tamil Nadu Governor case, same-sex marriage, Manoj Narula)
+- Constitutional and legal developments
+- G20 / India's global role
+- Economy: GDP growth, inflation, budget highlights
+- Digital India, UPI, technology developments
+- Climate change and environment (India's 2070 net-zero target)
+- Space missions (Chandrayaan, Gaganyaan, Aditya-L1)
+- Elections and political developments
 
-Each question must have 4 options (A-D) with one correct answer and an explanation.
-Return ONLY a valid JSON array.`,
+For each passage, generate 4-5 questions:
+- 2-3 questions directly from the passage (comprehension of content)
+- 1-2 questions that are static GK CONNECTED TO THE PASSAGE TOPIC (e.g., passsage on SCO → ask about SCO members, secretariat location; passage on chess → ask about grandmasters, origin of chess)
 
-  'Legal Reasoning': `You are a CLAT Legal Reasoning question generator.
+Return ONLY a valid JSON array. Every question must have a filled 'passage' field.`,
 
-CRITICAL: CLAT Legal Reasoning includes TWO question types:
-1. Passage-based questions about legal texts (excerpts from Supreme Court judgments, constitutional articles, legal commentary) with comprehension/analysis questions
-2. Principle + Facts questions where a legal principle is given and applied to a factual situation
+  'Legal Reasoning': `You are a CLAT Legal Reasoning content creator.
 
-Generate 10 questions across 2-3 of the following formats:
+CRITICAL: CLAT Legal Reasoning consists of two formats as per the 2026 paper:
+FORMAT A (Majority): Passage-based — extracts from real Supreme Court judgments, constitutional commentary, or legal texts followed by comprehension/application questions (5-6 per passage)
+FORMAT B (Minority): Principle + Facts — a legal principle given in the passage, followed by a factual scenario in the question_text
 
-FORMAT A (Passage-based, 4-6 questions per passage):
-Provide a passage (250-350 words) that is an extract from:
-- A real Supreme Court judgment (e.g., Manoj Narula v. Union of India)
-- A legal scholar's analysis
-- A constitutional provision commentary
-- A recent landmark judgment
-Followed by questions testing understanding, application, and inference from the passage.
+Generate 2 passages based on CLAT's high-yield legal topics:
 
-FORMAT B (Principle + Facts, 3-4 questions):
-- 'passage' field contains the legal principle (from contract, torts, criminal, constitutional law)
-- 'question_text' contains facts requiring application of the principle
-- Questions test the ability to apply the principle to new facts
+PASSAGE TOPICS (select 2, based on past trends and current affairs):
+- Constitutional Law: Fundamental Rights (Article 14, 19, 21), Directive Principles, Preamble interpretation, separation of powers
+- Criminal Law: IPC essentials, mens rea, actus reus, strict liability, theft/extortion/robbery distinctions
+- Law of Torts: Negligence, defamation, nuisance, strict liability (Rylands v. Fletcher), vicarious liability
+- Contract Law: Offer/acceptance, consideration, void/voidable contracts, breach and remedies
+- Recent Supreme Court judgments (Tamil Nadu Governor case, same-sex marriage, Manoj Narula v. Union of India, etc.)
 
-All answers must be legally accurate. Include explanations.
-Return ONLY a valid JSON array.`,
+For each passage:
+- FORMAT A passages: Extract from a real or realistic legal text (250-400 words). Follow with 5-6 questions testing: main legal principle, application to new facts, inference from the text, and understanding of legal concepts
+- FORMAT B passages: State a legal principle (in the 'passage' field), then present facts in 'question_text'. Follow with 3-4 application questions
 
-  'Logical Reasoning': `You are a CLAT Logical Reasoning question generator.
+Focus extra on Law of Torts as it's a key CLAT topic.
 
-CRITICAL: In CLAT, ALL Logical Reasoning questions are PASSAGE-EMBEDDED. Each set of questions is based on a short passage describing a puzzle, scenario, or logical problem.
+Adhere STRICTLY to the CLAT pattern. Return ONLY a valid JSON array.
+Every question must have the 'passage' field filled.`,
 
-Generate 10 questions spread across 2-3 passages covering these CLAT-style patterns:
+  'Logical Reasoning': `You are a CLAT Logical Reasoning content creator and expert puzzle designer.
 
-PATTERN 1 (Word Transformation / Coding puzzles, 4-6 questions per passage):
-A short passage (100-180 words) describing a word puzzle, coding scheme, or letter transformation problem. Questions test step-by-step application of the rules.
+CRITICAL: As per CLAT 2026 paper analysis, Logical Reasoning consists of passage-embedded puzzles across these patterns:
 
-PATTERN 2 (Deductive Reasoning / Logic Puzzles, 3-5 questions per passage):
-A passage (200-300 words) describing a scenario with suspects, schedules, or constraints, with multiple facts/conditions. Questions test:
-- Identifying the most likely conclusion
-- Evaluating alibis and constraints
-- Identifying logical flaws in arguments
-- Making inferences from given facts
+PATTERN 1 (Word/Coding puzzles): A short passage describing a word transformation, coding scheme, or letter puzzle with step-by-step rules. 5-6 questions testing application of each rule.
 
-PATTERN 3 (Blood Relations / Family Trees, 2-3 questions per passage):
-A short passage (130-180 words) describing family relationships using symbols or code. Questions test ability to trace relationships.
+PATTERN 2 (Deductive logic puzzles): A passage (250-300 words) describing a scenario with suspects, schedules, or constraints with multiple facts. Questions test: identifying logical conclusions, evaluating alibis/evidence, identifying logical flaws, making inferences.
 
-PATTERN 4 (Scheduling / Arrangement Puzzles, 5-8 questions per passage):
-A passage (170-220 words) describing a tournament, schedule, or arrangement with specific rules. Questions test ability to apply constraints and deduce the correct arrangement.
+PATTERN 3 (Blood Relations/Family Trees): A passage (150-200 words) introducing a symbolic relationship code (e.g., A × B = A is father of B), followed by coded relations. Questions test ability to decode relationships.
 
-All questions must have 4 options (A-D) with one unambiguously correct answer. Include explanations.
-Return ONLY a valid JSON array.`,
+PATTERN 4 (Scheduling/Arrangement puzzles): A passage (180-230 words) describing a tournament, schedule, or arrangement with specific rules/constraints. Questions test constraint application and deductive arrangement.
 
-  'Quantitative Techniques': `You are a CLAT Quantitative Techniques question generator.
+Generate 2 puzzles from these patterns. Each puzzle should have 5-6 questions.
 
-CRITICAL: In CLAT, ALL Quant questions are DATA INTERPRETATION based on tables, charts, or data sets in a passage. There are NO isolated arithmetic questions.
+Ensure:
+- All puzzles have a single, unambiguous answer
+- Questions progress from easy to hard within each puzzle
+- Options (A-D) are plausible but only one is correct
+- Include full explanations referencing the passage constraints
+- Critical reasoning questions (strengthen/weaken/assumption/flaw) are included in deductive scenario patterns
 
-Generate 10 questions spread across 2 passages, each containing:
-- A data table, chart description, or survey summary (150-250 words describing the data)
-- The 'passage' field must contain BOTH the data description AND any data tables
+Return ONLY a valid JSON array. Every question must have the 'passage' field filled.`,
 
-Data types to use:
-- Health/insurance survey data with percentages and breakdowns (urban/rural, etc.)
-- Energy/industry production data by quarter/source
-- Population/demographic statistics
-- Economic data (budgets, GDP, trade)
+  'Quantitative Techniques': `You are a CLAT Quantitative Techniques content creator and senior psychometrician. Generate questions for the CLAT 2027 exam pattern.
 
-Question types (5-6 per data set):
-- Ratio and proportion calculations
-- Percentage change and comparison
-- Finding totals from given percentages
-- "If X grows by Y%..." scenario questions
-- Identifying highest/lowest values
-- Multi-step computation requiring 2-3 operations
+### EXAM GUIDELINES:
+1. Format: 3 distinct passage-based caselets (Data Interpretation)
+2. Generate 12-14 total multiple-choice questions across the 3 caselets (e.g., two caselets with 4 questions each, one caselet with 5 questions)
+3. Difficulty: Class 10-level arithmetic embedded in reading-heavy text (150-250 words per passage)
+4. Each question must have exactly 4 options (A-D) with one correct answer
 
-Each question must have exactly 4 options (A-D) with one mathematically verified correct answer.
-Include step-by-step numerical explanations showing all working.
-Return ONLY a valid JSON array.`,
+### CORE SYLLABUS TOPICS (distribute across caselets):
+- Percentages, Fractions, Successive changes
+- Ratios, Proportions, Mixtures
+- Averages, Profit & Loss, Simple/Compound Interest
+- Time, Speed, Distance / Time & Work
+- Basic Mensuration or Data representation (Tables/Bar graphs described via text)
+
+### CASELE T FORMAT (3 caselets):
+Each caselet must have:
+1. A dense passage (150-250 words) containing realistic numerical data — legal-economic scenarios, survey statistics, government scheme budgets, corporate case disputes, or population census data WITH a data table or chart described in the text
+2. 4-5 questions based ENTIRELY on the passage data
+
+Question style: Avoid direct calculation. Use analytical phrasings:
+- "By what percentage does X exceed Y..."
+- "If a legal dispute reduces the payout by 20%, what is the new ratio..."
+- "What is the ratio of insured adults in Urban to Rural..."
+- "By what percentage is X higher/lower than Y..."
+- "If total grows by X% and shares remain same, how many additional..."
+- Multi-step: "If X is reduced by Y% and the reduction is shifted equally into A and B..."
+
+Return ONLY a valid JSON array. Every question must have the 'passage' field filled with the caselet data.
+Include step-by-step numerical explanations in the 'explanation' field.`,
 };
 
 // ─── Validation ───
@@ -268,7 +271,7 @@ async function callDeepSeek(
         { role: 'user', content: userPrompt },
       ],
       temperature: 0.7,
-      max_tokens: 4096,
+      max_tokens: 8192,
     }),
   });
 
@@ -285,7 +288,7 @@ async function callDeepSeek(
   const questions = parseJSONResponse(raw);
   if (!Array.isArray(questions)) throw new Error('DeepSeek response is not an array');
 
-  return questions.map(normaliseQuestion).filter((q): q is GeneratedQuestion => q !== null).slice(0, 10);
+  return questions.map(normaliseQuestion).filter((q): q is GeneratedQuestion => q !== null).slice(0, 15);
 }
 
 // ─── Gemini Fallback ───
@@ -320,7 +323,7 @@ async function callGemini(
 
   const questions = parseJSONResponse(raw);
   if (!Array.isArray(questions)) throw new Error('Gemini response is not an array');
-  return questions.map(normaliseQuestion).filter((q): q is GeneratedQuestion => q !== null).slice(0, 10);
+  return questions.map(normaliseQuestion).filter((q): q is GeneratedQuestion => q !== null).slice(0, 15);
 }
 
 // ─── Orchestrator ───
