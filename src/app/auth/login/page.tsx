@@ -24,11 +24,11 @@ export default function LoginPage() {
       return;
     }
 
-    // Copy access token from localStorage to a cookie so the server can read it
+    // Copy session tokens to cookie so the server can read them
     await persistSessionToCookie(supabase);
 
-    // Full page load — middleware will see the cookie
-    window.location.href = '/admin/dashboard';
+    // Redirect to a server page that will check the role and send us to the right dashboard
+    window.location.href = '/auth/redirect';
   };
 
   return (
