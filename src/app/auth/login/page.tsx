@@ -26,20 +26,9 @@ export default function LoginPage() {
       return;
     }
 
-    // Use the API endpoint to get role (service_role key bypasses RLS)
-    try {
-      const res = await fetch('/api/me');
-      const data = await res.json();
-      
-      if (data.role === 'admin') {
-        router.push('/admin/dashboard');
-      } else {
-        router.push('/student/dashboard');
-      }
-    } catch {
-      // Fallback: middleware will sort out the routing
-      router.push('/student/dashboard');
-    }
+    // Redirect to a server-side page that will read the session
+    // from cookies and determine the correct dashboard based on role
+    router.push('/auth/redirect');
   };
 
   return (
