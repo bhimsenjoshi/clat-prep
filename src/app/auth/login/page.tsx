@@ -18,7 +18,7 @@ export default function LoginPage() {
     setLoading(true);
     setError('');
 
-    const { data, error: authError } = await supabase.auth.signInWithPassword({ email, password });
+    const { error: authError } = await supabase.auth.signInWithPassword({ email, password });
 
     if (authError) {
       setError(authError.message);
@@ -26,28 +26,20 @@ export default function LoginPage() {
       return;
     }
 
-    // Fetch role to route correctly — retry once if profile is null (RLS timing)
-    let role = 'student';
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('role')
-      .eq('id', data.user.id)
-      .single();
-
-    if (profile?.role === 'admin') {
-      role = 'admin';
-    } else if (!profile) {
-      // Retry after a brief delay (auth session may not be propagated yet)
-      await new Promise((r) => setTimeout(r, 500));
-      const { data: retryProfile } = await supabase
-        .from('profiles')
-        .select('role')
-        .eq('id', data.user.id)
-        .single();
-      if (retryProfile?.role === 'admin') role = 'admin';
+    // Use the API endpoint to get role (service_role key bypasses RLS)
+    try {
+      const res = await fetch('/api/me');
+      const data = await res.json();
+      
+      if (data.role === 'admin') {
+        router.push('/admin/dashboard');
+      } else {
+        router.push('/student/dashboard');
+      }
+    } catch {
+      // Fallback: middleware will sort out the routing
+      router.push('/student/dashboard');
     }
-
-    router.push(role === 'admin' ? '/admin/dashboard' : '/student/dashboard');
   };
 
   return (
