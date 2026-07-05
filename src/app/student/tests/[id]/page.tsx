@@ -21,6 +21,8 @@ export default function TestTakingPage({ params }: TestPageProps) {
   const [timeLeft, setTimeLeft] = useState<number>(120 * 60); // 120 min default
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [resultScores, setResultScores] = useState<{ section: string; score: number; total: number }[]>([]);
+  const [resultTotal, setResultTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const supabase = createClient();
@@ -172,6 +174,14 @@ export default function TestTakingPage({ params }: TestPageProps) {
       })
       .eq('id', attemptId);
 
+    setResultScores(
+      sections.map((s) => ({
+        section: s.name,
+        score: sectionScores[s.name] ?? 0,
+        total: questions.filter((q) => q.section_id === s.id).length,
+      }))
+    );
+    setResultTotal(totalScore);
     setSubmitted(true);
     setSubmitting(false);
   }, [attemptId, questions, sections, answers, submitting]);
@@ -181,27 +191,42 @@ export default function TestTakingPage({ params }: TestPageProps) {
 
   if (submitted) {
     return (
-      <div className="max-w-xl mx-auto px-4 py-16 text-center">
-        <div className="bg-green-50 border border-green-200 rounded-2xl p-10">
+      <div className="max-w-xl mx-auto px-4 py-8">
+        <div className="bg-green-50 border border-green-200 rounded-2xl p-8 mb-6 text-center">
           <p className="text-5xl mb-4">🎉</p>
           <h2 className="text-2xl font-bold mb-2">Test Submitted!</h2>
-          <p className="text-gray-600 mb-6">
-            Your answers have been recorded. Check your dashboard for results.
-          </p>
-          <div className="flex justify-center gap-4">
-            <Link
-              href="/student/dashboard"
-              className="bg-indigo-600 text-white px-6 py-2.5 rounded-lg font-medium hover:bg-indigo-700 transition"
-            >
-              Go to Dashboard
-            </Link>
-            <Link
-              href="/student/tests"
-              className="border px-6 py-2.5 rounded-lg font-medium hover:bg-gray-100 transition"
-            >
-              More Tests
-            </Link>
+          <p className="text-5xl font-bold text-indigo-600 mt-4 mb-1">{resultTotal}%</p>
+          <p className="text-sm text-gray-500">Overall Score</p>
+        </div>
+
+        {/* Section breakdown */}
+        <div className="bg-white border rounded-xl p-6 mb-6 shadow-sm">
+          <h3 className="font-semibold mb-4">Section-wise Breakdown</h3>
+          <div className="space-y-3">
+            {resultScores.map((rs) => (
+              <div key={rs.section} className="flex items-center justify-between">
+                <span className="text-sm font-medium">{rs.section}</span>
+                <span className="text-sm font-bold text-indigo-600">
+                  {rs.score}/{rs.total}
+                </span>
+              </div>
+            ))}
           </div>
+        </div>
+
+        <div className="flex justify-center gap-4">
+          <Link
+            href="/student/dashboard"
+            className="bg-indigo-600 text-white px-6 py-2.5 rounded-lg font-medium hover:bg-indigo-700 transition"
+          >
+            Go to Dashboard
+          </Link>
+          <Link
+            href="/student/tests"
+            className="border px-6 py-2.5 rounded-lg font-medium hover:bg-gray-100 transition"
+          >
+            More Tests
+          </Link>
         </div>
       </div>
     );
