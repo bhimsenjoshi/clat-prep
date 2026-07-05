@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
       correct_option: q.correct_option,
       explanation: q.explanation,
       difficulty: q.difficulty,
-      generated_by: 'gemini',
+      generated_by: result.aiService || 'manual',
       reviewed: false,
     }));
 
