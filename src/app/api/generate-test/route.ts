@@ -56,8 +56,26 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Insert generated questions into DB (using service_key to bypass RLS)
-    const questionRows = result.questions.map((q) => ({
+    // Deduplicate against existing questions in this section
+    const { data: existingQuestions } = await adminClient
+      .from('questions')
+      .select('question_text')
+      .eq('section_id', sectionId);
+
+    const existingTexts = new Set(
+      (existingQuestions ?? []).map((eq: any) =>
+        eq.question_text.toLowerCase().trim().slice(0, 60)
+      )
+    );
+
+    const newQuestions = result.questions.filter(
+      (q) => !existingTexts.has(q.question_text.toLowerCase().trim().slice(0, 60))
+    );
+
+    const skipped = result.questions.length - newQuestions.length;
+
+    // Insert deduplicated questions into DB
+    const questionRows = newQuestions.map((q) => ({
       section_id: sectionId,
       question_text: q.question_text,
       passage: q.passage,
@@ -84,6 +102,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       count: inserted?.length ?? 0,
+      skipped,
       questions: inserted,
     });
   } catch (err: any) {
