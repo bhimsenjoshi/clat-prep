@@ -18,17 +18,39 @@ export async function POST(request: NextRequest) {
     const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
     const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 
-    // Read auth token from custom cookie
+    // Read auth tokens from custom cookies
     const cookieStore = await cookies();
-    const accessToken = cookieStore.get('clat-at')?.value;
+    let accessToken = cookieStore.get('clat-at')?.value;
+    const refreshToken = cookieStore.get('clat-rt')?.value;
 
     if (!accessToken) {
       return NextResponse.json({ error: 'Unauthorized — no session' }, { status: 401 });
     }
 
-    // Verify the token
+    // Verify the token — try refreshing if expired
     const supabase = createClient(supabaseUrl, supabaseKey);
-    const { data: { user } } = await supabase.auth.getUser(accessToken);
+    let { data: { user } } = await supabase.auth.getUser(accessToken);
+
+    if (!user && refreshToken) {
+      // Token expired — try refreshing with the refresh token
+      const { data: refreshed, error: refreshError } = await supabase.auth.refreshSession({ refresh_token: refreshToken });
+      if (!refreshError && refreshed?.session?.access_token) {
+        accessToken = refreshed.session.access_token;
+        // Update cookies for subsequent requests
+        const maxAge = 60 * 60 * 24 * 7;
+        cookieStore.set('clat-at', refreshed.session.access_token, {
+          path: '/', maxAge, secure: true, sameSite: 'lax',
+        });
+        if (refreshed.session.refresh_token) {
+          cookieStore.set('clat-rt', refreshed.session.refresh_token, {
+            path: '/', maxAge, secure: true, sameSite: 'lax',
+          });
+        }
+        // Retry with the refreshed access token
+        const { data: retry } = await supabase.auth.getUser(accessToken);
+        user = retry?.user ?? null;
+      }
+    }
 
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized — invalid token' }, { status: 401 });
