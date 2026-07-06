@@ -129,7 +129,9 @@ export default function TestTakingPage({ params }: TestPageProps) {
 
   // Auto-save time when navigating away from a question
   const recordTimeForCurrentQuestion = useCallback(async () => {
-    const q = sectionQuestions[currentQIdx];
+    const sec = sections[currentSectionIdx];
+    const secQs = questions.filter((q) => q.section_id === sec?.id);
+    const q = secQs[currentQIdx];
     if (!attemptId || !q?.id) return;
     const elapsed = Math.round((Date.now() - questionStartRef.current) / 1000);
     if (elapsed < 1) return;
@@ -154,7 +156,7 @@ export default function TestTakingPage({ params }: TestPageProps) {
 
     // Reset start time
     questionStartRef.current = Date.now();
-  }, [attemptId, sectionQuestions, currentQIdx, questionTimes, answers, supabase]);
+  }, [attemptId, sections, currentSectionIdx, questions, currentQIdx, questionTimes, answers, supabase]);
 
   // Timer countdown
   useEffect(() => {
