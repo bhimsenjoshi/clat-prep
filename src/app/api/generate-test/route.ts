@@ -5,7 +5,7 @@ import { generateSection, type SectionName } from '@/lib/ai/generate';
 
 export async function POST(request: NextRequest) {
   try {
-    const { sectionId, sectionName } = await request.json();
+    const { sectionId, sectionName, maxQuestions } = await request.json();
 
     if (!sectionId || !sectionName) {
       return NextResponse.json(
@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Generate questions via AI
-    const result = await generateSection(sectionName as SectionName);
+    const result = await generateSection(sectionName as SectionName, maxQuestions);
 
     if (!result.success) {
       return NextResponse.json(

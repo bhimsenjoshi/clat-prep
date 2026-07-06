@@ -85,6 +85,9 @@ export default function AdminTestEditPage({ params }: PageProps) {
       return;
     }
 
+    // Only ask for what we still need — never overshoot the target
+    const remaining = Math.min(target.max - existing.length, 12);
+
     try {
       const res = await fetch('/api/generate-test', {
         method: 'POST',
@@ -92,6 +95,7 @@ export default function AdminTestEditPage({ params }: PageProps) {
         body: JSON.stringify({
           sectionId: activeSection,
           sectionName: currentSection.name,
+          maxQuestions: remaining,
         }),
       });
 

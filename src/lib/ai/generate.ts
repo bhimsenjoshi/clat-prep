@@ -386,7 +386,8 @@ export interface GenerationResult {
  * Tries DeepSeek first, falls back to Gemini if configured.
  */
 export async function generateSection(
-  section: SectionName
+  section: SectionName,
+  maxQuestions?: number
 ): Promise<GenerationResult> {
   const sectionTitle: Record<SectionName, string> = {
     'English': 'English Language',
@@ -397,7 +398,8 @@ export async function generateSection(
   };
 
   const target = PER_SECTION_TARGET[section];
-  const userPrompt = `Generate exactly 10-12 CLAT-style multiple-choice questions for the "${sectionTitle[section]}" section. These will be added to a larger test that ultimately has ${target.totalQ} questions across ${target.passages} passages. Follow the section format described earlier. Return a JSON object with a key "questions" containing the array of question objects. Each question must have: question_text, passage, options (A-D), correct_option, explanation, difficulty.`;
+  const batchSize = Math.min(maxQuestions ?? 12, 12);
+  const userPrompt = `Generate exactly ${batchSize} CLAT-style multiple-choice questions for the "${sectionTitle[section]}" section. These will be added to a larger test that ultimately has ${target.totalQ} questions across ${target.passages} passages. Follow the section format described earlier. Return a JSON object with a key "questions" containing the array of question objects. Each question must have: question_text, passage, options (A-D), correct_option, explanation, difficulty.`;
 
   // Try DeepSeek first
   if (process.env.DEEPSEEK_API_KEY) {
