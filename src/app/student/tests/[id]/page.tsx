@@ -129,11 +129,12 @@ export default function TestTakingPage({ params }: TestPageProps) {
 
   // Auto-save time when navigating away from a question
   const recordTimeForCurrentQuestion = useCallback(async () => {
-    if (!attemptId || !currentQuestion?.id) return;
+    const q = sectionQuestions[currentQIdx];
+    if (!attemptId || !q?.id) return;
     const elapsed = Math.round((Date.now() - questionStartRef.current) / 1000);
     if (elapsed < 1) return;
 
-    const qId = currentQuestion.id;
+    const qId = q.id;
     const prevTime = questionTimes[qId] ?? 0;
 
     // Only save if we've spent meaningful time
@@ -153,7 +154,7 @@ export default function TestTakingPage({ params }: TestPageProps) {
 
     // Reset start time
     questionStartRef.current = Date.now();
-  }, [attemptId, currentQuestion, questionTimes, answers, supabase]);
+  }, [attemptId, sectionQuestions, currentQIdx, questionTimes, answers, supabase]);
 
   // Timer countdown
   useEffect(() => {
