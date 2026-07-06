@@ -397,17 +397,15 @@ export default function AdminTestEditPage({ params }: PageProps) {
 
                 {/* Passage area */}
                 {q.passage && (
-                  <div className="px-5 py-3 bg-gradient-to-r from-indigo-50/50 to-purple-50/50 border-b">
-                    <div className="flex items-start gap-2">
-                      <span className="text-xs text-indigo-400 mt-0.5">📄</span>
-                      <div>
-                        <p className="text-[11px] font-medium text-indigo-500 mb-1 uppercase tracking-wider">Passage</p>
-                        <textarea value={q.passage}
-                          onChange={(e) => updateQuestion(q.id, 'passage', e.target.value)}
-                          className="w-full bg-transparent text-xs text-gray-600 leading-relaxed resize-none focus:outline-none focus:ring-0"
-                          rows={2} />
-                      </div>
+                  <div className="px-5 py-4 bg-gradient-to-r from-indigo-50/50 to-purple-50/50 border-b">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-xs text-indigo-400">📄</span>
+                      <p className="text-[11px] font-medium text-indigo-500 uppercase tracking-wider">Passage</p>
                     </div>
+                    <textarea value={q.passage}
+                      onChange={(e) => updateQuestion(q.id, 'passage', e.target.value)}
+                      className="w-full bg-white/80 border border-indigo-100 rounded-lg p-3 text-sm text-gray-700 leading-relaxed resize-y focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-300 transition min-h-[100px]"
+                      rows={5} />
                   </div>
                 )}
 
@@ -415,8 +413,8 @@ export default function AdminTestEditPage({ params }: PageProps) {
                 <div className="px-5 py-3">
                   <textarea value={q.question_text}
                     onChange={(e) => updateQuestion(q.id, 'question_text', e.target.value)}
-                    className="w-full text-sm font-medium text-gray-800 bg-transparent resize-none focus:outline-none focus:ring-0 mb-3"
-                    rows={2} />
+                    className="w-full text-sm font-medium text-gray-800 bg-gray-50 border border-gray-200 rounded-lg p-3 resize-y focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-300 transition mb-3 min-h-[60px]"
+                    rows={3} />
 
                   {/* Options */}
                   <div className="grid grid-cols-2 gap-2">
