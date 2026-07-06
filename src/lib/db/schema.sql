@@ -67,11 +67,12 @@ create table public.attempts (
   id uuid primary key default gen_random_uuid(),
   test_id uuid not null references public.tests(id) on delete cascade,
   student_id uuid not null references public.profiles(id),
+  attempt_number int not null default 1,
   started_at timestamptz not null default now(),
   submitted_at timestamptz,
   total_score numeric,
   section_scores jsonb,             -- {"English": 7, "Legal Reasoning": 5, ...}
-  unique (test_id, student_id)      -- one attempt per test per student
+  unique (test_id, student_id, attempt_number)  -- multiple attempts per test per student
 );
 
 -- 6. Responses (one per question per attempt)
