@@ -36,6 +36,8 @@ export default function AdminTestEditPage({ params }: PageProps) {
   const [generating, setGenerating] = useState(false);
   const [reviewAll, setReviewAll] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
+  const [composing, setComposing] = useState(false);
+  const [composition, setComposition] = useState<Record<string, { picked: number; total: number; questions: Question[] }> | null>(null);
   const router = useRouter();
   const supabase = createClient();
 
@@ -119,6 +121,91 @@ export default function AdminTestEditPage({ params }: PageProps) {
 
     setGenerating(false);
   };
+
+  const handleComposePaper = async () => {
+    if (composing) return;
+    setComposing(true);
+    setComposition(null);
+
+    // Check available questions per section
+    const available: Record<string, { questions: Question[]; target: typeof SECTION_TARGETS[string] }> = {};
+    let minSum = 0;
+    let allEnough = true;
+    const issues: string[] = [];
+
+    for (const s of sections) {
+      const qs = questionsBySection[s.id] ?? [];
+      const target = getTarget(s.name);
+      available[s.name] = { questions: qs, target };
+      minSum += target.min;
+      if (qs.length < target.min) {
+        allEnough = false;
+        issues.push(`${s.name}: need ${target.min}, have ${qs.length}`);
+      }
+    }
+
+    if (!allEnough) {
+      alert(`Not enough questions to compose a full paper:\n${issues.join('\n')}\n\nGenerate more questions first.`);
+      setComposing(false);
+      return;
+    }
+
+    // Algorithm: start at mins, distribute remaining randomly within max bounds
+    const picks: Record<string, number> = {};
+    let remaining = 120;
+
+    // Phase 1: allocate mins
+    for (const s of sections) {
+      picks[s.name] = available[s.name].target.min;
+      remaining -= available[s.name].target.min;
+    }
+
+    // Phase 2: distribute remaining randomly, respecting max per section
+    const shuffled = [...sections].sort(() => Math.random() - 0.5);
+    for (const s of shuffled) {
+      if (remaining <= 0) break;
+      const target = available[s.name].target;
+      const maxExtra = Math.min(target.max - picks[s.name], remaining);
+      if (maxExtra > 0) {
+        const extra = Math.floor(Math.random() * (maxExtra + 1));
+        picks[s.name] += extra;
+        remaining -= extra;
+      }
+    }
+
+    // Phase 3: if still remaining after round-robin, give to sections with headroom
+    if (remaining > 0) {
+      for (const s of shuffled) {
+        if (remaining <= 0) break;
+        const target = available[s.name].target;
+        const headroom = target.max - picks[s.name];
+        if (headroom > 0) {
+          const extra = Math.min(headroom, remaining);
+          picks[s.name] += extra;
+          remaining -= extra;
+        }
+      }
+    }
+
+    // Phase 4: pick random questions from each section
+    const result: Record<string, { picked: number; total: number; questions: Question[] }> = {};
+    for (const s of sections) {
+      const qs = available[s.name].questions;
+      const count = picks[s.name];
+      // Shuffle and pick
+      const shuffledQs = [...qs].sort(() => Math.random() - 0.5);
+      result[s.name] = {
+        picked: count,
+        total: qs.length,
+        questions: shuffledQs.slice(0, count),
+      };
+    }
+
+    setComposition(result);
+    setComposing(false);
+  };
+
+  const clearComposition = () => setComposition(null);
 
   const updateQuestion = async (qId: string, field: string, value: string | boolean) => {
     await supabase.from('questions').update({ [field]: value }).eq('id', qId);
@@ -307,8 +394,57 @@ export default function AdminTestEditPage({ params }: PageProps) {
                 )}
               </button>
             )}
+            {!reviewAll && (
+              <button
+                onClick={handleComposePaper}
+                disabled={composing}
+                className="px-3 py-1.5 rounded-lg text-xs font-medium bg-gradient-to-r from-amber-500 to-orange-600 text-white hover:from-amber-600 hover:to-orange-700 disabled:opacity-40 disabled:cursor-not-allowed transition shadow-sm"
+              >
+                {composing ? (
+                  <span className="flex items-center gap-1">
+                    <span className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    Composing...
+                  </span>
+                ) : (
+                  '🎯 Compose 120Q Paper'
+                )}
+              </button>
+            )}
           </div>
         </div>
+
+        {/* Composition result */}
+        {composition && (
+          <div className="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-xl p-5 mb-6">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <span className="text-lg">🎯</span>
+                <h3 className="font-bold text-gray-900">120-Question Paper Composed</h3>
+              </div>
+              <button onClick={clearComposition}
+                className="text-xs px-2.5 py-1 rounded-md font-medium bg-white border border-amber-200 text-amber-700 hover:bg-amber-50 transition">
+                ✕ Dismiss
+              </button>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-4">
+              {Object.entries(composition).map(([name, info]) => (
+                <div key={name} className="bg-white/80 rounded-lg p-3 border border-amber-100">
+                  <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1">{name}</p>
+                  <p className="text-lg font-bold text-amber-700">{info.picked}</p>
+                  <p className="text-[10px] text-gray-400">of {info.total} available</p>
+                </div>
+              ))}
+            </div>
+            <div className="flex items-center justify-between text-sm">
+              <p className="text-gray-600">
+                <span className="font-bold text-amber-700">{Object.values(composition).reduce((s, i) => s + i.picked, 0)}</span>
+                <span className="mx-1">questions total</span>
+                <span className="text-gray-400">· random selection from each section</span>
+              </p>
+              <p className="text-xs text-gray-400">Click "Dismiss" to re-randomize</p>
+            </div>
+          </div>
+        )}
 
         {/* Question list */}
         <div className="space-y-3">
