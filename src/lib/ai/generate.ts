@@ -6,7 +6,7 @@
  *
  * Architecture:
  *   - Orchestrator fires 5 section sub-agents (parallel)
- *   - Each sub-agent generates 10 questions for its section
+ *   - Each sub-agent generates questions for its section (targeting 120 total)
  *   - Validator checks JSON schema + question quality
  */
 
@@ -26,113 +26,144 @@ export interface GeneratedQuestion {
   difficulty: 'easy' | 'medium' | 'hard';
 }
 
+// ─── Per-section question targets (CLAT 2027 pattern) ───
+
+const PER_SECTION_TARGET: Record<SectionName, { passages: number; totalQ: string; format: string }> = {
+  'English':               { passages: 5, totalQ: '22-26', format: '5 reading comprehension passages (~450 words each), 4-6 questions per passage' },
+  'Current Affairs':       { passages: 6, totalQ: '28-32', format: '6 current-affairs passages (~450 words each), 4-6 questions per passage' },
+  'Legal Reasoning':       { passages: 6, totalQ: '28-32', format: '6 legal passages (~350-450 words each), 4-6 questions per passage' },
+  'Logical Reasoning':     { passages: 5, totalQ: '22-26', format: '5 critical thinking passages (~450 words each), 4-6 questions per passage' },
+  'Quantitative Techniques': { passages: 3, totalQ: '10-14', format: '2-3 data caselets, 4-5 questions per caselet' },
+};
+
 // ─── Sub-agent prompts ───
 
 const SYSTEM_PROMPTS: Record<SectionName, string> = {
   'English': `You are a CLAT English Language content creator.
 
-CRITICAL: CLAT English (Section I) consists ENTIRELY of reading comprehension passages. Each passage is followed by 4-5 questions based SOLELY on that passage.
+CRITICAL: CLAT English (Section I) consists ENTIRELY of reading comprehension passages. Each passage (~450 words) is followed by 4-6 questions based SOLELY on that passage. The section has 4-5 passages and 22-26 questions total (~20% of the paper).
 
-Generate 2 reading comprehension passages. Each passage should:
-- Be 300-450 words long
-- Cover diverse topics: history, politics, law, philosophy, science, literature (like the CLAT 2026 paper which had passages on Non-Cooperation Movement, Yuval Harari's Sapiens, Freedom House/Tagore, Fukuyama, and George Orwell's Animal Farm)
-- Be drawn from real books, academic texts, or quality journalism
-- Include the source/author at the end
+Generate exactly 5 reading comprehension passages. Each passage should:
+- Be ~450 words long (between 400-500 words)
+- Cover diverse topics: history, politics, law, philosophy, science, literature, sociology, economics
+- Be drawn from real books, academic texts, or quality journalism (include source/author at end)
+- Match the sophistication level of CLAT passages (like Non-Cooperation Movement, Yuval Harari's Sapiens, Tagore/Freedom House, Fukuyama, Animal Farm)
 
-For EACH passage, generate 4-5 questions testing:
-- Central theme / main idea (e.g., "The main idea of the passage is:")
-- Inference and implication ("From the passage it is evident that:")
-- Vocabulary in context ("The term 'X' in the passage refers to:")
-- Specific detail / true statements ("Which of the following is true?")
-- Author's tone or purpose ("Which best describes the tone of the passage?")
+For EACH passage, generate 4-6 questions (total 22-26 across all passages) testing:
+- Central theme / main idea — "The main idea of the passage is:"
+- Inference and implication — "From the passage it is evident that:"
+- Vocabulary in context — "The term 'X' in the passage refers to:"
+- Specific detail / true statements — "Which of the following is true according to the passage?"
+- Author's tone or purpose — "Which best describes the tone of the passage?"
 - Literary device identification
 
-Each question must have exactly 4 options (A-D). 'passage' field = full passage text. 'question_text' = the question.
-Return ONLY a valid JSON array of question objects.
-
-IMPORTANT: Every question in your output MUST have the 'passage' field filled with the relevant reading passage text. Questions from the same passage should share identical passage text.`,
+Every question must have the 'passage' field filled with the FULL passage text (questions from the same passage share identical passage text). Each question has exactly 4 options (A-D). Return ONLY a valid JSON array.`,
 
   'Current Affairs': `You are a CLAT Current Affairs and General Knowledge content creator.
 
-CRITICAL: CLAT GK consists ENTIRELY of passage-based questions. Each passage is a recent news extract (150-250 words) from a newspaper, press release, or government statement. Questions test comprehension AND related static GK tied to the passage.
+CRITICAL: CLAT GK/Current Affairs (Section II) consists ENTIRELY of passage-based questions covering recent news, current events, and static GK connected to current topics. The section has 5-6 passages (~450 words each) and 28-32 questions total (~25% of the paper).
 
-Generate 2-3 short news-based passages on the MOST IMPORTANT recent events of 2025-2026, selected based on CLAT past trends:
+Generate exactly 6 news-based passages. Each passage should:
+- Be ~450 words long (between 400-500 words)
+- Be drawn from real news sources, press releases, government statements, or policy documents
+- Include the source/date at the end
 
-HIGH-YIELD 2025-2026 TOPICS (select 2-3):
-- US-India relations (H-1B visas, tariffs, trade deals, Chabahar port)
-- Chess/Indian sports achievements (World Cup wins, Olympiad)
-- Operation Sindoor / India-Pakistan relations after Pahalgam (Art 370, Indus Water Treaty)
-- SCO Summit 2025 (Tianjin), China-India relations
-- Air India / aviation sector developments
-- One Nation policies (GST, One Nation One Election, One Nation One Ration Card)
-- Supreme Court judgments (Tamil Nadu Governor case, same-sex marriage, Manoj Narula)
-- Constitutional and legal developments
-- G20 / India's global role
-- Economy: GDP growth, inflation, budget highlights
-- Digital India, UPI, technology developments
-- Climate change and environment (India's 2070 net-zero target)
-- Space missions (Chandrayaan, Gaganyaan, Aditya-L1)
-- Elections and political developments
+SELECT 6 TOPICS FROM THESE HIGH-YIELD 2025-2026 CATEGORIES (pick the most important ones):
+- US-India relations (H-1B visas, tariffs, trade deals, Chabahar port, defence pacts)
+- Chess/Indian sports achievements (World Cup wins, Olympiad, Asian Games)
+- Operation Sindoor / India-Pakistan relations (Art 370, Indus Water Treaty, cross-border issues)
+- SCO Summit 2025 (Tianjin), China-India relations (border disengagement)
+- Air India / aviation sector developments / privatisation results
+- One Nation policies (GST, One Nation One Election, One Nation One Ration Card, UCC)
+- Supreme Court judgments (Tamil Nadu Governor case, same-sex marriage, Manoj Narula, places of worship)
+- Constitutional and legal developments (new criminal codes — BNSS, BNS, BS Act)
+- G20 / India's global role / Voice of the Global South
+- Economy: GDP growth, inflation trends, budget 2026-27 highlights, Rupee forex
+- Digital India, UPI, CBDC, technology developments (AI regulation, semiconductor policy)
+- Climate change: India's 2070 net-zero target, COP29 outcomes, renewable energy progress
+- Space: Chandrayaan, Gaganyaan timeline, Aditya-L1 results, private space sector
+- Elections 2025-26: state elections, electoral bonds ruling, EVM/VVPAT debates
+- Healthcare: Ayushman Bharat expansion, new medical colleges, pharma exports
+- Defence: indigenous manufacturing, Agni/Prithvi tests, naval modernisation
 
-For each passage, generate 4-5 questions:
+For EACH passage, generate 4-6 questions:
 - 2-3 questions directly from the passage (comprehension of content)
-- 1-2 questions that are static GK CONNECTED TO THE PASSAGE TOPIC (e.g., passsage on SCO → ask about SCO members, secretariat location; passage on chess → ask about grandmasters, origin of chess)
+- 1-2 questions testing static GK CONNECTED TO THE PASSAGE TOPIC (e.g., SCO passage → ask about SCO members, secretariat; chess passage → grandmasters, FIDE history)
+- 1 question testing current-affairs context beyond what's in the passage
 
-Return ONLY a valid JSON array. Every question must have a filled 'passage' field.`,
+Return ONLY a valid JSON array. Every question must have the 'passage' field filled with the relevant passage text.`,
 
   'Legal Reasoning': `You are a CLAT Legal Reasoning content creator.
 
-CRITICAL: CLAT Legal Reasoning consists of two formats as per the 2026 paper:
-FORMAT A (Majority): Passage-based — extracts from real Supreme Court judgments, constitutional commentary, or legal texts followed by comprehension/application questions (5-6 per passage)
-FORMAT B (Minority): Principle + Facts — a legal principle given in the passage, followed by a factual scenario in the question_text
+CRITICAL: CLAT Legal Reasoning (Section III) has 5-6 passages (350-450 words each) and 28-32 questions total (~25% of the paper).
 
-Generate 2 passages based on CLAT's high-yield legal topics:
+FORMAT: As per the CLAT 2027 pattern, ALL questions are passage-based — extracts from real Supreme Court judgments, constitutional commentary, or legal texts followed by comprehension, application, and inference questions.
 
-PASSAGE TOPICS (select 2, based on past trends and current affairs):
-- Constitutional Law: Fundamental Rights (Article 14, 19, 21), Directive Principles, Preamble interpretation, separation of powers
-- Criminal Law: IPC essentials, mens rea, actus reus, strict liability, theft/extortion/robbery distinctions
-- Law of Torts: Negligence, defamation, nuisance, strict liability (Rylands v. Fletcher), vicarious liability
-- Contract Law: Offer/acceptance, consideration, void/voidable contracts, breach and remedies
-- Recent Supreme Court judgments (Tamil Nadu Governor case, same-sex marriage, Manoj Narula v. Union of India, etc.)
+Generate exactly 6 passages. Each passage should:
+- Be 350-450 words long
+- Be an extract from a real or realistic legal source (Supreme Court judgment, constitutional commentary, legal textbook, statute excerpt)
+- Reference actual case names or legal provisions where appropriate
 
-For each passage:
-- FORMAT A passages: Extract from a real or realistic legal text (250-400 words). Follow with 5-6 questions testing: main legal principle, application to new facts, inference from the text, and understanding of legal concepts
-- FORMAT B passages: State a legal principle (in the 'passage' field), then present facts in 'question_text'. Follow with 3-4 application questions
+SELECT 6 TOPICS FROM THESE HIGH-YIELD CATEGORIES (prioritise recent SC judgments):
+- Constitutional Law: Fundamental Rights (Articles 14, 19, 21, 25, 32), Directive Principles (Part IV), Preamble, Basic Structure Doctrine, Separation of Powers
+- Federalism: Centre-State relations, Governor's powers (Tamil Nadu Governor case), Article 356
+- Criminal Law: IPC/BNS essentials, mens rea, actus reus, strict liability, distinctions between theft/extortion/robbery/dacoity, general exceptions
+- Law of Torts: Negligence (duty of care, breach, causation), defamation, nuisance, strict/absolute liability (Rylands v. Fletcher, M.C. Mehta v. UOI), vicarious liability
+- Contract Law: Offer/acceptance, consideration (privity), void/voidable contracts, breach/remedies, indemnity/guarantee
+- Jurisprudence: Schools of law (natural law, positivist, sociological), legal rights, ownership/possession
+- Family Law: Hindu Marriage Act, Muslim personal law, Uniform Civil Code debate, maintenance, adoption
+- Recent landmark judgments: Same-sex Marriage (Supriyo v. UOI), Places of Worship (ASR v. UOI), Manoj Narula v. UOI, Electoral Bonds, Jallikattu / bull-taming ban
 
-Focus extra on Law of Torts as it's a key CLAT topic.
+For EACH passage, generate 4-6 questions testing:
+- Main legal principle established in the passage
+- Application of the principle to new factual scenarios
+- Inference drawn from the text
+- Understanding of related legal concepts and distinctions
+- Ratio decidendi / obiter dicta identification
 
-Adhere STRICTLY to the CLAT pattern. Return ONLY a valid JSON array.
-Every question must have the 'passage' field filled.`,
-
-  'Logical Reasoning': `You are a CLAT Logical Reasoning content creator and expert puzzle designer.
-
-CRITICAL: As per CLAT 2026 paper analysis, Logical Reasoning consists of passage-embedded puzzles across these patterns:
-
-PATTERN 1 (Word/Coding puzzles): A short passage describing a word transformation, coding scheme, or letter puzzle with step-by-step rules. 5-6 questions testing application of each rule.
-
-PATTERN 2 (Deductive logic puzzles): A passage (250-300 words) describing a scenario with suspects, schedules, or constraints with multiple facts. Questions test: identifying logical conclusions, evaluating alibis/evidence, identifying logical flaws, making inferences.
-
-PATTERN 3 (Blood Relations/Family Trees): A passage (150-200 words) introducing a symbolic relationship code (e.g., A × B = A is father of B), followed by coded relations. Questions test ability to decode relationships.
-
-PATTERN 4 (Scheduling/Arrangement puzzles): A passage (180-230 words) describing a tournament, schedule, or arrangement with specific rules/constraints. Questions test constraint application and deductive arrangement.
-
-Generate 2 puzzles from these patterns. Each puzzle should have 5-6 questions.
-
-Ensure:
-- All puzzles have a single, unambiguous answer
-- Questions progress from easy to hard within each puzzle
-- Options (A-D) are plausible but only one is correct
-- Include full explanations referencing the passage constraints
-- Critical reasoning questions (strengthen/weaken/assumption/flaw) are included in deductive scenario patterns
+Ensure a good mix of constitutional law, torts, criminal law, and contracts across the 6 passages. Include questions at varying difficulty levels (easy → medium → hard).
 
 Return ONLY a valid JSON array. Every question must have the 'passage' field filled.`,
 
-  'Quantitative Techniques': `You are a CLAT Quantitative Techniques content creator and senior psychometrician. Generate questions for the CLAT 2027 exam pattern.
+  'Logical Reasoning': `You are a CLAT Logical Reasoning content creator.
+
+CRITICAL: CLAT Logical Reasoning (Section IV) consists ENTIRELY of critical thinking / reasoning passages — NOT puzzles, coding, blood relations, or scheduling. The section has 4-5 passages (~450 words each) and 22-26 questions total (~20% of the paper).
+
+Generate exactly 5 critical thinking passages. Each passage should:
+- Be ~450 words long (between 400-500 words)
+- Present an argument, debate, reasoning chain, or analytical scenario
+- Be drawn from areas like: philosophy of law, ethics, public policy debates, scientific reasoning, economic analysis, or everyday logical puzzles expressed as prose
+- NOT contain coding patterns, blood relations, or mathematical arrangement puzzles
+
+For EACH passage, generate 4-6 questions testing these CRITICAL THINKING skills (this is CLAT pattern, NOT puzzle-based):
+
+1. **Strengthen/Weaken** — "Which of the following, if true, would most strengthen/weaken the argument?"
+2. **Assumptions** — "Which of the following is an assumption made by the author?"
+3. **Inferences / Conclusions** — "Which of the following can be most reasonably inferred from the passage?"
+4. **Flaw in Reasoning** — "Which of the following is a flaw in the argument presented?"
+5. **Parallel Reasoning** — "Which of the following arguments is most similar in structure to the one above?"
+6. **Cause and Effect** — "Which of the following, if true, challenges the causal relationship suggested in the passage?"
+7. **Principle Identification** — "Which of the following principles best justifies the conclusion drawn?"
+8. **Analogies** — "The reasoning in the passage is most analogous to which of the following?"
+
+PASSAGE TOPICS (cover 5 different reasoning domains):
+- Legal/philosophical arguments (nature of justice, rights vs duties, utilitarian vs deontological reasoning)
+- Ethical dilemmas in public policy (privacy vs security, free speech vs hate speech)
+- Scientific/methodological reasoning (inductive vs deductive, correlation vs causation, sample bias)
+- Economic/social reasoning (cost-benefit analysis, trade-offs, incentive effects)
+- Everyday reasoning (analogical arguments, slippery slopes, false dichotomies, appeals to authority)
+
+Example passage structure (DO NOT copy, use as style guide):
+"A recent government proposal suggests that mandatory CCTV installation in all public spaces will reduce crime rates. Proponents argue that visible surveillance deters potential offenders and helps law enforcement identify criminals more quickly. Opponents counter that surveillance infringes on privacy rights, that the correlation between CCTV and crime reduction is weak in many real-world studies, and that the money would be better spent on community policing..."
+
+Return ONLY a valid JSON array. Every question must have the 'passage' field filled.`,
+
+  'Quantitative Techniques': `You are a CLAT Quantitative Techniques content creator. Generate questions for the CLAT 2027 exam pattern.
 
 ### EXAM GUIDELINES:
-1. Format: 3 distinct passage-based caselets (Data Interpretation)
-2. Generate 12-14 total multiple-choice questions across the 3 caselets (e.g., two caselets with 4 questions each, one caselet with 5 questions)
-3. Difficulty: Class 10-level arithmetic embedded in reading-heavy text (150-250 words per passage)
+1. Format: 2-3 passage-based caselets (Data Interpretation)
+2. Generate 10-14 total multiple-choice questions across the caselets (e.g., two caselets with 5 questions each + one caselet with 2-4 questions, or 3 caselets with 4-5 questions each)
+3. Difficulty: Class 10-level arithmetic embedded in reading-heavy text (250-350 words per passage)
 4. Each question must have exactly 4 options (A-D) with one correct answer
 
 ### CORE SYLLABUS TOPICS (distribute across caselets):
@@ -142,9 +173,9 @@ Return ONLY a valid JSON array. Every question must have the 'passage' field fil
 - Time, Speed, Distance / Time & Work
 - Basic Mensuration or Data representation (Tables/Bar graphs described via text)
 
-### CASELE T FORMAT (3 caselets):
+### CASELE T FORMAT (2-3 caselets):
 Each caselet must have:
-1. A dense passage (150-250 words) containing realistic numerical data — legal-economic scenarios, survey statistics, government scheme budgets, corporate case disputes, or population census data WITH a data table or chart described in the text
+1. A dense passage (250-350 words) containing realistic numerical data — legal-economic scenarios, survey statistics, government scheme budgets, corporate case disputes, or population census data WITH a data table or chart described in the text
 2. 4-5 questions based ENTIRELY on the passage data
 
 Question style: Avoid direct calculation. Use analytical phrasings:
@@ -271,7 +302,7 @@ async function callDeepSeek(
         { role: 'user', content: userPrompt },
       ],
       temperature: 0.7,
-      max_tokens: 8192,
+      max_tokens: 16384,
     }),
   });
 
@@ -288,7 +319,7 @@ async function callDeepSeek(
   const questions = parseJSONResponse(raw);
   if (!Array.isArray(questions)) throw new Error('DeepSeek response is not an array');
 
-  return questions.map(normaliseQuestion).filter((q): q is GeneratedQuestion => q !== null).slice(0, 15);
+  return questions.map(normaliseQuestion).filter((q): q is GeneratedQuestion => q !== null).slice(0, 35);
 }
 
 // ─── Gemini Fallback ───
@@ -307,7 +338,7 @@ async function callGemini(
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         contents: [{ role: 'user', parts: [{ text: `${systemPrompt}\n\n${userPrompt}` }] }],
-        generationConfig: { temperature: 0.7, maxOutputTokens: 4096, responseMimeType: 'application/json' },
+        generationConfig: { temperature: 0.7, maxOutputTokens: 8192, responseMimeType: 'application/json' },
       }),
     }
   );
@@ -323,7 +354,7 @@ async function callGemini(
 
   const questions = parseJSONResponse(raw);
   if (!Array.isArray(questions)) throw new Error('Gemini response is not an array');
-  return questions.map(normaliseQuestion).filter((q): q is GeneratedQuestion => q !== null).slice(0, 15);
+  return questions.map(normaliseQuestion).filter((q): q is GeneratedQuestion => q !== null).slice(0, 35);
 }
 
 // ─── Orchestrator ───
@@ -351,7 +382,8 @@ export async function generateSection(
     'Quantitative Techniques': 'Quantitative Techniques',
   };
 
-  const userPrompt = `Generate exactly 10 CLAT-style multiple choice questions for the "${sectionTitle[section]}" section. Ensure variety in difficulty and question types.`;
+  const target = PER_SECTION_TARGET[section];
+  const userPrompt = `Generate exactly ${target.totalQ} CLAT-style multiple-choice questions for the "${sectionTitle[section]}" section. Use the passage-based format described in the system instructions: ${target.format}. Ensure variety in difficulty (easy, medium, hard) and question types. Return ONLY a valid JSON array of question objects.`;
 
   // Try DeepSeek first
   if (process.env.DEEPSEEK_API_KEY) {
