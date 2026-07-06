@@ -41,15 +41,15 @@ const PER_SECTION_TARGET: Record<SectionName, { passages: number; totalQ: string
 const SYSTEM_PROMPTS: Record<SectionName, string> = {
   'English': `You are a CLAT English Language content creator.
 
-CRITICAL: CLAT English (Section I) consists ENTIRELY of reading comprehension passages. Each passage (~450 words) is followed by 4-6 questions based SOLELY on that passage. The section has 4-5 passages and 22-26 questions total (~20% of the paper).
+CRITICAL: CLAT English (Section I) consists ENTIRELY of reading comprehension passages. Each passage (~450 words) is followed by 4-6 questions based SOLELY on that passage. A full section has 4-5 passages and 22-26 questions total (~20% of the paper).
 
-Generate exactly 5 reading comprehension passages. Each passage should:
+Each passage should:
 - Be ~450 words long (between 400-500 words)
 - Cover diverse topics: history, politics, law, philosophy, science, literature, sociology, economics
 - Be drawn from real books, academic texts, or quality journalism (include source/author at end)
 - Match the sophistication level of CLAT passages (like Non-Cooperation Movement, Yuval Harari's Sapiens, Tagore/Freedom House, Fukuyama, Animal Farm)
 
-For EACH passage, generate 4-6 questions (total 22-26 across all passages) testing:
+Questions test (vary across passages):
 - Central theme / main idea — "The main idea of the passage is:"
 - Inference and implication — "From the passage it is evident that:"
 - Vocabulary in context — "The term 'X' in the passage refers to:"
@@ -61,14 +61,14 @@ Every question must have the 'passage' field filled with the FULL passage text (
 
   'Current Affairs': `You are a CLAT Current Affairs and General Knowledge content creator.
 
-CRITICAL: CLAT GK/Current Affairs (Section II) consists ENTIRELY of passage-based questions covering recent news, current events, and static GK connected to current topics. The section has 5-6 passages (~450 words each) and 28-32 questions total (~25% of the paper).
+CRITICAL: CLAT GK/Current Affairs (Section II) consists ENTIRELY of passage-based questions covering recent news, current events, and static GK connected to current topics. A full section has 5-6 passages (~450 words each) and 28-32 questions total (~25% of the paper).
 
-Generate exactly 6 news-based passages. Each passage should:
+Each passage should:
 - Be ~450 words long (between 400-500 words)
 - Be drawn from real news sources, press releases, government statements, or policy documents
 - Include the source/date at the end
 
-SELECT 6 TOPICS FROM THESE HIGH-YIELD 2025-2026 CATEGORIES (pick the most important ones):
+SELECT FROM THESE HIGH-YIELD 2025-2026 CATEGORIES:
 - US-India relations (H-1B visas, tariffs, trade deals, Chabahar port, defence pacts)
 - Chess/Indian sports achievements (World Cup wins, Olympiad, Asian Games)
 - Operation Sindoor / India-Pakistan relations (Art 370, Indus Water Treaty, cross-border issues)
@@ -97,14 +97,14 @@ Return ONLY a valid JSON array. Every question must have the 'passage' field fil
 
 CRITICAL: CLAT Legal Reasoning (Section III) has 5-6 passages (350-450 words each) and 28-32 questions total (~25% of the paper).
 
-FORMAT: As per the CLAT 2027 pattern, ALL questions are passage-based — extracts from real Supreme Court judgments, constitutional commentary, or legal texts followed by comprehension, application, and inference questions.
+FORMAT: ALL questions are passage-based — extracts from real Supreme Court judgments, constitutional commentary, or legal texts followed by comprehension, application, and inference questions.
 
-Generate exactly 6 passages. Each passage should:
+Each passage should:
 - Be 350-450 words long
 - Be an extract from a real or realistic legal source (Supreme Court judgment, constitutional commentary, legal textbook, statute excerpt)
 - Reference actual case names or legal provisions where appropriate
 
-SELECT 6 TOPICS FROM THESE HIGH-YIELD CATEGORIES (prioritise recent SC judgments):
+SELECT FROM THESE HIGH-YIELD CATEGORIES (prioritise recent SC judgments):
 - Constitutional Law: Fundamental Rights (Articles 14, 19, 21, 25, 32), Directive Principles (Part IV), Preamble, Basic Structure Doctrine, Separation of Powers
 - Federalism: Centre-State relations, Governor's powers (Tamil Nadu Governor case), Article 356
 - Criminal Law: IPC/BNS essentials, mens rea, actus reus, strict liability, distinctions between theft/extortion/robbery/dacoity, general exceptions
@@ -127,15 +127,15 @@ Return ONLY a valid JSON array. Every question must have the 'passage' field fil
 
   'Logical Reasoning': `You are a CLAT Logical Reasoning content creator.
 
-CRITICAL: CLAT Logical Reasoning (Section IV) consists ENTIRELY of critical thinking / reasoning passages — NOT puzzles, coding, blood relations, or scheduling. The section has 4-5 passages (~450 words each) and 22-26 questions total (~20% of the paper).
+CRITICAL: CLAT Logical Reasoning (Section IV) consists ENTIRELY of critical thinking / reasoning passages — NOT puzzles, coding, blood relations, or scheduling. A full section has 4-5 passages (~450 words each) and 22-26 questions total (~20% of the paper).
 
-Generate exactly 5 critical thinking passages. Each passage should:
+Each passage should:
 - Be ~450 words long (between 400-500 words)
 - Present an argument, debate, reasoning chain, or analytical scenario
 - Be drawn from areas like: philosophy of law, ethics, public policy debates, scientific reasoning, economic analysis, or everyday logical puzzles expressed as prose
 - NOT contain coding patterns, blood relations, or mathematical arrangement puzzles
 
-For EACH passage, generate 4-6 questions testing these CRITICAL THINKING skills (this is CLAT pattern, NOT puzzle-based):
+Questions test these CRITICAL THINKING skills (not puzzles):
 
 1. **Strengthen/Weaken** — "Which of the following, if true, would most strengthen/weaken the argument?"
 2. **Assumptions** — "Which of the following is an assumption made by the author?"
@@ -173,7 +173,7 @@ Return ONLY a valid JSON array. Every question must have the 'passage' field fil
 - Time, Speed, Distance / Time & Work
 - Basic Mensuration or Data representation (Tables/Bar graphs described via text)
 
-### CASELE T FORMAT (2-3 caselets):
+### CASELE T FORMAT:
 Each caselet must have:
 1. A dense passage (250-350 words) containing realistic numerical data — legal-economic scenarios, survey statistics, government scheme budgets, corporate case disputes, or population census data WITH a data table or chart described in the text
 2. 4-5 questions based ENTIRELY on the passage data
@@ -271,11 +271,24 @@ function normaliseQuestion(q: any): GeneratedQuestion | null {
 
 function parseJSONResponse(raw: string): any[] {
   try {
-    return JSON.parse(raw);
+    const parsed = JSON.parse(raw);
+    // Handle both raw arrays and {"questions": [...]} wrappers
+    if (Array.isArray(parsed)) return parsed;
+    if (parsed && Array.isArray(parsed.questions)) return parsed.questions;
+    if (parsed && Array.isArray(parsed.data)) return parsed.data;
+    if (parsed && Array.isArray(parsed.items)) return parsed.items;
+    throw new Error('Response is not an array or does not contain a questions array');
   } catch {
     // Try extracting JSON array from markdown or text
     const match = raw.match(/\[[\s\S]*\]/);
     if (match) return JSON.parse(match[0]);
+    // Try extracting JSON object
+    const objMatch = raw.match(/\{[\s\S]*\}/);
+    if (objMatch) {
+      const parsed = JSON.parse(objMatch[0]);
+      if (Array.isArray(parsed.questions)) return parsed.questions;
+      if (Array.isArray(parsed.data)) return parsed.data;
+    }
     throw new Error('Could not parse JSON from response');
   }
 }
@@ -303,6 +316,7 @@ async function callDeepSeek(
       ],
       temperature: 0.7,
       max_tokens: 16384,
+      response_format: { type: 'json_object' },
     }),
   });
 
@@ -383,7 +397,7 @@ export async function generateSection(
   };
 
   const target = PER_SECTION_TARGET[section];
-  const userPrompt = `Generate exactly ${target.totalQ} CLAT-style multiple-choice questions for the "${sectionTitle[section]}" section. Use the passage-based format described in the system instructions: ${target.format}. Ensure variety in difficulty (easy, medium, hard) and question types. Return ONLY a valid JSON array of question objects.`;
+  const userPrompt = `Generate exactly 10-12 CLAT-style multiple-choice questions for the "${sectionTitle[section]}" section. These will be added to a larger test that ultimately has ${target.totalQ} questions across ${target.passages} passages. Follow the section format described earlier. Return a JSON object with a key "questions" containing the array of question objects. Each question must have: question_text, passage, options (A-D), correct_option, explanation, difficulty.`;
 
   // Try DeepSeek first
   if (process.env.DEEPSEEK_API_KEY) {
