@@ -1,89 +1,170 @@
 import Link from 'next/link';
 
+const sections = [
+  { name: 'English Language', icon: '📖', desc: 'Reading comprehension with 5 diverse passages, 22-26 questions' },
+  { name: 'Current Affairs / GK', icon: '🌍', desc: '6 news-based passages covering 2025-26 events, 28-32 questions' },
+  { name: 'Legal Reasoning', icon: '⚖️', desc: '6 legal passages from SC judgments & statutes, 28-32 questions' },
+  { name: 'Logical Reasoning', icon: '🧠', desc: '5 critical thinking passages testing arguments & inferences, 22-26 questions' },
+  { name: 'Quantitative Techniques', icon: '📊', desc: '2-3 data caselets with real-world scenarios, 10-14 questions' },
+];
+
+const stats = [
+  { value: '120', label: 'Questions', sub: 'Full CLAT mock paper' },
+  { value: '5', label: 'Sections', sub: 'Complete coverage' },
+  { value: 'AI', label: 'Powered', sub: 'Gemini + DeepSeek' },
+  { value: '24/7', label: 'Available', sub: 'Practice anytime' },
+];
+
 export default function HomePage() {
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="min-h-screen bg-white">
       {/* Nav */}
-      <header className="border-b bg-white">
-        <div className="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
-          <h1 className="text-xl font-bold tracking-tight">CLAT Prep Hub</h1>
-          <div className="flex gap-3 items-center">
-            <Link href="/auth/login" className="text-sm font-medium text-gray-600 hover:text-gray-900">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-lg border-b border-gray-100">
+        <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="text-xl">🎯</span>
+            <span className="text-lg font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+              CLAT Prep Hub
+            </span>
+          </div>
+          <div className="flex items-center gap-4">
+            <Link href="/auth/login" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition">
               Login
             </Link>
             <Link
               href="/auth/signup"
-              className="text-sm font-medium bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition"
+              className="text-sm font-medium bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-5 py-2 rounded-xl hover:from-indigo-700 hover:to-purple-700 transition shadow-sm"
             >
-              Sign Up
+              Get Started Free
             </Link>
           </div>
         </div>
       </header>
 
-      {/* Hero */}
-      <main className="flex-1 max-w-5xl mx-auto px-4 pt-20 pb-16">
-        <div className="text-center space-y-6">
-          <h2 className="text-4xl font-bold tracking-tight sm:text-5xl">
-            Master the{' '}
-            <span className="text-indigo-600">CLAT</span>
-          </h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            AI-powered practice tests across all 5 CLAT sections. Track your progress,
-            compete on the leaderboard, and sharpen your skills with regularly generated mock papers.
-          </p>
-          <div className="flex justify-center gap-4 pt-4">
-            <Link
-              href="/auth/signup"
-              className="bg-indigo-600 text-white px-8 py-3 rounded-lg font-medium hover:bg-indigo-700 transition text-lg"
-            >
-              Get Started
-            </Link>
-            <Link
-              href="/auth/login"
-              className="border px-8 py-3 rounded-lg font-medium hover:bg-gray-100 transition text-lg"
-            >
-              I have an account
-            </Link>
+      <main>
+        {/* Hero */}
+        <section className="relative pt-32 pb-20 overflow-hidden">
+          {/* Background decoration */}
+          <div className="absolute inset-0 -z-10">
+            <div className="absolute top-20 left-1/4 w-72 h-72 bg-indigo-200/30 rounded-full blur-3xl" />
+            <div className="absolute bottom-10 right-1/4 w-96 h-96 bg-purple-200/20 rounded-full blur-3xl" />
           </div>
-        </div>
 
-        {/* Feature cards */}
-        <div className="grid md:grid-cols-3 gap-6 mt-20">
-          {[
-            { title: 'AI-Generated Tests', desc: 'Fresh questions generated for every section using Gemini AI — never the same test twice.' },
-            { title: 'Detailed Analytics', desc: 'Section-wise scores, accuracy trends, and time tracking across every attempt.' },
-            { title: 'Leaderboard', desc: 'See how you stack up against other students per test and all-time.' },
-          ].map((f) => (
-            <div key={f.title} className="bg-white border rounded-xl p-6 shadow-sm">
-              <h3 className="font-semibold text-lg mb-2">{f.title}</h3>
-              <p className="text-gray-600 text-sm">{f.desc}</p>
+          <div className="max-w-5xl mx-auto px-4 text-center">
+            <div className="inline-flex items-center gap-2 bg-indigo-50 border border-indigo-100 rounded-full px-4 py-1.5 text-sm text-indigo-700 font-medium mb-8">
+              <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+              AI-Powered CLAT Preparation
             </div>
-          ))}
-        </div>
-
-        {/* Section breakdown */}
-        <div className="mt-20">
-          <h3 className="text-2xl font-bold text-center mb-8">5 CLAT Sections Covered</h3>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-4">
-            {[
-              'English Language',
-              'Current Affairs / GK',
-              'Legal Reasoning',
-              'Logical Reasoning',
-              'Quantitative Techniques',
-            ].map((s) => (
-              <div key={s} className="bg-indigo-50 border border-indigo-100 rounded-xl p-4 text-center text-sm font-medium text-indigo-800">
-                {s}
-              </div>
-            ))}
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.1] mb-6">
+              Master the{' '}
+              <span className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 bg-clip-text text-transparent">
+                CLAT
+              </span>
+              <br />
+              with AI-Generated Tests
+            </h1>
+            <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto mb-10 leading-relaxed">
+              Practice with fresh, exam-accurate questions generated by AI across all 5 CLAT sections.
+              Track your progress, compete on leaderboards, and ace your law entrance.
+            </p>
+            <div className="flex justify-center gap-4">
+              <Link
+                href="/auth/signup"
+                className="bg-gray-900 text-white px-8 py-3.5 rounded-xl font-semibold hover:bg-gray-800 transition text-lg shadow-sm"
+              >
+                Start Practicing Free
+              </Link>
+              <Link
+                href="/auth/login"
+                className="border-2 border-gray-200 px-8 py-3.5 rounded-xl font-semibold hover:bg-gray-50 transition text-lg"
+              >
+                Sign In
+              </Link>
+            </div>
           </div>
-        </div>
+        </section>
+
+        {/* Stats bar */}
+        <section className="border-y border-gray-100 bg-gray-50/50">
+          <div className="max-w-5xl mx-auto px-4 py-10">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+              {stats.map((s) => (
+                <div key={s.label} className="text-center">
+                  <p className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                    {s.value}
+                  </p>
+                  <p className="text-sm font-semibold text-gray-800 mt-1">{s.label}</p>
+                  <p className="text-xs text-gray-400 mt-0.5">{s.sub}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Sections breakdown */}
+        <section className="py-20">
+          <div className="max-w-5xl mx-auto px-4">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold text-gray-900 mb-3">CLAT 2027 Pattern</h2>
+              <p className="text-gray-500 max-w-xl mx-auto">
+                Every section follows the official CLAT 2027 format — passage-based questions with accurate weightage distribution.
+              </p>
+            </div>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {sections.map((s) => (
+                <div key={s.name} className="group bg-white border border-gray-200 rounded-xl p-5 hover:shadow-md hover:border-indigo-200 transition-all duration-200">
+                  <div className="flex items-center gap-3 mb-3">
+                    <span className="text-2xl">{s.icon}</span>
+                    <h3 className="font-semibold text-gray-900 group-hover:text-indigo-600 transition-colors">
+                      {s.name}
+                    </h3>
+                  </div>
+                  <p className="text-sm text-gray-500 leading-relaxed">{s.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* How it works */}
+        <section className="py-20 bg-gradient-to-b from-gray-50 to-white border-t border-gray-100">
+          <div className="max-w-5xl mx-auto px-4">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold text-gray-900 mb-3">How It Works</h2>
+              <p className="text-gray-500 max-w-xl mx-auto">
+                Three simple steps to start your CLAT preparation.
+              </p>
+            </div>
+            <div className="grid md:grid-cols-3 gap-8">
+              {[
+                { step: '01', title: 'Create Account', desc: 'Sign up as a student in seconds. No credit card needed.', color: 'from-indigo-500 to-indigo-600' },
+                { step: '02', title: 'Take Tests', desc: 'Attempt AI-generated mock papers. Each test is unique, covering all 5 CLAT sections.', color: 'from-purple-500 to-purple-600' },
+                { step: '03', title: 'Track Progress', desc: 'Review section-wise scores, track improvements, and compete on the leaderboard.', color: 'from-pink-500 to-pink-600' },
+              ].map((item) => (
+                <div key={item.step} className="text-center">
+                  <div className={`w-14 h-14 mx-auto mb-4 rounded-2xl bg-gradient-to-br ${item.color} flex items-center justify-center shadow-sm`}>
+                    <span className="text-white font-bold">{item.step}</span>
+                  </div>
+                  <h3 className="font-semibold text-gray-900 mb-2">{item.title}</h3>
+                  <p className="text-sm text-gray-500 leading-relaxed">{item.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
       </main>
 
       {/* Footer */}
-      <footer className="border-t bg-white py-6 text-center text-sm text-gray-500">
-        CLAT Prep Hub &mdash; Built for serious preparation.
+      <footer className="border-t bg-white py-10">
+        <div className="max-w-5xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-2">
+            <span className="text-lg">🎯</span>
+            <span className="text-sm font-semibold text-gray-800">CLAT Prep Hub</span>
+          </div>
+          <p className="text-sm text-gray-400">
+            Built with AI for serious CLAT preparation. &mdash; {new Date().getFullYear()}
+          </p>
+        </div>
       </footer>
     </div>
   );
