@@ -9,6 +9,8 @@ export default function AdminDashboard() {
   const [stats, setStats] = useState({ tests: 0, users: 0, attempts: 0 });
   const [loading, setLoading] = useState(true);
   const [recentStudents, setRecentStudents] = useState<any[]>([]);
+  const [generating, setGenerating] = useState(false);
+  const [genResult, setGenResult] = useState<{ ok: boolean; msg: string } | null>(null);
   const router = useRouter();
   const supabase = createClient();
 
@@ -50,6 +52,23 @@ export default function AdminDashboard() {
   }, []);
 
   if (loading) return <div className="p-8 text-center text-gray-500">Loading...</div>;
+
+  const handleGenerateDaily = async () => {
+    setGenerating(true);
+    setGenResult(null);
+    try {
+      const res = await fetch('/api/admin/generate-daily', { method: 'POST' });
+      const data = await res.json();
+      if (res.ok) {
+        setGenResult({ ok: true, msg: data.message || `✅ ${data.total_generated} questions generated!` });
+      } else {
+        setGenResult({ ok: false, msg: data.error || 'Failed to generate' });
+      }
+    } catch {
+      setGenResult({ ok: false, msg: 'Network error' });
+    }
+    setGenerating(false);
+  };
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-8">
@@ -112,6 +131,14 @@ export default function AdminDashboard() {
             <p className="text-lg font-semibold text-indigo-600 group-hover:text-indigo-700">+ Create New Test</p>
             <p className="text-sm text-gray-500 mt-1">Generate with AI or manually</p>
           </Link>
+          <button onClick={handleGenerateDaily} disabled={generating}
+            className="border-2 border-dashed border-emerald-200 rounded-xl p-6 text-center hover:bg-emerald-50 transition group disabled:opacity-50 disabled:cursor-not-allowed">
+            <p className="text-lg font-semibold text-emerald-600">{generating ? '⏳ Generating...' : '📅 Generate Daily Questions'}</p>
+            <p className="text-sm text-gray-500 mt-1">25 new questions (5 per section) via DeepSeek</p>
+            {genResult && (
+              <p className={`text-xs mt-2 ${genResult.ok ? 'text-emerald-600' : 'text-red-500'}`}>{genResult.msg}</p>
+            )}
+          </button>
           <Link href="/admin/students" className="border-2 border-dashed border-gray-200 rounded-xl p-6 text-center hover:bg-gray-50 transition">
             <p className="text-lg font-semibold text-gray-700">View Student Analytics</p>
             <p className="text-sm text-gray-500 mt-1">See performance across all tests</p>
