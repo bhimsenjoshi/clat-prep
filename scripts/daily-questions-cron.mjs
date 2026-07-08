@@ -46,29 +46,61 @@ async function callDeepSeek(systemPrompt, userPrompt) {
   const raw = data?.choices?.[0]?.message?.content;
   if (!raw) throw new Error('Empty DeepSeek response');
 
-  const parsed = JSON.parse(raw);
+  // Robust JSON parsing — try to extract valid JSON from the raw text
+  let parsed;
+  try {
+    parsed = JSON.parse(raw);
+  } catch {
+    // Attempt to find a valid JSON object/array in the response
+    const jsonMatch = raw.match(/\{[\s\S]*\}/);
+    if (jsonMatch) {
+      try { parsed = JSON.parse(jsonMatch[0]); } catch {
+        throw new Error('Failed to parse AI response as JSON');
+      }
+    } else {
+      throw new Error('Failed to parse AI response as JSON');
+    }
+  }
+
   const questions = parsed.questions || (Array.isArray(parsed) ? parsed : [parsed]);
   return questions.map(normalise).filter(Boolean);
 }
 
 function normalise(q) {
-  if (!q?.question_text || !q?.options || !q?.correct_option) return null;
-
+  // Accept both naming conventions from the AI
+  let question_text = q.question_text || q.question;
+  const correct_answer = q.correct_option || q.correct_answer || q.correctAnswer;
   let options = q.options;
-  if (typeof options === 'string') {
-    try { options = JSON.parse(options); } catch { return null; }
+
+  // Some AI responses embed the question in passage; use passage as fallback
+  if (!question_text && q.passage) {
+    // Take first sentence of passage as question text if separate question is missing
+    const sentences = q.passage.match(/[^.!?]+[.!?]/g);
+    question_text = (sentences && sentences[0]) ? sentences[0].trim() : q.passage.substring(0, 150);
+  }
+
+  if (!question_text || !options || !correct_answer) return null;
+
+  let parsedOptions = options;
+  if (typeof parsedOptions === 'string') {
+    try { parsedOptions = JSON.parse(parsedOptions); } catch { return null; }
+  }
+  // Convert array options to A/B/C/D object
+  if (Array.isArray(parsedOptions)) {
+    const labels = ['A', 'B', 'C', 'D', 'E'];
+    const obj = {};
+    parsedOptions.forEach((opt, i) => { if (i < labels.length) obj[labels[i]] = String(opt); });
+    parsedOptions = obj;
   }
 
   return {
-    question_text: q.question_text,
+    question_text,
     passage: q.passage || null,
-    options: typeof options === 'object' ? options : {},
-    correct_option: String(q.correct_option),
+    options: typeof parsedOptions === 'object' ? parsedOptions : {},
+    correct_option: String(correct_answer),
     explanation: q.explanation || null,
-    difficulty: q.difficulty || 'medium',
+    difficulty: (q.difficulty || 'medium').toLowerCase(),
     source: 'daily',
-    generated_by: 'deepseek',
-    reviewed: false,
   };
 }
 
