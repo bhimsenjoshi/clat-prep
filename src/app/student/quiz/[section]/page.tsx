@@ -216,6 +216,17 @@ export default function QuizPage() {
         .from('quiz_sessions')
         .update({ ended_at: new Date().toISOString() })
         .eq('id', sessionId);
+
+      // Send result to WhatsApp (async — don't block navigation)
+      fetch('/api/whatsapp/send-quiz-result', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          section: sectionName,
+          correct: stats.correct,
+          total: stats.total,
+        }),
+      }).catch(() => {});
     }
     router.push('/student/quiz');
   };

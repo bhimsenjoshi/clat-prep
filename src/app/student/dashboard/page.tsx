@@ -245,6 +245,9 @@ export default function StudentDashboard() {
           ))}
         </div>
 
+        {/* ─── WhatsApp Integration Card ─── */}
+        <WhatsAppCard userId={profile?.id} supabase={supabase} />
+
         {attempts.length === 0 ? (
           <div className="bg-white border-2 border-dashed border-gray-200 rounded-xl p-16 text-center">
             <div className="text-5xl mb-4">📭</div>
@@ -477,6 +480,103 @@ export default function StudentDashboard() {
           </>
         )}
       </div>
+    </div>
+  );
+}
+
+// ─── WhatsApp Card Component ───
+
+function WhatsAppCard({ supabase }: { supabase: any; userId?: string }) {
+  const [phone, setPhone] = useState('');
+  const [registered, setRegistered] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [status, setStatus] = useState<{ ok?: boolean; msg: string } | null>(null);
+
+  useEffect(() => {
+    const check = async () => {
+      try {
+        const res = await fetch('/api/whatsapp/register');
+        if (!res.ok) { setLoading(false); return; }
+        const data = await res.json();
+        if (data.registered) {
+          setRegistered(true);
+          setPhone(data.phone ?? '');
+        }
+      } catch {}
+      setLoading(false);
+    };
+    check();
+  }, []);
+
+  const registerPhone = async () => {
+    setSaving(true);
+    setStatus(null);
+    try {
+      const res = await fetch('/api/whatsapp/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setRegistered(true);
+        setStatus({ ok: true, msg: data.message ?? 'Registered! Check your WhatsApp 📱' });
+      } else {
+        setStatus({ ok: false, msg: data.error ?? 'Failed to register' });
+      }
+    } catch {
+      setStatus({ ok: false, msg: 'Network error' });
+    }
+    setSaving(false);
+  };
+
+  if (loading) return null;
+
+  return (
+    <div className="bg-white border rounded-xl p-5 shadow-sm">
+      <div className="flex items-start justify-between mb-3">
+        <div className="flex items-center gap-2">
+          <span className="text-xl">📱</span>
+          <div>
+            <h3 className="font-semibold text-gray-900 text-sm">WhatsApp Updates</h3>
+            <p className="text-xs text-gray-500">Get quiz results &amp; daily practice summaries on WhatsApp</p>
+          </div>
+        </div>
+        {registered && (
+          <span className="text-[10px] font-medium bg-green-100 text-green-700 px-2 py-0.5 rounded-full">ACTIVE</span>
+        )}
+      </div>
+
+      {registered ? (
+        <div className="text-sm text-gray-600">
+          ✅ Receiving updates on <span className="font-mono text-gray-800">{phone?.replace(/^91/, '+91 ')}</span>
+          <p className="text-xs text-gray-400 mt-1">Reply STOP to opt out anytime</p>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          <input
+            type="tel"
+            placeholder="Enter your 10-digit mobile number"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
+            className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+          />
+          <button
+            onClick={registerPhone}
+            disabled={saving || phone.length !== 10}
+            className="w-full py-2 rounded-lg text-sm font-medium bg-gradient-to-r from-green-600 to-emerald-600 text-white hover:from-green-700 hover:to-emerald-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {saving ? 'Registering...' : '🔔 Get Updates on WhatsApp'}
+          </button>
+          {status && (
+            <p className={`text-xs ${status.ok ? 'text-green-600' : 'text-red-500'}`}>
+              {status.msg}
+            </p>
+          )}
+          <p className="text-[10px] text-gray-400">Free tier — no spam, only your practice results</p>
+        </div>
+      )}
     </div>
   );
 }
