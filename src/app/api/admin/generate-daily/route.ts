@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 import { generateSection, type SectionName } from '@/lib/ai/generate';
 import { cookies } from 'next/headers';
 
@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
 
 // ─── Shared generation logic (used by admin UI + cron) ───
 
-async function generateAllSections(db?: ReturnType<typeof createClient>) {
+async function generateAllSections(db?: SupabaseClient<any>) {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
   const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
   const adminClient = db ?? createClient(supabaseUrl, serviceKey);

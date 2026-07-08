@@ -1,19 +1,20 @@
 #!/usr/bin/env node
 /**
- * Daily Question Generator — Cron Executable
+ * Daily Question Generator — Zero-dependency Cron Executable
  *
- * Run via Hermes cron: runs generateSection for all 5 sections
- * and inserts into practice_questions with source='daily'.
+ * Uses Node 18+ built-in fetch for both DeepSeek API and Supabase REST API.
+ * No npm install needed.
  *
  * Usage: node scripts/daily-questions-cron.mjs
- * Requires env: SUPABASE_SERVICE_ROLE_KEY, DEEPSEEK_API_KEY, NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY
+ * Requires env: SUPABASE_SERVICE_ROLE_KEY, DEEPSEEK_API_KEY,
+ *               NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY
  */
-import { createClient } from '@supabase/supabase-js';
 
 const SECTIONS = ['English', 'Current Affairs', 'Legal Reasoning', 'Logical Reasoning', 'Quantitative Techniques'];
 const QS_PER_SECTION = 5;
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+const ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 const DEEPSEEK_KEY = process.env.DEEPSEEK_API_KEY || '';
 
@@ -52,11 +53,17 @@ async function callDeepSeek(systemPrompt, userPrompt) {
 
 function normalise(q) {
   if (!q?.question_text || !q?.options || !q?.correct_option) return null;
+
+  let options = q.options;
+  if (typeof options === 'string') {
+    try { options = JSON.parse(options); } catch { return null; }
+  }
+
   return {
     question_text: q.question_text,
     passage: q.passage || null,
-    options: typeof q.options === 'string' ? JSON.parse(q.options) : q.options,
-    correct_option: q.correct_option,
+    options: typeof options === 'object' ? options : {},
+    correct_option: String(q.correct_option),
     explanation: q.explanation || null,
     difficulty: q.difficulty || 'medium',
     source: 'daily',
@@ -76,8 +83,27 @@ function buildPrompt(section) {
   return sectionPrompts[section] || sectionPrompts['English'];
 }
 
+async function supabaseInsert(rows) {
+  const url = `${SUPABASE_URL.replace(/\/$/, '')}/rest/v1/practice_questions`;
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'apikey': ANON_KEY,
+      'Authorization': `Bearer ${SERVICE_KEY}`,
+      'Prefer': 'return=minimal',
+    },
+    body: JSON.stringify(rows),
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Supabase error ${res.status}: ${text}`);
+  }
+  return true;
+}
+
 async function main() {
-  if (!SUPABASE_URL || !SERVICE_KEY) {
+  if (!SUPABASE_URL || !SERVICE_KEY || !ANON_KEY) {
     console.log('❌ Supabase env vars not set');
     process.exit(1);
   }
@@ -86,29 +112,26 @@ async function main() {
     process.exit(1);
   }
 
-  const db = createClient(SUPABASE_URL, SERVICE_KEY);
   console.log(`📅 Generating ${QS_PER_SECTION} questions per section...`);
   let totalInserted = 0;
 
   for (const section of SECTIONS) {
     try {
       console.log(`  → ${section}...`);
-      const questions = await callDeepSeek(buildPrompt(section), `Generate ${QS_PER_SECTION} CLAT practice questions for the "${section}" section.`);
-      
+      const questions = await callDeepSeek(
+        buildPrompt(section),
+        `Generate ${QS_PER_SECTION} CLAT practice questions for the "${section}" section.`
+      );
+
       if (questions.length === 0) {
         console.log(`    ⚠️ No questions generated`);
         continue;
       }
 
       const rows = questions.map(q => ({ ...q, section }));
-      const { error } = await db.from('practice_questions').insert(rows);
-      
-      if (error) {
-        console.log(`    ❌ Insert error: ${error.message}`);
-      } else {
-        console.log(`    ✅ ${rows.length} questions inserted`);
-        totalInserted += rows.length;
-      }
+      await supabaseInsert(rows);
+      console.log(`    ✅ ${rows.length} questions inserted`);
+      totalInserted += rows.length;
     } catch (err) {
       console.log(`    ❌ Error: ${err.message}`);
     }
