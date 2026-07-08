@@ -15,20 +15,28 @@ export default function LoginPage() {
     setLoading(true);
     setError('');
 
-    const supabase = createClient();
-    const { error: authError } = await supabase.auth.signInWithPassword({ email, password });
+    try {
+      const supabase = createClient();
+      console.log('Login: attempting signInWithPassword for', email);
+      const { data, error: authError } = await supabase.auth.signInWithPassword({ email, password });
 
-    if (authError) {
-      setError(authError.message);
+      if (authError) {
+        console.error('Login: auth error', authError.message);
+        setError(authError.message);
+        setLoading(false);
+        return;
+      }
+
+      console.log('Login: success, persisting session cookie');
+      await persistSessionToCookie(supabase);
+
+      console.log('Login: redirecting to /auth/redirect');
+      window.location.href = '/auth/redirect';
+    } catch (err) {
+      console.error('Login: unexpected error', err);
+      setError(err instanceof Error ? err.message : 'An unexpected error occurred');
       setLoading(false);
-      return;
     }
-
-    // Copy session tokens to cookie so the server can read them
-    await persistSessionToCookie(supabase);
-
-    // Redirect to a server page that will check the role and send us to the right dashboard
-    window.location.href = '/auth/redirect';
   };
 
   return (

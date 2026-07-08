@@ -112,7 +112,8 @@ export default function HomePage() {
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
               {sections.map((s) => (
-                <div key={s.name} className="group bg-white border border-gray-200 rounded-xl p-5 hover:shadow-md hover:border-indigo-200 transition-all duration-200">
+                <Link key={s.name} href="/auth/signup"
+                  className="group bg-white border border-gray-200 rounded-xl p-5 hover:shadow-md hover:border-indigo-200 transition-all duration-200 block">
                   <div className="flex items-center gap-3 mb-3">
                     <span className="text-2xl">{s.icon}</span>
                     <h3 className="font-semibold text-gray-900 group-hover:text-indigo-600 transition-colors">
@@ -120,7 +121,7 @@ export default function HomePage() {
                     </h3>
                   </div>
                   <p className="text-sm text-gray-500 leading-relaxed">{s.desc}</p>
-                </div>
+                </Link>
               ))}
             </div>
           </div>
