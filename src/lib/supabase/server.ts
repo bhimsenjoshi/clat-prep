@@ -23,6 +23,29 @@ export async function createServerSupabaseClient() {
 }
 
 /**
+ * Fallback: try to verify a user from a Bearer token or clat-at cookie.
+ * This handles the case where the browser refreshed the session (via refreshSession)
+ * updating clat-at but leaving the default Supabase cookies stale.
+ */
+export async function getServerUser() {
+  const supabase = await createServerSupabaseClient();
+  const cookieStore = await cookies();
+
+  // 1. Try default cookie-based auth first
+  const { data: { user } } = await supabase.auth.getUser();
+  if (user) return { user, supabase };
+
+  // 2. Fallback: try clat-at cookie (custom cookie set by persistSessionToCookie)
+  const clatAt = cookieStore.get('clat-at')?.value;
+  if (clatAt) {
+    const { data: { user: tokenUser } } = await supabase.auth.getUser(clatAt);
+    if (tokenUser) return { user: tokenUser, supabase };
+  }
+
+  return { user: null, supabase };
+}
+
+/**
  * Server client with the service-role key — bypasses RLS.
  * Only use in admin API routes / server actions.
  */

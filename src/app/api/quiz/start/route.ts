@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createServerSupabaseClient } from '@/lib/supabase/server';
+import { getServerUser } from '@/lib/supabase/server';
 import type { SectionName } from '@/types';
 
 export async function POST(req: NextRequest) {
@@ -18,8 +18,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: `Invalid section: ${section}` }, { status: 400 });
     }
 
-    const supabase = await createServerSupabaseClient();
-    const { data: { user } } = await supabase.auth.getUser();
+    const { user, supabase } = await getServerUser();
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
