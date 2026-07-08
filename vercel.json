@@ -2,5 +2,6 @@
   "github": {
     "silent": true,
     "autoJobCancelation": true
-  }
+  },
+  "ignoreCommand": "if ! git diff --quiet HEAD~1 HEAD -- src/ package.json next.config.ts tsconfig.json public/ vercel.json; then exit 1; fi; exit 0"
 }
