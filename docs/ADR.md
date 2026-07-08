@@ -3,252 +3,228 @@
 > **Date:** July 2026  
 > **Status:** Accepted  
 > **Deciders:** Bhimsen (@Bhimsen443)  
-> **Issue:** [#2 — Architecture Decision Record](https://github.com/bhimsenjoshi/clat-prep/issues/2)
+> **Last Updated:** July 8, 2026
 
 ---
 
-## 1. Project Overview
+## 1. Technology Stack
 
-CLAT Prep Hub is a web-based practice test platform for CLAT (Common Law Admission Test) aspirants. It generates CLAT-pattern questions using AI, provides a timed test-taking interface, and offers detailed performance analytics.
+### 1.1 Next.js 16 (App Router)
 
-### System Context
+**Decision:** Next.js 16 App Router + React 19 Server Components
 
-```
-┌──────────┐     ┌──────────────┐     ┌─────────────┐     ┌──────────────┐
-│  Student  │ ──→ │  CLAT Prep   │ ──→ │  Supabase   │     │  DeepSeek    │
-│ (Browser) │     │  Hub (Next)  │     │ (PostgreSQL)│     │  / Gemini AI │
-│  Admin    │ ←── │  on Vercel   │ ←── │  + Auth     │     │  (API calls) │
-└──────────┘     └──────────────┘     └─────────────┘     └──────────────┘
-```
+**Rationale:** Built-in API routes, SSR for fast loads, Vercel auto-deploy, large contributor pool.
 
-**See the full diagram:** [`docs/architecture.html`](./architecture.html) (open in browser)
+### 1.2 Supabase (Postgres + Auth)
 
----
+**Decision:** Supabase PostgreSQL with RLS + service role key for admin ops
 
-## 2. Architecture Principles
+**Rationale:** Relational data, built-in auth, free tier (500MB DB, 50k MAU), RLS for per-row security.
 
-| Principle | Description |
-|-----------|-------------|
-| **₹0/month ops** | Free tiers for everything (Vercel + Supabase). Pay only for AI API usage (~$0.10/test) |
-| **SSR-first** | Server Components + cookie auth for fast page loads and SEO |
-| **AI-powered** | DeepSeek primary, Gemini fallback — never manually write questions |
-| **Open for contribution** | Clean TypeScript, PR templates, `good first issue` labels |
-| **Mobile-first** | PWA installable, fully responsive for phone usage |
+### 1.3 DeepSeek AI
+
+**Decision:** DeepSeek Chat API — single AI backend (no Gemini fallback)
+
+**Rationale:** At ~₹0.10/test, it's the cheapest quality option. Gemini fallback considered but not implemented yet — DeepSeek uptime has been reliable.
+
+### 1.4 Vercel (Hobby) + Cloudflare
+
+**Decision:** Vercel auto-deploy + Cloudflare DNS proxy + SSL Full Strict
+
+**Rationale:** ₹0 hosting, auto-deploys from GitHub push, Cloudflare for DNS management and email routing.
 
 ---
 
-## 3. Technology Decisions
+## 2. Key Architecture Decisions
 
-### 3.1 Next.js 16 (App Router) — Frontend Framework
+### ADR-001: Custom Cookie Auth (`clat-at` / `clat-rt`)
 
-**Decision:** Next.js 16 App Router with React 19 Server Components
+**Context:** Supabase SSR package had cookie-name conflicts. Middleware reads `clat-at`, but server API routes couldn't find the user.
 
-**Alternatives considered:**
-- **Vite + React SPA** — No SSR, worse SEO, no built-in API routes
-- **Remix** — Good but smaller ecosystem than Next.js
-- **SvelteKit** — Too niche for potential contributors
+**Decision:** Custom cookie names + `getServerUser()` fallback helper.
 
-**Rationale:**
-- App Router gives us built-in API routes (no separate backend server)
-- Server Components mean zero JS shipped for static content
-- Vercel auto-deploys from GitHub — zero DevOps overhead
-- Largest contributor pool (most developers know Next.js)
+```typescript
+// src/lib/supabase/server.ts
+export async function getServerUser() {
+  const supabase = await createServerSupabaseClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (user) return { user, supabase };
 
----
-
-### 3.2 Custom Cookie Auth — Authentication
-
-**Decision:** Custom cookie-based auth using `clat-at` / `clat-rt` cookies with Supabase Auth underneath
-
-**Alternatives considered:**
-- **NextAuth.js** — Heavy dependency, complex callback flow, version compatibility issues
-- **Clerk** — $0/tier has limits, vendor lock-in
-- **Supabase SSR package** — Good but `@supabase/ssr` was immature when the project started
-
-**Rationale:**
-- Cookies survive page loads (unlike localStorage), enabling SSR
-- Custom middleware gives full control over role-based redirects (student vs admin)
-- `refreshSession()` fallback handles token expiry transparently
-- Supabase Auth still handles password hashing, email verification, session management
-- Zero additional cost
-
-**Flow:**
-```
-1. User logs in → Supabase Auth returns session
-2. persistSessionToCookie() saves clat-at + clat-rt as cookies
-3. Middleware reads cookies → getUser() validates → checks profiles.role
-4. If token expired → refreshSession() with rt cookie → re-saves new tokens
-5. Role-based redirect: /student/* or /admin/*
+  // Fallback: read clat-at cookie directly
+  const clatAt = cookies().get('clat-at')?.value;
+  if (clatAt) {
+    const { data: { user: tokenUser } } = await supabase.auth.getUser(clatAt);
+    if (tokenUser) {
+      await supabase.auth.setSession({ ... }); // Sync session
+      return { user: tokenUser, supabase };
+    }
+  }
+  return { user: null, supabase };
+}
 ```
 
-**Key files:**
-- `src/middleware.ts` — Edge middleware
-- `src/lib/supabase/middleware.ts` — Auth logic
-- `src/lib/supabase/client.ts` — Browser client + cookie persistence
+**Files:** `src/lib/supabase/server.ts`, `src/lib/supabase/client.ts`, `src/middleware.ts`
 
 ---
 
-### 3.3 Supabase — Database & Auth
+### ADR-002: Practice Quiz Model (No Tests/Sections Tables)
 
-**Decision:** Supabase (PostgreSQL) with RLS policies and service role key for admin operations
+**Context:** Original design had `tests` + `sections` + `questions` tables. Simplified to direct question consumption.
 
-**Alternatives considered:**
-- **Firebase Firestore** — NoSQL, expensive at scale, no JOINs
-- **MongoDB Atlas** — Requires separate backend, more complex
-- **Neon** — Serverless PostgreSQL but no built-in auth
+**Decision:** Single `practice_questions` table. Students pick a CLAT section → API fetches random questions filtered by section.
 
-**Rationale:**
-- PostgreSQL gives us proper relational data (tests → sections → questions → attempts)
-- RLS (Row-Level Security) means queries automatically respect ownership
-- Service role key bypasses RLS for admin operations
-- Free tier: 500MB DB, 50k monthly active users — enough for launch
-- Built-in auth (Supabase Auth) handles signup/login/sessions
+**Files:** `src/app/api/quiz/start/route.ts`, `src/app/api/quiz/respond/route.ts`
 
 ---
 
-### 3.4 DeepSeek (Primary) + Gemini (Fallback) — AI Question Generation
+### ADR-003: Daily Count Decrement on Answer
 
-**Decision:** Dual AI backend — DeepSeek Chat API as primary, Gemini 2.5 Flash as fallback
+**Context:** Daily limit was decremented when a quiz session started. Students who opened a quiz and left wasted their daily quota.
 
-**Alternatives considered:**
-- **OpenAI GPT-4** — Too expensive ($2-5/test vs $0.10/test)
-- **Claude** — Good quality but higher cost per token
-- **Gemini only** — Single point of failure
+**Decision:** Decrement only happens in `/api/quiz/respond` — when a student actually answers a question.
 
-**Rationale:**
-- DeepSeek is ~₹0.10/test — cheapest option that produces quality CLAT questions
-- Gemini Flash as fallback if DeepSeek is down or rate-limited
-- Both support JSON response format natively
-- Prompts are section-specific (5 different system prompts for 5 CLAT sections)
-- Sub-agents run in parallel — all 5 sections generate simultaneously (~30s total)
+**Files:** `src/app/api/quiz/respond/route.ts`
 
 ---
 
-### 3.5 Vercel — Hosting & Deployment
+### ADR-004: Daily Question Generation (Hybrid Cron + Admin)
 
-**Decision:** Vercel (Hobby tier) with auto-deploy from GitHub
+**Context:** Need fresh questions daily without manual work.
 
-**Alternatives considered:**
-- **Cloudflare Pages** — No built-in SSR for Next.js App Router at project start
-- **Railway** — More expensive, less mature Next.js support
-- **Self-hosted VM** — More ops overhead, not ₹0
+**Decision:** Two-trigger system:
+1. **Hermes cron** — `30 1 * * *` (7:00 AM IST), `no_agent=true` script execution
+2. **Admin button** — POST `/api/admin/generate-daily`
 
-**Rationale:**
-- GitHub push → Vercel auto-deploys (branch previews included)
-- Free tier: 100GB bandwidth, 6000 build minutes/month — generous for a study tool
-- Custom domain support (when purchased)
-- Built-in analytics and monitoring
+Both use the same `scripts/daily-questions-cron.mjs` logic. Zero npm dependencies (Node 18+ built-in `fetch`).
 
----
+**Key design choices:**
+- `response_format: { type: 'json_object' }` forces structured AI output
+- `normalise()` handles AI naming quirks (`question`/`question_text`, `correct_answer`/`correct_option`, array/object options)
+- Supabase REST API (not client SDK) to avoid npm deps
+- `source='daily'` tag for question origin tracking
 
-## 4. Database Schema
-
-### Tables
-
-| Table | Purpose | Key Columns | RLS |
-|-------|---------|-------------|-----|
-| `profiles` | Extends auth.users | id (FK), role, full_name | ✅ Users read own |
-| `tests` | Test header | id, title, status, created_by | ✅ Admins only |
-| `sections` | 5 per test | id, test_id, name, question_count | ✅ Admins only |
-| `questions` | Individual questions | id, section_id, passage, options (JSONB), correct_option, explanation, difficulty, generated_by, reviewed | ✅ Students read published |
-| `attempts` | One per student per test-take | id, user_id, test_id, attempt_number, score, started_at, submitted_at | ✅ Users see own |
-| `attempt_answers` | Per-question response | id, attempt_id, question_id, selected_option, is_correct, time_spent_seconds | ✅ Users see own |
-
-**Schema SQL:** `src/lib/db/schema.sql`  
-**Seed data:** `src/lib/db/seed.sql`
+**Files:** `scripts/daily-questions-cron.mjs`, `src/app/api/admin/generate-daily/route.ts`
 
 ---
 
-## 5. Data Flow
+### ADR-005: `source` Column for Question Origin
 
-### Test-Taking Flow
+**Context:** Need to distinguish AI-generated questions from manual/PYQ imports.
 
-```
-Student → /student/tests → Click test
-  → middleware reads clat-at cookie
-  → Supabase getUser() validates token
-  → fetch sections + questions from DB
-  → Render Server Component (fast, no JS for initial state)
-  → Student answers questions (Client Component with timer)
-  → Auto-save per question on navigation
-  → Submit → API route scores → insert attempt_answers
-  → Redirect to /review → show results
-```
+**Decision:** `practice_questions.source` column with values: `manual`, `daily`, `pyq`.
 
-### AI Generation Flow
+**Status:** Column exists. `daily` is active. `pyq` reserved for future import.
 
-```
-Admin → /admin/tests/[id] → Click "Generate"
-  → POST /api/generate-test with { sectionId, sectionName, maxQuestions }
-  → Validate auth + admin role
-  → generateSection() → DeepSeek API (parallel sub-agents)
-  → If DeepSeek fails → Gemini fallback
-  → Parse JSON → Normalize → Validate schema
-  → Deduplicate against existing questions
-  → Insert into questions table (reviewed: false)
-  → Return count + skipped to admin
+---
+
+### ADR-006: Zero-Dependency Cron Script
+
+**Context:** Hermes cron needs to run the script daily. `npm install` takes 30-60s on the VM and can fail.
+
+**Decision:** Script uses only Node.js built-in APIs (`fetch`, `JSON`, `console`). No npm packages. Supabase inserts via REST API with `fetch()`.
+
+**Rationale:** Eliminates install failures, faster cron ticks, no version conflicts.
+
+---
+
+### ADR-007: Flexible AI Response Parsing
+
+**Context:** DeepSeek is inconsistent with JSON key naming — sometimes uses `question_text`, sometimes `question`, sometimes `correct_option`, sometimes `correct_answer`.
+
+**Decision:** `normalise()` function accepts all known variants and falls back gracefully.
+
+```javascript
+const question_text = q.question_text || q.question;
+const correct_answer = q.correct_option || q.correct_answer || q.correctAnswer;
+// Array options → {"A":"...", "B":"...", "C":"...", "D":"..."}
 ```
 
 ---
 
-## 6. Cost Budget
+## 3. Database Schema (Current)
 
-| Service | Free Tier | What We Use | Cost |
-|---------|-----------|-------------|------|
-| Vercel Hobby | 100GB BW, 6000 builds/mo | SSR + API routes | ₹0 |
-| Supabase Free | 500MB DB, 50k MAU | PostgreSQL + Auth | ₹0 |
-| DeepSeek API | Pay-as-you-go | ~$0.10/test × 50 tests/mo | ~₹40/mo |
-| Gemini API | Pay-as-you-go | Fallback only | ~₹0 |
-| **Total** | | | **~₹40/month** |
+### `practice_questions`
+| Column | Type | Notes |
+|--------|------|-------|
+| id | uuid | PK |
+| section | text | CLAT section name |
+| topic | text | Optional |
+| question_text | text | The question |
+| passage | text | Optional passage |
+| options | jsonb | `{"A":"...","B":"...","C":"...","D":"..."}` |
+| correct_option | text | Single letter |
+| explanation | text | |
+| difficulty | text | Check constraint: `easy`/`medium`/`hard` |
+| source | text | `manual`/`daily`/`pyq` |
+| tags | jsonb | Optional |
+| created_at | timestamptz | |
+
+### `profiles`
+| Column | Type | Notes |
+|--------|------|-------|
+| id | uuid | PK → auth.users |
+| email | text | |
+| role | text | `student`/`admin` |
+| daily_questions_limit | int4 | Default 10 |
+| questions_used_today | int4 | Reset daily |
+
+Plus `quiz_sessions` and `quiz_answers` for attempt tracking.
 
 ---
 
-## 7. Project Structure
+## 4. Data Flows
 
+### Question Generation Flow
 ```
-clat-prep/
-├── src/
-│   ├── app/                    # Next.js App Router pages
-│   │   ├── page.tsx            # Landing
-│   │   ├── layout.tsx          # Root layout
-│   │   ├── auth/               # Login, signup, callback
-│   │   ├── student/            # Dashboard, test-taking, review, leaderboard
-│   │   ├── admin/              # Dashboard, test management, students
-│   │   └── api/                # Route handlers (login, me, generate-test)
-│   ├── lib/
-│   │   ├── ai/generate.ts      # Multi-agent AI question generation
-│   │   ├── supabase/           # Client, server, middleware
-│   │   └── db/                 # schema.sql, seed.sql, migrations
-│   ├── types/index.ts          # TypeScript interfaces
-│   └── middleware.ts           # Auth guard (edge)
-├── docs/
-│   ├── PRD.md                  # Product Requirements
-│   ├── ADR.md                  # This document
-│   └── architecture.html       # Visual architecture diagram
-├── .github/
-│   ├── ISSUE_TEMPLATE/         # Bug + feature templates
-│   └── PULL_REQUEST_TEMPLATE.md
-└── README.md
+Trigger (cron 7am IST OR admin button)
+  → scripts/daily-questions-cron.mjs
+  → For each of 5 sections (sequential):
+      → POST DeepSeek API (response_format: json_object)
+      → JSON.parse → normalise() → filter(Boolean)
+      → POST Supabase REST API (service_role key)
+  → Output: "✅ English: 5 | CA: 5 | ... | Total: 25"
+```
+
+### Quiz Flow
+```
+Student clicks section → POST /api/quiz/start
+  → Fetch random questions from practice_questions (filtered by section)
+  → Create session → Return questions
+→ Student answers → POST /api/quiz/respond
+  → Check → Correct? Update attempt
+  → Decrement daily_questions_used (only on answer)
+  → Return result + explanation
 ```
 
 ---
 
-## 8. Future Considerations
+## 5. Cost Budget (Actual)
 
-| Topic | Consideration |
-|-------|--------------|
-| **Scale** | If >50 concurrent students, consider PgBouncer for Supabase connection pooling |
-| **Performance** | If page loads exceed 2s, add ISR (Incremental Static Regeneration) for test listing |
-| **AI Cost** | If monthly AI cost >₹500, implement caching or question recycling |
-| **Contributors** | Add CODEOWNERS file, stricter CI checks, and contribution guide |
-| **Mobile** | If PWA usage exceeds 80%, consider native wrapper (Capacitor/Tauri) |
-| **Payments** | If monetization is needed, add Stripe integration (future phase) |
+| Service | Cost | Notes |
+|---------|------|-------|
+| Vercel Hobby | ₹0 | Unlimited projects, shared free tier |
+| Supabase Free | ₹0 | 500MB DB, 50k MAU |
+| Cloudflare | ₹0 | DNS proxy, Email Routing, SSL |
+| Domain (clatly.com) | $10.46/yr | ₹870/yr (~₹72/month) |
+| DeepSeek AI (25 questions/day) | ~₹1/day | ~₹30/month |
+| **Total** | **~₹102/month** | |
 
 ---
 
-## 9. References
+## 6. Future Considerations
 
-- [Visual Architecture Diagram](./architecture.html) — Open in browser for interactive SVG
-- [Product Requirements Document](./PRD.md) — Complete feature specification
-- [Project Board](https://github.com/users/bhimsenjoshi/projects/1) — Track progress
-- [GitHub Repo](https://github.com/bhimsenjoshi/clat-prep) — Source code
+| Topic | Plan |
+|-------|------|
+| PYQ Import | Use `source='pyq'` column; import from PDF/excel |
+| Question validation | Review queue before questions go live (#13, #15, #16) |
+| WhatsApp | Shelved (#25) — Meta Business API too complex |
+| Advanced analytics | Weak-topic recommendations from attempt data |
+| More students | Scale: PgBouncer for connection pooling |
+
+---
+
+## 7. References
+
+- [ARCHITECTURE.md](../ARCHITECTURE.md) — Full system design
+- [PRD.md](./PRD.md) — Product requirements
+- [GitHub Repo](https://github.com/bhimsenjoshi/clat-prep)
