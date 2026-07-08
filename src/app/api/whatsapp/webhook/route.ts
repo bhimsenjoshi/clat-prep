@@ -11,7 +11,8 @@ import { WaQuizBot } from '@/lib/wa-quiz-bot';
  * Set WHATSAPP_VERIFY_TOKEN in Vercel env vars to your chosen secret string.
  */
 export async function GET(request: NextRequest) {
-  const verifyToken = process.env.WHATSAPP_VERIFY_TOKEN ?? '';
+  // TEMP: hardcoded for Meta webhook verification. TODO: move to env var.
+  const verifyToken = process.env.WHATSAPP_VERIFY_TOKEN ?? 'clatPrep2027';
 
   const verified = verifyWebhook(request, verifyToken);
   if (verified) return verified;
