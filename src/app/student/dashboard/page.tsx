@@ -245,9 +245,6 @@ export default function StudentDashboard() {
           ))}
         </div>
 
-        {/* ─── WhatsApp Integration Card ─── */}
-        <WhatsAppCard userId={profile?.id} supabase={supabase} />
-
         {attempts.length === 0 ? (
           <div className="bg-white border-2 border-dashed border-gray-200 rounded-xl p-16 text-center">
             <div className="text-5xl mb-4">📭</div>
