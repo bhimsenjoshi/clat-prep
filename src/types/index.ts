@@ -79,6 +79,53 @@ export interface TestWithSections extends Test {
   sections: SectionWithQuestions[];
 }
 
+// ─── Practice Quiz types ───
+
+export type Difficulty = 'easy' | 'medium' | 'hard';
+export type SubscriptionPlan = 'free' | 'premium';
+
+export interface PracticeQuestion {
+  id: string;
+  section: SectionName;
+  topic: string;
+  question_text: string;
+  passage: string | null;
+  options: Record<'A' | 'B' | 'C' | 'D', string>;
+  correct_option: string;
+  explanation: string;
+  difficulty: Difficulty;
+  source: string;
+  tags: string[];
+  created_at: string;
+}
+
+export interface QuizSession {
+  id: string;
+  student_id: string;
+  section: SectionName;
+  topic: string;
+  started_at: string;
+  ended_at: string | null;
+  questions_answered: number;
+  correct_count: number;
+}
+
+export interface QuizResponse {
+  id: string;
+  session_id: string;
+  question_id: string;
+  selected_option: string | null;
+  is_correct: boolean;
+  time_taken_seconds: number;
+  answered_at: string;
+}
+
+export interface ExtendedProfile extends Profile {
+  daily_free_questions: number;
+  last_practice_date: string | null;
+  subscription_plan: SubscriptionPlan;
+}
+
 export interface SectionWithQuestions extends Section {
   questions: Question[];
 }

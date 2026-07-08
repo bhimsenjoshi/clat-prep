@@ -209,6 +209,10 @@ export default function StudentDashboard() {
               className="px-3 py-1.5 rounded-lg text-xs font-medium bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 transition">
               🏆 Leaderboard
             </Link>
+            <Link href="/student/quiz"
+              className="px-4 py-1.5 rounded-lg text-xs font-medium bg-gradient-to-r from-amber-500 to-orange-600 text-white hover:from-amber-600 hover:to-orange-700 transition shadow-sm">
+              🎯 Practice
+            </Link>
             <Link href="/student/tests"
               className="px-4 py-1.5 rounded-lg text-xs font-medium bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700 transition shadow-sm">
               + Available Tests
