@@ -61,6 +61,7 @@ export default function QuizPage() {
   const [dailyRemaining, setDailyRemaining] = useState<number | 'unlimited'>(10);
   const [needsSeeding, setNeedsSeeding] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const questionStartTime = useRef<number>(Date.now());
 
@@ -72,6 +73,7 @@ export default function QuizPage() {
 
   const startSession = async () => {
     setLoading(true);
+    setErrorMsg(null);
     try {
       const res = await fetch('/api/quiz/start', {
         method: 'POST',
@@ -79,9 +81,22 @@ export default function QuizPage() {
         body: JSON.stringify({ section: sectionName }),
       });
 
-      const data = await res.json();
+      let data: any;
+      try {
+        data = await res.json();
+      } catch {
+        setErrorMsg(`Response not JSON (status ${res.status})`);
+        setLoading(false);
+        return;
+      }
 
-      if (res.status === 403 && data.code === 'DAILY_LIMIT_REACHED') {
+      if (!res.ok) {
+        setErrorMsg(data?.error || `Error ${res.status}: ${res.statusText}`);
+        setLoading(false);
+        return;
+      }
+
+      if (data.code === 'DAILY_LIMIT_REACHED') {
         setDailyRemaining(0);
         setLoading(false);
         return;
@@ -325,6 +340,13 @@ export default function QuizPage() {
       </div>
 
       <div className="max-w-3xl mx-auto px-4 py-6">
+        {/* Error message */}
+        {errorMsg && (
+          <div className="mb-4 p-4 bg-red-900/20 border border-red-700/50 rounded-xl">
+            <p className="text-red-400 text-sm font-medium">⚠️ {errorMsg}</p>
+          </div>
+        )}
+
         {question && !showExplanation ? (
           // ─── Question View ───
           <div className="space-y-6">
