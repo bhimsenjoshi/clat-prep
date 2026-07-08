@@ -37,9 +37,17 @@ export async function getServerUser() {
 
   // 2. Fallback: try clat-at cookie (custom cookie set by persistSessionToCookie)
   const clatAt = cookieStore.get('clat-at')?.value;
+  const clatRt = cookieStore.get('clat-rt')?.value;
   if (clatAt) {
     const { data: { user: tokenUser } } = await supabase.auth.getUser(clatAt);
-    if (tokenUser) return { user: tokenUser, supabase };
+    if (tokenUser) {
+      // Set the session so subsequent queries have auth context (auth.uid() for RLS)
+      await supabase.auth.setSession({
+        access_token: clatAt,
+        refresh_token: clatRt ?? '',
+      });
+      return { user: tokenUser, supabase };
+    }
   }
 
   return { user: null, supabase };
