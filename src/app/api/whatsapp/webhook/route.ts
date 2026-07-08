@@ -1,12 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyWebhook } from '@/lib/whatsapp';
+import { WaQuizBot } from '@/lib/wa-quiz-bot';
 
 /**
- * GET = Meta's webhook verification challenge.
+ * GET /api/whatsapp/webhook — Meta webhook verification
+ *
  * When you configure the webhook URL in Meta Dashboard, they send a GET
  * with hub.mode, hub.verify_token, hub.challenge to verify ownership.
  *
- * Set WHATSAPP_VERIFY_TOKEN in Vercel env vars to a secret string of your choice.
+ * Set WHATSAPP_VERIFY_TOKEN in Vercel env vars to your chosen secret string.
  */
 export async function GET(request: NextRequest) {
   const verifyToken = process.env.WHATSAPP_VERIFY_TOKEN ?? '';
@@ -18,43 +20,48 @@ export async function GET(request: NextRequest) {
 }
 
 /**
- * POST = Incoming messages + status callbacks from WhatsApp.
- * Meta sends:
- *   - Incoming user messages (when a student replies)
- *   - Status updates (sent, delivered, read)
+ * POST /api/whatsapp/webhook — Incoming messages from users
  *
- * Log these to whatsapp_log for tracking.
+ * This is the interactive quiz bot entry point.
+ * Users send messages like "start english", "A", "B", "help", etc.
  */
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
 
-    // Meta sends a "hub.challenge" on webhook setup too, but that's GET.
-    // POST receives actual message/status objects.
-
-    // Log all incoming payloads for debugging
-    console.log('WhatsApp webhook received:', JSON.stringify(body).slice(0, 1000));
-
-    // Extract message status updates
+    // Log incoming for debugging
     if (body.entry) {
       for (const entry of body.entry) {
         for (const change of entry.changes ?? []) {
           if (change.field === 'messages') {
             const value = change.value;
 
-            // Status updates (sent → delivered → read)
+            // ─── Handle status updates (delivered/read receipts) ───
             if (value.statuses) {
               for (const status of value.statuses) {
-                console.log(`WhatsApp status: ${status.id} → ${status.status} (timestamp: ${status.timestamp})`);
-                // TODO: Update whatsapp_log.status where whatsapp_message_id = status.id
+                console.log(`WhatsApp status: ${status.id} → ${status.status}`);
+                // Could update whatsapp_log here in future
               }
             }
 
-            // Incoming messages from users
+            // ─── Handle incoming text messages (the actual quiz interaction) ───
             if (value.messages) {
+              const bot = new WaQuizBot();
+
               for (const msg of value.messages) {
-                console.log(`WhatsApp msg from ${msg.from}: ${msg.type} = ${msg.text?.body ?? '(non-text)'}`);
-                // TODO: Handle student replies (opt-out, request stats, etc.)
+                const phone = msg.from;   // sender's phone number (91XXXXXXXXXX)
+                const msgType = msg.type;
+
+                if (msgType === 'text') {
+                  const text = msg.text?.body ?? '';
+                  await bot.handleIncoming(phone, text);
+                } else if (msgType === 'interactive') {
+                  // Button reply — extract the button ID
+                  const buttonReply = msg.interactive?.button_reply;
+                  if (buttonReply?.id) {
+                    await bot.handleIncoming(phone, buttonReply.id);
+                  }
+                }
               }
             }
           }
@@ -62,7 +69,7 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Meta expects 200 OK to acknowledge receipt
+    // Always return 200 OK to acknowledge receipt
     return NextResponse.json({ status: 'ok' });
   } catch (err) {
     console.error('WhatsApp webhook error:', err);

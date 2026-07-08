@@ -492,6 +492,7 @@ function WhatsAppCard({ supabase }: { supabase: any; userId?: string }) {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [status, setStatus] = useState<{ ok?: boolean; msg: string } | null>(null);
+  const businessPhone = process.env.NEXT_PUBLIC_WHATSAPP_BUSINESS_PHONE ?? '';
 
   useEffect(() => {
     const check = async () => {
@@ -549,9 +550,21 @@ function WhatsAppCard({ supabase }: { supabase: any; userId?: string }) {
       </div>
 
       {registered ? (
-        <div className="text-sm text-gray-600">
-          ✅ Receiving updates on <span className="font-mono text-gray-800">{phone?.replace(/^91/, '+91 ')}</span>
-          <p className="text-xs text-gray-400 mt-1">Reply STOP to opt out anytime</p>
+        <div className="space-y-3">
+          <div className="text-sm text-gray-600">
+            ✅ Receiving updates on <span className="font-mono text-gray-800">{phone?.replace(/^91/, '+91 ')}</span>
+          </div>
+          {businessPhone && (
+            <a
+              href={`https://wa.me/${businessPhone}?text=${encodeURIComponent('start english')}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block w-full text-center py-2 rounded-lg text-sm font-medium bg-green-600 text-white hover:bg-green-700 transition"
+            >
+              📱 Start Quiz on WhatsApp →
+            </a>
+          )}
+          <p className="text-xs text-gray-400">Reply STOP to opt out anytime</p>
         </div>
       ) : (
         <div className="space-y-3">
