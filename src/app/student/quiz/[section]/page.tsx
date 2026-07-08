@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { createClient } from '@/lib/supabase/client';
+import { persistSessionToCookie } from '@/lib/supabase/client';
 import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
 import type { SectionName } from '@/types';
@@ -75,6 +76,9 @@ export default function QuizPage() {
     setLoading(true);
     setErrorMsg(null);
     try {
+      // Refresh the clat-at cookie so the server can authenticate
+      await persistSessionToCookie(supabase);
+
       const res = await fetch('/api/quiz/start', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
