@@ -85,23 +85,21 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // Decrement daily count (free users)
-    if (profile.subscription_plan === 'free') {
-      const current = profile.daily_free_questions ?? 10;
-      await supabase
-        .from('profiles')
-        .update({ daily_free_questions: Math.max(0, current - 1) })
-        .eq('id', user.id);
-    }
-
     // Remove correct answer from response (only show after they answer)
     const { correct_option, ...safeQuestion } = question;
+
+    // Re-fetch profile to get latest daily count (reset may have happened)
+    const { data: freshProfile } = await supabase
+      .from('profiles')
+      .select('daily_free_questions, subscription_plan')
+      .eq('id', user.id)
+      .single();
 
     return NextResponse.json({
       session_id: session.id,
       question: safeQuestion,
-      daily_remaining: profile.subscription_plan === 'free'
-        ? (profile.daily_free_questions ?? 10) - 1
+      daily_remaining: freshProfile?.subscription_plan === 'free'
+        ? (freshProfile?.daily_free_questions ?? 10)
         : 'unlimited',
     });
 

@@ -58,6 +58,26 @@ export async function POST(req: NextRequest) {
         time_taken_seconds,
       });
 
+      // Decrement daily count on first answer (not on session start)
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('daily_free_questions, last_practice_date, subscription_plan')
+        .eq('id', user.id)
+        .single();
+
+      if (profile?.subscription_plan === 'free') {
+        const today = new Date().toISOString().split('T')[0];
+        let current = profile.daily_free_questions ?? 10;
+        if (profile.last_practice_date !== today) current = 10;
+        await supabase
+          .from('profiles')
+          .update({
+            daily_free_questions: Math.max(0, current - 1),
+            last_practice_date: today,
+          })
+          .eq('id', user.id);
+      }
+
       // Update session counts (fetch current, then increment)
       const { data: curSession } = await supabase
         .from('quiz_sessions')
