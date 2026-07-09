@@ -44,7 +44,7 @@ export default function AnalyticsPage() {
         .from('attempts')
         .select('*, tests(title)')
         .eq('student_id', user.id)
-        .eq('submitted_at', 'not.is', null)
+        .not('submitted_at', 'is', null)
         .order('started_at', { ascending: false });
 
       if (!rawAttempts || rawAttempts.length === 0) {
