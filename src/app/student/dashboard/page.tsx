@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import type { Profile } from '@/types';
+import type { ExtendedProfile } from '@/types';
 
 const SECTIONS = [
   { id: 'English', label: 'English', icon: '📖', color: 'indigo', desc: 'Reading comprehension' },
@@ -28,7 +28,7 @@ interface AttemptWithMeta {
 }
 
 export default function StudentDashboard() {
-  const [profile, setProfile] = useState<Profile | null>(null);
+  const [profile, setProfile] = useState<ExtendedProfile | null>(null);
   const [attempts, setAttempts] = useState<AttemptWithMeta[]>([]);
   const [loading, setLoading] = useState(true);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
