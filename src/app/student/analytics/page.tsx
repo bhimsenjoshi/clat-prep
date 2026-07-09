@@ -76,6 +76,7 @@ export default function AnalyticsPage() {
 
         enriched.push({
           id: a.id,
+          test_id: a.test_id,
           test_title: a.tests?.title ?? 'Practice Test',
           attempt_number: a.attempt_number ?? 1,
           submitted_at: a.submitted_at,
