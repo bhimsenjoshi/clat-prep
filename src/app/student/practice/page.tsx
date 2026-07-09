@@ -498,6 +498,11 @@ export default function PracticeQuiz() {
                   Next Question →
                 </button>
               )}
+            </div>
+          </div>
+        )}
+
+        {loading && !question && !result && (
           <div className="text-center py-12">
             <div className="animate-spin w-8 h-8 border-2 border-indigo-500 border-t-transparent rounded-full mx-auto mb-3" />
             <p className="text-sm text-gray-500">Loading next question...</p>
