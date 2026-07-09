@@ -95,11 +95,9 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Failed to create session' }, { status: 500 });
     }
 
-    const { correct_option, ...safeQuestion } = questionResult.data!;
-
     return NextResponse.json({
       session_id: sessionResult.data.id,
-      question: safeQuestion,
+      question: questionResult.data,
       question_ids: questionIds, // Client uses this for fast PK-based next-question lookup
       daily_remaining: profile.subscription_plan === 'free'
         ? (profile.daily_free_questions ?? 10)

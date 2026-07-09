@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
         const nextId = remaining_ids[Math.floor(Math.random() * remaining_ids.length)];
         const { data: nq } = await supabase
           .from('practice_questions')
-          .select('id, section, topic, question_text, passage, options, difficulty, explanation, tags')
+          .select('id, section, topic, question_text, passage, options, correct_option, difficulty, explanation, tags')
           .eq('id', nextId)
           .single();
         return { nextQuestion: nq, newRemainingIds: remaining_ids.filter((id: string) => id !== nextId) };

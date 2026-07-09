@@ -20,6 +20,7 @@ interface Question {
   passage: string | null;
   options: Record<string, string>;
   difficulty: string;
+  correct_option?: string;
   explanation?: string;
 }
 
@@ -124,6 +125,21 @@ export default function PracticeQuiz() {
     setSelectedOption(option);
     const timeTaken = Math.round((Date.now() - timerRef.current) / 1000);
 
+    // ── Instant client-side check ──
+    const isCorrectLocally = option === question.correct_option;
+    const localResult: AnswerResult = {
+      is_correct: isCorrectLocally,
+      correct_option: question.correct_option ?? '?',
+      explanation: question.explanation ?? '',
+      your_answer: option,
+      time_taken_seconds: timeTaken,
+    };
+    setResult(localResult);
+    if (question) {
+      setTrackedResponses(prev => [...prev, { question, result: localResult }]);
+    }
+
+    // ── Fire API call in background to record response + fetch next question ──
     try {
       const res = await fetch('/api/quiz/respond', {
         method: 'POST',
@@ -139,12 +155,6 @@ export default function PracticeQuiz() {
 
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Failed to submit answer');
-      setResult(data.result);
-
-      // Track this response for the review screen
-      if (question) {
-        setTrackedResponses(prev => [...prev, { question, result: data.result }]);
-      }
 
       if (data.next_question) {
         setQuestion(data.next_question);
@@ -153,7 +163,7 @@ export default function PracticeQuiz() {
         setSessionComplete(true);
       }
     } catch (err) {
-      console.error('Respond error:', err);
+      console.error('Background respond error:', err);
     }
   };
 
