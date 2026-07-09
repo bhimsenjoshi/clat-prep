@@ -422,7 +422,7 @@ export default function PracticeQuiz() {
 
       <div className="max-w-3xl mx-auto px-4 py-6">
         {/* Passage */}
-        {question?.passage && (
+        {question?.passage && !result && (
           <div className="bg-gray-900 border border-gray-800 rounded-xl p-5 mb-4">
             <p className="text-xs text-indigo-400 uppercase tracking-wide font-medium mb-2">Passage</p>
             <p className="text-sm text-gray-300 leading-relaxed">{question.passage}</p>
