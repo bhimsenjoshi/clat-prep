@@ -146,6 +146,10 @@ export default function StudentDashboard() {
               className="px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100 transition">
               🏆 Leaderboard
             </Link>
+            <Link href="/student/tests"
+              className="px-3 py-2 rounded-lg text-sm font-medium text-indigo-600 hover:bg-indigo-50 transition">
+              📝 Tests
+            </Link>
             <button onClick={() => supabase.auth.signOut().then(() => router.push('/'))}
               className="px-3 py-2 rounded-lg text-sm font-medium text-gray-400 hover:text-red-600 hover:bg-red-50 transition">
               Sign Out
@@ -183,6 +187,10 @@ export default function StudentDashboard() {
               className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-gray-700 hover:bg-gray-50">
               🏆 Leaderboard
             </Link>
+            <Link href="/student/tests" onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-indigo-700 hover:bg-indigo-50">
+              📝 Available Tests
+            </Link>
             <hr className="my-1 border-gray-100" />
             <button onClick={() => { setMobileMenuOpen(false); supabase.auth.signOut().then(() => router.push('/')); }}
               className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-red-600 hover:bg-red-50 w-full text-left">
@@ -215,9 +223,9 @@ export default function StudentDashboard() {
         <div>
           <h2 className="text-sm font-semibold text-gray-800 mb-3 flex items-center gap-2">
             <span>⚡</span> Quick Practice
-            {profile?.subscription_plan === 'free' && profile?.daily_free_questions !== undefined && (
+            {profile?.subscription_plan === 'free' && (
               <span className="text-xs font-normal text-gray-400 ml-auto">
-                {profile.daily_free_questions} free questions remaining
+                {(profile.daily_free_questions ?? 10)} free questions remaining
               </span>
             )}
           </h2>
@@ -248,6 +256,10 @@ export default function StudentDashboard() {
             <Link href="/student/practice"
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-medium bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700 transition shadow-sm">
               🎯 Start Practicing
+            </Link>
+            <Link href="/student/tests"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-medium bg-white border border-indigo-300 text-indigo-700 hover:bg-indigo-50 transition shadow-sm ml-2">
+              📝 Browse Tests
             </Link>
           </div>
         ) : (
