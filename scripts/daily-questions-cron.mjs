@@ -9,6 +9,34 @@
  * Requires env: SUPABASE_SERVICE_ROLE_KEY, DEEPSEEK_API_KEY,
  *               NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY
  */
+import { readFileSync, existsSync } from 'fs';
+import { resolve, dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+// ─── Load .env file for cron context ───
+const scriptDir = dirname(fileURLToPath(import.meta.url));
+const envPaths = [
+  resolve(scriptDir, '..', '.env'),
+  resolve(scriptDir, '.env'),
+];
+for (const envPath of envPaths) {
+  if (existsSync(envPath)) {
+    const content = readFileSync(envPath, 'utf-8');
+    for (const line of content.split('\n')) {
+      const trimmed = line.trim();
+      if (!trimmed || trimmed.startsWith('#')) continue;
+      const eqIdx = trimmed.indexOf('=');
+      if (eqIdx === -1) continue;
+      const key = trimmed.slice(0, eqIdx).trim();
+      let val = trimmed.slice(eqIdx + 1).trim();
+      if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
+        val = val.slice(1, -1);
+      }
+      if (!process.env[key]) process.env[key] = val;
+    }
+    break;
+  }
+}
 
 const SECTIONS = ['English', 'Current Affairs', 'Legal Reasoning', 'Logical Reasoning', 'Quantitative Techniques'];
 const QS_PER_SECTION = 5;
