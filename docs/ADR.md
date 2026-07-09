@@ -219,6 +219,7 @@ Student clicks section → POST /api/quiz/start
 | Question validation | Review queue before questions go live (#13, #15, #16) |
 | WhatsApp | Shelved (#25) — Meta Business API too complex |
 | Advanced analytics | Weak-topic recommendations from attempt data |
+| **AI Mentor (Max Plan)** | **Conversational tutor per premium student — like talking to Nova. Persistent sessions, voice + text, performance-aware. Requires subscription model first.** |
 | More students | Scale: PgBouncer for connection pooling |
 
 ---

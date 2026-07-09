@@ -132,6 +132,21 @@ Admin Dashboard → "📅 Generate Daily Questions" → POST /api/admin/generate
 - Question validation/review queue (#13, #15, #16)
 - Payments/subscriptions
 
+### 🔮 Planned: AI Mentor / Personal Tutor
+
+**Target:** Max/paid plan students
+
+Each premium student gets their own **AI mentor** — a conversational agent like Nova that they can talk to for:
+- 📚 **Doubt resolution** — "Explain this legal principle to me like I'm 15"
+- 📊 **Performance analysis** — "Which sections should I focus on?"
+- 🎯 **Study planning** — "Make me a 2-week plan for Legal Reasoning"
+- 💡 **Concept teaching** — "Walk me through the Indian Contract Act"
+- 📝 **Essay feedback** — "Review my legal argument"
+
+**Architecture:** Similar to Hermes Agent — persistent session per student, LLM-powered (DeepSeek or dedicated model), voice + text interface via PWA.
+
+**Status:** ⏳ Backlog — requires subscription/payment model first.
+
 ---
 
 ## 7. Architecture Overview
