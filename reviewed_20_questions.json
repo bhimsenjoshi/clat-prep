@@ -1,0 +1,440 @@
+﻿{
+ "export_date": "2026-07-09",
+ "total_questions": 20,
+ "sections": {
+   "current_affairs": {
+     "name": "Current Affairs",
+     "count": 4,
+     "questions": [
+       {
+         "id": "transformed-cfa3fb0-space-exploration-2025",
+         "difficulty": "hard",
+         "topic": "Science & Technology",
+         "question_text": "Based on the passage, which of the following choices highlights the core architectural and operational differentiation between the Chandrayaan-3 and Chandrayaan-4 missions?",
+         "options": {
+           "A": "Chandrayaan-3 was entirely state-funded, whereas Chandrayaan-4 was executed via a public-private partnership under the IN-SPACe framework.",
+           "B": "Chandrayaan-3 focused exclusively on low-Earth orbit validation, whereas Chandrayaan-4 introduced deep-space telemetry modules.",
+           "C": "Chandrayaan-3 was fundamentally a landing demonstration mission, whereas Chandrayaan-4 introduced complex multi-module sequences to achieve a sample return to Earth.",
+           "D": "Chandrayaan-3 targeted the lunar north pole, whereas Chandrayaan-4 redirected its operational matrix exclusively toward the south pole."
+         },
+         "correct_option": "C",
+         "explanation": "The passage explicitly states that while Chandrayaan-3 achieved a soft landing, Chandrayaan-4 diverged by acting as a 'multi-module sample-return initiative' involving docking and separation to return soil samples to Earth. Options A, B, and D distort or fabricate facts not supported by the text.",
+         "tags": [
+           "space-exploration",
+           "isro",
+           "clat-format"
+         ],
+         "passage": "In a defining era for its extra-terrestrial ambitions, the Indian Space Research Organisation (ISRO) executed a series of milestone launches that underscored India’s transition from a cost-effective space explorer to a pioneering technological powerhouse. Central to this paradigm shift was the execution of the Chandrayaan-4 mission. Diverging significantly from its predecessor, Chandrayaan-3—which achieved an historic soft-landing near the lunar south pole—Chandrayaan-4 was engineered as a complex, multi-module sample-return initiative. The mission architecture demanded unprecedented orbital mechanics, requiring an intricate sequence of autonomous docking and separation maneuvers in lunar orbit involving an ascender, lander, transfer module, and re-entry capsule to successfully fetch pristine soil samples back to Earth. Simultaneously, India broadened its heliophysics footprint with the deployment of the Aditya-L2 observatory. While its forerunner, Aditya-L1, successfully monitored solar dynamics from the Lagrange Point 1, the L2 iteration was strategically inserted into a halo orbit around the second Lagrange point (L2). This positioning provided a distinct vantage point for monitoring deep-space weather patterns, solar coronal mass ejections (CMEs), and solar flares, effectively establishing an early-warning telemetry system to safeguard critical satellite constellations in low-Earth orbit. Parallelly, India’s human spaceflight program crossed a pivotal technical threshold with the uncrewed flight test of Gaganyaan-2. This mission acted as the final structural and safety validator for the indigenous crew module, testing automated environmental control, life-support integrations, and high-velocity atmospheric re-entry dynamics before human spaceflight missions. Complementing these state-led milestones was the surging maturation of India's domestic private space sector (NewSpace). The successful deployment of Aryabhata-2, a high-throughput communication satellite entirely conceptualized, manufactured, and funded by a Bengaluru-based private aerospace startup, signaled a definitive departure from ISRO’s traditional monopoly. Aimed at deploying low-latency internet connectivity to historically underserved, far-flung topography, the launch validated the operational viability of the Indian National Space Promotion and Authorization Centre (IN-SPACe) framework, cementing an ecosystem where private capital actively drives national digital infrastructure."
+       },
+       {
+         "id": "transformed-26c7edab-aditya-l2-mechanics",
+         "difficulty": "hard",
+         "topic": "Science & Technology",
+         "question_text": "An expert in orbital mechanics argues: 'The choice of inserting Aditya-L2 at the L2 point rather than the L1 point provides a directional shielding advantage against direct solar radiation for instruments observing deep space.' Does the passage support this operational shift?",
+         "options": {
+           "A": "No, because the passage states that Aditya-L2’s primary objective is to duplicate Aditya-L1's data streams to ensure atmospheric redundancy.",
+           "B": "Yes, because the passage implies that the L2 positioning provides a distinct, non-redundant vantage point optimized for broad space-weather monitoring and CME warning systems.",
+           "C": "No, because the Lagrange points are structurally identical, meaning any alleged diagnostic advantage is scientifically negligible.",
+           "D": "Yes, because the passage confirms that Aditya-L2 is primarily designed to track deep-space exoplanets rather than solar dynamics."
+         },
+         "correct_option": "B",
+         "explanation": "The text highlights that Aditya-L2 was given a 'distinct vantage point' at the second Lagrange point to monitor space weather and coronal mass ejections, differentiating its operational matrix from its predecessor (Aditya-L1).",
+         "tags": [
+           "space-exploration",
+           "isro",
+           "clat-format"
+         ],
+         "passage": "In a defining era for its extra-terrestrial ambitions, the Indian Space Research Organisation (ISRO) executed a series of milestone launches that underscored India’s transition from a cost-effective space explorer to a pioneering technological powerhouse. Central to this paradigm shift was the execution of the Chandrayaan-4 mission. Diverging significantly from its predecessor, Chandrayaan-3—which achieved an historic soft-landing near the lunar south pole—Chandrayaan-4 was engineered as a complex, multi-module sample-return initiative. The mission architecture demanded unprecedented orbital mechanics, requiring an intricate sequence of autonomous docking and separation maneuvers in lunar orbit involving an ascender, lander, transfer module, and re-entry capsule to successfully fetch pristine soil samples back to Earth. Simultaneously, India broadened its heliophysics footprint with the deployment of the Aditya-L2 observatory. While its forerunner, Aditya-L1, successfully monitored solar dynamics from the Lagrange Point 1, the L2 iteration was strategically inserted into a halo orbit around the second Lagrange point (L2). This positioning provided a distinct vantage point for monitoring deep-space weather patterns, solar coronal mass ejections (CMEs), and solar flares, effectively establishing an early-warning telemetry system to safeguard critical satellite constellations in low-Earth orbit. Parallelly, India’s human spaceflight program crossed a pivotal technical threshold with the uncrewed flight test of Gaganyaan-2. This mission acted as the final structural and safety validator for the indigenous crew module, testing automated environmental control, life-support integrations, and high-velocity atmospheric re-entry dynamics before human spaceflight missions. Complementing these state-led milestones was the surging maturation of India's domestic private space sector (NewSpace). The successful deployment of Aryabhata-2, a high-throughput communication satellite entirely conceptualized, manufactured, and funded by a Bengaluru-based private aerospace startup, signaled a definitive departure from ISRO’s traditional monopoly. Aimed at deploying low-latency internet connectivity to historically underserved, far-flung topography, the launch validated the operational viability of the Indian National Space Promotion and Authorization Centre (IN-SPACe) framework, cementing an ecosystem where private capital actively drives national digital infrastructure."
+       },
+       {
+         "id": "transformed-3bfeda21-aryabhata-economics",
+         "difficulty": "hard",
+         "topic": "Science & Technology",
+         "question_text": "According to the passage, the successful deployment of the privately developed Aryabhata-2 satellite serves as a broader indicator of which macro-economic trend in India's technology sector?",
+         "options": {
+           "A": "The complete privatization of ISRO’s core military surveillance defense assets.",
+           "B": "The democratization of the space ecosystem, shifting from a state monopoly to a market-driven landscape where private enterprises build public digital infrastructure.",
+           "C": "A structural decline in state space funding, forcing regional startups to source international venture capital.",
+           "D": "The immediate replacement of low-Earth orbit satellite communications with terrestrial high-speed fiber networks."
+         },
+         "correct_option": "B",
+         "explanation": "The text directly notes that Aryabhata-2's launch by a private startup 'signaled a definitive departure from ISRO’s traditional monopoly' and validated an ecosystem where private enterprise drives national digital connectivity infrastructure.",
+         "tags": [
+           "space-exploration",
+           "economy",
+           "clat-format"
+         ],
+         "passage": "In a defining era for its extra-terrestrial ambitions, the Indian Space Research Organisation (ISRO) executed a series of milestone launches that underscored India’s transition from a cost-effective space explorer to a pioneering technological powerhouse. Central to this paradigm shift was the execution of the Chandrayaan-4 mission. Diverging significantly from its predecessor, Chandrayaan-3—which achieved an historic soft-landing near the lunar south pole—Chandrayaan-4 was engineered as a complex, multi-module sample-return initiative. The mission architecture demanded unprecedented orbital mechanics, requiring an intricate sequence of autonomous docking and separation maneuvers in lunar orbit involving an ascender, lander, transfer module, and re-entry capsule to successfully fetch pristine soil samples back to Earth. Simultaneously, India broadened its heliophysics footprint with the deployment of the Aditya-L2 observatory. While its forerunner, Aditya-L1, successfully monitored solar dynamics from the Lagrange Point 1, the L2 iteration was strategically inserted into a halo orbit around the second Lagrange point (L2). This positioning provided a distinct vantage point for monitoring deep-space weather patterns, solar coronal mass ejections (CMEs), and solar flares, effectively establishing an early-warning telemetry system to safeguard critical satellite constellations in low-Earth orbit. Parallelly, India’s human spaceflight program crossed a pivotal technical threshold with the uncrewed flight test of Gaganyaan-2. This mission acted as the final structural and safety validator for the indigenous crew module, testing automated environmental control, life-support integrations, and high-velocity atmospheric re-entry dynamics before human spaceflight missions. Complementing these state-led milestones was the surging maturation of India's domestic private space sector (NewSpace). The successful deployment of Aryabhata-2, a high-throughput communication satellite entirely conceptualized, manufactured, and funded by a Bengaluru-based private aerospace startup, signaled a definitive departure from ISRO’s traditional monopoly. Aimed at deploying low-latency internet connectivity to historically underserved, far-flung topography, the launch validated the operational viability of the Indian National Space Promotion and Authorization Centre (IN-SPACe) framework, cementing an ecosystem where private capital actively drives national digital infrastructure."
+       },
+       {
+         "id": "transformed-7f80614f-gaganyaan-milestone",
+         "difficulty": "hard",
+         "topic": "Science & Technology",
+         "question_text": "What critical milestone was achieved through the launch of the uncrewed Gaganyaan-2 mission?",
+         "options": {
+           "A": "It achieved the first successful recovery of an Indian astronaut capsule from lunar orbit.",
+           "B": "It validated structural safety, environmental controls, and re-entry dynamics required to safely execute human spaceflight.",
+           "C": "It successfully deployed a network of micro-satellites for the private telecom sector.",
+           "D": "It set a record for the highest payload weight transported into geosynchronous transfer orbit by an indigenous cryogenic engine."
+         },
+         "correct_option": "B",
+         "explanation": "The passage explicitly defines Gaganyaan-2 as a safety validator that tested 'environmental control, life-support integrations, and high-velocity atmospheric re-entry dynamics' prior to launching human crews.",
+         "tags": [
+           "space-exploration",
+           "isro",
+           "clat-format"
+         ],
+         "passage": "In a defining era for its extra-terrestrial ambitions, the Indian Space Research Organisation (ISRO) executed a series of milestone launches that underscored India’s transition from a cost-effective space explorer to a pioneering technological powerhouse. Central to this paradigm shift was the execution of the Chandrayaan-4 mission. Diverging significantly from its predecessor, Chandrayaan-3—which achieved an historic soft-landing near the lunar south pole—Chandrayaan-4 was engineered as a complex, multi-module sample-return initiative. The mission architecture demanded unprecedented orbital mechanics, requiring an intricate sequence of autonomous docking and separation maneuvers in lunar orbit involving an ascender, lander, transfer module, and re-entry capsule to successfully fetch pristine soil samples back to Earth. Simultaneously, India broadened its heliophysics footprint with the deployment of the Aditya-L2 observatory. While its forerunner, Aditya-L1, successfully monitored solar dynamics from the Lagrange Point 1, the L2 iteration was strategically inserted into a halo orbit around the second Lagrange point (L2). This positioning provided a distinct vantage point for monitoring deep-space weather patterns, solar coronal mass ejections (CMEs), and solar flares, effectively establishing an early-warning telemetry system to safeguard critical satellite constellations in low-Earth orbit. Parallelly, India’s human spaceflight program crossed a pivotal technical threshold with the uncrewed flight test of Gaganyaan-2. This mission acted as the final structural and safety validator for the indigenous crew module, testing automated environmental control, life-support integrations, and high-velocity atmospheric re-entry dynamics before human spaceflight missions. Complementing these state-led milestones was the surging maturation of India's domestic private space sector (NewSpace). The successful deployment of Aryabhata-2, a high-throughput communication satellite entirely conceptualized, manufactured, and funded by a Bengaluru-based private aerospace startup, signaled a definitive departure from ISRO’s traditional monopoly. Aimed at deploying low-latency internet connectivity to historically underserved, far-flung topography, the launch validated the operational viability of the Indian National Space Promotion and Authorization Centre (IN-SPACe) framework, cementing an ecosystem where private capital actively drives national digital infrastructure."
+       }
+     ]
+   },
+   "english": {
+     "name": "English",
+     "count": 4,
+     "questions": [
+       {
+         "id": "transformed-98e85c5d-rc-ai-biases",
+         "difficulty": "hard",
+         "topic": "Reading Comprehension",
+         "question_text": "The author's tone in the passage can best be described as which of the following?",
+         "options": {
+           "A": "Optimistic and celebratory, focusing on the inevitable triumph of automation over systemic bottlenecks.",
+           "B": "Neutral and dispassionate, presenting empirical observations without issuing ethical commentary.",
+           "C": "Critical but constructive, highlighting systemic harms while encouraging responsible human intervention.",
+           "D": "Pessimistic and alarmist, arguing that technological advancements have irreversibly damaged human equity."
+         },
+         "correct_option": "C",
+         "explanation": "The author acknowledges the benefits ('remarkable,' 'convenience') but balances this by revealing critical algorithmic harms ('troubling reality,' 'reinforcing systemic inequality'). The final sentence frames this as a 'crossroads,' asking whether we will shape AI 'responsibly,' showing a critical yet constructive mindset.",
+         "tags": [
+           "tone",
+           "critical-comprehension",
+           "clat-format"
+         ],
+         "passage": "The rapid proliferation of artificial intelligence in everyday life has been nothing short of remarkable. From virtual assistants that manage our schedules to algorithms that curate our news feeds, AI has become an invisible hand guiding modern existence. Yet, beneath the veneer of convenience lies a troubling reality. These systems, trained on vast datasets, often perpetuate and amplify existing societal biases. A hiring algorithm trained on a company's historical data may learn to favor male candidates if the company traditionally hired more men. A facial recognition system trained primarily on light-skinned faces may perform poorly on darker skin tones. The consequences are not merely theoretical; they affect real people—denying job opportunities, triggering false arrests, and reinforcing systemic inequality. As we stand at this crossroads, the question is not whether AI will shape our future, but whether we will shape AI responsibly."
+       },
+       {
+         "id": "transformed-d612dc1d-rc-broken-rung",
+         "difficulty": "hard",
+         "topic": "Reading Comprehension",
+         "question_text": "Based on the passage, which of the following statements best identifies the primary structural barrier to achieving organizational gender parity?",
+         "options": {
+           "A": "The existence of explicit discriminatory laws that bar women from securing corporate board positions.",
+           "B": "The 'broken rung' effect, where an early-career promotional gap drastically reduces the pool of women eligible for senior leadership.",
+           "C": "The invisible 'glass ceiling' that remains entirely uncracked and prevents entry-level hiring parity.",
+           "D": "An intrinsic preference among female corporate professionals to avoid high-stress leadership roles."
+         },
+         "correct_option": "B",
+         "explanation": "The passage explicitly contrasts the 'glass ceiling' (which now has cracks) with the 'broken rung,' identifying the latter as the core issue because 'this early-career gap means fewer women are in the pipeline for senior leadership.' Options A and D are completely contradicted or unsupported by the text.",
+         "tags": [
+           "social-issues",
+           "inference",
+           "clat-format"
+         ],
+         "passage": "Despite decades of legislation and social progress, gender equality in the workplace remains an elusive goal. The 'glass ceiling' metaphor, coined in the 1980s, described the invisible barrier preventing women from reaching top leadership positions. Today, that ceiling has developed cracks—more women serve as CEOs and board members than ever before. However, a new challenge has emerged: the 'broken rung.' Studies show that women, particularly women of color, are significantly less likely than men to be promoted from entry-level positions to manager roles. This early-career gap means fewer women are in the pipeline for senior leadership. The problem is compounded by unconscious bias in performance evaluations, where women's assertiveness is often perceived negatively while the same behavior in men is rewarded. Until organizations address these systemic issues at every level, true equality will remain aspirational."
+       },
+       {
+         "id": "transformed-c331daa1-behavioral-economics",
+         "difficulty": "hard",
+         "topic": "Reading Comprehension",
+         "question_text": "Which of the following real-world consumer scenarios best illustrates the logical mechanism of the 'endowment effect' as conceptualized in the text?",
+         "options": {
+           "A": "An investor rapidly liquidating high-performing stocks due to a generalized fear of an impending market crash.",
+           "B": "A consumer choosing an over-priced product under the psychological assumption that high costs guarantee superior durability.",
+           "C": "A homeowner refusing an offer of ₹1 Crore for their house, despite previously valuing identical houses in the neighborhood at no more than ₹70 Lakhs.",
+           "D": "A shopper stocking up on heavily discounted items that they do not require simply because of a perceived bargain."
+         },
+         "correct_option": "C",
+         "explanation": "The passage states that the 'endowment effect' occurs when 'people value items they own more highly than identical items they do not own.' Option C perfectly matches this as the individual places an inflated value on their own property compared to identical unowned ones.",
+         "tags": [
+           "applied-logic",
+           "behavioral-economics",
+           "clat-format"
+         ],
+         "passage": "Recent studies in behavioral economics have challenged the traditional assumption that humans are rational actors. For example, the 'endowment effect' shows that people value items they own more highly than identical items they do not own. This irrationality can lead to market inefficiencies. Similarly, 'loss aversion' suggests that losses loom larger than gains, influencing decision-making. These insights have implications for public policy, such as designing 'nudge' strategies to guide better choices without restricting freedom."
+       },
+       {
+         "id": "transformed-08d3e30f-indus-valley-decline",
+         "difficulty": "hard",
+         "topic": "Reading Comprehension",
+         "question_text": "According to the historical analysis presented in the passage, what is the most accurate conclusion regarding the structural collapse of the Indus Valley Civilization?",
+         "options": {
+           "A": "The civilization collapsed abruptly due to a singular, catastrophic tectonic intervention that decimated city planning.",
+           "B": "It was triggered exclusively by external military invasions executed by highly aggressive nomadic Aryan tribes.",
+           "C": "The decline was an incremental process driven by a confluence of environmental degradation, shifting river networks, and changing monsoonal patterns.",
+           "D": "The collapse was entirely economic, stemming solely from the breakdown of luxury trade routes with Mesopotamia."
+         },
+         "correct_option": "C",
+         "explanation": "The text explicitly emphasizes that 'a combination of factors, rather than a single cause, likely led to the civilization's gradual decline,' detailing climate change, river shifts, and resource over-exploitation working together. Options A, B, and D incorrectly isolate single causes.",
+         "tags": [
+           "history",
+           "textual-analysis",
+           "clat-format"
+         ],
+         "passage": "The Indus Valley Civilization, one of the world's oldest urban cultures, flourished around 2500 BCE in what is now Pakistan and northwest India. The civilization was known for its advanced city planning, sophisticated drainage systems, and extensive trade networks. However, by 1900 BCE, the civilization began to decline. Scholars have debated the causes for centuries. Some attribute it to climate change, as evidence suggests a weakening of the monsoon rains that sustained agriculture. Others point to the shifting course of the Indus River, which may have disrupted trade and agriculture. A third theory suggests that over-exploitation of resources led to environmental degradation. Recent archaeological findings indicate that a combination of factors, rather than a single cause, likely led to the civilization's gradual decline."
+       }
+     ]
+   },
+   "legal_reasoning": {
+     "name": "Legal Reasoning",
+     "count": 4,
+     "questions": [
+       {
+         "id": "transformed-e986aa11-minor-contracts-clat",
+         "difficulty": "hard",
+         "topic": "Contract Law",
+         "question_text": "Facts: Meera, a 16-year-old student from a middle-class household, purchases a high-end smartphone worth ₹75,000 on a monthly EMI scheme, explicitly misrepresenting her age as 19 to the shopkeeper. After utilizing the device for two months to attend online board exam coaching classes, she defaults on her installments. She seeks to return the phone and demands a full refund of her initial deposit, pleading minority. The shopkeeper sues her for the balance, asserting that the phone was an absolute educational necessity. Based on the passage, what is the legal outcome?",
+         "options": {
+           "A": "Meera is liable to pay the balance because her fraudulent misrepresentation regarding her age debars her from taking shelter under the defense of minority.",
+           "B": "The contract is entirely valid because electronic communication devices automatically qualify as 'necessaries' creating a personal contractual obligation under Section 68.",
+           "C": "The contract is void ab initio, and Meera bears no personal liability to pay the balance; the shopkeeper can only seek equitable reimbursement from Meera’s estate if he satisfies the court that the specific luxury phone was a necessary commodity.",
+           "D": "The contract is voidable strictly at the option of the shopkeeper due to the operational elements of civil fraud committed by the minor."
+         },
+         "correct_option": "C",
+         "explanation": "According to the passage, a minor's contract is void ab initio (Mohori Bibee), and fraudulent misrepresentation does not create an estoppel against pleading minority. Section 68 allows reimbursement for necessaries strictly out of the minor's estate (in rem) rather than establishing personal liability. Since it is a luxury phone, it must be proven to be an actual necessity relative to her condition in life.",
+         "tags": [
+           "contracts",
+           "minor-capacity",
+           "clat-format"
+         ],
+         "passage": "Under Section 11 of the Indian Contract Act, 1872, every person is competent to contract who is of the age of majority according to the law to which he is subject, who is of sound mind, and is not disqualified from contracting by any law. In the seminal ruling of Mohori Bibee v. Dharmodas Ghose, it was conclusively established that a contract entered into by a minor is void ab initio (void from the very beginning) and cannot be enforced by or against them. Because a minor's agreement is a nullity in law, the equitable doctrine of estoppel cannot be invoked to prevent a minor from pleading their infancy to avoid contractual liability, even if they intentionally misrepresented their age at the time of the agreement. However, this protective shield is subject to statutory nuances. Section 68 of the Act stipulates that if a person incapable of entering into a contract is supplied by another person with 'necessaries' suited to their condition in life, the person who has furnished such supplies is entitled to be reimbursed from the property of such incapable person. Crucially, this does not create a personal liability for the minor; the statutory remedy is strictly in rem, operating solely against the minor’s estate. 'Necessaries' are legally defined as goods or services without which the minor cannot reasonably exist, relative to their socio-economic status, and must not already be possessed by the minor in sufficient quantities."
+       },
+       {
+         "id": "transformed-f136898e-negligence-torts-clat",
+         "difficulty": "hard",
+         "topic": "Law of Torts",
+         "question_text": "Facts: Rohan, a commercial supermarket manager, mops a central aisle but completely fails to erect a 'Wet Floor' warning sign. Priya, a customer carrying a heavy box, enters the aisle, slips, and fractures her ankle. Rohan denies liability, arguing that the wet patch was completely visible and that Priya's failure to observe the floor amounts to a complete breakdown of causation. Applying the legal principles, is Rohan liable?",
+         "options": {
+           "A": "No, because the routine act of cleaning a store does not give rise to a legal duty of care toward customers.",
+           "B": "Yes, because Rohan owed an invitor's duty of care to ensure a safe environment, breached it by failing to display a warning sign, and directly caused Priya's foreseeable physical injury.",
+           "C": "No, because Priya's independent choice to carry a heavy box that obstructed her line of vision acts as an intervening event that absolves the store of all liability.",
+           "D": "Yes, because in tort law, the mere occurrence of a slip or physical injury inside commercial boundaries automatically creates absolute liability."
+         },
+         "correct_option": "B",
+         "explanation": "The passage outlines the strict cumulative criteria for negligence: duty of care, breach of that duty, and direct causation of damage. Rohan owes a duty of care to lawful visitors; failing to place a sign constitutes a breach, which directly caused the foreseeable injury to Priya.",
+         "tags": [
+           "torts",
+           "negligence",
+           "clat-format"
+         ],
+         "passage": "In civil jurisprudence, the Law of Torts governs non-contractual wrongs, primarily through the framework of negligence. To successfully anchor an action in negligence, the plaintiff must concurrently establish four distinct legal prongs: first, that the defendant owed a definitive legal 'duty of care' to the plaintiff; second, that the defendant breached that duty by failing to conform to the standard of care expected of a reasonably prudent person under identical circumstances; third, that the breach was the direct and proximate cause of the injury; and fourth, that the plaintiff suffered actual, legally cognizable damage. The standard of care is objective, assessed through the eyes of a reasonable man acting with standard caution. Under the principle of occupier's liability, commercial entities inviting the public onto their premises owe an elevated duty of care to proactively mitigate hidden hazards or conditions that pose a foreseeable risk of physical injury to visitors. While contributory negligence on the part of the plaintiff may reduce the quantum of damages, it does not erase the initial structural breach committed by an occupier who ignores public safety standards."
+       },
+       {
+         "id": "transformed-5ec06a7c-private-defense-clat",
+         "difficulty": "hard",
+         "topic": "Criminal Law",
+         "question_text": "Facts: Sameer is walking down a dimly lit street when two men confront him, brandishing a knife and aggressively demanding his wallet. One attacker moves forward to strike him. Sameer, who is carrying a licensed handgun, draws his weapon and shoots the attacker in the chest, causing his death. The state prosecutes Sameer for culpable homicide, arguing that lethal force was completely disproportionate for a property crime like theft. Can Sameer successfully invoke the right of private defense?",
+         "options": {
+           "A": "No, because the statutory right of private defense is strictly confined to the protection of physical property and can never extend to causing death.",
+           "B": "Yes, because the armed confrontation and the presentation of a lethal weapon created a reasonable, real-time apprehension of death or grievous hurt, legally justifying the extension of self-defense to its absolute limit.",
+           "C": "No, because Sameer was under a strict, absolute legal obligation to retreat from the scene or contact emergency services before employing lethal force.",
+           "D": "Yes, because the possession of a validly licensed firearm automatically confers an absolute legal immunity against criminal prosecution for actions taken under stress."
+         },
+         "correct_option": "B",
+         "explanation": "The passage states that the right of private defense extends to causing death if the target faces an 'imminent assault causing reasonable apprehension of death or grievous hurt.' A knife attack creates exactly this reasonable apprehension, making the response legally justified under Section 100.",
+         "tags": [
+           "criminal-law",
+           "private-defense",
+           "clat-format"
+         ],
+         "passage": "The right of private defense, codified under Sections 96 to 106 of the Indian Penal Code, serves as a vital statutory shield, recognizing that the state cannot prevent every immediate criminal act. Section 96 unequivocally dictates that nothing is an offense which is done in the exercise of the right of private defense. However, this right is governed by the principles of necessity and proportionality; it is a defensive right, not a punitive or retaliatory weapon. Section 99 explicitly mandates that the right of private defense in no case extends to the inflicting of more harm than it is necessary to inflict for the purpose of defense. Crucially, Section 100 provides specific exceptions where the right of private defense of the body extends to the voluntary causing of death to the assailant. This absolute extension is legally triggered only if the offense that occasions the exercise of the right belongs to specific categories, foremost among which is an imminent assault that reasonably causes an apprehension that death or grievous hurt will otherwise be the consequence. The law does not expect a citizen facing an armed attacker to modulate their response with mathematical precision; the threat is evaluated based on real-time subjective apprehension rather than detached historical review."
+       },
+       {
+         "id": "transformed-9c611f59-free-speech-clat",
+         "difficulty": "hard",
+         "topic": "Constitutional Law",
+         "question_text": "Facts: Amit distributes a highly provocative video on social media asserting that an ethnic minority group is stockpiling weapons to attack his neighborhood, relying entirely on an unverified messaging forward. The video goes viral, causing panic and triggering widespread mob violence and arson across two cities. The state arrests Amit under a public security law. Amit challenges the arrest, claiming absolute protection under Article 19(1)(a). Is the state's restriction constitutionally valid?",
+         "options": {
+           "A": "No, because digital speech shared on personal social networks falls entirely outside the purview of statutory state restrictions.",
+           "B": "Yes, because the restriction satisfies the constitutional requirements of Article 19(2), as Amit’s speech had a direct, proximate causal connection to the actual breakdown of public order.",
+           "C": "No, because the state must prove that Amit harbored a malicious internal intent to actively incite violence before making an arrest.",
+           "D": "Yes, because the state possesses unfettered plenary power to penalize and restrict any speech that contains false or unverified information."
+         },
+         "correct_option": "B",
+         "explanation": "The passage outlines that free speech under Article 19(1)(a) is not absolute and can be restricted under Article 19(2) on specified grounds, including 'public order.' Because Amit's unverified video had a direct, proximate connection to actual mob violence, the restriction is valid. The state does not have 'unfettered power' (rejecting D), but must tie the restriction strictly to the grounds in Article 19(2).",
+         "tags": [
+           "constitutional-law",
+           "fundamental-rights",
+           "clat-format"
+         ],
+         "passage": "Article 19(1)(a) of the Constitution of India guarantees to all its citizens the fundamental right to freedom of speech and expression. This right is a cornerstone of democratic governance, protecting the exchange of ideas, political dissent, and journalistic critique. However, this liberty is explicitly non-absolute. Under Article 19(2), the state retains the sovereign power to impose 'reasonable restrictions' on this right by law, provided such restrictions are strictly anchored to specific, exhaustive constitutional grounds: namely, the sovereignty and integrity of India, the security of the State, friendly relations with foreign States, public order, decency, morality, or in relation to contempt of court, defamation, or incitement to an offense. For a restriction to be deemed 'reasonable,' there must exist a direct, proximate, and non-tenuous causal nexus between the regulated speech and the anticipated threat, particularly regarding the maintenance of 'public order.' The state cannot employ overbroad or disproportionate legal tools to suppress speech merely because it is unpopular or controversial; the restriction must target a clear and present danger that threatens institutional stability or public safety."
+       }
+     ]
+   },
+   "logical_reasoning": {
+     "name": "Logical Reasoning",
+     "count": 4,
+     "questions": [
+       {
+         "id": "transformed-7a5614cb-cr-causation-flaw",
+         "difficulty": "hard",
+         "topic": "Critical Reasoning",
+         "question_text": "Which of the following statements, if true, identifies the most severe logical vulnerability in the author's argument regarding caffeine and exam performance?",
+         "options": {
+           "A": "Clinical trials demonstrate that caffeine acts as an active nervous system stimulant that temporarily reduces drowsiness.",
+           "B": "The underlying data reveals that students who consume coffee before exams also consistently study significantly more hours than non-coffee drinkers.",
+           "C": "A significant percentage of high-performing students express an explicit dietary preference for herbal tea over coffee.",
+           "D": "Global market indicators show that aggregate coffee consumption has expanded steadily over the past decade."
+         },
+         "correct_option": "B",
+         "explanation": "The author commits a classic correlation-to-causation error: observing that coffee-drinking students perform better and concluding that coffee *causes* the better performance. Option B introduces a major confounding variable (hours studied), showing that the performance spike may be caused by extra studying rather than coffee, heavily weakening the original argument.",
+         "tags": [
+           "logical-flaws",
+           "weaken-argument",
+           "clat-format"
+         ],
+         "passage": "In a competitive educational environment, optimizing cognitive performance during examinations is a paramount concern for students. A recent institutional survey revealed a compelling statistical correlation: students who consumed caffeinated coffee within two hours prior to entering the testing hall scored, on average, 15% higher than peers who abstained from caffeine. Based entirely on this empirical correlation, the researchers concluded that caffeine directly enhances cognitive processing, memory recall, and problem-solving efficiency under exam stress. Consequently, they have advocated for the mandatory installation of coffee dispensers in all high school common rooms to structurally boost institutional academic performance."
+       },
+       {
+         "id": "transformed-ffeb863f-cr-syllogism-fallacy",
+         "difficulty": "hard",
+         "topic": "Critical Reasoning",
+         "question_text": "The structural reasoning layout of the argument in the final sentence is flawed because it ignores the possibility that:",
+         "options": {
+           "A": "the training programs required to qualify as a judge are far more rigorous than standard legal training.",
+           "B": "the entire subset of graduates who have successfully transitioned into judges is comprised exclusively of non-lawyer professionals.",
+           "C": "some lawyers choose to retire early and abandon their legal practice before entering public office.",
+           "D": "the total number of graduates globally is vastly higher than the total number of practicing lawyers."
+         },
+         "correct_option": "B",
+         "explanation": "The premises state: 1. All lawyers are graduates. 2. Some graduates are judges. The author erroneously concludes that 'some lawyers are judges.' This is a formal syllogistic fallacy. The subset of 'graduates who are judges' could sit entirely outside the subset of 'graduates who are lawyers' (e.g., they could be academic or bureaucratic graduates). Option B highlights this complete separation, destroying the validity of the conclusion.",
+         "tags": [
+           "analytical-fallacies",
+           "categorical-logic",
+           "clat-format"
+         ],
+         "passage": "The composition of the modern legal system relies heavily on professional educational prerequisites. It is an absolute rule within our jurisdiction that all practicing lawyers are university graduates, ensuring baseline professional standards. Furthermore, rigorous data from the department of justice indicates that some university graduates successfully secure positions as judges within the higher judiciary. Based on these two parameters, the chief judicial officer issued an official statement concluding that some practicing lawyers within the jurisdiction are necessarily judges."
+       },
+       {
+         "id": "transformed-073b9d4e-cr-assumptions",
+         "difficulty": "hard",
+         "topic": "Critical Reasoning",
+         "question_text": "The policy argument advocating for an absolute electric vehicle mandate by 2030 relies on which of the following unstated foundational assumptions?",
+         "options": {
+           "A": "Internal combustion engines can be made completely emissions-free through advanced exhaust scrubbing technology.",
+           "B": "The domestic electrical power grid and charging infrastructure will possess the capacity to safely sustain the massive added load by 2030.",
+           "C": "The average retail consumer demonstrates a natural psychological preference for electric drivetrains over fossil-fuel alternatives.",
+           "D": "Global automobile manufacturers intend to fully terminate all manufacturing operations prior to the 2030 deadline."
+         },
+         "correct_option": "B",
+         "explanation": "For an absolute mandate of electric vehicles to achieve its stated goals, the underlying energy infrastructure must be capable of supporting it. If the grid cannot handle the load, the policy fails fundamentally. Therefore, Option B is a necessary, unstated assumption that anchors the argument's viability.",
+         "tags": [
+           "implicit-assumptions",
+           "policy-analysis",
+           "clat-format"
+         ],
+         "passage": "To aggressively combat deteriorating urban air quality and meet international carbon reduction commitments, the parliamentary committee on environmental sustainability has proposed an absolute legislative mandate: every single passenger automobile sold within the domestic market after the year 2030 must be a fully electric vehicle (EV). Proponents of this sweeping statutory intervention argue that removing internal combustion engines is the most efficient method to decarbonize transport networks and eliminate tailpipe emissions entirely."
+       },
+       {
+         "id": "transformed-02ee98e4-cr-weaken-causation",
+         "difficulty": "hard",
+         "topic": "Critical Reasoning",
+         "question_text": "Which of the following findings, if true, would most severely undermine the city council's causal conclusion regarding public transit and commuter satisfaction?",
+         "options": {
+           "A": "Commuters who utilize public transit happen to live primarily in premium urban zones that boast superior transit infrastructure and shorter raw distances to commercial hubs.",
+           "B": "The comprehensive survey data completely excluded individuals who rely heavily on ride-sharing services or motorized two-wheelers.",
+           "C": "A substantial portion of single-occupant vehicle drivers state that they commute via personal cars due to a complete lack of transit options.",
+           "D": "The survey respondents participated voluntarily, introducing a slight statistical variance compared to a randomized census study."
+         },
+         "correct_option": "A",
+         "explanation": "The council assumes that switching to public transit *causes* higher satisfaction and less time in traffic. Option A provides an alternative explanation: these transit users already live in premium zones with shorter distances and better infrastructure. Thus, the satisfaction stems from geography and infrastructure rather than transit usage itself, severely weakening the council's plan to expand transit to outer zones.",
+         "tags": [
+           "weaken-argument",
+           "causal-fallacy",
+           "clat-format"
+         ],
+         "passage": "In a municipal transportation survey, 80% of respondents who reported utilizing public transit networks at least once a week expressed significantly higher levels of satisfaction with their daily commutes compared to those who drove personal vehicles alone. The data also indicated that public transit users spent an average of 30 minutes less per week trapped in gridlock. Driven by these specific metrics, the city council concluded that expanding public transit infrastructure will directly reduce congestion and uniformly improve commuter satisfaction across all demographics."
+       }
+     ]
+   },
+   "quantitative_techniques": {
+     "name": "Quantitative Techniques",
+     "count": 4,
+     "questions": [
+       {
+         "id": "transformed-96857682-qt-coaching-weighted",
+         "difficulty": "medium",
+         "topic": "Percentages",
+         "question_text": "Based on the data provided in the narrative caselet, what exact percentage of the total student body enrolled at the Hyderabad center successfully qualified for the next tier?",
+         "options": {
+           "A": "34%",
+           "B": "35%",
+           "C": "36%",
+           "D": "42%"
+         },
+         "correct_option": "C",
+         "explanation": "Let total students = 100. Male students = 60% of 100 = 60. Female students = 100 - 60 = 40. Qualifying males = 40% of 60 = 24. Qualifying females = 30% of 40 = 12. Total qualified students = 24 + 12 = 36. Out of 100 students, this is exactly 36%.",
+         "tags": [
+           "caselet",
+           "weighted-averages",
+           "percentages",
+           "clat-format"
+         ],
+         "passage": "An institutional performance review at a premier CLAT coaching academy in Hyderabad evaluates student qualification data. The center has a total enrollment of 500 students. Demographically, 60% of the total student body is male, while the remaining students are female. Following a series of intensive baseline mock examinations designed to filter candidates for an advanced batch, the internal data reveals that exactly 40% of the male students successfully cleared the qualification threshold. Simultaneously, exactly 30% of the female students achieved qualifying scores."
+       },
+       {
+         "id": "transformed-7e0a13e5-qt-ratios",
+         "difficulty": "medium",
+         "topic": "Ratios",
+         "question_text": "Determine the exact total number of mock exam questions successfully attempted by Ravi during the comprehensive evaluation cycle.",
+         "options": {
+           "A": "60 questions",
+           "B": "80 questions",
+           "C": "100 questions",
+           "D": "160 questions"
+         },
+         "correct_option": "A",
+         "explanation": "The ratio of Ravi's attempts to Simran's attempts is 3:5. Let Ravi's attempts = 3x and Simran's attempts = 5x. The difference is given as 5x - 3x = 2x = 40 questions. Therefore, x = 20. Ravi's total attempted questions = 3 * 20 = 60 questions.",
+         "tags": [
+           "caselet",
+           "ratios",
+           "linear-equations",
+           "clat-format"
+         ],
+         "passage": "During a synchronized preparation strategy session, two law aspirants, Ravi and Simran, track their problem-solving metrics across a rigorous series of sectional tests. The algebraic ratio of the total number of questions attempted by Ravi to those attempted by Simran is locked at a strict constant of 3:5. Due to differences in reading speed and skimming strategies, Simran managed to attempt exactly 40 more questions than Ravi over the same evaluation cycle."
+       },
+       {
+         "id": "transformed-a778807f-qt-time-work",
+         "difficulty": "medium",
+         "topic": "Time & Work",
+         "question_text": "If aspirant B is required to analyze and complete an identical mock test paper entirely on their own, how many total hours will it take them to complete the task?",
+         "options": {
+           "A": "12 hours",
+           "B": "15 hours",
+           "C": "16 hours",
+           "D": "20 hours"
+         },
+         "correct_option": "B",
+         "explanation": "Combined work rate of A and B = 1/6 of the test paper per hour. Individual work rate of A alone = 1/10 of the test paper per hour. Let B's individual rate be 1/B. Thus, 1/10 + 1/B = 1/6 => 1/B = 1/6 - 1/10 = (5 - 3)/30 = 2/30 = 1/15. Therefore, B working alone takes exactly 15 hours.",
+         "tags": [
+           "caselet",
+           "work-rate",
+           "fractions",
+           "clat-format"
+         ],
+         "passage": "An analytical study tracks the operational efficiency of two content creators, Aspirant A and Aspirant B, who are tasked with drafting detailed answer explanations for full-length CLAT mock papers. Working concurrently and combining their processing speeds, A and B can complete the detailed review of a comprehensive test paper in exactly 6 hours. When the task is isolated and given exclusively to Aspirant A working alone, their individual speed requires exactly 10 hours to complete the identical volume of work."
+       },
+       {
+         "id": "transformed-f1148057-qt-di-table",
+         "difficulty": "hard",
+         "topic": "Data Interpretation",
+         "question_text": "Based strictly on the structured economic data table provided, what is the approximate percentage increase in India's aggregate Gross Domestic Product (GDP) when moving from the financial year 2022 to the financial year 2023?",
+         "options": {
+           "A": "7.5%",
+           "B": "8.1%",
+           "C": "12.5%",
+           "D": "13.5%"
+         },
+         "correct_option": "B",
+         "explanation": "GDP in 2022 = 160 lakh crore. GDP in 2023 = 173 lakh crore. Absolute increase = 173 - 160 = 13 lakh crore. Percentage increase = (Absolute Increase / Original Value) * 100 = (13 / 160) * 100 = 8.125%, which approximates closely to 8.1%.",
+         "tags": [
+           "data-interpretation",
+           "tables",
+           "percentage-increase",
+           "clat-format"
+         ],
+         "passage": "A research cell at a financial newspaper compiles economic data sets tracking India's macro performance indicators across four successive fiscal years. The compiled metrics focus on aggregate Gross Domestic Product (GDP), total structural Exports, and inbound Foreign Direct Investment (FDI) inflows. The absolute data points are formally structured in the table below:\n\nEconomic Indicators of India (figures in ₹ lakh crore):\n| Year | GDP | Exports | FDI Inflow |\n|------|-----|---------|------------|\n| 2020 | 135 | 29.1    | 4.2        |\n| 2021 | 147 | 32.5    | 5.1        |\n| 2022 | 160 | 36.8    | 5.8        |\n| 2023 | 173 | 41.2    | 6.4        |"
+       }
+     ]
+   }
+ }
+}
