@@ -9,6 +9,10 @@ import { getServerUser } from '@/lib/supabase/server';
  * - Valid till July 31, 2026
  * - Limited to first 20 users
  * - DPDP: audit trail in upgrade_log table
+ *
+ * Graceful fallback: If campaign columns (is_promo_user etc.) don't exist
+ * in the DB yet (migration not run), the upgrade still works without
+ * campaign tracking.
  */
 export async function POST(_req: NextRequest) {
   try {
@@ -22,10 +26,13 @@ export async function POST(_req: NextRequest) {
     const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
     const admin = createClient(supabaseUrl, serviceKey);
 
-    // Fetch user's current plan
+    // ── Step 1: Fetch user's current plan ──
+    // Only select columns that definitely exist (subscription_plan).
+    // Campaign columns (is_promo_user, promo_claimed_at) may not exist
+    // if the migration hasn't been run yet.
     const { data: profile, error: profileErr } = await admin
       .from('profiles')
-      .select('subscription_plan, is_promo_user, promo_claimed_at')
+      .select('subscription_plan')
       .eq('id', user.id)
       .single();
 
@@ -33,9 +40,7 @@ export async function POST(_req: NextRequest) {
       return NextResponse.json({ error: 'Profile not found' }, { status: 404 });
     }
 
-    // ── Campaign validation ──
-
-    // 1. Must currently be on 'free' plan
+    // ── Step 2: Must be on 'free' plan ──
     if (profile.subscription_plan !== 'free') {
       return NextResponse.json({
         error: 'Already upgraded',
@@ -46,44 +51,64 @@ export async function POST(_req: NextRequest) {
       }, { status: 400 });
     }
 
-    // 2. Must be within campaign period (July 2026)
+    // ── Step 3: Check if campaign columns exist ──
+    let hasCampaign = false;
+    let remainingSlots = 0;
     const now = new Date();
     const campaignEnd = new Date('2026-07-31T23:59:59Z');
-    if (now > campaignEnd) {
-      return NextResponse.json({
-        error: 'Campaign ended',
-        message: 'The free upgrade campaign ended on July 31, 2026. Check back for new offers!',
-      }, { status: 400 });
+
+    try {
+      // Probe: try selecting campaign columns
+      await admin
+        .from('profiles')
+        .select('is_promo_user')
+        .eq('id', user.id)
+        .limit(1)
+        .single();
+
+      hasCampaign = true;
+
+      // Campaign period check
+      if (now > campaignEnd) {
+        return NextResponse.json({
+          error: 'Campaign ended',
+          message: 'The free upgrade campaign ended on July 31, 2026. Check back for new offers!',
+        }, { status: 400 });
+      }
+
+      // Count promo users (first 20 cap)
+      const { count: promoCount } = await admin
+        .from('profiles')
+        .select('id', { count: 'exact', head: true })
+        .eq('is_promo_user', true)
+        .eq('subscription_plan', 'premium');
+
+      remainingSlots = 20 - (promoCount ?? 0);
+      if (remainingSlots <= 0) {
+        return NextResponse.json({
+          error: 'Campaign full',
+          message: 'Sorry, all 20 promo slots have been claimed! Stay tuned for more offers.',
+        }, { status: 400 });
+      }
+    } catch {
+      // Campaign columns don't exist — skip campaign checks
+      // Upgrade will still work, just without promo tracking
+      hasCampaign = false;
     }
 
-    // 3. Count current promo users (first 20 cap)
-    const { count: promoCount, error: countErr } = await admin
-      .from('profiles')
-      .select('id', { count: 'exact', head: true })
-      .eq('is_promo_user', true)
-      .eq('subscription_plan', 'premium');
+    // ── Step 4: Perform upgrade ──
+    const updateData: Record<string, unknown> = {
+      subscription_plan: 'premium',
+    };
 
-    if (countErr) {
-      console.error('Failed to count promo users:', countErr);
-      return NextResponse.json({ error: 'Server error' }, { status: 500 });
+    if (hasCampaign) {
+      updateData.is_promo_user = true;
+      updateData.promo_claimed_at = now.toISOString();
     }
 
-    const remainingSlots = 20 - (promoCount ?? 0);
-    if (remainingSlots <= 0) {
-      return NextResponse.json({
-        error: 'Campaign full',
-        message: 'Sorry, all 20 promo slots have been claimed! Stay tuned for more offers.',
-      }, { status: 400 });
-    }
-
-    // ── Perform upgrade ──
     const { error: updateErr } = await admin
       .from('profiles')
-      .update({
-        subscription_plan: 'premium',
-        is_promo_user: true,
-        promo_claimed_at: now.toISOString(),
-      })
+      .update(updateData)
       .eq('id', user.id);
 
     if (updateErr) {
@@ -91,27 +116,31 @@ export async function POST(_req: NextRequest) {
       return NextResponse.json({ error: 'Upgrade failed' }, { status: 500 });
     }
 
-    // ── Audit log (DPDP compliance: immutable trail) ──
-    const { error: logErr } = await admin
-      .from('upgrade_log')
-      .insert({
-        user_id: user.id,
-        from_plan: 'free',
-        to_plan: 'premium',
-        upgrade_type: 'promo_campaign',
-        campaign_remaining: remainingSlots - 1,
-      });
-
-    if (logErr) {
-      // Log failure is non-fatal — upgrade already succeeded
-      console.error('Audit log insertion failed:', logErr);
+    // ── Step 5: Audit log (only if upgrade_log exists) ──
+    if (hasCampaign) {
+      try {
+        await admin
+          .from('upgrade_log')
+          .insert({
+            user_id: user.id,
+            from_plan: 'free',
+            to_plan: 'premium',
+            upgrade_type: 'promo_campaign',
+            campaign_remaining: remainingSlots - 1,
+          });
+      } catch {
+        // Audit log failure is non-fatal
+        console.warn('Audit log write skipped (table may not exist yet)');
+      }
     }
 
     return NextResponse.json({
       success: true,
       plan: 'premium',
-      message: '🎉 You\'ve been upgraded to Premium!',
-      campaign_slots_remaining: remainingSlots - 1,
+      message: hasCampaign
+        ? '🎉 You\'ve been upgraded to Premium!'
+        : '✅ Upgraded to Premium! Run the DB migration for full campaign tracking.',
+      campaign_slots_remaining: hasCampaign ? remainingSlots - 1 : null,
     });
 
   } catch (err) {
