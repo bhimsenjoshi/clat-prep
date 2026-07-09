@@ -28,6 +28,7 @@ interface AnswerResult {
   correct_option: string;
   explanation: string;
   your_answer: string;
+  time_taken_seconds?: number;
 }
 
 interface TrackedResponse {
@@ -279,8 +280,10 @@ export default function PracticeQuiz() {
                       'bg-blue-900/50 text-blue-400'
                     }`}>{r.question.difficulty}</span>
                   )}
-                  <span className="ml-auto text-xs text-gray-500">
-                    Your: {r.result.your_answer} · Correct: {r.result.correct_option}
+                  <span className="ml-auto text-xs text-gray-500 flex items-center gap-2">
+                    <span>⏱ {r.result.time_taken_seconds}s</span>
+                    <span>·</span>
+                    <span>Your: {r.result.your_answer} · Correct: {r.result.correct_option}</span>
                   </span>
                 </div>
                 {/* Passage */}
@@ -357,6 +360,11 @@ export default function PracticeQuiz() {
                 <p className="text-sm text-gray-400">Incorrect</p>
               </div>
             </div>
+            {trackedResponses.length > 0 && (
+              <div className="text-xs text-gray-500 mb-3">
+                Avg ⏱ {Math.round(trackedResponses.reduce((s, r) => s + (r.result.time_taken_seconds ?? 0), 0) / trackedResponses.length)}s per question
+              </div>
+            )}
             <div className="pt-4 border-t border-gray-800">
               <p className={`text-4xl font-bold ${
                 pct >= 70 ? 'text-green-400' : pct >= 40 ? 'text-amber-400' : 'text-red-400'
@@ -460,6 +468,7 @@ export default function PracticeQuiz() {
                 <p className="font-bold text-lg">{result.is_correct ? 'Correct!' : 'Incorrect'}</p>
                 <p className="text-xs text-gray-400">
                   Your answer: {result.your_answer} · Correct: {result.correct_option}
+                  {result.time_taken_seconds != null && <span className="ml-2">· ⏱ {result.time_taken_seconds}s</span>}
                 </p>
               </div>
             </div>
