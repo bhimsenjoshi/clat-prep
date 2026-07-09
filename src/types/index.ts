@@ -82,7 +82,7 @@ export interface TestWithSections extends Test {
 // ─── Practice Quiz types ───
 
 export type Difficulty = 'easy' | 'medium' | 'hard';
-export type SubscriptionPlan = 'free' | 'premium';
+export type SubscriptionPlan = 'free' | 'premium' | 'max';
 
 export interface PracticeQuestion {
   id: string;
@@ -124,6 +124,10 @@ export interface ExtendedProfile extends Profile {
   daily_free_questions: number;
   last_practice_date: string | null;
   subscription_plan: SubscriptionPlan;
+  is_promo_user: boolean;
+  promo_claimed_at: string | null;
+  phone: string | null;
+  email: string | null;
 }
 
 export interface SectionWithQuestions extends Section {

@@ -39,9 +39,30 @@ const PER_SECTION_TARGET: Record<SectionName, { passages: number; totalQ: string
 // ─── Sub-agent prompts ───
 
 const SYSTEM_PROMPTS: Record<SectionName, string> = {
-  'English': `You are a CLAT English Language content creator.
+  'English': `You are a CLAT English Language content creator crafting CHALLENGING reading comprehension questions.
 
 CRITICAL: CLAT English (Section I) consists ENTIRELY of reading comprehension passages. Each passage (~450 words) is followed by 4-6 questions based SOLELY on that passage. A full section has 4-5 passages and 22-26 questions total (~20% of the paper).
+
+🚫 FORBIDDEN QUESTION TYPES (DO NOT USE):
+- "The main idea of the passage is" — NEVER use this phrasing
+- "What is the primary focus/goal/theme of the passage" — TOO EASY
+- "Which of the following best summarizes the passage" — TOO EASY
+- "What is the author's main argument" without requiring specific textual analysis
+- Simple fact-recall like "According to the passage, what happened in year X?"
+
+✅ REQUIRED QUESTION TYPES (distribute evenly across passages):
+1. **Vocabulary in context** — "The term 'X' (line Y) most nearly means:" — pick nuanced words from passage, options must be subtle distinctions
+2. **Inference and implication** — "From the passage it can be inferred that:" — requires reading BETWEEN the lines, not stated explicitly
+3. **Author's tone / attitude** — "The author's attitude toward X can best be described as:" — subtle tone distinctions
+4. **Literary/rhetorical devices** — "The author uses the phrase 'X' to:" — identify purpose of specific literary technique
+5. **Structure and purpose** — "The primary purpose of the second paragraph is to:" or "The relationship between paragraph 1 and paragraph 2 is:"
+6. **Complex reasoning** — "Which of the following, if true, would most weaken/strengthen the author's claim?" or "The author would most likely agree with which of the following statements?"
+7. **Critical evaluation** — "The passage mentions X primarily in order to:" — requires understanding argument structure
+
+DIFFICULTY DISTRIBUTION:
+- ~20% easy (straightforward but NOT main-idea-recall)
+- ~50% medium (requires careful reading and analysis)
+- ~30% hard (subtle inference, complex vocabulary, multi-step reasoning)
 
 Each passage should:
 - Be ~450 words long (between 400-500 words)
@@ -49,17 +70,15 @@ Each passage should:
 - Be drawn from real books, academic texts, or quality journalism (include source/author at end)
 - Match the sophistication level of CLAT passages (like Non-Cooperation Movement, Yuval Harari's Sapiens, Tagore/Freedom House, Fukuyama, Animal Farm)
 
-Questions test (vary across passages):
-- Central theme / main idea — "The main idea of the passage is:"
-- Inference and implication — "From the passage it is evident that:"
-- Vocabulary in context — "The term 'X' in the passage refers to:"
-- Specific detail / true statements — "Which of the following is true according to the passage?"
-- Author's tone or purpose — "Which best describes the tone of the passage?"
-- Literary device identification
+⚠️ ANTI-CHEAT RULES:
+- Question text MUST NOT be a direct copy of a sentence from the passage
+- Correct answer option MUST NOT be a direct quote from the passage
+- At least 3 of the 4 options must be plausible (not obviously wrong)
+- Questions must be UNANSWERABLE by simply scanning the passage — require actual comprehension
 
-Every question must have the 'passage' field filled with the FULL passage text (questions from the same passage share identical passage text). Each question has exactly 4 options (A-D). Return ONLY a valid JSON array.`,
+Every question must have the 'passage' field filled with the FULL passage text (questions from the same passage share identical passage text). Each question has exactly 4 options (A-D). Return ONLY a valid JSON object with a "questions" key containing the array.`,
 
-  'Current Affairs': `You are a CLAT Current Affairs and General Knowledge content creator.
+  'Current Affairs': `You are a CLAT Current Affairs and General Knowledge content creator crafting CHALLENGING questions.
 
 CRITICAL: CLAT GK/Current Affairs (Section II) consists ENTIRELY of passage-based questions covering recent news, current events, and static GK connected to current topics. A full section has 5-6 passages (~450 words each) and 28-32 questions total (~25% of the paper).
 
@@ -87,17 +106,20 @@ SELECT FROM THESE HIGH-YIELD 2025-2026 CATEGORIES:
 - Defence: indigenous manufacturing, Agni/Prithvi tests, naval modernisation
 
 For EACH passage, generate 4-6 questions:
-- 2-3 questions directly from the passage (comprehension of content)
-- 1-2 questions testing static GK CONNECTED TO THE PASSAGE TOPIC (e.g., SCO passage → ask about SCO members, secretariat; chess passage → grandmasters, FIDE history)
-- 1 question testing current-affairs context beyond what's in the passage
+- 2-3 questions directly from the passage (comprehension of content — but these must test NUANCED understanding, not fact-recall)
+- 1-2 questions testing static GK CONNECTED TO THE PASSAGE TOPIC that require real knowledge (e.g., SCO passage → ask about SCO founding year, members, secretariat location; chess passage → grandmasters, FIDE history, World Chess Championship winners)
+- 1 question testing current-affairs context beyond the passage (requires awareness of recent events)
 
-Return ONLY a valid JSON array. Every question must have the 'passage' field filled with the relevant passage text.`,
+DIFFICULTY DISTRIBUTION: ~20% easy, ~50% medium, ~30% hard
+⚠️ ANTI-CHEAT: Questions must NOT be answerable by simply copying text from the passage. Static GK questions should test knowledge the passage assumes, not text it contains.
 
-  'Legal Reasoning': `You are a CLAT Legal Reasoning content creator.
+Return ONLY a valid JSON object with a "questions" key containing the array. Every question must have the 'passage' field filled.`,
+
+  'Legal Reasoning': `You are a CLAT Legal Reasoning content creator crafting CHALLENGING application-based questions.
 
 CRITICAL: CLAT Legal Reasoning (Section III) has 5-6 passages (350-450 words each) and 28-32 questions total (~25% of the paper).
 
-FORMAT: ALL questions are passage-based — extracts from real Supreme Court judgments, constitutional commentary, or legal texts followed by comprehension, application, and inference questions.
+FORMAT: ALL questions are passage-based — extracts from real Supreme Court judgments, constitutional commentary, or legal texts followed by application, inference, and analysis questions.
 
 Each passage should:
 - Be 350-450 words long
@@ -114,24 +136,27 @@ SELECT FROM THESE HIGH-YIELD CATEGORIES (prioritise recent SC judgments):
 - Family Law: Hindu Marriage Act, Muslim personal law, Uniform Civil Code debate, maintenance, adoption
 - Recent landmark judgments: Same-sex Marriage (Supriyo v. UOI), Places of Worship (ASR v. UOI), Manoj Narula v. UOI, Electoral Bonds, Jallikattu / bull-taming ban
 
-For EACH passage, generate 4-6 questions testing:
-- Main legal principle established in the passage
-- Application of the principle to new factual scenarios
-- Inference drawn from the text
-- Understanding of related legal concepts and distinctions
-- Ratio decidendi / obiter dicta identification
+For EACH passage, generate 4-6 questions (PRIORITISE APPLICATION over comprehension):
+- APPLICATION questions (at least 60%): Present a NEW factual scenario and ask "Applying the principle laid down in the passage, which of the following would be the most likely outcome?" — this tests whether the student can EXTRAPOLATE the legal principle
+- Inference questions: "Which of the following can be inferred about the court's approach from this passage?"
+- Principle identification: "The principle established in the passage is most accurately captured by which of the following statements?"
+- Distinction questions: "How does the principle in this passage differ from the rule established in X?"
 
-Ensure a good mix of constitutional law, torts, criminal law, and contracts across the 6 passages. Include questions at varying difficulty levels (easy → medium → hard).
+🚫 MINIMIZE: "What does the passage say about X" type comprehension questions
+✅ EMPHASISE: "If a new set of facts arises..." type application questions
 
-Return ONLY a valid JSON array. Every question must have the 'passage' field filled.`,
+DIFFICULTY DISTRIBUTION: ~20% easy, ~50% medium, ~30% hard
+⚠️ ANTI-CHEAT: Questions and correct answers must NOT be direct text from passage. Application questions by definition cannot be answered by copying.
 
-  'Logical Reasoning': `You are a CLAT Logical Reasoning content creator.
+Return ONLY a valid JSON object with a "questions" key containing the array. Every question must have the 'passage' field filled.`,
+
+  'Logical Reasoning': `You are a CLAT Logical Reasoning content creator crafting CHALLENGING critical thinking questions.
 
 CRITICAL: CLAT Logical Reasoning (Section IV) consists ENTIRELY of critical thinking / reasoning passages — NOT puzzles, coding, blood relations, or scheduling. A full section has 4-5 passages (~450 words each) and 22-26 questions total (~20% of the paper).
 
 Each passage should:
 - Be ~450 words long (between 400-500 words)
-- Present an argument, debate, reasoning chain, or analytical scenario
+- Present a nuanced argument, debate, reasoning chain, or analytical scenario
 - Be drawn from areas like: philosophy of law, ethics, public policy debates, scientific reasoning, economic analysis, or everyday logical puzzles expressed as prose
 - NOT contain coding patterns, blood relations, or mathematical arrangement puzzles
 
@@ -146,6 +171,11 @@ Questions test these CRITICAL THINKING skills (not puzzles):
 7. **Principle Identification** — "Which of the following principles best justifies the conclusion drawn?"
 8. **Analogies** — "The reasoning in the passage is most analogous to which of the following?"
 
+🚫 FORBIDDEN: CRITICAL REASONING ONLY — DO NOT generate syllogism questions ("All A are B. Some B are C..."), coding-decoding, blood relations, seating arrangement, or any puzzle-type question. These are NOT in CLAT Logical Reasoning.
+
+DIFFICULTY DISTRIBUTION: ~20% easy, ~50% medium, ~30% hard
+⚠️ ANTI-CHEAT: Correct answer MUST NOT be a direct quote from passage. At least 3 options must be plausible. Questions must require genuine reasoning, not text scanning.
+
 PASSAGE TOPICS (cover 5 different reasoning domains):
 - Legal/philosophical arguments (nature of justice, rights vs duties, utilitarian vs deontological reasoning)
 - Ethical dilemmas in public policy (privacy vs security, free speech vs hate speech)
@@ -156,7 +186,7 @@ PASSAGE TOPICS (cover 5 different reasoning domains):
 Example passage structure (DO NOT copy, use as style guide):
 "A recent government proposal suggests that mandatory CCTV installation in all public spaces will reduce crime rates. Proponents argue that visible surveillance deters potential offenders and helps law enforcement identify criminals more quickly. Opponents counter that surveillance infringes on privacy rights, that the correlation between CCTV and crime reduction is weak in many real-world studies, and that the money would be better spent on community policing..."
 
-Return ONLY a valid JSON array. Every question must have the 'passage' field filled.`,
+Return ONLY a valid JSON object with a "questions" key containing the array. Every question must have the 'passage' field filled.`,
 
   'Quantitative Techniques': `You are a CLAT Quantitative Techniques content creator. Generate questions for the CLAT 2027 exam pattern.
 
@@ -269,6 +299,65 @@ function normaliseQuestion(q: any): GeneratedQuestion | null {
   };
 }
 
+// ─── Quality Validator ───
+
+/** List of shallow/forbidden question patterns that produce easy questions. */
+const SHALLOW_PATTERNS = [
+  /main idea (of|in) (the )?passage/i,
+  /primary (focus|goal|theme|idea|purpose) (of|in) (the )?passage/i,
+  /best summarizes (the )?passage/i,
+  /best summarizes (the )?main/i,
+  /what (is|was) (the )?(author'?s|passage'?s) main/i,
+];
+
+/**
+ * Validate a question's quality.
+ * Returns null if the question passes, or a string reason if it should be rejected.
+ */
+function validateQuality(q: GeneratedQuestion): string | null {
+  // 1. Check for shallow/forbidden question patterns
+  for (const pattern of SHALLOW_PATTERNS) {
+    if (pattern.test(q.question_text)) {
+      return `Shallow question pattern: ${q.question_text.slice(0, 60)}`;
+    }
+  }
+
+  // 2. If there's a passage, check the question text isn't a direct copy from passage
+  if (q.passage) {
+    // Clean the question text for comparison (remove common prefixes)
+    const qClean = q.question_text
+      .replace(/^(which of the following|according to the passage|the passage suggests that|what does the passage\s+)\s*/i, '')
+      .replace(/[?.,!;:]+$/, '')
+      .trim()
+      .toLowerCase();
+
+    // Check if a substantial portion of the question text appears verbatim in the passage
+    if (qClean.length > 30) {
+      const passageLower = q.passage.toLowerCase();
+      // Check first 30 chars
+      if (passageLower.includes(qClean.slice(0, 40))) {
+        return 'Question text is a direct copy from passage';
+      }
+    }
+
+    // Check if the correct answer option text is a direct quote from the passage
+    const correctOptText = q.options[q.correct_option]?.toLowerCase().trim() || '';
+    if (correctOptText.length > 25 && q.passage.toLowerCase().includes(correctOptText)) {
+      return 'Correct answer option is a direct quote from passage';
+    }
+  }
+
+  // 3. Check that not all options are too similar (all starting with same text)
+  const optValues = Object.values(q.options).map(v => v.toLowerCase().trim());
+  const sharedPrefix = optValues[0]?.slice(0, 15) || '';
+  const allSamePrefix = optValues.every(v => v && v.startsWith(sharedPrefix));
+  if (allSamePrefix && optValues.length >= 3 && sharedPrefix.length > 5) {
+    return 'All options share the same prefix — likely poor options';
+  }
+
+  return null; // Passes validation
+}
+
 function parseJSONResponse(raw: string): any[] {
   try {
     const parsed = JSON.parse(raw);
@@ -333,7 +422,23 @@ async function callDeepSeek(
   const questions = parseJSONResponse(raw);
   if (!Array.isArray(questions)) throw new Error('DeepSeek response is not an array');
 
-  return questions.map(normaliseQuestion).filter((q): q is GeneratedQuestion => q !== null).slice(0, 35);
+  const normalised = questions.map(normaliseQuestion).filter((q): q is GeneratedQuestion => q !== null);
+
+  // Apply quality validation — log rejections for debugging
+  const validQuestions = normalised.filter(q => {
+    const rejection = validateQuality(q);
+    if (rejection) {
+      console.warn(`[Quality Reject] ${rejection}`);
+      return false;
+    }
+    return true;
+  });
+
+  if (validQuestions.length === 0) {
+    throw new Error('All generated questions failed quality validation');
+  }
+
+  return validQuestions.slice(0, 35);
 }
 
 // ─── Gemini Fallback ───
@@ -368,7 +473,24 @@ async function callGemini(
 
   const questions = parseJSONResponse(raw);
   if (!Array.isArray(questions)) throw new Error('Gemini response is not an array');
-  return questions.map(normaliseQuestion).filter((q): q is GeneratedQuestion => q !== null).slice(0, 35);
+
+  const normalised = questions.map(normaliseQuestion).filter((q): q is GeneratedQuestion => q !== null);
+
+  // Apply quality validation — log rejections for debugging
+  const validQuestions = normalised.filter(q => {
+    const rejection = validateQuality(q);
+    if (rejection) {
+      console.warn(`[Quality Reject] ${rejection}`);
+      return false;
+    }
+    return true;
+  });
+
+  if (validQuestions.length === 0) {
+    throw new Error('All generated questions failed quality validation');
+  }
+
+  return validQuestions.slice(0, 35);
 }
 
 // ─── Orchestrator ───

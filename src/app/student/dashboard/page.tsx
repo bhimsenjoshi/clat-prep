@@ -150,6 +150,10 @@ export default function StudentDashboard() {
               className="px-3 py-2 rounded-lg text-sm font-medium text-indigo-600 hover:bg-indigo-50 transition">
               📝 Tests
             </Link>
+            <Link href="/student/profile"
+              className="px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100 transition">
+              👤 Profile
+            </Link>
             <button onClick={() => supabase.auth.signOut().then(() => router.push('/'))}
               className="px-3 py-2 rounded-lg text-sm font-medium text-gray-400 hover:text-red-600 hover:bg-red-50 transition">
               Sign Out
@@ -192,6 +196,10 @@ export default function StudentDashboard() {
               📝 Available Tests
             </Link>
             <hr className="my-1 border-gray-100" />
+            <Link href="/student/profile" onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-gray-700 hover:bg-gray-50">
+              👤 My Profile
+            </Link>
             <button onClick={() => { setMobileMenuOpen(false); supabase.auth.signOut().then(() => router.push('/')); }}
               className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-red-600 hover:bg-red-50 w-full text-left">
               🚪 Sign Out
@@ -218,6 +226,25 @@ export default function StudentDashboard() {
             </div>
           ))}
         </div>
+
+        {/* ─── Upgrade Banner (free users only) ─── */}
+        {profile?.subscription_plan === 'free' && !profile?.is_promo_user && (
+          <Link href="/student/profile"
+            className="block bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-xl p-4 hover:shadow-md transition group">
+            <div className="flex items-center gap-3">
+              <span className="text-2xl">🎁</span>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-bold text-amber-900 group-hover:underline">
+                  Free Premium Upgrade Available!
+                </p>
+                <p className="text-xs text-amber-700 truncate">
+                  Limited time offer · First 20 users only · Valid till July 31
+                </p>
+              </div>
+              <span className="text-amber-500 group-hover:translate-x-1 transition-transform text-lg">→</span>
+            </div>
+          </Link>
+        )}
 
         {/* ─── Quick Practice Section Cards ─── */}
         <div>
