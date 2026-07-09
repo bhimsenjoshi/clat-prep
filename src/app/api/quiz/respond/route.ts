@@ -42,7 +42,7 @@ export async function POST(req: NextRequest) {
     const today = new Date().toISOString().split('T')[0];
 
     // ── Steps 2-5: All independent — run in 1 batch ──
-    const step5Promise = (async (): Promise<{ nextQuestion: typeof questionRes.data | null; newRemainingIds: string[] | null }> => {
+    const step5Promise = (async () => {
       if (remaining_ids && remaining_ids.length > 0) {
         const nextId = remaining_ids[Math.floor(Math.random() * remaining_ids.length)];
         const { data: nq } = await supabase
