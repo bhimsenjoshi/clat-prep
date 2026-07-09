@@ -12,6 +12,7 @@ const SECTION_NAMES = [
 
 interface AttemptWithScores {
   id: string;
+  test_id: string;
   test_title: string;
   attempt_number: number;
   submitted_at: string | null;
