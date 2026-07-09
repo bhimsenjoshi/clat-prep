@@ -9,7 +9,6 @@ export async function POST(req: NextRequest) {
       topic?: string;
     };
 
-    // Validate section
     const validSections: SectionName[] = [
       'English', 'Current Affairs', 'Legal Reasoning',
       'Logical Reasoning', 'Quantitative Techniques',
@@ -23,83 +22,87 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Check daily free limit
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('daily_free_questions, last_practice_date, subscription_plan')
-      .eq('id', user.id)
-      .single();
+    // Parallel: fetch profile + all question IDs for the section
+    const [profileResult, idsResult] = await Promise.all([
+      supabase
+        .from('profiles')
+        .select('daily_free_questions, last_practice_date, subscription_plan')
+        .eq('id', user.id)
+        .single(),
+      supabase
+        .from('practice_questions')
+        .select('id')
+        .eq('section', section),
+    ]);
 
+    const profile = profileResult.data;
     if (!profile) {
       return NextResponse.json({ error: 'Profile not found' }, { status: 404 });
     }
 
-    const today = new Date().toISOString().split('T')[0];
+    const questionIds = (idsResult.data ?? []).map(q => q.id);
 
     // Reset daily count if new day
+    const today = new Date().toISOString().split('T')[0];
     if (profile.last_practice_date !== today) {
       await supabase
         .from('profiles')
         .update({ daily_free_questions: 10, last_practice_date: today })
         .eq('id', user.id);
+      profile.daily_free_questions = 10;
     }
 
-    // Check limit (free users only)
     if (profile.subscription_plan === 'free' && (profile.daily_free_questions ?? 10) <= 0) {
       return NextResponse.json({
         error: 'Daily free limit reached',
         code: 'DAILY_LIMIT_REACHED',
-        message: 'You\'ve used all 10 free questions today. Upgrade to premium for unlimited!',
+        message: "You've used all 10 free questions today. Upgrade to premium for unlimited!",
       }, { status: 403 });
     }
 
-    // Create a new quiz session
-    const { data: session, error: sessionError } = await supabase
-      .from('quiz_sessions')
-      .insert({
-        student_id: user.id,
-        section,
-        topic,
-      })
-      .select()
-      .single();
-
-    if (sessionError || !session) {
-      return NextResponse.json({ error: 'Failed to create session' }, { status: 500 });
-    }
-
-    // Fetch first question
-    const { data: question } = await supabase
-      .from('practice_questions')
-      .select('*')
-      .eq('section', section)
-      .limit(1)
-      .maybeSingle();
-
-    if (!question) {
-      // No questions seeded yet — return empty state
+    if (questionIds.length === 0) {
       return NextResponse.json({
-        session_id: session.id,
+        session_id: null,
         question: null,
         needs_seeding: true,
       });
     }
 
-    // Remove correct answer from response (only show after they answer)
-    const { correct_option, ...safeQuestion } = question;
+    // Pick a random first question
+    const firstId = questionIds[Math.floor(Math.random() * questionIds.length)];
 
-    // Re-fetch profile to get latest daily count (reset may have happened)
-    const { data: freshProfile } = await supabase
-      .from('profiles')
-      .select('daily_free_questions, subscription_plan')
-      .eq('id', user.id)
-      .single();
+    // Fetch first question + create session in parallel
+    const [questionResult, sessionResult] = await Promise.all([
+      supabase
+        .from('practice_questions')
+        .select('id, section, topic, question_text, passage, options, correct_option, difficulty, explanation, tags')
+        .eq('id', firstId)
+        .single(),
+      supabase
+        .from('quiz_sessions')
+        .insert({
+          student_id: user.id,
+          section,
+          topic,
+          questions_answered: 0,
+          correct_count: 0,
+        })
+        .select('id')
+        .single(),
+    ]);
+
+    if (sessionResult.error || !sessionResult.data) {
+      return NextResponse.json({ error: 'Failed to create session' }, { status: 500 });
+    }
+
+    const { correct_option, ...safeQuestion } = questionResult.data!;
 
     return NextResponse.json({
-      session_id: session.id,
+      session_id: sessionResult.data.id,
       question: safeQuestion,
-      daily_remaining: freshProfile?.subscription_plan === 'free'
-        ? (freshProfile?.daily_free_questions ?? 10)
+      question_ids: questionIds, // Client uses this for fast PK-based next-question lookup
+      daily_remaining: profile.subscription_plan === 'free'
+        ? (profile.daily_free_questions ?? 10)
         : 'unlimited',
     });
 
