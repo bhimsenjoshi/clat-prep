@@ -55,6 +55,15 @@ export async function POST(req: NextRequest) {
       return { nextQuestion: null, newRemainingIds: null };
     })();
 
+    // Build session update data (set ended_at if no more questions)
+    const sessionUpdateData: Record<string, any> = {
+      questions_answered: (sessionRes.data.questions_answered ?? 0) + 1,
+      correct_count: (sessionRes.data.correct_count ?? 0) + (is_correct ? 1 : 0),
+    };
+    if (remaining_ids && remaining_ids.length === 0) {
+      sessionUpdateData.ended_at = new Date().toISOString();
+    }
+
     // Steps 2+3+4 (writes — fire & forget within the batch)
     await Promise.all([
       // Step 2: Record response
@@ -68,17 +77,10 @@ export async function POST(req: NextRequest) {
           time_taken_seconds,
         }, { onConflict: 'session_id, question_id' }),
 
-      // Step 3: Update session counts (set ended_at if no more questions)
-      const updateData: Record<string, any> = {
-        questions_answered: (sessionRes.data.questions_answered ?? 0) + 1,
-        correct_count: (sessionRes.data.correct_count ?? 0) + (is_correct ? 1 : 0),
-      };
-      if (remaining_ids && remaining_ids.length === 0) {
-        updateData.ended_at = new Date().toISOString();
-      }
+      // Step 3: Update session counts
       supabase
         .from('quiz_sessions')
-        .update(updateData)
+        .update(sessionUpdateData)
         .eq('id', session_id),
 
       // Step 4: Update daily count (free users only)
