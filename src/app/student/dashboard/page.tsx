@@ -565,22 +565,28 @@ export default function StudentDashboard() {
         )}
 
         {/* ════════════════════════════════════════════ */}
-        {/* #6 — TODAY'S EDITORIALS (RSS-powered)         */}
+        {/* #6 — TODAY'S EDITORIALS (RSS-powered 3x3)     */}
         {/* ════════════════════════════════════════════ */}
         <div>
           <h2 className="text-sm font-semibold text-slate-300 mb-3 flex items-center gap-2">
             <span>📰</span> Today's Editorials
-            <span className="text-[10px] font-normal text-slate-500">
-              {editorialsLoading ? 'Loading...' : `${editorialItems.length} articles`}
-            </span>
+            {editorialsLoading && <span className="text-[10px] font-normal text-slate-500">Loading...</span>}
           </h2>
+
           {editorialsLoading ? (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5">
-              {[1, 2, 3].map(i => (
-                <div key={i} className="bg-slate-800/40 border border-slate-700/30 rounded-xl p-4 animate-pulse">
-                  <div className="h-3 bg-slate-700/50 rounded w-20 mb-3" />
-                  <div className="h-4 bg-slate-700/50 rounded w-full mb-2" />
-                  <div className="h-3 bg-slate-700/50 rounded w-3/4" />
+            <div className="space-y-4">
+              {[1, 2, 3].map(row => (
+                <div key={row}>
+                  <div className="h-3 bg-slate-700/30 rounded w-24 mb-2 animate-pulse" />
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5">
+                    {[1, 2, 3].map(col => (
+                      <div key={col} className="bg-slate-800/40 border border-slate-700/30 rounded-xl p-4 animate-pulse">
+                        <div className="h-3 bg-slate-700/50 rounded w-16 mb-3" />
+                        <div className="h-4 bg-slate-700/50 rounded w-full mb-2" />
+                        <div className="h-3 bg-slate-700/50 rounded w-3/4" />
+                      </div>
+                    ))}
+                  </div>
                 </div>
               ))}
             </div>
@@ -589,49 +595,71 @@ export default function StudentDashboard() {
               <p className="text-sm text-slate-500">Could not load editorials. Check back later.</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5">
-              {/* Show latest 3, one per source if possible */}
+            <div className="space-y-5">
               {(() => {
+                // Group by source, keep 3 per source
                 const bySource: Record<string, any[]> = {};
+                const sourceOrder = ['the-hindu', 'indian-express', 'livelaw'];
+                const sourceMeta: Record<string, { name: string; icon: string }> = {
+                  'the-hindu': { name: 'The Hindu', icon: '📰' },
+                  'indian-express': { name: 'Indian Express', icon: '📰' },
+                  'livelaw': { name: 'LiveLaw', icon: '⚖️' },
+                };
+
                 for (const item of editorialItems) {
                   if (!bySource[item.sourceId]) bySource[item.sourceId] = [];
                   if (bySource[item.sourceId].length < 3) bySource[item.sourceId].push(item);
                 }
-                const sources = Object.values(bySource).flat().slice(0, 9);
-                return sources.map((item: any) => (
-                  <a
-                    key={`${item.sourceId}-${item.link}`}
-                    href={item.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="bg-slate-800/60 border border-slate-700/50 rounded-xl p-4 hover:border-indigo-600/50 hover:bg-slate-800 transition group flex flex-col"
-                  >
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="text-xs shrink-0">{item.icon}</span>
-                      <span className="text-[10px] font-medium text-slate-500 uppercase tracking-wider">{item.source}</span>
-                      {item.pubDate && (
-                        <span className="text-[10px] text-slate-600 ml-auto">
-                          {(() => {
-                            const d = new Date(item.pubDate);
-                            const now = new Date();
-                            const diff = Math.round((now.getTime() - d.getTime()) / 3600000);
-                            if (diff < 1) return 'Just now';
-                            if (diff < 24) return `${diff}h ago`;
-                            return d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
-                          })()}
-                        </span>
-                      )}
+
+                return sourceOrder.map(sourceId => {
+                  const items = bySource[sourceId] || [];
+                  if (items.length === 0) return null;
+                  const meta = sourceMeta[sourceId];
+
+                  return (
+                    <div key={sourceId}>
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-sm">{meta?.icon}</span>
+                        <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">{meta?.name}</span>
+                        <span className="text-[10px] text-slate-600">· {items.length} article{items.length !== 1 ? 's' : ''}</span>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5">
+                        {items.map((item: any) => (
+                          <a
+                            key={`${item.sourceId}-${item.link}`}
+                            href={item.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="bg-slate-800/60 border border-slate-700/50 rounded-xl p-4 hover:border-indigo-600/50 hover:bg-slate-800 transition group flex flex-col"
+                          >
+                            <div className="flex items-center gap-2 mb-2">
+                              {item.pubDate && (
+                                <span className="text-[10px] text-slate-500">
+                                  {(() => {
+                                    const d = new Date(item.pubDate);
+                                    const now = new Date();
+                                    const diff = Math.round((now.getTime() - d.getTime()) / 3600000);
+                                    if (diff < 1) return 'Just now';
+                                    if (diff < 24) return `${diff}h ago`;
+                                    return d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
+                                  })()}
+                                </span>
+                              )}
+                            </div>
+                            <p className="text-sm font-medium text-white group-hover:text-indigo-300 transition leading-snug line-clamp-3">
+                              {item.title}
+                            </p>
+                            <div className="mt-auto pt-2">
+                              <span className="text-[10px] text-indigo-400/70 group-hover:text-indigo-300 transition">
+                                Read full ↗
+                              </span>
+                            </div>
+                          </a>
+                        ))}
+                      </div>
                     </div>
-                    <p className="text-sm font-medium text-white group-hover:text-indigo-300 transition leading-snug line-clamp-3">
-                      {item.title}
-                    </p>
-                    <div className="mt-auto pt-2">
-                      <span className="text-[10px] text-indigo-400/70 group-hover:text-indigo-300 transition">
-                        Read full ↗
-                      </span>
-                    </div>
-                  </a>
-                ));
+                  );
+                });
               })()}
             </div>
           )}
