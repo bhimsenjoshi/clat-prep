@@ -512,6 +512,7 @@ export default function StudentDashboard() {
             <p className="text-2xl font-bold text-white">{totalPracticeQ}</p>
             <p className="text-[10px] text-slate-400 uppercase tracking-wider">Total Q</p>
           </div>
+        </div>
         </SectionCard>
 
         {/* ════════════════════════════════════════════ */}
