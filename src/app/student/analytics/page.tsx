@@ -78,7 +78,6 @@ export default function AnalyticsPage() {
         .from('quiz_sessions')
         .select('*')
         .eq('student_id', user.id)
-        .not('ended_at', 'is', null)
         .order('started_at', { ascending: false })
         .limit(100);
 
@@ -102,7 +101,12 @@ export default function AnalyticsPage() {
           respBySession[r.session_id].totalTime += (r.time_taken_seconds ?? 0);
         }
 
-        const enriched: PracticeSession[] = sessions.map((s: any) => {
+        const enriched: PracticeSession[] = sessions
+          .filter((s: any) => {
+            const rs = respBySession[s.id];
+            return rs && rs.total > 0; // skip abandoned sessions
+          })
+          .map((s: any) => {
           const rs = respBySession[s.id] || { correct: 0, total: 0, totalTime: 0 };
           return {
             id: s.id,
