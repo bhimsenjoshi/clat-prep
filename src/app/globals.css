@@ -1,204 +1,241 @@
 @import "tailwindcss";
 
-/* ═══════════════════════════════════════════════
-   UNIVERSAL THEME SYSTEM — Single mechanism
-   Overrides hardcoded Tailwind classes across
-   ALL pages (dashboard, analytics, tests, etc.)
-   ═══════════════════════════════════════════════ */
+/* ════════════════════════════════════════════════════════════
+   UNIVERSAL THEME SYSTEM — CSS Custom Properties
+   
+   No brute-force Tailwind class overrides. Instead, CSS vars
+   define every color ONCE. Pages that want theme awareness
+   use the semantic classes (bg-theme-card, text-theme-secondary,
+   border-theme, etc.). Both themes share the SAME class names.
+   ════════════════════════════════════════════════════════════ */
 
 /* ─── DARK THEME (default) ─── */
-/* Converts light-themed pages (analytics, profile, tests, leaderboard) to dark */
-[data-theme="dark"] {
+:root, [data-theme="dark"] {
+  /* Page / Body */
+  --bg-page: #0f172a;         /* slate-950 */
+  --bg-page-secondary: #020617; /* darker */
 
-  /* ── BODY / PAGE ── */
-  body, .bg-white { background-color: #0f172a; }
-  .bg-gray-50, .bg-gray-100, .bg-gray-200 { background-color: #1e293b; }
-  .bg-gray-950 { background-color: #0f172a; }
+  /* Card surfaces */
+  --bg-card: #1e293b;         /* slate-800 */
+  --bg-card-hover: #334155;   /* slate-700 */
+  --bg-elevated: #334155;
 
-  /* ── GRADIENTS ── */
-  [class*="from-gray-50"], [class*="to-indigo-50"] { background-color: #0f172a; }
-  [class*="bg-gradient-to-br"][class*="from-gray-50"] {
-    background: linear-gradient(135deg, #0f172a, #1e1b4b, #0f172a) !important;
-  }
-  [class*="bg-gradient-to-r"][class*="from-amber-50"],
-  [class*="bg-gradient-to-r"][class*="from-indigo-50"] {
-    background: linear-gradient(90deg, #1e293b, #1e293b) !important;
-  }
+  /* Interactive */
+  --bg-input: #1e293b;
+  --bg-hover: #334155;
+  --bg-active: #475569;
 
-  /* ── TINTED BACKGROUNDS ── */
-  .bg-indigo-50, .bg-indigo-100 { background-color: #1e1b4b; }
-  .bg-blue-50, .bg-blue-100 { background-color: #172554; }
-  .bg-green-50, .bg-green-100 { background-color: #064e3b; }
-  .bg-red-50 { background-color: #7f1d1d; }
-  .bg-amber-50, .bg-amber-100 { background-color: #78350f; }
-  .bg-purple-100 { background-color: #3b0764; }
+  /* Tinted cards (for stat cards etc) */
+  --bg-tint-indigo: rgba(99, 102, 241, 0.15);
+  --bg-tint-green: rgba(5, 150, 105, 0.15);
+  --bg-tint-blue: rgba(37, 99, 235, 0.15);
+  --bg-tint-amber: rgba(217, 119, 6, 0.15);
+  --bg-tint-purple: rgba(139, 92, 246, 0.15);
+  --bg-tint-red: rgba(220, 38, 38, 0.15);
 
-  /* ── ACCENT BUTTONS ── */
-  .bg-indigo-600, .bg-indigo-700 { background-color: #4f46e5; }
-  .bg-green-600, .bg-green-700 { background-color: #059669; }
-  .bg-red-500, .bg-red-600 { background-color: #dc2626; }
-  .bg-amber-500 { background-color: #d97706; }
+  /* Text */
+  --text-primary: #f1f5f9;    /* slate-100 */
+  --text-secondary: #94a3b8;  /* slate-400 */
+  --text-muted: #64748b;      /* slate-500 */
+  --text-accent: #818cf8;     /* indigo-400 */
+  --text-on-accent: #ffffff;
+  --text-heading: #f8fafc;
 
-  /* ── TEXT ── */
-  .text-gray-900, .text-gray-800 { color: #f1f5f9; }
-  .text-gray-700 { color: #cbd5e1; }
-  .text-gray-600 { color: #94a3b8; }
-  .text-gray-500 { color: #64748b; }
-  .text-gray-400 { color: #475569; }
-  .text-gray-300 { color: #334155; }
-  .text-indigo-600, .text-indigo-700, .text-indigo-800 { color: #a5b4fc; }
-  .text-blue-600, .text-blue-700 { color: #93c5fd; }
-  .text-green-600, .text-green-700, .text-green-800 { color: #86efac; }
-  .text-red-500, .text-red-600, .text-red-700, .text-red-800 { color: #fca5a5; }
-  .text-amber-600, .text-amber-700, .text-amber-800, .text-amber-900 { color: #fbbf24; }
-  .text-purple-500, .text-purple-700, .text-purple-900 { color: #c4b5fd; }
-  .text-white { color: #ffffff; }
+  /* Colored text (for stats values etc) */
+  --text-indigo: #a5b4fc;
+  --text-green: #86efac;
+  --text-blue: #93c5fd;
+  --text-amber: #fbbf24;
+  --text-red: #fca5a5;
+  --text-purple: #c4b5fd;
+  --text-emerald: #6ee7b7;
 
-  /* ── BORDERS ── */
-  .border-gray-100, .border-gray-200, .border-gray-300 { border-color: #334155; }
-  .border-indigo-100, .border-indigo-200 { border-color: #3730a3; }
-  .border-indigo-500, .border-indigo-600 { border-color: #4f46e5; }
-  .border-blue-200 { border-color: #1e3a5f; }
-  .border-green-200 { border-color: #065f46; }
-  .border-red-200 { border-color: #991b1b; }
-  .border-amber-200, .border-amber-300 { border-color: #92400e; }
-  .border-purple-200, .border-purple-300 { border-color: #581c87; }
+  /* Borders */
+  --border: #334155;          /* slate-700 */
+  --border-light: #1e293b;    /* slate-800 */
+  --border-subtle: #475569;  /* slate-600 */
 
-  /* ── HOVER STATES ── */
-  .hover\:text-gray-900:hover, .hover\:text-indigo-800:hover { color: #f8fafc; }
-  .hover\:from-indigo-700:hover, .hover\:to-purple-700:hover { /* keep gradient */ }
+  /* Accent */
+  --accent: #6366f1;
+  --accent-hover: #4f46e5;
+  --accent-subtle: rgba(99, 102, 241, 0.2);
 
-  /* ── SHADOWS ── */
-  .shadow-sm { box-shadow: 0 1px 3px 0 rgba(0,0,0,0.4); }
-  .shadow-md { box-shadow: 0 4px 6px -1px rgba(0,0,0,0.4); }
+  /* Status */
+  --success: #059669;
+  --warning: #d97706;
+  --danger: #dc2626;
+  --info: #2563eb;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+
+  /* Gradients (kept dark-edgy) */
+  --gradient-accent: linear-gradient(135deg, #6366f1, #8b5cf6);
+  --gradient-warm: linear-gradient(135deg, #f59e0b, #ea580c);
 }
 
 /* ─── LIGHT THEME ─── */
-/* Converts dark-themed pages (dashboard, practice, quiz) to light */
 [data-theme="light"] {
+  --bg-page: #ffffff;
+  --bg-page-secondary: #f8fafc;
 
-  /* ── BODY / PAGE ── */
-  .bg-slate-900, .bg-slate-900\/80, .bg-slate-900\/60,
-  .bg-slate-900\/40, .bg-slate-900\/30, .bg-slate-900\/20,
-  .bg-gray-950 { background-color: #ffffff; }
+  --bg-card: #ffffff;
+  --bg-card-hover: #f8fafc;
+  --bg-elevated: #f1f5f9;
 
-  .bg-slate-800, .bg-slate-800\/60, .bg-slate-800\/50,
-  .bg-slate-800\/40 { background-color: #f8fafc; }
+  --bg-input: #ffffff;
+  --bg-hover: #f1f5f9;
+  --bg-active: #e2e8f0;
 
-  .bg-slate-700, .bg-slate-700\/50, .bg-slate-700\/40,
-  .bg-slate-700\/30, .bg-slate-700\/20 { background-color: #f1f5f9; }
+  --bg-tint-indigo: rgba(99, 102, 241, 0.08);
+  --bg-tint-green: rgba(22, 163, 74, 0.08);
+  --bg-tint-blue: rgba(37, 99, 235, 0.08);
+  --bg-tint-amber: rgba(217, 119, 6, 0.08);
+  --bg-tint-purple: rgba(139, 92, 246, 0.08);
+  --bg-tint-red: rgba(220, 38, 38, 0.08);
 
-  .bg-slate-900 { background-color: #ffffff; }
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+  --text-accent: #6366f1;
+  --text-on-accent: #ffffff;
+  --text-heading: #0f172a;
 
-  /* ── TINTED / GRADIENT BACKGROUNDS ── */
-  [class*="from-slate-900 via-indigo-950 to-slate-900"] {
-    background: linear-gradient(135deg, #f8fafc, #eef2ff, #f8fafc) !important;
-  }
-  [class*="from-indigo-900"][class*="via-purple-900"],
-  [class*="bg-gradient-to-r from-indigo-900"] {
-    background: linear-gradient(90deg, #eef2ff, #f5f3ff, #eef2ff) !important;
-  }
-  [class*="from-indigo-900/60 via-purple-900/50 to-indigo-900/60"] {
-    background: linear-gradient(90deg, #eef2ff, #f5f3ff, #eef2ff) !important;
-    border-color: #c7d2fe !important;
-  }
-  [class*="from-purple-900/40 to-pink-900/40"] {
-    background: linear-gradient(90deg, #f3e8ff, #fce7f3) !important;
-    border-color: #e9d5ff !important;
-  }
-  [class*="from-blue-900/30 to-indigo-900/30"] {
-    background: linear-gradient(90deg, #dbeafe, #e0e7ff) !important;
-    border-color: #bfdbfe !important;
-  }
-  [class*="from-purple-900/40 to-pink-900/40"] {
-    background: linear-gradient(90deg, #f3e8ff, #fce7f3) !important;
-  }
-  .shadow-indigo-900\/30, .shadow-purple-900\/30 {
-    box-shadow: 0 4px 6px -1px rgba(99,102,241,0.1);
-  }
+  --text-indigo: #4f46e5;
+  --text-green: #16a34a;
+  --text-blue: #2563eb;
+  --text-amber: #d97706;
+  --text-red: #dc2626;
+  --text-purple: #7c3aed;
+  --text-emerald: #059669;
 
-  /* ── TINTED CARDS ── */
-  .bg-indigo-900\/30, .bg-indigo-900\/40, .bg-indigo-900\/50,
-  .bg-indigo-800\/50 { background-color: #eef2ff; }
-  .bg-indigo-700\/50 { background-color: #e0e7ff; }
-  .bg-indigo-500\/10 { background-color: rgba(99,102,241,0.08); }
-  .bg-purple-900\/60, .bg-purple-900\/50, .bg-purple-700\/50 { background-color: #f5f3ff; }
-  .bg-emerald-900\/60, .bg-emerald-900\/40 { background-color: #d1fae5; }
-  .bg-green-900\/30, .bg-green-900\/50 { background-color: #ecfdf5; }
-  .bg-amber-900\/30, .bg-amber-900\/50 { background-color: #fef3c7; }
-  .bg-amber-800\/40 { background-color: #fef3c7; }
-  .bg-red-900\/30 { background-color: #fef2f2; }
-  .bg-blue-900\/20, .bg-blue-900\/50 { background-color: #dbeafe; }
-  .bg-red-900\/50 { background-color: #fef2f2; }
+  --border: #e2e8f0;
+  --border-light: #f1f5f9;
+  --border-subtle: #cbd5e1;
 
-  /* ── TEXT ── */
-  .text-white { color: #0f172a; }
-  .text-slate-300 { color: #334155; }
-  .text-slate-400 { color: #64748b; }
-  .text-slate-500 { color: #94a3b8; }
-  .text-slate-600, .text-slate-200 { color: #cbd5e1; }
-  .text-indigo-300, .text-indigo-400, .text-indigo-400\/60 { color: #6366f1; }
-  .text-indigo-300\/70 { color: rgba(99,102,241,0.7); }
-  .text-purple-300, .text-purple-400 { color: #8b5cf6; }
-  .text-amber-300, .text-amber-400, .text-amber-400\/70 { color: #d97706; }
-  .text-emerald-300 { color: #059669; }
-  .text-green-300, .text-green-400 { color: #16a34a; }
-  .text-red-300, .text-red-400 { color: #dc2626; }
-  .text-blue-300, .text-blue-400 { color: #2563eb; }
-  .text-gray-400 { color: #94a3b8; }
+  --accent: #6366f1;
+  --accent-hover: #4f46e5;
+  --accent-subtle: rgba(99, 102, 241, 0.1);
 
-  /* ── BORDERS ── */
-  .border-slate-700, .border-slate-700\/50, .border-slate-700\/40,
-  .border-slate-700\/30 { border-color: #e2e8f0; }
-  .border-slate-800, .border-slate-800\/50 { border-color: #f1f5f9; }
-  .border-slate-600, .border-slate-600\/50 { border-color: #cbd5e1; }
-  .border-indigo-700\/40, .border-indigo-600\/50, .border-indigo-500,
-  .border-indigo-400 { border-color: #c7d2fe; }
-  .border-purple-700\/50, .border-purple-700\/40, .border-purple-400 { border-color: #ddd6fe; }
-  .border-amber-700\/40, .border-amber-600\/50 { border-color: #fde68a; }
-  .border-blue-700\/30 { border-color: #bfdbfe; }
-  .border-emerald-700\/50 { border-color: #a7f3d0; }
-  .border-green-600, .border-green-800, .border-green-800\/50 { border-color: #86efac; }
-  .border-red-600, .border-red-700, .border-red-800, .border-red-800\/50 { border-color: #fca5a5; }
-  .border-blue-800\/50 { border-color: #bfdbfe; }
+  --success: #16a34a;
+  --warning: #d97706;
+  --danger: #dc2626;
+  --info: #2563eb;
 
-  /* ── RING / QUIZ STATES ── */
-  .ring-indigo-500 { --tw-ring-color: #6366f1; }
-  .ring-green-600\/50 { --tw-ring-color: rgba(22,163,74,0.5); }
-  .ring-red-600\/50 { --tw-ring-color: rgba(220,38,38,0.5); }
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 
-  /* ── HOVER STATES ── */
-  .hover\:bg-slate-800:hover { background-color: #f1f5f9; }
-  .hover\:bg-slate-800\/50:hover { background-color: #f8fafc; }
-  .hover\:bg-indigo-700\/50:hover, .hover\:bg-indigo-800\/50:hover { background-color: #eef2ff; }
-  .hover\:bg-purple-700\/50:hover { background-color: #f5f3ff; }
-  .hover\:bg-red-900\/30:hover { background-color: rgba(254,202,202,0.3); }
-  .hover\:bg-amber-800\/40:hover, .hover\:bg-amber-900\/30:hover { background-color: #fef3c7; }
-  .hover\:border-indigo-600\/50:hover { border-color: #a5b4fc; }
-  .hover\:border-slate-600\/50:hover { border-color: #cbd5e1; }
-  .hover\:text-indigo-200:hover, .hover\:text-indigo-300:hover { color: #6366f1; }
-  .hover\:text-purple-200:hover { color: #8b5cf6; }
-  .hover\:text-slate-200:hover, .hover\:text-slate-300:hover { color: #334155; }
-  .hover\:text-white:hover { color: #0f172a; }
-
-  /* ── GRADIENT TEXT BUTTONS (keep colorful) ── */
-  [class*="from-indigo-600 to-purple-600"],
-  [class*="from-amber-500 to-orange-600"] {
-    color: white !important;
-  }
-  [class*="from-amber-500 to-orange-600"] { background: linear-gradient(90deg,#f59e0b,#ea580c) !important; }
-  [class*="from-indigo-600 to-purple-600"] { background: linear-gradient(90deg,#6366f1,#8b5cf6) !important; }
-
-  /* ── SKELETON / PULSE ── */
-  .animate-pulse [class*="rounded"]:where(.bg-slate-700\/30, .bg-slate-700\/50) {
-    background-color: #e2e8f0;
-  }
+  --gradient-accent: linear-gradient(135deg, #6366f1, #8b5cf6);
+  --gradient-warm: linear-gradient(135deg, #f59e0b, #ea580c);
 }
 
-/* ─── Base page-level background ─── */
+/* ─── Apply theme to page shell ─── */
 html {
-  background-color: #0f172a; /* dark default */
+  background-color: var(--bg-page);
+  transition: background-color 0.2s ease;
 }
-[data-theme="light"] html {
-  background-color: #ffffff;
+
+body {
+  background-color: var(--bg-page);
+  color: var(--text-primary);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* ─── Semantic Utility Classes ─── */
+
+/* Backgrounds */
+.bg-page { background-color: var(--bg-page); }
+.bg-card { background-color: var(--bg-card); }
+.bg-card-hover:hover { background-color: var(--bg-card-hover); }
+.bg-elevated { background-color: var(--bg-elevated); }
+.bg-hover:hover { background-color: var(--bg-hover); }
+
+/* Tinted backgrounds for stat cards */
+.bg-tint-indigo { background-color: var(--bg-tint-indigo); }
+.bg-tint-green { background-color: var(--bg-tint-green); }
+.bg-tint-blue { background-color: var(--bg-tint-blue); }
+.bg-tint-amber { background-color: var(--bg-tint-amber); }
+.bg-tint-purple { background-color: var(--bg-tint-purple); }
+.bg-tint-red { background-color: var(--bg-tint-red); }
+
+/* Text */
+.text-primary { color: var(--text-primary); }
+.text-secondary { color: var(--text-secondary); }
+.text-muted { color: var(--text-muted); }
+.text-accent { color: var(--text-accent); }
+.text-heading { color: var(--text-heading); }
+
+/* Colored text values (like stats numbers) */
+.text-stat-indigo { color: var(--text-indigo); }
+.text-stat-green { color: var(--text-green); }
+.text-stat-blue { color: var(--text-blue); }
+.text-stat-amber { color: var(--text-amber); }
+.text-stat-red { color: var(--text-red); }
+.text-stat-purple { color: var(--text-purple); }
+.text-stat-emerald { color: var(--text-emerald); }
+
+/* Status text */
+.text-success { color: var(--success); }
+.text-warning { color: var(--warning); }
+.text-danger { color: var(--danger); }
+.text-info { color: var(--info); }
+
+/* Borders */
+.border-theme { border-color: var(--border); }
+.border-theme-light { border-color: var(--border-light); }
+.border-theme-subtle { border-color: var(--border-subtle); }
+
+/* Accent */
+.bg-accent { background-color: var(--accent); }
+.bg-accent-hover:hover { background-color: var(--accent-hover); }
+.bg-accent-subtle { background-color: var(--accent-subtle); }
+.shadow-theme-sm { box-shadow: var(--shadow-sm); }
+.shadow-theme-md { box-shadow: var(--shadow-md); }
+
+/* Gradient buttons (keep colorful in both themes) */
+.bg-gradient-accent {
+  background: var(--gradient-accent);
+  color: white;
+}
+.bg-gradient-warm {
+  background: var(--gradient-warm);
+  color: white;
+}
+
+/* ─── Navbar (appears on multiple pages) ─── */
+.navbar {
+  background-color: color-mix(in srgb, var(--bg-page) 80%, transparent);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+
+/* ─── Smooth transitions for theme toggle ─── */
+*, *::before, *::after {
+  transition-property: background-color, border-color, color, box-shadow;
+  transition-duration: 0.15s;
+  transition-timing-function: ease;
+}
+
+/* ─── Input fields ─── */
+input, textarea, select {
+  background-color: var(--bg-input);
+  border-color: var(--border);
+  color: var(--text-primary);
+}
+input:focus, textarea:focus, select:focus {
+  border-color: var(--accent);
+  outline: none;
+  box-shadow: 0 0 0 2px var(--accent-subtle);
+}
+
+/* ─── Button base ─── */
+button.bg-accent {
+  background-color: var(--accent);
+  color: var(--text-on-accent);
+}
+button.bg-accent:hover {
+  background-color: var(--accent-hover);
 }

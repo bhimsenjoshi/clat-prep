@@ -101,10 +101,10 @@ export default function ReviewPage({ params }: ReviewPageProps) {
   };
 
   if (loading) return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+    <div className="min-h-screen flex items-center justify-center bg-page">
       <div className="animate-pulse flex flex-col items-center gap-3">
         <div className="w-8 h-8 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin" />
-        <p className="text-gray-500 text-sm">Loading review...</p>
+        <p className="text-secondary text-sm">Loading review...</p>
       </div>
     </div>
   );
@@ -117,19 +117,19 @@ export default function ReviewPage({ params }: ReviewPageProps) {
   const sectionName = sections.find((s) => s.id === activeSection)?.name ?? 'All';
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-indigo-50/30">
+    <div className="min-h-screen bg-page">
       {/* Header */}
-      <div className="bg-white border-b shadow-sm sticky top-0 z-10">
+      <div className="bg-card border-b border-theme shadow-theme-sm sticky top-0 z-10">
         <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Link href="/student/dashboard" className="text-gray-400 hover:text-gray-600">
+            <Link href="/student/dashboard" className="text-muted hover:text-secondary">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
             </Link>
             <div>
-              <h1 className="text-lg font-bold text-gray-900">Review: {testTitle}</h1>
-              <p className="text-xs text-gray-500">Attempt #{attemptInfo.attempt_number}</p>
+              <h1 className="text-lg font-bold text-primary">Review: {testTitle}</h1>
+              <p className="text-xs text-secondary">Attempt #{attemptInfo.attempt_number}</p>
             </div>
           </div>
           <div className="flex items-center gap-3">
@@ -137,12 +137,12 @@ export default function ReviewPage({ params }: ReviewPageProps) {
               <p className={`text-xl font-bold ${
                 score >= 70 ? 'text-green-600' : score >= 40 ? 'text-amber-600' : 'text-red-600'
               }`}>{score}%</p>
-              <p className="text-[10px] text-gray-400">
+              <p className="text-[10px] text-muted">
                 {responses.filter((r) => r.is_correct).length}/{responses.length} correct
               </p>
             </div>
             <Link href={`/student/tests/${searchParams.get('attempt')?.split('?')[0] ?? ''}`}
-              className="px-3 py-1.5 rounded-lg text-xs font-medium bg-green-50 text-green-700 hover:bg-green-100 border border-green-200 transition">
+              className="px-3 py-1.5 rounded-lg text-xs font-medium bg-tint-green text-stat-green hover:bg-tint-green border border-theme transition">
               🔄 Retake
             </Link>
           </div>
@@ -182,7 +182,7 @@ export default function ReviewPage({ params }: ReviewPageProps) {
         </div>
 
         {/* Score summary card */}
-        <div className="bg-white border rounded-xl shadow-sm p-5 mb-6">
+        <div className="bg-card border border-theme rounded-xl shadow-theme-sm p-5 mb-6">
           <div className="flex items-center gap-4">
             <div className={`w-16 h-16 rounded-2xl flex items-center justify-center text-2xl font-bold ${
               score >= 70 ? 'bg-green-100 text-green-700' :
@@ -192,8 +192,8 @@ export default function ReviewPage({ params }: ReviewPageProps) {
               {score}%
             </div>
             <div className="flex-1">
-              <p className="font-semibold text-gray-900">Attempt #{attemptInfo.attempt_number}</p>
-              <div className="flex items-center gap-4 mt-1 text-xs text-gray-500">
+              <p className="font-semibold text-primary">Attempt #{attemptInfo.attempt_number}</p>
+              <div className="flex items-center gap-4 mt-1 text-xs text-secondary">
                 <span>✅ {responses.filter((r) => r.is_correct).length} correct</span>
                 <span>❌ {responses.filter((r) => r.is_correct === false).length} incorrect</span>
                 <span>⬜ {responses.filter((r) => r.is_correct === null).length} unanswered</span>
@@ -216,7 +216,7 @@ export default function ReviewPage({ params }: ReviewPageProps) {
             const isUnanswered = r.selected_option === null;
 
             return (
-              <div key={r.id} className={`bg-white border rounded-xl shadow-sm overflow-hidden ${
+              <div key={r.id} className={`bg-card border border-theme rounded-xl shadow-theme-sm overflow-hidden ${
                 isCorrect ? 'border-green-200' :
                 isWrong ? 'border-red-200' :
                 'border-amber-200'
@@ -231,7 +231,7 @@ export default function ReviewPage({ params }: ReviewPageProps) {
                     <span className="text-sm">
                       {isCorrect ? '✅' : isWrong ? '❌' : '⬜'}
                     </span>
-                    <span className="text-xs font-medium text-gray-500">Q{idx + 1}</span>
+                    <span className="text-xs font-medium text-secondary">Q{idx + 1}</span>
                     {r.difficulty && (
                       <span className={`text-[10px] px-1.5 py-0.5 rounded ${
                         r.difficulty === 'hard' ? 'bg-red-100 text-red-600' :
@@ -240,7 +240,7 @@ export default function ReviewPage({ params }: ReviewPageProps) {
                       }`}>{r.difficulty}</span>
                     )}
                   </div>
-                  <div className="flex items-center gap-3 text-[10px] text-gray-400">
+                  <div className="flex items-center gap-3 text-[10px] text-muted">
                     <span>⏱ {formatTime(r.time_taken_seconds)}</span>
                     <span>
                       {isCorrect ? 'Correct' : isWrong ? `Your answer: ${r.selected_option} · Correct: ${r.correct_option}` : 'Not answered'}
@@ -250,15 +250,15 @@ export default function ReviewPage({ params }: ReviewPageProps) {
 
                 {/* Passage */}
                 {r.passage && (
-                  <div className="px-5 py-3 bg-indigo-50/50 border-b">
-                    <p className="text-[10px] font-medium text-indigo-500 uppercase tracking-wider mb-1">Passage</p>
-                    <p className="text-xs text-gray-600 leading-relaxed">{r.passage}</p>
+                  <div className="px-5 py-3 bg-tint-indigo border-b border-theme">
+                    <p className="text-[10px] font-medium text-accent uppercase tracking-wider mb-1">Passage</p>
+                    <p className="text-xs text-secondary leading-relaxed">{r.passage}</p>
                   </div>
                 )}
 
                 {/* Question */}
                 <div className="px-5 py-4">
-                  <p className="text-sm font-medium text-gray-800 mb-3">{r.question_text}</p>
+                  <p className="text-sm font-medium text-primary mb-3">{r.question_text}</p>
                   <div className="grid grid-cols-2 gap-2">
                     {Object.entries(r.options).map(([key, value]) => {
                       const isSelected = r.selected_option === key;
@@ -277,7 +277,7 @@ export default function ReviewPage({ params }: ReviewPageProps) {
                           <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold ${
                             isCorrectOpt ? 'bg-green-500 text-white' :
                             isSelected ? 'bg-red-500 text-white' :
-                            'bg-gray-100 text-gray-500'
+                            'bg-elevated text-secondary'
                           }`}>
                             {isCorrectOpt ? '✓' : isSelected ? '✗' : key}
                           </span>
@@ -295,9 +295,9 @@ export default function ReviewPage({ params }: ReviewPageProps) {
 
                   {/* Explanation */}
                   {r.explanation && (
-                    <div className="mt-3 p-3 bg-blue-50 border border-blue-100 rounded-lg">
-                      <p className="text-[10px] font-medium text-blue-600 uppercase tracking-wider mb-1">Explanation</p>
-                      <p className="text-xs text-gray-700 leading-relaxed">{r.explanation}</p>
+                    <div className="mt-3 p-3 bg-tint-blue border border-theme rounded-lg">
+                      <p className="text-[10px] font-medium text-info uppercase tracking-wider mb-1">Explanation</p>
+                      <p className="text-xs text-secondary leading-relaxed">{r.explanation}</p>
                     </div>
                   )}
                 </div>
@@ -308,7 +308,7 @@ export default function ReviewPage({ params }: ReviewPageProps) {
 
         {/* Bottom nav */}
         <div className="flex justify-between items-center mt-8 pb-8">
-          <Link href="/student/dashboard" className="text-sm text-indigo-600 hover:underline">
+          <Link href="/student/dashboard" className="text-sm text-accent hover:underline">
             ← Back to Dashboard
           </Link>
           <Link href={`/student/tests/${searchParams.get('attempt')?.split('?')[0] ?? ''}`}

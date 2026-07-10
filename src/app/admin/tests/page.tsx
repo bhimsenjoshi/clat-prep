@@ -95,19 +95,19 @@ export default function AdminTestsPage() {
     loadTests();
   };
 
-  if (loading) return <div className="p-8 text-center text-gray-500">Loading...</div>;
+  if (loading) return <div className="p-8 text-center text-secondary">Loading...</div>;
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold">Manage Tests</h1>
-        <Link href="/admin/dashboard" className="text-sm text-indigo-600 hover:underline">
+        <Link href="/admin/dashboard" className="text-sm text-accent hover:underline">
           ← Dashboard
         </Link>
       </div>
 
       {/* Create test */}
-      <div className="bg-white border rounded-xl p-5 mb-6 shadow-sm">
+      <div className="bg-card border border-theme rounded-xl p-5 mb-6 shadow-theme-sm">
         <h2 className="font-semibold mb-3">Create New Test</h2>
         <div className="flex gap-3">
           <input
@@ -125,16 +125,15 @@ export default function AdminTestsPage() {
             {creating ? 'Creating...' : 'Create'}
           </button>
         </div>
-        {error && <p className="text-red-600 text-sm mt-3">{error}</p>}
-      </div>
+        {error && <p className="text-danger text-sm mt-3">{error}</p>}
 
       {/* Test list */}
-      <div className="bg-white border rounded-xl shadow-sm">
-        <div className="px-6 py-4 border-b">
-          <h2 className="font-semibold">All Tests</h2>
+      <div className="bg-card border border-theme rounded-xl shadow-theme-sm">
+        <div className="px-6 py-4 border-b border-theme">
+          <h2 className="font-semibold text-primary">All Tests</h2>
         </div>
         {tests.length === 0 ? (
-          <div className="p-6 text-center text-gray-400">No tests created yet.</div>
+          <div className="p-6 text-center text-muted">No tests created yet.</div>
         ) : (
           <div className="divide-y">
             {tests.map((test) => (
@@ -146,14 +145,14 @@ export default function AdminTestsPage() {
                         ? 'bg-green-100 text-green-700'
                         : test.status === 'draft'
                         ? 'bg-yellow-100 text-yellow-700'
-                        : 'bg-gray-100 text-gray-500'
+                        : 'bg-gray-100 text-secondary'
                     }`}
                   >
                     {test.status}
                   </span>
                   <div>
                     <p className="font-medium">{test.title}</p>
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-secondary">
                       {new Date(test.created_at).toLocaleDateString('en-IN')}
                     </p>
                   </div>
@@ -161,7 +160,7 @@ export default function AdminTestsPage() {
                 <div className="flex gap-2">
                   <Link
                     href={`/admin/tests/${test.id}`}
-                    className="border px-3 py-1.5 rounded-lg text-xs font-medium hover:bg-gray-100 transition"
+                    className="border border-theme px-3 py-1.5 rounded-lg text-xs font-medium hover:bg-elevated transition"
                   >
                     Edit
                   </Link>
@@ -176,7 +175,7 @@ export default function AdminTestsPage() {
                   {test.status !== 'archived' && (
                     <button
                       onClick={() => handleArchive(test.id)}
-                      className="border px-3 py-1.5 rounded-lg text-xs text-red-600 hover:bg-red-50 transition"
+                      className="border border-theme px-3 py-1.5 rounded-lg text-xs text-danger hover:bg-tint-red transition"
                     >
                       Archive
                     </button>

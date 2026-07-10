@@ -9,19 +9,19 @@ import type { ExtendedProfile } from '@/types';
 const PLAN_BADGES: Record<string, { label: string; color: string; icon: string; features: string[] }> = {
   free: {
     label: 'Free',
-    color: 'bg-gray-100 text-gray-700 border-gray-300',
+    color: 'bg-elevated text-secondary border-theme',
     icon: '📚',
     features: ['10 free questions/day', 'All 5 sections', 'Instant feedback'],
   },
   premium: {
     label: 'Premium',
-    color: 'bg-amber-100 text-amber-700 border-amber-300',
+    color: 'bg-tint-amber text-amber-800 border-amber-300',
     icon: '⭐',
     features: ['Unlimited questions', 'All 5 sections', 'Instant feedback', 'Detailed analytics', 'Priority support'],
   },
   max: {
     label: 'Max',
-    color: 'bg-purple-100 text-purple-700 border-purple-300',
+    color: 'bg-tint-indigo text-indigo-800 border-indigo-300',
     icon: '👑',
     features: ['Everything in Premium', 'AI Mentor / Personal Tutor', 'Advanced analytics & insights', 'WhatsApp quiz bot access', 'Early access to new features'],
   },
@@ -81,10 +81,10 @@ export default function ProfilePage() {
   };
 
   if (loading) return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-indigo-50/30">
+    <div className="min-h-screen bg-page flex items-center justify-center">
       <div className="animate-pulse flex flex-col items-center gap-3">
         <div className="w-8 h-8 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin" />
-        <p className="text-gray-500 text-sm">Loading profile...</p>
+        <p className="text-secondary text-sm">Loading profile...</p>
       </div>
     </div>
   );
@@ -98,52 +98,52 @@ export default function ProfilePage() {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-indigo-50/30">
+    <div className="min-h-screen bg-page">
       {/* ─── Header ─── */}
-      <header className="bg-white border-b shadow-sm sticky top-0 z-20">
+      <header className="bg-card border-b border-theme shadow-theme-sm sticky top-0 z-20">
         <div className="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Link href="/student/dashboard" className="text-gray-400 hover:text-gray-600">
+            <Link href="/student/dashboard" className="text-muted hover:text-secondary">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
             </Link>
-            <span className="text-lg font-bold text-gray-900">My Profile</span>
+            <span className="text-lg font-bold text-primary">My Profile</span>
           </div>
           <nav className="hidden md:flex items-center gap-2">
-            <Link href="/student/dashboard" className="px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100 transition">
+            <Link href="/student/dashboard" className="px-3 py-2 rounded-lg text-sm font-medium text-secondary hover:bg-elevated transition">
               📊 Dashboard
             </Link>
             <Link href="/student/practice" className="px-3 py-2 rounded-lg text-sm font-medium bg-gradient-to-r from-amber-500 to-orange-600 text-white hover:from-amber-600 hover:to-orange-700 transition shadow-sm">
               🎯 Practice
             </Link>
             <button onClick={() => supabase.auth.signOut().then(() => router.push('/'))}
-              className="px-3 py-2 rounded-lg text-sm font-medium text-gray-400 hover:text-red-600 hover:bg-red-50 transition">
+              className="px-3 py-2 rounded-lg text-sm font-medium text-muted hover:text-danger hover:bg-tint-red transition">
               Sign Out
             </button>
           </nav>
-          <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition">
-            <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="md:hidden p-2 rounded-lg hover:bg-elevated transition">
+            <svg className="w-5 h-5 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={mobileMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"} />
             </svg>
           </button>
         </div>
         {mobileMenuOpen && (
-          <div className="md:hidden border-t border-gray-100 bg-white px-4 py-3 space-y-1">
+          <div className="md:hidden border-t border-theme-light bg-card px-4 py-3 space-y-1">
             <Link href="/student/dashboard" onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-gray-700 hover:bg-gray-50">📊 Dashboard</Link>
+              className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-secondary hover:bg-elevated">📊 Dashboard</Link>
             <Link href="/student/practice" onClick={() => setMobileMenuOpen(false)}
               className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm bg-gradient-to-r from-amber-50 to-orange-50 text-amber-800">🎯 Practice</Link>
-            <hr className="my-1 border-gray-100" />
+            <hr className="my-1 border-theme-light" />
             <button onClick={() => { setMobileMenuOpen(false); supabase.auth.signOut().then(() => router.push('/')); }}
-              className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-red-600 hover:bg-red-50 w-full text-left">🚪 Sign Out</button>
+              className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-danger hover:bg-tint-red w-full text-left">🚪 Sign Out</button>
           </div>
         )}
       </header>
 
       <main className="max-w-4xl mx-auto px-4 py-6 space-y-6">
         {/* ─── Profile Card ─── */}
-        <div className="bg-white border rounded-xl shadow-sm overflow-hidden">
+        <div className="bg-card border border-theme rounded-xl shadow-theme-sm overflow-hidden">
           <div className="bg-gradient-to-r from-indigo-600 to-purple-600 px-6 py-8 text-white">
             <div className="flex items-center gap-4">
               <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center text-3xl font-bold">
@@ -159,20 +159,20 @@ export default function ProfilePage() {
           {/* Details grid */}
           <div className="px-6 py-5 grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <p className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">Email</p>
-              <p className="text-sm text-gray-800">{profile.email || '—'}</p>
+              <p className="text-xs font-medium text-secondary uppercase tracking-wider mb-1">Email</p>
+              <p className="text-sm text-primary">{profile.email || '—'}</p>
             </div>
             <div>
-              <p className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">Phone</p>
-              <p className="text-sm text-gray-800">{profile.phone || '—'}</p>
+              <p className="text-xs font-medium text-secondary uppercase tracking-wider mb-1">Phone</p>
+              <p className="text-sm text-primary">{profile.phone || '—'}</p>
             </div>
             <div>
-              <p className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">Role</p>
-              <p className="text-sm text-gray-800 capitalize">{profile.role}</p>
+              <p className="text-xs font-medium text-secondary uppercase tracking-wider mb-1">Role</p>
+              <p className="text-sm text-primary capitalize">{profile.role}</p>
             </div>
             <div>
-              <p className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">Daily Questions Remaining</p>
-              <p className="text-sm text-gray-800">
+              <p className="text-xs font-medium text-secondary uppercase tracking-wider mb-1">Daily Questions Remaining</p>
+              <p className="text-sm text-primary">
                 {profile.subscription_plan === 'free' ? `${profile.daily_free_questions ?? 10}/10` : '♾️ Unlimited'}
               </p>
             </div>
@@ -190,13 +190,13 @@ export default function ProfilePage() {
         </div>
 
         {/* ─── Subscription Card ─── */}
-        <div className={`bg-white border rounded-xl shadow-sm overflow-hidden ${
-          isFree ? 'border-amber-200 ring-1 ring-amber-100' : 'border-gray-200'
+        <div className={`bg-card border border-theme rounded-xl shadow-theme-sm overflow-hidden ${
+          isFree ? 'border-amber-200 ring-1 ring-amber-100' : 'border-theme'
         }`}>
           <div className="px-6 py-5">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+                <h2 className="text-lg font-bold text-primary flex items-center gap-2">
                   <span>{currentPlan.icon}</span> {currentPlan.label} Plan
                 </h2>
                 {profile.is_promo_user && (
@@ -211,20 +211,20 @@ export default function ProfilePage() {
             {/* Features list */}
             <div className="space-y-2 mb-5">
               {currentPlan.features.map((f, i) => (
-                <div key={i} className="flex items-center gap-2 text-sm text-gray-600">
+                <div key={i} className="flex items-center gap-2 text-sm text-secondary">
                   <span className="text-green-500">✓</span> {f}
                 </div>
               ))}
               {isFree && (
                 <>
-                  <div className="flex items-center gap-2 text-sm text-gray-400">
-                    <span className="text-gray-300">—</span> Detailed analytics
+                  <div className="flex items-center gap-2 text-sm text-muted">
+                    <span className="text-muted">—</span> Detailed analytics
                   </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-400">
-                    <span className="text-gray-300">—</span> AI Mentor / Personal Tutor
+                  <div className="flex items-center gap-2 text-sm text-muted">
+                    <span className="text-muted">—</span> AI Mentor / Personal Tutor
                   </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-400">
-                    <span className="text-gray-300">—</span> WhatsApp bot access
+                  <div className="flex items-center gap-2 text-sm text-muted">
+                    <span className="text-muted">—</span> WhatsApp bot access
                   </div>
                 </>
               )}
@@ -232,7 +232,7 @@ export default function ProfilePage() {
 
             {/* Upgrade options */}
             {isFree && (
-              <div className="border-t border-gray-100 pt-5 space-y-4">
+              <div className="border-t border-theme-light pt-5 space-y-4">
                 {/* Upgrade message */}
                 {upgradeMsg && (
                   <div className={`p-4 rounded-xl text-sm ${
@@ -289,7 +289,7 @@ export default function ProfilePage() {
 
             {/* Show what's next for Premium users */}
             {profile.subscription_plan === 'premium' && (
-              <div className="border-t border-gray-100 pt-5">
+              <div className="border-t border-theme-light pt-5">
                 <div className="bg-gradient-to-r from-purple-50 to-indigo-50 border border-purple-200 rounded-xl p-5">
                   <div className="flex items-start gap-3">
                     <span className="text-2xl">👑</span>
@@ -308,7 +308,7 @@ export default function ProfilePage() {
 
             {/* Max users - already at top */}
             {profile.subscription_plan === 'max' && (
-              <div className="border-t border-gray-100 pt-5">
+              <div className="border-t border-theme-light pt-5">
                 <div className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-xl p-5">
                   <div className="flex items-start gap-3">
                     <span className="text-2xl">👑</span>
@@ -326,10 +326,10 @@ export default function ProfilePage() {
         </div>
 
         {/* ─── Privacy Note ─── */}
-        <div className="text-center text-xs text-gray-400 py-4">
+        <div className="text-center text-xs text-muted py-4">
           🔒 Your data is protected in accordance with DPDP (Digital Personal Data Protection) guidelines.
           We collect only the information needed to provide and improve our services.
-          <Link href="#" className="text-indigo-500 hover:underline ml-1">Privacy Policy</Link>
+          <Link href="#" className="text-accent hover:underline ml-1">Privacy Policy</Link>
         </div>
       </main>
     </div>

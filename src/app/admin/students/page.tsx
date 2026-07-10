@@ -85,7 +85,7 @@ export default async function AdminStudentsPage() {
     <div className="max-w-5xl mx-auto px-4 py-8">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold">Student Analytics</h1>
-        <Link href="/admin/dashboard" className="text-sm text-indigo-600 hover:underline">← Dashboard</Link>
+        <Link href="/admin/dashboard" className="text-sm text-accent hover:underline">← Dashboard</Link>
       </div>
 
       <div className="grid grid-cols-4 gap-4 mb-8">
@@ -95,37 +95,37 @@ export default async function AdminStudentsPage() {
           { label: 'Avg Score', value: `${overallAvg}%` },
           { label: 'Active Users', value: activeStudents.length },
         ].map((s) => (
-          <div key={s.label} className="bg-white border rounded-xl p-4 shadow-sm">
-            <p className="text-2xl font-bold text-indigo-600">{s.value}</p>
-            <p className="text-xs text-gray-500 mt-0.5">{s.label}</p>
+          <div key={s.label} className="bg-card border border-theme rounded-xl p-4 shadow-theme-sm">
+            <p className="text-2xl font-bold text-accent">{s.value}</p>
+            <p className="text-xs text-secondary mt-0.5">{s.label}</p>
           </div>
         ))}
       </div>
 
-      <div className="bg-white border rounded-xl shadow-sm mb-8">
-        <div className="px-6 py-4 border-b">
-          <h2 className="font-semibold">Section-Wise Average Scores</h2>
+      <div className="bg-card border border-theme shadow-theme-sm mb-8">
+        <div className="px-6 py-4 border-b border-theme">
+          <h2 className="font-semibold text-primary">Section-Wise Average Scores</h2>
         </div>
         <div className="p-6 grid grid-cols-5 gap-4">
           {sectionAvg.map((s) => (
             <div key={s.name} className="text-center">
-              <p className="text-2xl font-bold text-indigo-600">{s.avgScore}/10</p>
-              <p className="text-xs text-gray-500 mt-1">{s.name}</p>
+              <p className="text-2xl font-bold text-accent">{s.avgScore}/10</p>
+              <p className="text-xs text-secondary mt-1">{s.name}</p>
             </div>
           ))}
         </div>
       </div>
 
-      <div className="bg-white border rounded-xl shadow-sm">
-        <div className="px-6 py-4 border-b">
-          <h2 className="font-semibold">All Users</h2>
+      <div className="bg-card border border-theme shadow-theme-sm">
+        <div className="px-6 py-4 border-b border-theme">
+          <h2 className="font-semibold text-primary">All Users</h2>
         </div>
         {studentStats.length === 0 ? (
-          <div className="p-6 text-center text-gray-400">No users registered.</div>
+          <div className="p-6 text-center text-muted">No users registered.</div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
-              <thead className="bg-gray-50 text-gray-500">
+              <thead className="bg-elevated text-secondary">
                 <tr>
                   <th className="text-left px-6 py-3 font-medium">Name</th>
                   <th className="text-center px-4 py-3 font-medium">Role</th>
@@ -136,18 +136,18 @@ export default async function AdminStudentsPage() {
               </thead>
               <tbody className="divide-y">
                 {studentStats.map((s: any) => (
-                  <tr key={s.id} className="hover:bg-gray-50">
+                  <tr key={s.id} className="hover:bg-elevated">
                     <td className="px-6 py-3 font-medium">{s.full_name || '—'}</td>
                     <td className="px-4 py-3 text-center">
                       <span className={`text-xs px-2 py-0.5 rounded-full ${
-                        s.role === 'admin' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700'
+                        s.role === 'admin' ? 'bg-tint-indigo text-accent' : 'bg-elevated text-secondary'
                       }`}>{s.role}</span>
                     </td>
                     <td className="px-4 py-3 text-center">{s.testsTaken}</td>
                     <td className={`px-4 py-3 text-center font-medium ${
-                      s.testsTaken > 0 ? (s.avgScore >= 70 ? 'text-green-600' : s.avgScore >= 40 ? 'text-yellow-600' : 'text-red-600') : ''
+                      s.testsTaken > 0 ? (s.avgScore >= 70 ? 'text-stat-green' : s.avgScore >= 40 ? 'text-stat-amber' : 'text-danger') : ''
                     }`}>{s.testsTaken > 0 ? `${s.avgScore}%` : '—'}</td>
-                    <td className="px-4 py-3 text-center font-medium text-indigo-600">
+                    <td className="px-4 py-3 text-center font-medium text-accent">
                       {s.testsTaken > 0 ? `${s.bestScore}%` : '—'}
                     </td>
                   </tr>

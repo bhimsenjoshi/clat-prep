@@ -52,18 +52,18 @@ export default async function LeaderboardPage() {
     <div className="max-w-4xl mx-auto px-4 py-8">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold">Leaderboard</h1>
-        <Link href="/student/dashboard" className="text-sm text-indigo-600 hover:underline">
+        <Link href="/student/dashboard" className="text-sm text-accent hover:underline">
           ← Dashboard
         </Link>
       </div>
 
       {/* All-time leaderboard */}
-      <div className="bg-white border rounded-xl shadow-sm mb-8">
-        <div className="px-6 py-4 border-b">
-          <h2 className="font-semibold">All-Time Rankings</h2>
+      <div className="bg-card border border-theme shadow-theme-sm mb-8">
+        <div className="px-6 py-4 border-b border-theme">
+          <h2 className="font-semibold text-primary">All-Time Rankings</h2>
         </div>
         {ranked.length === 0 ? (
-          <div className="p-6 text-center text-gray-400">No tests completed yet.</div>
+          <div className="p-6 text-center text-muted">No tests completed yet.</div>
         ) : (
           <div className="divide-y">
             {ranked.map((entry) => (
@@ -73,16 +73,16 @@ export default async function LeaderboardPage() {
                     entry.rank === 1
                       ? 'bg-yellow-100 text-yellow-700'
                       : entry.rank === 2
-                      ? 'bg-gray-100 text-gray-600'
+                      ? 'bg-elevated text-secondary'
                       : entry.rank === 3
                       ? 'bg-orange-100 text-orange-700'
-                      : 'bg-gray-50 text-gray-500'
+                      : 'bg-elevated text-secondary'
                   }`}
                 >
                   {entry.rank}
                 </span>
                 <span className="flex-1 font-medium">{entry.name}</span>
-                <span className="text-indigo-600 font-bold">{entry.score}%</span>
+                <span className="text-accent font-bold">{entry.score}%</span>
               </div>
             ))}
           </div>
@@ -90,12 +90,12 @@ export default async function LeaderboardPage() {
       </div>
 
       {/* Per-test leaderboards */}
-      <div className="bg-white border rounded-xl shadow-sm">
-        <div className="px-6 py-4 border-b">
-          <h2 className="font-semibold">Per-Test Rankings</h2>
+      <div className="bg-card border border-theme shadow-theme-sm">
+        <div className="px-6 py-4 border-b border-theme">
+          <h2 className="font-semibold text-primary">Per-Test Rankings</h2>
         </div>
         {!tests || tests.length === 0 ? (
-          <div className="p-6 text-center text-gray-400">No published tests.</div>
+          <div className="p-6 text-center text-muted">No published tests.</div>
         ) : (
           <div className="divide-y">
             {tests.map((test) => {
@@ -104,11 +104,11 @@ export default async function LeaderboardPage() {
                 <div key={test.id} className="px-6 py-4">
                   <h3 className="font-medium text-sm mb-2">{test.title}</h3>
                   {ranks.length === 0 ? (
-                    <p className="text-xs text-gray-400">No submissions yet.</p>
+                    <p className="text-xs text-muted">No submissions yet.</p>
                   ) : (
-                    <div className="flex flex-wrap gap-4 text-xs text-gray-600">
+                    <div className="flex flex-wrap gap-4 text-xs text-secondary">
                       {ranks.map((r: any) => (
-                        <span key={r.full_name + r.test_rank} className="bg-gray-50 rounded-full px-3 py-1">
+                        <span key={r.full_name + r.test_rank} className="bg-elevated rounded-full px-3 py-1">
                           <strong>#{r.test_rank}</strong> {r.full_name} ({r.total_score}%)
                         </span>
                       ))}

@@ -51,29 +51,29 @@ export default function SignupPage() {
   if (confirmed) {
     return (
       <div className="min-h-screen flex items-center justify-center px-4">
-        <div className="w-full max-w-sm space-y-6 text-center">
-          <div className="bg-green-50 rounded-full w-16 h-16 flex items-center justify-center mx-auto">
-            <svg className="w-8 h-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div className="w-full max-w-sm bg-card border-theme rounded-xl p-8 shadow-theme-md space-y-6 text-center">
+          <div className="bg-tint-green rounded-full w-16 h-16 flex items-center justify-center mx-auto">
+            <svg className="w-8 h-8 text-stat-green" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
             </svg>
           </div>
           <h1 className="text-2xl font-bold">Check your email</h1>
-          <p className="text-gray-500 text-sm">
-            We&apos;ve sent a confirmation link to <strong className="text-gray-700">{email}</strong>.
+          <p className="text-secondary text-sm">
+            We&apos;ve sent a confirmation link to <strong className="text-primary">{email}</strong>.
             Click the link to activate your account.
           </p>
-          <p className="text-gray-400 text-xs">
+          <p className="text-muted text-xs">
             Didn&apos;t receive it? Check your spam folder, or{' '}
             <button
               onClick={() => setConfirmed(false)}
-              className="text-indigo-600 hover:underline"
+              className="text-accent hover:underline"
             >
               try again with a different email
             </button>
           </p>
           <Link
             href="/auth/login"
-            className="block w-full text-center bg-indigo-600 text-white rounded-lg py-2.5 font-medium hover:bg-indigo-700 transition"
+            className="block w-full text-center bg-accent text-white rounded-lg py-2.5 font-medium bg-accent-hover transition"
           >
             Go to Sign In
           </Link>
@@ -84,10 +84,10 @@ export default function SignupPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4">
-      <div className="w-full max-w-sm space-y-6">
+      <div className="w-full max-w-sm bg-card border-theme rounded-xl p-8 shadow-theme-md space-y-6">
         <div className="text-center">
           <h1 className="text-2xl font-bold">Create your account</h1>
-          <p className="text-gray-500 text-sm mt-1">Start your CLAT preparation journey</p>
+          <p className="text-secondary text-sm mt-1">Start your CLAT preparation journey</p>
         </div>
 
         <form onSubmit={handleSignup} className="space-y-4">
@@ -99,7 +99,7 @@ export default function SignupPage() {
               required
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
-              className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full border-theme rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
               placeholder="Your name"
             />
           </div>
@@ -111,7 +111,7 @@ export default function SignupPage() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full border-theme rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
               placeholder="you@example.com"
             />
           </div>
@@ -124,25 +124,25 @@ export default function SignupPage() {
               minLength={6}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full border-theme rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
               placeholder="At least 6 characters"
             />
           </div>
 
-          {error && <p className="text-red-600 text-sm">{error}</p>}
+          {error && <p className="text-danger text-sm">{error}</p>}
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-indigo-600 text-white rounded-lg py-2.5 font-medium hover:bg-indigo-700 disabled:opacity-50 transition"
+            className="w-full bg-accent text-white rounded-lg py-2.5 font-medium bg-accent-hover disabled:opacity-50 transition"
           >
             {loading ? 'Creating account...' : 'Create Account'}
           </button>
         </form>
 
-        <p className="text-center text-sm text-gray-500">
+        <p className="text-center text-sm text-secondary">
           Already have an account?{' '}
-          <Link href="/auth/login" className="text-indigo-600 hover:underline">Sign in</Link>
+          <Link href="/auth/login" className="text-accent hover:underline">Sign in</Link>
         </p>
       </div>
     </div>

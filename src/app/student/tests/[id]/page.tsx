@@ -261,14 +261,14 @@ export default function TestTakingPage({ params }: TestPageProps) {
   }, [attemptId, questions, sections, answers, questionTimes, submitting]);
 
   if (loading) return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+    <div className="min-h-screen flex items-center justify-center bg-page">
       <div className="animate-pulse flex flex-col items-center gap-3">
         <div className="w-8 h-8 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin" />
-        <p className="text-gray-500 text-sm">Loading test...</p>
+        <p className="text-secondary text-sm">Loading test...</p>
       </div>
     </div>
   );
-  if (!test) return <div className="p-8 text-center text-gray-500">Test not found.</div>;
+  if (!test) return <div className="p-8 text-center text-secondary">Test not found.</div>;
 
   if (submitted) {
     return (
@@ -276,18 +276,18 @@ export default function TestTakingPage({ params }: TestPageProps) {
         <div className="bg-green-50 border border-green-200 rounded-2xl p-8 mb-6 text-center">
           <p className="text-5xl mb-4">🎉</p>
           <h2 className="text-2xl font-bold mb-2">Test Submitted!</h2>
-          <p className="text-xs text-gray-400 mb-2">Attempt #{attemptNumber}</p>
+          <p className="text-xs text-muted mb-2">Attempt #{attemptNumber}</p>
           <p className="text-5xl font-bold text-indigo-600 mt-4 mb-1">{resultTotal}%</p>
-          <p className="text-sm text-gray-500">Overall Score</p>
+          <p className="text-sm text-secondary">Overall Score</p>
         </div>
 
-        <div className="bg-white border rounded-xl p-6 mb-6 shadow-sm">
+        <div className="bg-card border border-theme rounded-xl p-6 mb-6 shadow-theme-sm">
           <h3 className="font-semibold mb-4">Section-wise Breakdown</h3>
           <div className="space-y-3">
             {resultScores.map((rs) => (
               <div key={rs.section} className="flex items-center justify-between">
                 <span className="text-sm font-medium">{rs.section}</span>
-                <span className="text-sm font-bold text-indigo-600">
+                <span className="text-sm font-bold text-accent">
                   {rs.score}/{rs.total}
                 </span>
               </div>
@@ -304,7 +304,7 @@ export default function TestTakingPage({ params }: TestPageProps) {
           </Link>
           <Link
             href="/student/dashboard"
-            className="border px-6 py-2.5 rounded-lg font-medium hover:bg-gray-100 transition"
+            className="border border-theme px-6 py-2.5 rounded-lg font-medium hover:bg-elevated transition"
           >
             Go to Dashboard
           </Link>
@@ -323,23 +323,23 @@ export default function TestTakingPage({ params }: TestPageProps) {
   const totalQuestions = questions.length;
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-page">
       {/* Top bar */}
-      <div className="bg-white border-b shadow-sm sticky top-0 z-10">
+      <div className="bg-card border-b border-theme shadow-theme-sm sticky top-0 z-10">
         <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Link href="/student/dashboard" className="text-gray-400 hover:text-gray-600">
+            <Link href="/student/dashboard" className="text-muted hover:text-secondary">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
             </Link>
             <div>
               <h1 className="text-sm font-bold">{test.title}</h1>
-              <p className="text-[10px] text-gray-500">Attempt #{attemptNumber}</p>
+              <p className="text-[10px] text-secondary">Attempt #{attemptNumber}</p>
             </div>
           </div>
           <div className="flex items-center gap-4">
-            <span className="text-xs text-gray-500">
+            <span className="text-xs text-secondary">
               <span className="font-semibold">{questionsAnswered}</span>/{totalQuestions} answered
             </span>
             <span className={`font-mono text-lg font-bold ${timeLeft < 300 ? 'text-red-600' : ''}`}>
@@ -375,20 +375,20 @@ export default function TestTakingPage({ params }: TestPageProps) {
 
             {/* Passage */}
             {currentQuestion?.passage && (
-              <div className="bg-white border rounded-xl p-5 mb-4 shadow-sm">
-                <p className="font-medium text-xs text-indigo-500 uppercase tracking-wide mb-2">Passage</p>
-                <p className="text-sm text-gray-700 leading-relaxed">{currentQuestion.passage}</p>
+              <div className="bg-card border border-theme rounded-xl p-5 mb-4 shadow-theme-sm">
+                <p className="font-medium text-xs text-accent uppercase tracking-wide mb-2">Passage</p>
+                <p className="text-sm text-secondary leading-relaxed">{currentQuestion.passage}</p>
               </div>
             )}
 
             {/* Question */}
-            <div className="bg-white border rounded-xl p-6 mb-4 shadow-sm">
+            <div className="bg-card border border-theme rounded-xl p-6 mb-4 shadow-theme-sm">
               <div className="flex items-center justify-between mb-4">
-                <span className="text-xs font-medium text-gray-400">
+                <span className="text-xs font-medium text-muted">
                   Question {currentQIdx + 1} of {sectionQuestions.length}
-                  <span className="ml-2 text-indigo-400">· {currentSection?.name}</span>
+                  <span className="ml-2 text-accent">· {currentSection?.name}</span>
                 </span>
-                <span className="text-[10px] text-gray-400">
+                <span className="text-[10px] text-muted">
                   {currentQuestion?.difficulty && (
                     <span className={`px-1.5 py-0.5 rounded ${
                       currentQuestion.difficulty === 'hard' ? 'bg-red-50 text-red-500' :
@@ -410,7 +410,7 @@ export default function TestTakingPage({ params }: TestPageProps) {
                       className={`w-full text-left px-4 py-3 rounded-lg border text-sm transition ${
                         answers[currentQuestion.id] === key
                           ? 'border-indigo-500 bg-indigo-50 text-indigo-800 font-medium ring-1 ring-indigo-300'
-                          : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                          : 'border-theme hover:border-theme hover:bg-elevated'
                       }`}
                     >
                       <span className="font-semibold mr-2">{key}.</span>
@@ -432,11 +432,11 @@ export default function TestTakingPage({ params }: TestPageProps) {
                   }
                 }}
                 disabled={currentSectionIdx === 0 && currentQIdx === 0}
-                className="border px-4 py-2 rounded-lg text-sm disabled:opacity-30 hover:bg-gray-50 transition"
+                className="border border-theme px-4 py-2 rounded-lg text-sm disabled:opacity-30 hover:bg-elevated transition"
               >
                 ← Previous
               </button>
-              <span className="text-xs text-gray-400">
+              <span className="text-xs text-muted">
                 {sectionQuestions.filter((q) => answers[q.id]).length}/{sectionQuestions.length} in this section
               </span>
               <button
@@ -455,8 +455,8 @@ export default function TestTakingPage({ params }: TestPageProps) {
           {/* Sidebar */}
           <div className="space-y-4">
             {/* Section nav */}
-            <div className="bg-white border rounded-xl p-4 shadow-sm">
-              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Sections</p>
+            <div className="bg-card border border-theme rounded-xl p-4 shadow-theme-sm">
+              <p className="text-xs font-semibold text-secondary uppercase tracking-wide mb-2">Sections</p>
               <div className="space-y-1">
                 {sections.map((s, i) => {
                   const sectionQ = questions.filter((q) => q.section_id === s.id);
@@ -468,11 +468,11 @@ export default function TestTakingPage({ params }: TestPageProps) {
                       className={`w-full text-left px-3 py-2 rounded-lg text-xs transition ${
                         i === currentSectionIdx
                           ? 'bg-indigo-100 text-indigo-800 font-medium'
-                          : 'hover:bg-gray-100'
+                          : 'hover:bg-elevated'
                       }`}
                     >
                       <span>{s.name}</span>
-                      <span className="float-right text-gray-400">{answered}/{sectionQ.length}</span>
+                      <span className="float-right text-muted">{answered}/{sectionQ.length}</span>
                     </button>
                   );
                 })}
@@ -480,8 +480,8 @@ export default function TestTakingPage({ params }: TestPageProps) {
             </div>
 
             {/* Question grid */}
-            <div className="bg-white border rounded-xl p-4 shadow-sm">
-              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+            <div className="bg-card border border-theme rounded-xl p-4 shadow-theme-sm">
+              <p className="text-xs font-semibold text-secondary uppercase tracking-wide mb-2">
                 {currentSection?.name}
               </p>
               <div className="grid grid-cols-5 gap-1.5">

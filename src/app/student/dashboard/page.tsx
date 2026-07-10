@@ -334,10 +334,10 @@ export default function StudentDashboard() {
   const todayStr = new Date().toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
 
   if (loading) return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-950">
+    <div className="min-h-screen flex items-center justify-center bg-page">
       <div className="animate-pulse flex flex-col items-center gap-3">
         <div className="w-8 h-8 border-4 border-indigo-400 border-t-transparent rounded-full animate-spin" />
-        <p className="text-gray-400 text-sm">Loading your dashboard...</p>
+        <p className="text-muted text-sm">Loading your dashboard...</p>
       </div>
     </div>
   );
@@ -348,23 +348,23 @@ export default function StudentDashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900">
       {/* ─── Header ─── */}
-      <header className="bg-slate-900/80 border-b border-slate-800/50 backdrop-blur-sm sticky top-0 z-20">
+      <header className="bg-page border-b border-theme backdrop-blur-sm sticky top-0 z-20">
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3 min-w-0">
             <span className="text-xl shrink-0">🎯</span>
             <div className="truncate">
               <h1 className="text-base font-bold text-white truncate">CLAT Prep</h1>
-              <p className="text-[11px] text-slate-400 truncate">
+              <p className="text-[11px] text-secondary truncate">
                 {todayStr}
               </p>
             </div>
             {/* Plan badge + Upgrade CTA */}
             {profile?.subscription_plan === 'max' ? (
-              <div className="shrink-0 text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-md bg-purple-900/60 text-purple-300 border border-purple-700/50">
+              <div className="shrink-0 text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-md bg-tint-purple text-stat-purple border border-purple-700/50">
                 MAX ✨
               </div>
             ) : profile?.is_promo_user ? (
-              <div className="shrink-0 text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-md bg-emerald-900/60 text-emerald-300 border border-emerald-700/50">
+              <div className="shrink-0 text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-md bg-tint-green text-stat-emerald border border-emerald-700/50">
                 PREMIUM 🎁
               </div>
             ) : (
@@ -386,24 +386,24 @@ export default function StudentDashboard() {
               🎯 Practice
             </Link>
             <Link href="/student/analytics"
-              className="px-3 py-2 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 transition">
+              className="px-3 py-2 rounded-lg text-sm font-medium text-secondary hover:bg-card-hover transition">
               📊 Analytics
             </Link>
             <Link href="/student/leaderboard"
-              className="px-3 py-2 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 transition">
+              className="px-3 py-2 rounded-lg text-sm font-medium text-secondary hover:bg-card-hover transition">
               🏆 Leaderboard
             </Link>
             <Link href="/student/tests"
-              className="px-3 py-2 rounded-lg text-sm font-medium text-indigo-400 hover:bg-slate-800 transition">
+              className="px-3 py-2 rounded-lg text-sm font-medium text-accent hover:bg-card-hover transition">
               📝 Tests
             </Link>
             <Link href="/student/profile"
-              className="px-3 py-2 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 transition">
+              className="px-3 py-2 rounded-lg text-sm font-medium text-secondary hover:bg-card-hover transition">
               👤 Profile
             </Link>
             <ThemeToggle />
             <button onClick={() => supabase.auth.signOut().then(() => router.push('/'))}
-              className="px-3 py-2 rounded-lg text-sm font-medium text-slate-500 hover:text-red-400 hover:bg-red-900/30 transition">
+              className="px-3 py-2 rounded-lg text-sm font-medium text-muted hover:text-red-400 hover:bg-tint-red transition">
               Sign Out
             </button>
           </nav>
@@ -411,10 +411,10 @@ export default function StudentDashboard() {
           {/* Mobile Hamburger */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2 rounded-lg hover:bg-slate-800 transition"
+            className="md:hidden p-2 rounded-lg hover:bg-card-hover transition"
             aria-label="Menu"
           >
-            <svg className="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               {mobileMenuOpen ? (
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               ) : (
@@ -425,31 +425,31 @@ export default function StudentDashboard() {
         </div>
 
         {mobileMenuOpen && (
-          <div className="md:hidden border-t border-slate-800 bg-slate-900 px-4 py-3 space-y-1">
+          <div className="md:hidden border-t border-theme-light bg-page px-4 py-3 space-y-1">
             <Link href="/student/practice" onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium bg-gradient-to-r from-amber-900/50 to-orange-900/50 text-amber-300">
+              className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium bg-gradient-to-r from-amber-900/50 to-orange-900/50 text-stat-amber">
               🎯 Practice Questions
             </Link>
             <Link href="/student/analytics" onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-300 hover:bg-slate-800">
+              className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-secondary hover:bg-card-hover">
               📊 Performance Analytics
             </Link>
             <Link href="/student/leaderboard" onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-300 hover:bg-slate-800">
+              className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-secondary hover:bg-card-hover">
               🏆 Leaderboard
             </Link>
             <Link href="/student/tests" onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-indigo-400 hover:bg-slate-800">
+              className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-accent hover:bg-card-hover">
               📝 Available Tests
             </Link>
-            <hr className="my-1 border-slate-800" />
+            <hr className="my-1 border-theme-light" />
             <Link href="/student/profile" onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-300 hover:bg-slate-800">
+              className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-secondary hover:bg-card-hover">
               👤 My Profile
             </Link>
             <div className="py-1"><ThemeToggle /></div>
             <button onClick={() => { setMobileMenuOpen(false); supabase.auth.signOut().then(() => router.push('/')); }}
-              className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-red-400 hover:bg-red-900/30 w-full text-left">
+              className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-red-400 hover:bg-tint-red w-full text-left">
               🚪 Sign Out
             </button>
           </div>
@@ -461,25 +461,25 @@ export default function StudentDashboard() {
         {/* ════════════════════════════════════════════ */}
         {/* #1 — CLAT 2026 COUNTDOWN                     */}
         {/* ════════════════════════════════════════════ */}
-        <div className="bg-gradient-to-r from-indigo-900/60 via-purple-900/50 to-indigo-900/60 border border-indigo-700/40 rounded-2xl p-6 md:p-8 text-center shadow-lg shadow-indigo-900/30">
+        <div className="bg-gradient-to-r from-indigo-900/60 via-purple-900/50 to-indigo-900/60 border border-indigo-700/40 rounded-2xl p-6 md:p-8 text-center shadow-lg shadow-theme-sm">
           <div className="flex items-center justify-center gap-2 mb-1">
             <span className="text-2xl">⏳</span>
-            <span className="text-xs font-semibold text-indigo-300 uppercase tracking-widest">CLAT 2026</span>
+            <span className="text-xs font-semibold text-accent uppercase tracking-widest">CLAT 2026</span>
           </div>
           <p className="text-xl md:text-2xl font-bold text-white mb-1">
             {countdown.days > 0
               ? `${countdown.days} days ${countdown.hours}h ${countdown.minutes}m ${countdown.seconds}s`
               : 'Exam Day! 🚀'}
           </p>
-          <p className="text-xs text-indigo-300/70">Sunday, 6 December 2026</p>
+          <p className="text-xs text-accent/70">Sunday, 6 December 2026</p>
           <div className="mt-3 flex items-center justify-center gap-2">
-            <div className="h-1.5 bg-indigo-800/50 rounded-full max-w-xs w-full overflow-hidden">
+            <div className="h-1.5 bg-tint-indigo rounded-full max-w-xs w-full overflow-hidden">
               <div
                 className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full transition-all"
                 style={{ width: `${Math.max(0, Math.min(100, ((CLAT_DATE.getTime() - Date.now()) / (CLAT_DATE.getTime() - new Date('2025-07-01').getTime())) * 100))}%` }}
               />
             </div>
-            <span className="text-[10px] text-indigo-400/60 shrink-0">
+            <span className="text-[10px] text-accent/60 shrink-0">
               {countdown.days > 0 ? `${countdown.days}d left` : 'D-Day!'}
             </span>
           </div>
@@ -490,27 +490,27 @@ export default function StudentDashboard() {
         {/* ════════════════════════════════════════════ */}
         <SectionCard title="Today's Stats" icon="📊" collapsible defaultExpanded={false}>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          <div className="bg-slate-800/60 border border-slate-700/50 rounded-xl p-4 text-center">
+          <div className="bg-card border border-theme rounded-xl p-4 text-center">
             <div className="text-2xl mb-1">{streak > 0 ? '🔥' : '❄️'}</div>
             <p className="text-2xl font-bold text-white">{streak}</p>
-            <p className="text-[10px] text-slate-400 uppercase tracking-wider">Day Streak</p>
+            <p className="text-[10px] text-secondary uppercase tracking-wider">Day Streak</p>
           </div>
-          <div className="bg-slate-800/60 border border-slate-700/50 rounded-xl p-4 text-center">
+          <div className="bg-card border border-theme rounded-xl p-4 text-center">
             <div className="text-2xl mb-1">📝</div>
             <p className="text-2xl font-bold text-white">{todayCount}</p>
-            <p className="text-[10px] text-slate-400 uppercase tracking-wider">Today</p>
+            <p className="text-[10px] text-secondary uppercase tracking-wider">Today</p>
           </div>
-          <div className="bg-slate-800/60 border border-slate-700/50 rounded-xl p-4 text-center">
+          <div className="bg-card border border-theme rounded-xl p-4 text-center">
             <div className="text-2xl mb-1">📊</div>
             <p className="text-2xl font-bold text-white">
               {totalPracticeQ > 0 ? `${practiceAccuracy}%` : '—'}
             </p>
-            <p className="text-[10px] text-slate-400 uppercase tracking-wider">Accuracy</p>
+            <p className="text-[10px] text-secondary uppercase tracking-wider">Accuracy</p>
           </div>
-          <div className="bg-slate-800/60 border border-slate-700/50 rounded-xl p-4 text-center">
+          <div className="bg-card border border-theme rounded-xl p-4 text-center">
             <div className="text-2xl mb-1">📚</div>
             <p className="text-2xl font-bold text-white">{totalPracticeQ}</p>
-            <p className="text-[10px] text-slate-400 uppercase tracking-wider">Total Q</p>
+            <p className="text-[10px] text-secondary uppercase tracking-wider">Total Q</p>
           </div>
         </div>
         </SectionCard>
@@ -524,8 +524,8 @@ export default function StudentDashboard() {
             <div className="flex items-start gap-3">
               <span className="text-xl shrink-0 mt-0.5">{a.icon}</span>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-bold text-blue-300">{a.title}</p>
-                <p className="text-xs text-slate-400 mt-0.5">{a.body}</p>
+                <p className="text-sm font-bold text-stat-blue">{a.title}</p>
+                <p className="text-xs text-secondary mt-0.5">{a.body}</p>
               </div>
               <button
                 onClick={() => {
@@ -534,7 +534,7 @@ export default function StudentDashboard() {
                   setDismissedAnnouncements(next);
                   try { localStorage.setItem('clatly_dismissed', JSON.stringify([...next])); } catch {}
                 }}
-                className="shrink-0 text-slate-500 hover:text-slate-300 transition p-1"
+                className="shrink-0 text-muted hover:text-secondary transition p-1"
                 aria-label="Dismiss"
               >
                 ✕
@@ -549,13 +549,13 @@ export default function StudentDashboard() {
         {/* ════════════════════════════════════════════ */}
         <SectionCard title="Legal Maxim of the Day" icon="⚖️" collapsible defaultExpanded={false}>
           <div className="flex items-start gap-4">
-            <div className="w-10 h-10 rounded-lg bg-amber-800/40 flex items-center justify-center text-xl shrink-0">
+            <div className="w-10 h-10 rounded-lg bg-tint-amber flex items-center justify-center text-xl shrink-0">
               ⚖️
             </div>
             <div className="min-w-0 flex-1">
               <p className="text-[10px] text-amber-400/70 font-semibold uppercase tracking-wider">Legal Maxim of the Day</p>
               <p className="text-sm font-bold text-white mt-0.5 italic">&ldquo;{maxim.maxim}&rdquo;</p>
-              <p className="text-xs text-slate-400 mt-1">{maxim.meaning}</p>
+              <p className="text-xs text-secondary mt-1">{maxim.meaning}</p>
             </div>
           </div>
         </SectionCard>
@@ -568,9 +568,9 @@ export default function StudentDashboard() {
             <div className="flex items-start md:items-center gap-4 flex-col md:flex-row">
               <div className="flex-1 min-w-0">
                 <p className="text-base font-bold text-white mt-0.5">
-                  Your weakest section is <span className="text-purple-300">{SECTION_ICONS[weakestSection]} {weakestSection}</span>
+                  Your weakest section is <span className="text-stat-purple">{SECTION_ICONS[weakestSection]} {weakestSection}</span>
                 </p>
-                <p className="text-xs text-slate-400 mt-0.5">
+                <p className="text-xs text-secondary mt-0.5">
                   You've answered {totalPracticeQ} practice questions — let's improve that score!
                 </p>
               </div>
@@ -593,13 +593,13 @@ export default function StudentDashboard() {
             <div className="space-y-4">
               {[1, 2, 3].map(row => (
                 <div key={row}>
-                  <div className="h-3 bg-slate-700/30 rounded w-24 mb-2 animate-pulse" />
+                  <div className="h-3 bg-elevated/30 rounded w-24 mb-2 animate-pulse" />
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5">
                     {[1, 2, 3].map(col => (
-                      <div key={col} className="bg-slate-800/40 border border-slate-700/30 rounded-xl p-4 animate-pulse">
-                        <div className="h-3 bg-slate-700/50 rounded w-16 mb-3" />
-                        <div className="h-4 bg-slate-700/50 rounded w-full mb-2" />
-                        <div className="h-3 bg-slate-700/50 rounded w-3/4" />
+                      <div key={col} className="bg-card/40 border border-elevated/30 rounded-xl p-4 animate-pulse">
+                        <div className="h-3 bg-elevated/50 rounded w-16 mb-3" />
+                        <div className="h-4 bg-elevated/50 rounded w-full mb-2" />
+                        <div className="h-3 bg-elevated/50 rounded w-3/4" />
                       </div>
                     ))}
                   </div>
@@ -607,8 +607,8 @@ export default function StudentDashboard() {
               ))}
             </div>
           ) : editorialItems.length === 0 ? (
-            <div className="bg-slate-800/40 border border-slate-700/30 rounded-xl p-4 text-center">
-              <p className="text-sm text-slate-500">Could not load editorials. Check back later.</p>
+            <div className="bg-card/40 border border-elevated/30 rounded-xl p-4 text-center">
+              <p className="text-sm text-muted">Could not load editorials. Check back later.</p>
             </div>
           ) : (
             <div className="space-y-5">
@@ -636,7 +636,7 @@ export default function StudentDashboard() {
                     <div key={sourceId}>
                       <div className="flex items-center gap-2 mb-2">
                         <span className="text-sm">{meta?.icon}</span>
-                        <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">{meta?.name}</span>
+                        <span className="text-xs font-semibold text-secondary uppercase tracking-wider">{meta?.name}</span>
                         <span className="text-[10px] text-slate-600">· {items.length} article{items.length !== 1 ? 's' : ''}</span>
                       </div>
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5">
@@ -645,11 +645,11 @@ export default function StudentDashboard() {
                           return (
                             <div
                               key={`${item.sourceId}-${item.link}`}
-                              className="bg-slate-800/60 border border-slate-700/50 rounded-xl p-4 hover:border-indigo-600/50 hover:bg-slate-800 transition group flex flex-col"
+                              className="bg-card border border-theme rounded-xl p-4 hover:border-indigo-600/50 hover:bg-card transition group flex flex-col"
                             >
                               <div className="flex items-center gap-2 mb-2">
                                 {item.pubDate && (
-                                  <span className="text-[10px] text-slate-500">
+                                  <span className="text-[10px] text-muted">
                                     {(() => {
                                       const d = new Date(item.pubDate);
                                       const now = new Date();
@@ -694,8 +694,8 @@ export default function StudentDashboard() {
                                   }}
                                   className={`text-[11px] font-medium px-2.5 py-1 rounded-lg transition flex items-center gap-1 ${
                                     isRead
-                                      ? 'bg-emerald-900/40 text-emerald-300 cursor-default'
-                                      : 'bg-slate-700/50 text-slate-300 hover:bg-indigo-700/50 hover:text-indigo-200'
+                                      ? 'bg-tint-green text-stat-emerald cursor-default'
+                                      : 'bg-elevated/50 text-secondary hover:bg-tint-indigo hover:text-indigo-200'
                                   }`}
                                 >
                                   {isRead ? '✅ Read' : '📖 Read'}
@@ -721,7 +721,7 @@ export default function StudentDashboard() {
                                       })
                                       .catch(() => setQuizLoading(false));
                                   }}
-                                  className="text-[11px] font-medium px-2.5 py-1 rounded-lg bg-slate-700/50 text-slate-300 hover:bg-purple-700/50 hover:text-purple-200 transition flex items-center gap-1"
+                                  className="text-[11px] font-medium px-2.5 py-1 rounded-lg bg-elevated/50 text-secondary hover:bg-tint-purple hover:text-purple-200 transition flex items-center gap-1"
                                 >
                                   📝 Quiz
                                 </button>
@@ -730,7 +730,7 @@ export default function StudentDashboard() {
                                   target="_blank"
                                   rel="noopener noreferrer"
                                   onClick={(e) => e.stopPropagation()}
-                                  className="ml-auto text-[10px] text-indigo-400/60 hover:text-indigo-300 transition"
+                                  className="ml-auto text-[10px] text-accent/60 hover:text-accent transition"
                                 >
                                   ↗
                                 </a>
@@ -750,16 +750,16 @@ export default function StudentDashboard() {
         {/* ─── Quiz Modal ─── */}
         {quizzingArticle && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-            <div className="bg-slate-800 border border-slate-700 rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-2xl">
+            <div className="bg-card border border-theme rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-2xl">
               {/* Modal header */}
-              <div className="px-5 py-4 border-b border-slate-700 flex items-center justify-between">
+              <div className="px-5 py-4 border-b border-theme flex items-center justify-between">
                 <div className="min-w-0 flex-1">
-                  <p className="text-xs text-purple-400 font-semibold uppercase tracking-wider">Editorial Quiz</p>
-                  <p className="text-sm font-medium text-white truncate mt-0.5">{quizzingArticle.title}</p>
+                  <p className="text-xs text-stat-purple font-semibold uppercase tracking-wider">Editorial Quiz</p>
+                  <p className="text-sm font-medium text-primary truncate mt-0.5">{quizzingArticle.title}</p>
                 </div>
                 <button
                   onClick={() => setQuizzingArticle(null)}
-                  className="shrink-0 text-slate-500 hover:text-slate-300 transition p-1 ml-3"
+                  className="shrink-0 text-muted hover:text-secondary transition p-1 ml-3"
                 >
                   ✕
                 </button>
@@ -767,21 +767,21 @@ export default function StudentDashboard() {
 
               <div className="px-5 py-4 space-y-5">
                 {/* ⚠️ Copyright disclaimer */}
-                <div className="text-[10px] leading-relaxed text-slate-500 bg-slate-900/60 border border-slate-700/40 rounded-lg px-3 py-2.5">
-                  ⚠️ <strong className="text-slate-400">Practice only.</strong> These questions are AI-generated on topics similar to the editorial — they do <em>not</em> reproduce or summarize the original article's content. For accurate editorial analysis, read the full article.
+                <div className="text-[10px] leading-relaxed text-secondary bg-page border border-theme rounded-lg px-3 py-2.5">
+                  ⚠️ <strong className="text-primary">Practice only.</strong> These questions are AI-generated on topics similar to the editorial — they do <em>not</em> reproduce or summarize the original article's content. For accurate editorial analysis, read the full article.
                 </div>
 
                 {quizLoading ? (
                   <div className="text-center py-8">
                     <div className="animate-spin w-8 h-8 border-2 border-purple-400 border-t-transparent rounded-full mx-auto mb-3" />
-                    <p className="text-sm text-slate-400">Generating quiz questions...</p>
+                    <p className="text-sm text-secondary">Generating quiz questions...</p>
                   </div>
                 ) : quizQuestions.length === 0 ? (
                   <div className="text-center py-8">
-                    <p className="text-sm text-slate-400">Could not generate quiz. Try again.</p>
+                    <p className="text-sm text-secondary">Could not generate quiz. Try again.</p>
                     <button
                       onClick={() => setQuizzingArticle(null)}
-                      className="mt-3 text-sm text-indigo-400 hover:text-indigo-300"
+                      className="mt-3 text-sm text-accent hover:text-accent"
                     >
                       Close
                     </button>
@@ -790,22 +790,22 @@ export default function StudentDashboard() {
                   <>
                     {quizQuestions.map((q: any, qi: number) => (
                       <div key={qi}>
-                        <p className="text-sm font-medium text-white mb-3">
+                        <p className="text-sm font-medium text-primary mb-3">
                           Q{qi + 1}. {q.question}
                         </p>
                         <div className="space-y-2">
                           {q.options.map((opt: string, oi: number) => {
-                            let btnStyle = 'border-slate-600 hover:border-indigo-500 hover:bg-indigo-500/10';
+                            let btnStyle = 'border-theme hover:border-accent hover:bg-accent-subtle';
                             if (quizSubmitted) {
                               if (oi === q.correctIndex) {
-                                btnStyle = 'border-green-600 bg-green-900/30 ring-1 ring-green-600/50';
+                                btnStyle = 'border-green-600 bg-tint-green ring-1 ring-green-600/50';
                               } else if (oi === quizAnswers[qi] && quizAnswers[qi] !== q.correctIndex) {
-                                btnStyle = 'border-red-600 bg-red-900/30 ring-1 ring-red-600/50';
+                                btnStyle = 'border-red-600 bg-tint-red ring-1 ring-red-600/50';
                               } else {
-                                btnStyle = 'border-slate-700/50 opacity-50';
+                                btnStyle = 'border-theme opacity-50';
                               }
                             } else if (quizAnswers[qi] === oi) {
-                              btnStyle = 'border-indigo-500 bg-indigo-900/30 ring-1 ring-indigo-500';
+                              btnStyle = 'border-accent bg-tint-indigo ring-1 ring-indigo-500';
                             }
                             return (
                               <button
@@ -821,16 +821,16 @@ export default function StudentDashboard() {
                                   quizSubmitted ? 'cursor-default' : 'cursor-pointer'
                                 }`}
                               >
-                                <span className="text-slate-400 mr-2">{String.fromCharCode(65 + oi)}.</span>
-                                <span className="text-slate-200">{opt.replace(/^[A-D]\)\s*/, '')}</span>
+                                <span className="text-secondary mr-2">{String.fromCharCode(65 + oi)}.</span>
+                                <span className="text-primary">{opt.replace(/^[A-D]\)\s*/, '')}</span>
                               </button>
                             );
                           })}
                         </div>
                         {quizSubmitted && q.explanation && (
-                          <div className="mt-2 p-3 bg-blue-900/20 border border-blue-800/40 rounded-lg">
-                            <p className="text-[10px] text-blue-400 font-semibold uppercase tracking-wider mb-1">Explanation</p>
-                            <p className="text-xs text-slate-300 leading-relaxed">{q.explanation}</p>
+                          <div className="mt-2 p-3 bg-tint-blue border border-theme rounded-lg">
+                            <p className="text-[10px] text-info font-semibold uppercase tracking-wider mb-1">Explanation</p>
+                            <p className="text-xs text-secondary leading-relaxed">{q.explanation}</p>
                           </div>
                         )}
                       </div>
@@ -865,7 +865,7 @@ export default function StudentDashboard() {
                           setReadArticles(prev => new Set(prev).add(quizzingArticle.link));
                         }}
                         disabled={quizAnswers.every(a => a < 0)}
-                        className="w-full py-3 rounded-xl font-medium bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:from-purple-500 hover:to-pink-500 transition disabled:opacity-40"
+                        className="w-full py-3 rounded-xl font-medium bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:from-purple-500 hover:to-pink-500 transition disabled:opacity-40 shadow-theme-sm"
                       >
                         {quizAnswers.every(a => a < 0) ? 'Select at least one answer' : 'Submit Quiz'}
                       </button>
@@ -882,7 +882,7 @@ export default function StudentDashboard() {
                         </div>
                         <button
                           onClick={() => setQuizzingArticle(null)}
-                          className="text-sm text-indigo-400 hover:text-indigo-300 transition"
+                          className="text-sm text-accent hover:text-accent transition"
                         >
                           Close
                         </button>
@@ -900,7 +900,7 @@ export default function StudentDashboard() {
         {/* ════════════════════════════════════════════ */}
         <SectionCard title="Quick Practice" icon="⚡" collapsible defaultExpanded={false}
           extra={profile?.subscription_plan === 'free' ? (
-            <span className="text-xs font-normal text-slate-500">{(profile.daily_free_questions ?? 10)} free questions remaining</span>
+            <span className="text-xs font-normal text-secondary">{(profile.daily_free_questions ?? 10)} free questions remaining</span>
           ) : undefined}
         >
           <div className="grid grid-cols-2 md:grid-cols-5 gap-2.5">
@@ -909,11 +909,11 @@ export default function StudentDashboard() {
                 key={s.id}
                 href={`/student/practice`}
                 onClick={() => sessionStorage.setItem('practiceSection', s.id)}
-                className="bg-slate-800/60 border border-slate-700/50 rounded-xl p-3.5 hover:border-indigo-600/50 hover:bg-slate-800 transition text-center group"
+                className="bg-card border border-theme rounded-xl p-3.5 hover:border-accent bg-card-hover transition text-center group"
               >
                 <span className="text-xl block mb-1 group-hover:scale-110 transition-transform">{s.icon}</span>
-                <p className="text-xs font-semibold text-white truncate">{s.label}</p>
-                <p className="text-[10px] text-slate-500 truncate">{s.desc}</p>
+                <p className="text-xs font-semibold text-primary truncate">{s.label}</p>
+                <p className="text-[10px] text-muted truncate">{s.desc}</p>
               </Link>
             ))}
           </div>
@@ -926,8 +926,8 @@ export default function StudentDashboard() {
           <SectionCard title="Recent Activity" icon="📋" collapsible defaultExpanded={false}>
             <div className="text-center py-6">
               <div className="text-4xl mb-3">📭</div>
-              <h2 className="text-lg font-bold text-white mb-1">No Practice Yet</h2>
-              <p className="text-sm text-slate-400 mb-5 max-w-sm mx-auto">
+              <h2 className="text-lg font-bold text-primary mb-1">No Practice Yet</h2>
+              <p className="text-sm text-secondary mb-5 max-w-sm mx-auto">
                 Pick a section above and start practicing with instant feedback!
               </p>
               <div className="flex gap-3 justify-center flex-wrap">
@@ -936,7 +936,7 @@ export default function StudentDashboard() {
                   🎯 Start Practicing
                 </Link>
                 <Link href="/student/tests"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-medium bg-slate-800 border border-slate-600 text-slate-300 hover:bg-slate-700 transition shadow-sm">
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-medium bg-card border border-theme text-secondary bg-card-hover transition shadow-theme-sm">
                   📝 Browse Tests
                 </Link>
               </div>
@@ -950,18 +950,18 @@ export default function StudentDashboard() {
                 const pct = s.response_count > 0
                   ? Math.round((s.correct_count_from_resp / s.response_count) * 100) : 0;
                 return (
-                  <div key={s.id} className="bg-slate-800/60 border border-slate-700/50 rounded-xl overflow-hidden hover:border-slate-600/50 transition">
+                  <div key={s.id} className="bg-card border border-theme rounded-xl overflow-hidden hover:border-accent transition">
                     <div className="px-4 py-3 flex items-center gap-3">
                       <span className="text-xl shrink-0">{SECTION_ICONS[s.section] || '📝'}</span>
                       <div className="min-w-0 flex-1">
-                        <p className="text-sm font-semibold text-white truncate">{s.section}</p>
-                        <p className="text-[10px] text-slate-500">
+                        <p className="text-sm font-semibold text-primary truncate">{s.section}</p>
+                        <p className="text-[10px] text-muted">
                           {new Date(s.started_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
                           {s.total_time > 0 && <> · ⏱ {Math.round(s.total_time / s.response_count)}s/q</>}
                         </p>
                       </div>
                       <div className="flex items-center gap-3 shrink-0">
-                        <span className="text-xs text-slate-400">
+                        <span className="text-xs text-secondary">
                           {s.correct_count_from_resp}/{s.response_count}
                         </span>
                         <span className={`text-sm font-bold ${
@@ -980,18 +980,18 @@ export default function StudentDashboard() {
                 const done = !!a.submitted_at;
                 const pct = a.total_score ?? 0;
                 return (
-                  <div key={a.id} className={`bg-slate-800/60 border rounded-xl overflow-hidden transition ${
-                    done ? 'border-slate-700/50 hover:border-slate-600/50' : 'border-amber-700/40 hover:border-amber-600/50'
+                  <div key={a.id} className={`bg-card border rounded-xl overflow-hidden transition ${
+                    done ? 'border-theme hover:border-accent' : 'border-theme hover:border-accent'
                   }`}>
                     <div className="px-4 py-3 flex items-center gap-3">
                       <span className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold shrink-0 ${
-                        done ? 'bg-green-900/50 text-green-400' : 'bg-amber-900/50 text-amber-400'
+                        done ? 'bg-tint-green text-stat-green' : 'bg-tint-amber text-stat-amber'
                       }`}>
                         #{a.attempt_number}
                       </span>
                       <div className="min-w-0 flex-1">
-                        <p className="text-sm font-semibold text-white truncate">{a.test_title}</p>
-                        <p className="text-[10px] text-slate-500">
+                        <p className="text-sm font-semibold text-primary truncate">{a.test_title}</p>
+                        <p className="text-[10px] text-muted">
                           {new Date(a.started_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
                           {done && a.submitted_at && (
                             <> · {formatTime(Math.round((new Date(a.submitted_at).getTime() - new Date(a.started_at).getTime()) / 1000))}</>
@@ -1005,17 +1005,17 @@ export default function StudentDashboard() {
                               pct >= 70 ? 'text-green-400' : pct >= 40 ? 'text-amber-400' : 'text-red-400'
                             }`}>{pct}%</span>
                             <Link href={`/student/tests/${a.test_id}/review?attempt=${a.id}`}
-                              className="px-2.5 py-1 rounded-lg text-[10px] font-medium bg-indigo-900/40 text-indigo-300 hover:bg-indigo-800/50 transition">
+                              className="px-2.5 py-1 rounded-lg text-[10px] font-medium bg-tint-indigo text-accent bg-card-hover transition">
                               Review
                             </Link>
                           </>
                         ) : (
                           <>
-                            <span className="text-[10px] font-medium text-amber-400 bg-amber-900/30 px-2 py-1 rounded-full">
+                            <span className="text-[10px] font-medium text-stat-amber bg-tint-amber px-2 py-1 rounded-full">
                               ⏳ In Progress
                             </span>
                             <Link href={`/student/tests/${a.test_id}`}
-                              className="px-2.5 py-1 rounded-lg text-[10px] font-medium bg-amber-900/30 text-amber-300 hover:bg-amber-800/40 transition">
+                              className="px-2.5 py-1 rounded-lg text-[10px] font-medium bg-tint-amber text-stat-amber bg-card-hover transition">
                               Resume
                             </Link>
                           </>
@@ -1027,7 +1027,7 @@ export default function StudentDashboard() {
               })}
             </div>
             <div className="mt-3 text-center">
-              <Link href="/student/analytics" className="text-xs text-indigo-400 hover:text-indigo-300 font-medium transition">
+              <Link href="/student/analytics" className="text-xs text-accent hover:text-accent font-medium transition">
                 View Analytics →
               </Link>
             </div>

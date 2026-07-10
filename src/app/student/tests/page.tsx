@@ -28,20 +28,20 @@ export default async function StudentTestsPage() {
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-2xl font-bold">Practice Tests</h1>
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="text-sm text-secondary mt-1">
             Select a test to begin. Each test covers all 5 CLAT sections.
           </p>
         </div>
         <Link
           href="/student/dashboard"
-          className="text-sm text-indigo-600 hover:underline"
+          className="text-sm text-accent hover:underline"
         >
           ← Dashboard
         </Link>
       </div>
 
       {!tests || tests.length === 0 ? (
-        <div className="bg-white border rounded-xl p-10 text-center text-gray-400">
+        <div className="bg-card border border-theme rounded-xl p-10 text-center text-muted">
           <p>No tests available yet. Check back soon!</p>
         </div>
       ) : (
@@ -51,11 +51,11 @@ export default async function StudentTestsPage() {
             return (
               <div
                 key={test.id}
-                className="bg-white border rounded-xl px-6 py-5 flex items-center justify-between shadow-sm"
+                className="bg-card border border-theme rounded-xl px-6 py-5 flex items-center justify-between shadow-theme-sm"
               >
                 <div>
                   <h3 className="font-semibold">{test.title}</h3>
-                  <p className="text-xs text-gray-500 mt-0.5">
+                  <p className="text-xs text-secondary mt-0.5">
                     Published{' '}
                     {test.published_at
                       ? new Date(test.published_at).toLocaleDateString('en-IN', {

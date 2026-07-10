@@ -67,22 +67,22 @@ function LockedSection({ children, title, icon, isPremium }: {
   if (isPremium) return <>{children}</>;
 
   return (
-    <div className="relative bg-white border rounded-xl shadow-sm overflow-hidden">
+    <div className="relative bg-card border border-theme rounded-xl shadow-theme-sm overflow-hidden">
       {/* Blurred preview of the actual content */}
       <div className="blur-sm pointer-events-none select-none opacity-40">
         {children}
       </div>
       {/* Lock overlay */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/60 backdrop-blur-[2px] p-6">
+      <div className="absolute inset-0 flex flex-col items-center justify-center bg-card/60 backdrop-blur-[2px] p-6">
         <div className="bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-200 rounded-2xl p-6 text-center max-w-sm shadow-lg">
           <div className="text-4xl mb-3">🔒</div>
-          <h3 className="text-lg font-bold text-gray-900 mb-1">{icon} {title}</h3>
-          <p className="text-sm text-gray-600 mb-5">
+          <h3 className="text-lg font-bold text-primary mb-1">{icon} {title}</h3>
+          <p className="text-sm text-secondary mb-5">
             Unlock detailed analytics — section-wise breakdowns, time tracking, and session history.
           </p>
           <Link
             href="/student/profile"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold bg-gradient-to-r from-amber-500 to-orange-600 text-white hover:from-amber-600 hover:to-orange-700 transition shadow-md shadow-amber-200"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold bg-gradient-to-r from-amber-500 to-orange-600 text-white hover:from-amber-600 hover:to-orange-700 transition shadow-theme-md">
           >
             ⭐ Upgrade to Premium
           </Link>
@@ -290,7 +290,7 @@ export default function AnalyticsPage() {
   };
 
   if (loading) return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-950">
+    <div className="min-h-screen flex items-center justify-center bg-page">
       <div className="animate-spin w-8 h-8 border-2 border-indigo-500 border-t-transparent rounded-full" />
     </div>
   );
@@ -301,10 +301,10 @@ export default function AnalyticsPage() {
   // ─── Shared detailed content sections (used with LockedSection wrapper) ───
 
   const PracticeBySectionContent = (
-    <div className="bg-white border rounded-xl shadow-sm">
-      <div className="px-6 py-4 border-b flex items-center justify-between">
-        <h2 className="font-semibold text-gray-900">📈 Practice by Section</h2>
-        <span className="text-xs text-gray-400">Pass / Fail · Avg Time</span>
+    <div className="bg-card border border-theme rounded-xl shadow-theme-sm">
+      <div className="px-6 py-4 border-b border-theme flex items-center justify-between">
+        <h2 className="font-semibold text-primary">📈 Practice by Section</h2>
+        <span className="text-xs text-muted">Pass / Fail · Avg Time</span>
       </div>
       <div className="p-6 space-y-6">
         {sectionPracticeStats.map(s => (
@@ -312,16 +312,16 @@ export default function AnalyticsPage() {
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
                 <span className="text-lg">{s.icon}</span>
-                <span className="text-sm font-medium text-gray-800">{s.name}</span>
-                <span className="text-[10px] text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded-full">
+                <span className="text-sm font-medium text-primary">{s.name}</span>
+                <span className="text-[10px] text-muted bg-elevated px-1.5 py-0.5 rounded-full">
                   {s.sessions} session{s.sessions !== 1 ? 's' : ''}
                 </span>
               </div>
-              <div className="flex items-center gap-4 text-xs text-gray-500">
-                <span className="font-semibold text-green-600">{s.correct}<span className="text-gray-400 font-normal">✓</span></span>
-                <span className="font-semibold text-red-500">{s.incorrect}<span className="text-gray-400 font-normal">✗</span></span>
+              <div className="flex items-center gap-4 text-xs text-secondary">
+                <span className="font-semibold text-green-600">{s.correct}<span className="text-muted font-normal">✓</span></span>
+                <span className="font-semibold text-danger">{s.incorrect}<span className="text-muted font-normal">✗</span></span>
                 <span className={`font-semibold ${
-                  s.accuracy >= 70 ? 'text-green-600' : s.accuracy >= 40 ? 'text-amber-600' : 'text-red-500'
+                  s.accuracy >= 70 ? 'text-green-600' : s.accuracy >= 40 ? 'text-stat-amber' : 'text-danger'
                 }`}>
                   {s.accuracy}%
                 </span>
@@ -330,7 +330,7 @@ export default function AnalyticsPage() {
             </div>
             {/* Accuracy bar */}
             <div className="flex items-center gap-2">
-              <div className="flex-1 bg-gray-100 rounded-full h-2.5">
+              <div className="flex-1 bg-elevated rounded-full h-2.5">
                 <div
                   className={`h-2.5 rounded-full transition-all ${
                     s.accuracy >= 70 ? 'bg-green-500' : s.accuracy >= 40 ? 'bg-amber-500' : 'bg-red-500'
@@ -338,7 +338,7 @@ export default function AnalyticsPage() {
                   style={{ width: `${Math.min(s.accuracy, 100)}%` }}
                 />
               </div>
-              <span className="text-[10px] text-gray-400 w-16 text-right">
+              <span className="text-[10px] text-muted w-16 text-right">
                 {s.totalQuestions} Q
               </span>
             </div>
@@ -356,15 +356,15 @@ export default function AnalyticsPage() {
       if (!best || !worst) return null;
       return (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          <div className="bg-green-50 border border-green-200 rounded-xl p-4">
-            <p className="text-xs text-green-600 font-medium uppercase tracking-wider">✅ Strongest Section</p>
+          <div className="bg-tint-green border border-green-200 rounded-xl p-4">
+            <p className="text-xs text-stat-green font-medium uppercase tracking-wider">✅ Strongest Section</p>
             <p className="text-lg font-bold text-green-800 mt-1">{best.icon} {best.name}</p>
-            <p className="text-sm text-green-600">{best.accuracy}% accuracy · {best.totalQuestions} questions</p>
+            <p className="text-sm text-stat-green">{best.accuracy}% accuracy · {best.totalQuestions} questions</p>
           </div>
-          <div className="bg-red-50 border border-red-200 rounded-xl p-4">
-            <p className="text-xs text-red-600 font-medium uppercase tracking-wider">🎯 Needs Practice</p>
+          <div className="bg-tint-red border border-red-200 rounded-xl p-4">
+            <p className="text-xs text-danger font-medium uppercase tracking-wider">🎯 Needs Practice</p>
             <p className="text-lg font-bold text-red-800 mt-1">{worst.icon} {worst.name}</p>
-            <p className="text-sm text-red-600">{worst.accuracy}% accuracy · {worst.totalQuestions} questions</p>
+            <p className="text-sm text-danger">{worst.accuracy}% accuracy · {worst.totalQuestions} questions</p>
           </div>
         </div>
       );
@@ -372,24 +372,24 @@ export default function AnalyticsPage() {
   );
 
   const PracticeRecentContent = (
-    <div className="bg-white border rounded-xl shadow-sm">
-      <div className="px-6 py-4 border-b flex items-center justify-between">
-        <h2 className="font-semibold text-gray-900">🔄 Recent Practice Sessions</h2>
-        <Link href="/student/practice" className="text-xs text-indigo-600 hover:text-indigo-800 font-medium">
+    <div className="bg-card border border-theme rounded-xl shadow-theme-sm">
+      <div className="px-6 py-4 border-b border-theme flex items-center justify-between">
+        <h2 className="font-semibold text-primary">🔄 Recent Practice Sessions</h2>
+        <Link href="/student/practice" className="text-xs text-accent hover:text-accent/80 font-medium">
           Practice Now →
         </Link>
       </div>
-      <div className="divide-y divide-gray-100">
+      <div className="divide-y divide-theme-light">
         {practiceSessions.slice(0, 20).map(s => {
           const pct = s.questions_answered > 0
             ? Math.round((s.correct_count / s.questions_answered) * 100) : 0;
           return (
-            <div key={s.id} className="px-6 py-3 flex items-center justify-between hover:bg-gray-50 transition">
+            <div key={s.id} className="px-6 py-3 flex items-center justify-between hover:bg-elevated transition">
               <div className="flex items-center gap-3 min-w-0 flex-1">
                 <span className="text-lg shrink-0">{SECTION_ICONS[s.section] || '📝'}</span>
                 <div className="min-w-0">
-                  <p className="text-sm font-medium text-gray-900 truncate">{s.section}</p>
-                  <p className="text-[10px] text-gray-500">
+                  <p className="text-sm font-medium text-primary truncate">{s.section}</p>
+                  <p className="text-[10px] text-secondary">
                     {new Date(s.started_at).toLocaleDateString('en-IN', {
                       day: 'numeric', month: 'short', year: 'numeric'
                     })}
@@ -398,11 +398,11 @@ export default function AnalyticsPage() {
                 </div>
               </div>
               <div className="flex items-center gap-4 shrink-0">
-                <span className="text-xs text-gray-400">
+                <span className="text-xs text-muted">
                   {s.correct_count}/{s.questions_answered}
                 </span>
                 <span className={`text-sm font-bold ${
-                  pct >= 70 ? 'text-green-600' : pct >= 40 ? 'text-amber-600' : 'text-red-600'
+                  pct >= 70 ? 'text-green-600' : pct >= 40 ? 'text-stat-amber' : 'text-red-600'
                 }`}>
                   {pct}%
                 </span>
@@ -417,24 +417,24 @@ export default function AnalyticsPage() {
   const TestBestWeakContent = (
     bestSection && weakSection ? (
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-        <div className="bg-green-50 border border-green-200 rounded-xl p-4">
-          <p className="text-xs text-green-600 font-medium uppercase tracking-wider">✅ Strongest Section</p>
+        <div className="bg-tint-green border border-green-200 rounded-xl p-4">
+          <p className="text-xs text-stat-green font-medium uppercase tracking-wider">✅ Strongest Section</p>
           <p className="text-lg font-bold text-green-800 mt-1">{bestSection.name}</p>
-          <p className="text-sm text-green-600">Avg {bestSection.avg} · {bestSection.count} attempts</p>
+          <p className="text-sm text-stat-green">Avg {bestSection.avg} · {bestSection.count} attempts</p>
         </div>
-        <div className="bg-red-50 border border-red-200 rounded-xl p-4">
-          <p className="text-xs text-red-600 font-medium uppercase tracking-wider">🎯 Needs Focus</p>
+        <div className="bg-tint-red border border-red-200 rounded-xl p-4">
+          <p className="text-xs text-danger font-medium uppercase tracking-wider">🎯 Needs Focus</p>
           <p className="text-lg font-bold text-red-800 mt-1">{weakSection.name}</p>
-          <p className="text-sm text-red-600">Avg {weakSection.avg} · {weakSection.count} attempts</p>
+          <p className="text-sm text-danger">Avg {weakSection.avg} · {weakSection.count} attempts</p>
         </div>
       </div>
     ) : null
   );
 
   const TestSectionPerformanceContent = (
-    <div className="bg-white border rounded-xl shadow-sm">
-      <div className="px-6 py-4 border-b">
-        <h2 className="font-semibold text-gray-900">📈 Section-wise Performance</h2>
+    <div className="bg-card border border-theme rounded-xl shadow-theme-sm">
+      <div className="px-6 py-4 border-b border-theme">
+        <h2 className="font-semibold text-primary">📈 Section-wise Performance</h2>
       </div>
       <div className="p-6 space-y-5">
         {sectionAggs.map(s => {
@@ -445,14 +445,14 @@ export default function AnalyticsPage() {
           return (
             <div key={s.name}>
               <div className="flex items-center justify-between mb-1.5">
-                <span className="text-sm font-medium text-gray-800">{s.name}</span>
-                <div className="flex items-center gap-3 text-xs text-gray-500">
-                  <span className="font-semibold text-indigo-600">{s.avg}<span className="text-gray-400 font-normal"> avg</span></span>
-                  <span className="font-semibold text-green-600">{s.max}<span className="text-gray-400 font-normal"> best</span></span>
+                <span className="text-sm font-medium text-primary">{s.name}</span>
+                <div className="flex items-center gap-3 text-xs text-secondary">
+                  <span className="font-semibold text-accent">{s.avg}<span className="text-muted font-normal"> avg</span></span>
+                  <span className="font-semibold text-stat-green">{s.max}<span className="text-muted font-normal"> best</span></span>
                   {avgTime > 0 && <span>{avgTime}m avg</span>}
                 </div>
               </div>
-              <div className="w-full bg-gray-100 rounded-full h-2.5">
+              <div className="w-full bg-elevated rounded-full h-2.5">
                 <div
                   className={`h-2.5 rounded-full transition-all ${
                     pct >= 70 ? 'bg-green-500' : pct >= 40 ? 'bg-amber-500' : 'bg-red-500'
@@ -460,7 +460,7 @@ export default function AnalyticsPage() {
                   style={{ width: `${Math.min(pct, 100)}%` }}
                 />
               </div>
-              <p className="text-[10px] text-gray-400 mt-1">{s.count} test{s.count !== 1 ? 's' : ''} attempted</p>
+              <p className="text-[10px] text-muted mt-1">{s.count} test{s.count !== 1 ? 's' : ''} attempted</p>
             </div>
           );
         })}
@@ -469,21 +469,21 @@ export default function AnalyticsPage() {
   );
 
   const TestHistoryContent = (
-    <div className="bg-white border rounded-xl shadow-sm">
-      <div className="px-6 py-4 border-b flex items-center justify-between">
-        <h2 className="font-semibold text-gray-900">📋 Attempt History</h2>
-        <Link href="/student/tests" className="text-xs text-indigo-600 hover:text-indigo-800 font-medium">
+    <div className="bg-card border border-theme rounded-xl shadow-theme-sm">
+      <div className="px-6 py-4 border-b border-theme flex items-center justify-between">
+        <h2 className="font-semibold text-primary">📋 Attempt History</h2>
+        <Link href="/student/tests" className="text-xs text-accent hover:text-accent/80 font-medium">
           All Tests →
         </Link>
       </div>
-      <div className="divide-y divide-gray-100">
+      <div className="divide-y divide-theme-light">
         {completed.slice(0, 20).map(a => (
-          <div key={a.id} className="px-6 py-3 flex items-center justify-between hover:bg-gray-50 transition">
+          <div key={a.id} className="px-6 py-3 flex items-center justify-between hover:bg-elevated transition">
             <div className="min-w-0 flex-1">
-              <p className="text-sm font-medium text-gray-900 truncate">
+              <p className="text-sm font-medium text-primary truncate">
                 {a.test_title}
               </p>
-              <p className="text-[10px] text-gray-500">
+              <p className="text-[10px] text-secondary">
                 Attempt #{a.attempt_number} · {new Date(a.started_at).toLocaleDateString('en-IN', {
                   day: 'numeric', month: 'short', year: 'numeric'
                 })}
@@ -492,12 +492,12 @@ export default function AnalyticsPage() {
             <div className="flex items-center gap-4 shrink-0">
               <span className={`text-sm font-bold ${
                 (a.total_score ?? 0) >= 70 ? 'text-green-600' :
-                (a.total_score ?? 0) >= 40 ? 'text-amber-600' : 'text-red-600'
+                (a.total_score ?? 0) >= 40 ? 'text-stat-amber' : 'text-red-600'
               }`}>
                 {a.total_score ?? '—'}%
               </span>
               <Link href={`/student/tests/${a.test_id}/review?attempt=${a.id}`}
-                className="text-xs text-indigo-600 hover:text-indigo-800 font-medium">
+                className="text-xs text-accent hover:text-accent/80 font-medium">
                 Review →
               </Link>
             </div>
@@ -508,17 +508,17 @@ export default function AnalyticsPage() {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-indigo-50/30">
+    <div className="min-h-screen bg-gradient-to-br from-elevated to-tint-indigo/30">
       {/* Header */}
-      <header className="bg-white border-b shadow-sm sticky top-0 z-10">
+      <header className="bg-card border-b border-theme shadow-theme-sm sticky top-0 z-10">
         <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
-          <Link href="/student/dashboard" className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition">
+          <Link href="/student/dashboard" className="flex items-center gap-2 text-secondary hover:text-primary transition">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
             <span className="text-sm font-medium">Dashboard</span>
           </Link>
-          <h1 className="text-sm font-bold text-gray-900">📊 Performance Analytics</h1>
+          <h1 className="text-sm font-bold text-primary">📊 Performance Analytics</h1>
           <ThemeToggle />
         </div>
       </header>
@@ -541,13 +541,13 @@ export default function AnalyticsPage() {
         )}
 
         {/* ─── Tab Switcher ─── */}
-        <div className="flex gap-1 bg-white border rounded-xl p-1 shadow-sm">
+        <div className="flex gap-1 bg-card border border-theme rounded-xl p-1 shadow-theme-sm">
           <button
             onClick={() => setActiveTab('practice')}
             className={`flex-1 py-2.5 rounded-lg text-sm font-medium transition-all ${
               activeTab === 'practice'
                 ? 'bg-indigo-600 text-white shadow-sm'
-                : 'text-gray-500 hover:text-gray-800'
+                : 'text-secondary hover:text-primary'
             }`}
           >
             🎯 Practice
@@ -557,7 +557,7 @@ export default function AnalyticsPage() {
             className={`flex-1 py-2.5 rounded-lg text-sm font-medium transition-all ${
               activeTab === 'tests'
                 ? 'bg-indigo-600 text-white shadow-sm'
-                : 'text-gray-500 hover:text-gray-800'
+                : 'text-secondary hover:text-primary'
             }`}
           >
             📝 Tests
@@ -567,7 +567,7 @@ export default function AnalyticsPage() {
             className={`flex-1 py-2.5 rounded-lg text-sm font-medium transition-all ${
               activeTab === 'editorials'
                 ? 'bg-indigo-600 text-white shadow-sm'
-                : 'text-gray-500 hover:text-gray-800'
+                : 'text-secondary hover:text-primary'
             }`}
           >
             📰 Editorials
@@ -580,10 +580,10 @@ export default function AnalyticsPage() {
         {activeTab === 'practice' && (
           <>
             {!hasPracticeData ? (
-              <div className="bg-white border-2 border-dashed border-gray-200 rounded-xl p-16 text-center">
+              <div className="bg-card border-2 border-dashed border-theme rounded-xl p-16 text-center">
                 <div className="text-5xl mb-4">🎯</div>
-                <h2 className="text-xl font-bold text-gray-800 mb-2">No Practice Data Yet</h2>
-                <p className="text-gray-500 mb-6 max-w-md mx-auto">
+                <h2 className="text-xl font-bold text-primary mb-2">No Practice Data Yet</h2>
+                <p className="text-secondary mb-6 max-w-md mx-auto">
                   Complete some practice quizzes to see your performance analytics here.
                 </p>
                 <Link href="/student/practice"
@@ -596,17 +596,17 @@ export default function AnalyticsPage() {
                 {/* Practice Overview Cards — FREE for everyone */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                   {[
-                    { label: 'Practice Sessions', value: practiceSessions.length, icon: '🔄', color: 'text-indigo-600' },
-                    { label: 'Questions Attempted', value: totalPracticeQuestions, icon: '📝', color: 'text-blue-600' },
-                    { label: 'Overall Accuracy', value: `${practiceAccuracy}%`, icon: '🎯', color: practiceAccuracy >= 70 ? 'text-green-600' : practiceAccuracy >= 40 ? 'text-amber-600' : 'text-red-600' },
-                    { label: 'Avg Time / Q', value: formatTime(avgPracticeTimePerQ), icon: '⏱️', color: 'text-gray-700' },
+                    { label: 'Practice Sessions', value: practiceSessions.length, icon: '🔄', color: 'text-accent' },
+                    { label: 'Questions Attempted', value: totalPracticeQuestions, icon: '📝', color: 'text-stat-blue' },
+                    { label: 'Overall Accuracy', value: `${practiceAccuracy}%`, icon: '🎯', color: practiceAccuracy >= 70 ? 'text-stat-green' : practiceAccuracy >= 40 ? 'text-stat-amber' : 'text-danger' },
+                    { label: 'Avg Time / Q', value: formatTime(avgPracticeTimePerQ), icon: '⏱️', color: 'text-secondary' },
                   ].map(s => (
-                    <div key={s.label} className="bg-white border rounded-xl p-4 shadow-sm">
+                    <div key={s.label} className="bg-card border border-theme rounded-xl p-4 shadow-theme-sm">
                       <div className="flex items-center justify-between mb-0.5">
                         <span className="text-lg">{s.icon}</span>
                         <span className={`text-2xl font-bold ${s.color}`}>{s.value}</span>
                       </div>
-                      <p className="text-xs text-gray-500">{s.label}</p>
+                      <p className="text-xs text-secondary">{s.label}</p>
                     </div>
                   ))}
                 </div>
@@ -636,10 +636,10 @@ export default function AnalyticsPage() {
         {activeTab === 'tests' && (
           <>
             {!hasTestData ? (
-              <div className="bg-white border-2 border-dashed border-gray-200 rounded-xl p-16 text-center">
+              <div className="bg-card border-2 border-dashed border-theme rounded-xl p-16 text-center">
                 <div className="text-5xl mb-4">📊</div>
-                <h2 className="text-xl font-bold text-gray-800 mb-2">No Test Data Yet</h2>
-                <p className="text-gray-500 mb-6 max-w-md mx-auto">
+                <h2 className="text-xl font-bold text-primary mb-2">No Test Data Yet</h2>
+                <p className="text-secondary mb-6 max-w-md mx-auto">
                   Complete some full-length tests to see your performance analytics here.
                 </p>
                 <Link href="/student/tests"
@@ -652,17 +652,17 @@ export default function AnalyticsPage() {
                 {/* Overview Cards — FREE for everyone */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                   {[
-                    { label: 'Tests Completed', value: completed.length, icon: '✅', color: 'text-green-600' },
-                    { label: 'Overall Accuracy', value: `${overallAccuracy}%`, icon: '🎯', color: overallAccuracy >= 70 ? 'text-green-600' : overallAccuracy >= 40 ? 'text-amber-600' : 'text-red-600' },
-                    { label: 'Avg Score', value: `${avgScore}%`, icon: '📊', color: avgScore >= 70 ? 'text-green-600' : avgScore >= 40 ? 'text-amber-600' : 'text-red-600' },
-                    { label: 'Total Q Answered', value: totalQuestions, icon: '📝', color: 'text-indigo-600' },
+                    { label: 'Tests Completed', value: completed.length, icon: '✅', color: 'text-stat-green' },
+                    { label: 'Overall Accuracy', value: `${overallAccuracy}%`, icon: '🎯', color: overallAccuracy >= 70 ? 'text-stat-green' : overallAccuracy >= 40 ? 'text-stat-amber' : 'text-danger' },
+                    { label: 'Avg Score', value: `${avgScore}%`, icon: '📊', color: avgScore >= 70 ? 'text-stat-green' : avgScore >= 40 ? 'text-stat-amber' : 'text-danger' },
+                    { label: 'Total Q Answered', value: totalQuestions, icon: '📝', color: 'text-accent' },
                   ].map(s => (
-                    <div key={s.label} className="bg-white border rounded-xl p-4 shadow-sm">
+                    <div key={s.label} className="bg-card border border-theme rounded-xl p-4 shadow-theme-sm">
                       <div className="flex items-center justify-between mb-0.5">
                         <span className="text-lg">{s.icon}</span>
                         <span className={`text-2xl font-bold ${s.color}`}>{s.value}</span>
                       </div>
-                      <p className="text-xs text-gray-500">{s.label}</p>
+                      <p className="text-xs text-secondary">{s.label}</p>
                     </div>
                   ))}
                 </div>
@@ -692,14 +692,14 @@ export default function AnalyticsPage() {
         {activeTab === 'editorials' && (
           <div className="space-y-4">
             {editorialStatsLoading ? (
-              <div className="bg-white border rounded-xl p-8 text-center">
+              <div className="bg-card border border-theme rounded-xl p-8 text-center">
                 <div className="animate-spin w-6 h-6 border-2 border-indigo-500 border-t-transparent rounded-full mx-auto" />
               </div>
             ) : !editorialStats || editorialStats.totalRead === 0 ? (
-              <div className="bg-white border-2 border-dashed border-gray-200 rounded-xl p-16 text-center">
+              <div className="bg-card border-2 border-dashed border-theme rounded-xl p-16 text-center">
                 <div className="text-5xl mb-4">📰</div>
-                <h2 className="text-xl font-bold text-gray-800 mb-2">No Editorial Activity Yet</h2>
-                <p className="text-gray-500 mb-6 max-w-md mx-auto">
+                <h2 className="text-xl font-bold text-primary mb-2">No Editorial Activity Yet</h2>
+                <p className="text-secondary mb-6 max-w-md mx-auto">
                   Read editorials from the dashboard and take quick quizzes to track your Current Affairs prep.
                 </p>
                 <Link href="/student/dashboard"
@@ -711,47 +711,47 @@ export default function AnalyticsPage() {
               <>
                 {/* Overview cards */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                  <div className="bg-white border rounded-xl p-4 shadow-sm">
+                  <div className="bg-card border border-theme rounded-xl p-4 shadow-theme-sm">
                     <div className="flex items-center justify-between mb-0.5">
                       <span className="text-lg">📖</span>
-                      <span className="text-2xl font-bold text-indigo-600">{editorialStats.totalRead}</span>
+                      <span className="text-2xl font-bold text-accent">{editorialStats.totalRead}</span>
                     </div>
-                    <p className="text-xs text-gray-500">Editorials Read</p>
+                    <p className="text-xs text-secondary">Editorials Read</p>
                   </div>
-                  <div className="bg-white border rounded-xl p-4 shadow-sm">
+                  <div className="bg-card border border-theme rounded-xl p-4 shadow-theme-sm">
                     <div className="flex items-center justify-between mb-0.5">
                       <span className="text-lg">📝</span>
-                      <span className="text-2xl font-bold text-blue-600">{editorialStats.quizedArticles || 0}</span>
+                      <span className="text-2xl font-bold text-stat-blue">{editorialStats.quizedArticles || 0}</span>
                     </div>
-                    <p className="text-xs text-gray-500">Quizzes Taken</p>
+                    <p className="text-xs text-secondary">Quizzes Taken</p>
                   </div>
-                  <div className="bg-white border rounded-xl p-4 shadow-sm">
+                  <div className="bg-card border border-theme rounded-xl p-4 shadow-theme-sm">
                     <div className="flex items-center justify-between mb-0.5">
                       <span className="text-lg">🎯</span>
                       <span className={`text-2xl font-bold ${
-                        editorialStats.quizAccuracy >= 70 ? 'text-green-600' : editorialStats.quizAccuracy >= 40 ? 'text-amber-600' : 'text-red-600'
+                        editorialStats.quizAccuracy >= 70 ? 'text-stat-green' : editorialStats.quizAccuracy >= 40 ? 'text-stat-amber' : 'text-danger'
                       }`}>
                         {editorialStats.quizAccuracy || 0}%
                       </span>
                     </div>
-                    <p className="text-xs text-gray-500">Quiz Accuracy</p>
+                    <p className="text-xs text-secondary">Quiz Accuracy</p>
                   </div>
-                  <div className="bg-white border rounded-xl p-4 shadow-sm">
+                  <div className="bg-card border border-theme rounded-xl p-4 shadow-theme-sm">
                     <div className="flex items-center justify-between mb-0.5">
                       <span className="text-lg">🔥</span>
                       <span className="text-2xl font-bold text-orange-600">{editorialStats.streak || 0}</span>
                     </div>
-                    <p className="text-xs text-gray-500">Day Streak</p>
+                    <p className="text-xs text-secondary">Day Streak</p>
                   </div>
                 </div>
 
                 {/* Sources */}
-                <div className="bg-white border rounded-xl shadow-sm">
-                  <div className="px-6 py-4 border-b">
-                    <h2 className="font-semibold text-gray-900">📰 Sources Covered</h2>
+                <div className="bg-card border border-theme rounded-xl shadow-theme-sm">
+                  <div className="px-6 py-4 border-b border-theme">
+                    <h2 className="font-semibold text-primary">📰 Sources Covered</h2>
                   </div>
                   <div className="p-6">
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm text-secondary">
                       Reading from <strong>{editorialStats.uniqueSources || 0}</strong> different sources
                     </p>
                   </div>
@@ -759,13 +759,13 @@ export default function AnalyticsPage() {
 
                 {/* Topics */}
                 {editorialStats.topics && editorialStats.topics.length > 0 && (
-                  <div className="bg-white border rounded-xl shadow-sm">
-                    <div className="px-6 py-4 border-b">
-                      <h2 className="font-semibold text-gray-900">🏷️ Topics Covered</h2>
+                  <div className="bg-card border border-theme rounded-xl shadow-theme-sm">
+                    <div className="px-6 py-4 border-b border-theme">
+                      <h2 className="font-semibold text-primary">🏷️ Topics Covered</h2>
                     </div>
                     <div className="p-6 flex flex-wrap gap-2">
                       {editorialStats.topics.map((t: string) => (
-                        <span key={t} className="px-3 py-1.5 rounded-full text-xs font-medium bg-indigo-50 text-indigo-700 border border-indigo-100">
+                        <span key={t} className="px-3 py-1.5 rounded-full text-xs font-medium bg-tint-indigo text-accent border border-indigo-100">
                           {t}
                         </span>
                       ))}
