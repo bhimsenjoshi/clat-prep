@@ -45,27 +45,6 @@ const LEGAL_MAXIMS = [
   { maxim: 'Volenti non fit injuria', meaning: 'Injury cannot be done to a willing person' },
 ];
 
-const TODAY_EDITORIALS = [
-  {
-    source: 'The Hindu',
-    url: 'https://www.thehindu.com/opinion/editorial/',
-    icon: '📰',
-    desc: 'Today\'s lead editorials — polity, economy & governance',
-  },
-  {
-    source: 'Indian Express',
-    url: 'https://indianexpress.com/section/opinion/editorials/',
-    icon: '📰',
-    desc: 'Express view — current affairs & legal developments',
-  },
-  {
-    source: 'LiveLaw',
-    url: 'https://www.livelaw.in/news',
-    icon: '⚖️',
-    desc: 'Legal news & Supreme Court updates daily',
-  },
-];
-
 // ─── Announcements ───
 const ANNOUNCEMENTS = [
   {
@@ -114,6 +93,8 @@ export default function StudentDashboard() {
   const [countdown, setCountdown] = useState<Countdown>({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [maximIndex, setMaximIndex] = useState(0);
   const [dismissedAnnouncements, setDismissedAnnouncements] = useState<Set<string>>(new Set());
+  const [editorialItems, setEditorialItems] = useState<any[]>([]);
+  const [editorialsLoading, setEditorialsLoading] = useState(true);
   const router = useRouter();
   const supabase = createClient();
 
@@ -299,6 +280,17 @@ export default function StudentDashboard() {
       setLoading(false);
     };
     loadDashboard();
+  }, []);
+
+  // ─── Fetch RSS editorials ───
+  useEffect(() => {
+    fetch('/api/editorials')
+      .then(r => r.json())
+      .then(data => {
+        setEditorialItems(data.items || []);
+        setEditorialsLoading(false);
+      })
+      .catch(() => setEditorialsLoading(false));
   }, []);
 
   const completed = attempts.filter(a => a.submitted_at);
@@ -573,35 +565,76 @@ export default function StudentDashboard() {
         )}
 
         {/* ════════════════════════════════════════════ */}
-        {/* #6 — TODAY'S EDITORIALS                       */}
+        {/* #6 — TODAY'S EDITORIALS (RSS-powered)         */}
         {/* ════════════════════════════════════════════ */}
         <div>
           <h2 className="text-sm font-semibold text-slate-300 mb-3 flex items-center gap-2">
             <span>📰</span> Today's Editorials
-            <span className="text-[10px] font-normal text-slate-500">Must-read for CLAT</span>
+            <span className="text-[10px] font-normal text-slate-500">
+              {editorialsLoading ? 'Loading...' : `${editorialItems.length} articles`}
+            </span>
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5">
-            {TODAY_EDITORIALS.map(e => (
-              <a
-                key={e.source}
-                href={e.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-slate-800/60 border border-slate-700/50 rounded-xl p-4 hover:border-indigo-600/50 hover:bg-slate-800 transition group"
-              >
-                <div className="flex items-center gap-3">
-                  <span className="text-xl">{e.icon}</span>
-                  <div className="min-w-0">
-                    <p className="text-sm font-semibold text-white group-hover:text-indigo-300 transition truncate">
-                      {e.source}
-                    </p>
-                    <p className="text-[10px] text-slate-400 truncate">{e.desc}</p>
-                  </div>
-                  <span className="ml-auto text-slate-500 group-hover:text-indigo-400 transition">↗</span>
+          {editorialsLoading ? (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5">
+              {[1, 2, 3].map(i => (
+                <div key={i} className="bg-slate-800/40 border border-slate-700/30 rounded-xl p-4 animate-pulse">
+                  <div className="h-3 bg-slate-700/50 rounded w-20 mb-3" />
+                  <div className="h-4 bg-slate-700/50 rounded w-full mb-2" />
+                  <div className="h-3 bg-slate-700/50 rounded w-3/4" />
                 </div>
-              </a>
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : editorialItems.length === 0 ? (
+            <div className="bg-slate-800/40 border border-slate-700/30 rounded-xl p-4 text-center">
+              <p className="text-sm text-slate-500">Could not load editorials. Check back later.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5">
+              {/* Show latest 3, one per source if possible */}
+              {(() => {
+                const bySource: Record<string, any[]> = {};
+                for (const item of editorialItems) {
+                  if (!bySource[item.sourceId]) bySource[item.sourceId] = [];
+                  if (bySource[item.sourceId].length < 3) bySource[item.sourceId].push(item);
+                }
+                const sources = Object.values(bySource).flat().slice(0, 9);
+                return sources.map((item: any) => (
+                  <a
+                    key={`${item.sourceId}-${item.link}`}
+                    href={item.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="bg-slate-800/60 border border-slate-700/50 rounded-xl p-4 hover:border-indigo-600/50 hover:bg-slate-800 transition group flex flex-col"
+                  >
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-xs shrink-0">{item.icon}</span>
+                      <span className="text-[10px] font-medium text-slate-500 uppercase tracking-wider">{item.source}</span>
+                      {item.pubDate && (
+                        <span className="text-[10px] text-slate-600 ml-auto">
+                          {(() => {
+                            const d = new Date(item.pubDate);
+                            const now = new Date();
+                            const diff = Math.round((now.getTime() - d.getTime()) / 3600000);
+                            if (diff < 1) return 'Just now';
+                            if (diff < 24) return `${diff}h ago`;
+                            return d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
+                          })()}
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-sm font-medium text-white group-hover:text-indigo-300 transition leading-snug line-clamp-3">
+                      {item.title}
+                    </p>
+                    <div className="mt-auto pt-2">
+                      <span className="text-[10px] text-indigo-400/70 group-hover:text-indigo-300 transition">
+                        Read full ↗
+                      </span>
+                    </div>
+                  </a>
+                ));
+              })()}
+            </div>
+          )}
         </div>
 
         {/* ════════════════════════════════════════════ */}
