@@ -24,7 +24,7 @@ function parseRSSItems(xml: string, source: typeof FEEDS[0]): EditorialItem[] {
     const itemXml = match[1];
     const title = itemXml.match(/<title[^>]*>(?:<!\[CDATA\[([\s\S]*?)\]\]>|([\s\S]*?))<\/title>/i);
     const link = itemXml.match(/<link[^>]*>(?:<!\[CDATA\[([\s\S]*?)\]\]>|([\s\S]*?))<\/link>/i);
-    const pubDate = itemXml.match(/<pubDate[^>]*>([\s\S]*?)<\/pubDate>/i);
+    const pubDate = itemXml.match(/<pubDate[^>]*>(?:<!\[CDATA\[([\s\S]*?)\]\]>|([\s\S]*?))<\/pubDate>/i);
 
     const titleText = (title?.[1] || title?.[2] || '').trim();
     const linkText = (link?.[1] || link?.[2] || '').trim();
@@ -33,7 +33,7 @@ function parseRSSItems(xml: string, source: typeof FEEDS[0]): EditorialItem[] {
       items.push({
         title: titleText.replace(/<\/?[^>]+(>|$)/g, ''),
         link: linkText,
-        pubDate: pubDate?.[1]?.trim() || '',
+        pubDate: (pubDate?.[1] || pubDate?.[2] || '').trim(),
         source: source.name,
         sourceId: source.id,
         icon: source.icon,

@@ -45,7 +45,7 @@ export async function POST(req: NextRequest) {
       // Upsert: update quiz scores
       const { data: existing } = await supabase
         .from('editorial_activity')
-        .select('id, quiz_correct, quiz_total')
+        .select('id, quiz_correct, quiz_total, read_at')
         .eq('student_id', user.id)
         .eq('article_url', article_url)
         .maybeSingle();
