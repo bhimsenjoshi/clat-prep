@@ -488,7 +488,7 @@ export default function StudentDashboard() {
         {/* ════════════════════════════════════════════ */}
         {/* #2 — STREAK + TODAY STATS                     */}
         {/* ════════════════════════════════════════════ */}
-        <SectionCard title="Today's Stats" icon="📊">
+        <SectionCard title="Today's Stats" icon="📊" collapsible defaultExpanded={false}>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           <div className="bg-slate-800/60 border border-slate-700/50 rounded-xl p-4 text-center">
             <div className="text-2xl mb-1">{streak > 0 ? '🔥' : '❄️'}</div>
@@ -518,7 +518,7 @@ export default function StudentDashboard() {
         {/* ════════════════════════════════════════════ */}
         {/* #3 — ANNOUNCEMENTS                            */}
         {/* ════════════════════════════════════════════ */}
-        <SectionCard title="Announcements" icon="📢">
+        <SectionCard title="Announcements" icon="📢" collapsible defaultExpanded={false}>
           {ANNOUNCEMENTS.filter(a => !dismissedAnnouncements.has(a.id)).slice(0, 2).map(a => (
           <div key={a.id} className="bg-gradient-to-r from-blue-900/30 to-indigo-900/30 border border-blue-700/30 rounded-xl p-4">
             <div className="flex items-start gap-3">
@@ -547,7 +547,7 @@ export default function StudentDashboard() {
         {/* ════════════════════════════════════════════ */}
         {/* #4 — LEGAL MAXIM OF THE DAY                   */}
         {/* ════════════════════════════════════════════ */}
-        <SectionCard title="Legal Maxim of the Day" icon="⚖️">
+        <SectionCard title="Legal Maxim of the Day" icon="⚖️" collapsible defaultExpanded={false}>
           <div className="flex items-start gap-4">
             <div className="w-10 h-10 rounded-lg bg-amber-800/40 flex items-center justify-center text-xl shrink-0">
               ⚖️
@@ -564,7 +564,7 @@ export default function StudentDashboard() {
         {/* #5 — TODAY'S FOCUS (smart recommendation)    */}
         {/* ════════════════════════════════════════════ */}
         {weakestSection && totalPracticeQ >= 10 && (
-          <SectionCard title="Today's Focus" icon="💡" variant="accent">
+          <SectionCard title="Today's Focus" icon="💡" variant="accent" collapsible defaultExpanded={false}>
             <div className="flex items-start md:items-center gap-4 flex-col md:flex-row">
               <div className="flex-1 min-w-0">
                 <p className="text-base font-bold text-white mt-0.5">
@@ -588,7 +588,7 @@ export default function StudentDashboard() {
         {/* ════════════════════════════════════════════ */}
         {/* #6 — TODAY'S EDITORIALS (RSS-powered 3x3)     */}
         {/* ════════════════════════════════════════════ */}
-        <SectionCard title="Today's Editorials" icon="📰" collapsible extra={editorialsLoading ? <span className="text-[10px] text-slate-500">Loading...</span> : undefined}>
+        <SectionCard title="Today's Editorials" icon="📰" collapsible defaultExpanded={false} extra={editorialsLoading ? <span className="text-[10px] text-slate-500">Loading...</span> : undefined}>
           {editorialsLoading ? (
             <div className="space-y-4">
               {[1, 2, 3].map(row => (
@@ -898,7 +898,7 @@ export default function StudentDashboard() {
         {/* ════════════════════════════════════════════ */}
         {/* #7 — QUICK PRACTICE SECTION CARDS             */}
         {/* ════════════════════════════════════════════ */}
-        <SectionCard title="Quick Practice" icon="⚡" collapsible
+        <SectionCard title="Quick Practice" icon="⚡" collapsible defaultExpanded={false}
           extra={profile?.subscription_plan === 'free' ? (
             <span className="text-xs font-normal text-slate-500">{(profile.daily_free_questions ?? 10)} free questions remaining</span>
           ) : undefined}
@@ -923,7 +923,7 @@ export default function StudentDashboard() {
         {/* #8 — RECENT ACTIVITY                           */}
         {/* ════════════════════════════════════════════ */}
         {noActivity ? (
-          <SectionCard title="Recent Activity" icon="📋">
+          <SectionCard title="Recent Activity" icon="📋" collapsible defaultExpanded={false}>
             <div className="text-center py-6">
               <div className="text-4xl mb-3">📭</div>
               <h2 className="text-lg font-bold text-white mb-1">No Practice Yet</h2>
@@ -943,14 +943,7 @@ export default function StudentDashboard() {
             </div>
           </SectionCard>
         ) : (
-          <SectionCard title="Recent Activity" icon="📋" collapsible
-            extra={
-              <Link href="/student/analytics" className="text-xs text-indigo-400 hover:text-indigo-300 font-medium">
-                View Analytics →
-              </Link>
-            }
-          >
-
+          <SectionCard title="Recent Activity" icon="📋" collapsible defaultExpanded={false}>
             <div className="space-y-2.5">
               {/* Practice sessions first (most recent) */}
               {practiceSessions.slice(0, 5).map(s => {
@@ -1032,6 +1025,11 @@ export default function StudentDashboard() {
                   </div>
                 );
               })}
+            </div>
+            <div className="mt-3 text-center">
+              <Link href="/student/analytics" className="text-xs text-indigo-400 hover:text-indigo-300 font-medium transition">
+                View Analytics →
+              </Link>
             </div>
           </SectionCard>
         )}

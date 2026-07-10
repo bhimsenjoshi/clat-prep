@@ -7,7 +7,7 @@ interface SectionCardProps {
   title: string;
   /** Emoji / icon prefix */
   icon?: string;
-  /** Right-side header content (loading indicators, counts, etc.) */
+  /** Right-side header content (loading indicators, counts, etc.) — shown even when collapsed */
   extra?: ReactNode;
   /** Whether the section can be collapsed */
   collapsible?: boolean;
@@ -32,7 +32,7 @@ export default function SectionCard({
   className = '',
 }: SectionCardProps) {
   const [expanded, setExpanded] = useState(defaultExpanded);
-  const isToggleable = collapsible;
+  const showBody = !collapsible || expanded;
 
   const borderMap = {
     default: 'border-slate-700/50',
@@ -46,34 +46,45 @@ export default function SectionCard({
     plain: 'bg-slate-800/40',
   };
 
-  return (
-    <div className={`${bgMap[variant]} ${borderMap[variant]} border rounded-2xl p-5 md:p-6 shadow-lg ${className}`}>
-      {/* Header row */}
-      <div className="flex items-center gap-2 mb-3">
-        {icon && <span className="text-lg shrink-0">{icon}</span>}
+  const handleToggle = () => {
+    if (collapsible) setExpanded(!expanded);
+  };
 
-        {isToggleable ? (
-          <button
-            onClick={() => setExpanded(!expanded)}
-            className="flex items-center gap-2 text-sm font-semibold text-slate-300 hover:text-white transition text-left flex-1"
-          >
-            <span>{title}</span>
-            <span
-              className="text-slate-500 text-[10px] transition-transform duration-200 ml-auto"
-              style={{ transform: expanded ? 'rotate(180deg)' : 'rotate(0deg)' }}
-            >
-              ▼
-            </span>
-          </button>
-        ) : (
-          <h2 className="text-sm font-semibold text-slate-300 flex-1">{title}</h2>
-        )}
+  return (
+    <div className={`${bgMap[variant]} ${borderMap[variant]} border rounded-2xl shadow-lg ${className}`}>
+      {/* ─── Header row — entire row clickable if collapsible ─── */}
+      <div
+        onClick={handleToggle}
+        className={`
+          flex items-center gap-2 px-5 md:px-6
+          ${collapsible ? 'cursor-pointer select-none hover:bg-white/[0.02] transition' : ''}
+          ${showBody ? 'pt-5 md:pt-6 pb-3' : 'py-3 md:py-3.5'}
+        `}
+      >
+        {icon && <span className="text-lg shrink-0 leading-none">{icon}</span>}
+
+        <span className="text-sm font-semibold text-slate-300 flex-1 truncate">
+          {title}
+        </span>
 
         {extra && <div className="shrink-0">{extra}</div>}
+
+        {collapsible && (
+          <span
+            className="text-slate-500 text-[10px] transition-transform duration-200 shrink-0"
+            style={{ transform: expanded ? 'rotate(180deg)' : 'rotate(0deg)' }}
+          >
+            ▼
+          </span>
+        )}
       </div>
 
-      {/* Body */}
-      {(!collapsible || expanded) && <div>{children}</div>}
+      {/* ─── Body ─── */}
+      {showBody && (
+        <div className="px-5 md:px-6 pb-5 md:pb-6">
+          {children}
+        </div>
+      )}
     </div>
   );
 }
