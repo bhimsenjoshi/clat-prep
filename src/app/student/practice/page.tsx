@@ -433,18 +433,25 @@ export default function PracticeQuiz() {
         {question && !result && (
           <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-4">
             <div className="flex items-center justify-between mb-4">
-              <span className="text-xs text-gray-500">
-                {selectedSection}
-                {question.difficulty && (
-                  <span className={`ml-2 px-1.5 py-0.5 rounded text-[10px] ${
-                    question.difficulty === 'hard' ? 'bg-red-900/50 text-red-400' :
-                    question.difficulty === 'easy' ? 'bg-green-900/50 text-green-400' :
-                    'bg-blue-900/50 text-blue-400'
-                  }`}>
-                    {question.difficulty}
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-gray-500">
+                  {selectedSection}
+                  {question.difficulty && (
+                    <span className={`ml-2 px-1.5 py-0.5 rounded text-[10px] ${
+                      question.difficulty === 'hard' ? 'bg-red-900/50 text-red-400' :
+                      question.difficulty === 'easy' ? 'bg-green-900/50 text-green-400' :
+                      'bg-blue-900/50 text-blue-400'
+                    }`}>
+                      {question.difficulty}
+                    </span>
+                  )}
+                </span>
+                {(question as any).subtopic && (question as any).subtopic !== 'General' && (
+                  <span className="text-[10px] text-indigo-300 bg-indigo-900/40 px-2 py-0.5 rounded-full border border-indigo-700/30">
+                    {(question as any).subtopic}
                   </span>
                 )}
-              </span>
+              </div>
             </div>
             <p className="font-medium text-base mb-5 leading-relaxed">{question.question_text}</p>
             <div className="space-y-2">

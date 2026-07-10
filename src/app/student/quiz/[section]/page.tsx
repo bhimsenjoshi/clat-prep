@@ -11,6 +11,7 @@ interface QuestionData {
   id: string;
   section: SectionName;
   topic: string;
+  subtopic: string;
   question_text: string;
   passage: string | null;
   options: Record<string, string>;
@@ -367,8 +368,8 @@ export default function QuizPage() {
           <div className="space-y-6">
             {/* Question card */}
             <div className="bg-gray-800/40 rounded-xl p-6 border border-gray-700/40">
-              {/* Difficulty badge */}
-              <div className="flex items-center gap-2 mb-4">
+              {/* Difficulty badge + Subtopic */}
+              <div className="flex items-center gap-2 mb-4 flex-wrap">
                 <span className={`text-[10px] font-medium uppercase tracking-wider px-2 py-0.5 rounded-full ${
                   question.difficulty === 'easy' ? 'bg-green-900/50 text-green-300' :
                   question.difficulty === 'hard' ? 'bg-red-900/50 text-red-300' :
@@ -376,6 +377,11 @@ export default function QuizPage() {
                 }`}>
                   {question.difficulty}
                 </span>
+                {question.subtopic && question.subtopic !== 'General' && (
+                  <span className="text-[10px] font-medium text-indigo-300 bg-indigo-900/40 px-2 py-0.5 rounded-full border border-indigo-700/30">
+                    {question.subtopic}
+                  </span>
+                )}
                 {question.tags?.length > 0 && question.tags.slice(0, 3).map(tag => (
                   <span key={tag} className="text-[10px] text-gray-500 bg-gray-700/50 px-2 py-0.5 rounded-full">
                     {tag}

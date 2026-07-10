@@ -4,9 +4,10 @@ import type { SectionName } from '@/types';
 
 export async function POST(req: NextRequest) {
   try {
-    const { section, topic = 'general' } = await req.json() as {
+    const { section, topic = 'general', subtopic } = await req.json() as {
       section: SectionName;
       topic?: string;
+      subtopic?: string;
     };
 
     const validSections: SectionName[] = [
@@ -22,17 +23,23 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Parallel: fetch profile + all question IDs + answered session IDs
+    // Build the questions query — optionally filter by subtopic
+    let questionsQuery = supabase
+      .from('practice_questions')
+      .select('id')
+      .eq('section', section);
+
+    if (subtopic) {
+      questionsQuery = questionsQuery.eq('subtopic', subtopic);
+    }
+
     const [profileResult, idsResult, sessionIdsResult] = await Promise.all([
       supabase
         .from('profiles')
         .select('daily_free_questions, last_practice_date, subscription_plan')
         .eq('id', user.id)
         .single(),
-      supabase
-        .from('practice_questions')
-        .select('id')
-        .eq('section', section),
+      questionsQuery,
       supabase
         .from('quiz_sessions')
         .select('id')
@@ -96,7 +103,7 @@ export async function POST(req: NextRequest) {
     const [questionResult, sessionResult] = await Promise.all([
       supabase
         .from('practice_questions')
-        .select('id, section, topic, question_text, passage, options, correct_option, difficulty, explanation, tags')
+        .select('id, section, topic, subtopic, question_text, passage, options, correct_option, difficulty, explanation, tags')
         .eq('id', firstId)
         .single(),
       supabase

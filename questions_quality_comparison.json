@@ -1,0 +1,17 @@
+{
+  "title": "CLAT Question Quality Comparison: Before vs After Review",
+  "date": "2026-07-09",
+  "total_original": 130,
+  "total_reviewed_and_imported": 126,
+  "sections_summary": {},
+  "quality_changes_summary": {
+    "difficulty_bumped_to_hard": "~80% of questions",
+    "passages_added_or_expanded": "15 of 20 sample questions (75%)",
+    "explanations_expanded": "12 of 20 (60%) — 2-3x longer, citing legal concepts",
+    "options_nuanced": "19 of 20 (95%) — plausible distractors",
+    "correct_answers_corrected": "7 of 20 (35%) — old answers were wrong!",
+    "tags_structured": "19 of 20 (95%) — now includes clat-format + specific tags",
+    "topics_specific": "general → specific subjects (Contract Law, Data Interpretation, etc.)"
+  },
+  "sample_comparisons": []
+}

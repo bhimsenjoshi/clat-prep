@@ -24,7 +24,33 @@ export interface GeneratedQuestion {
   correct_option: 'A' | 'B' | 'C' | 'D';
   explanation: string;
   difficulty: 'easy' | 'medium' | 'hard';
+  subtopic: string;
 }
+
+// ─── Subtopic categories per section ───
+
+export const SUBTOPICS: Record<SectionName, string[]> = {
+  'English': [
+    'Reading Comprehension', 'Vocabulary', 'Grammar',
+    'Para Jumbles', 'Verbal Ability',
+  ],
+  'Current Affairs': [
+    'Polity', 'International Relations', 'Economy',
+    'Science & Technology', 'Environment', 'Legal Developments', 'Schemes',
+  ],
+  'Legal Reasoning': [
+    'Constitutional Law', 'Law of Torts', 'Criminal Law',
+    'Contract Law', 'Jurisprudence', 'Family Law', 'Legal Maxims',
+  ],
+  'Logical Reasoning': [
+    'Critical Reasoning', 'Assumptions', 'Syllogisms',
+    'Blood Relations', 'Analogies', 'Puzzles',
+  ],
+  'Quantitative Techniques': [
+    'Data Interpretation', 'Percentages', 'Ratios',
+    'Averages', 'Time & Work', 'Algebra',
+  ],
+};
 
 // ─── Per-section question targets (CLAT 2027 pattern) ───
 
@@ -289,6 +315,11 @@ function normaliseQuestion(q: any): GeneratedQuestion | null {
   // Difficulty
   const difficulty = ['easy', 'medium', 'hard'].includes(q.difficulty) ? q.difficulty : 'medium';
 
+  // Subtopic — fall back to 'General' if not provided
+  const subtopic = typeof q.subtopic === 'string' && q.subtopic.length > 0
+    ? q.subtopic
+    : (typeof q.topic === 'string' && q.topic.length > 0 ? q.topic : 'General');
+
   return {
     question_text,
     passage,
@@ -296,6 +327,7 @@ function normaliseQuestion(q: any): GeneratedQuestion | null {
     correct_option: correct_option as 'A' | 'B' | 'C' | 'D',
     explanation,
     difficulty: difficulty as 'easy' | 'medium' | 'hard',
+    subtopic,
   };
 }
 
@@ -521,7 +553,7 @@ export async function generateSection(
 
   const target = PER_SECTION_TARGET[section];
   const batchSize = Math.min(maxQuestions ?? 12, 12);
-  const userPrompt = `Generate exactly ${batchSize} CLAT-style multiple-choice questions for the "${sectionTitle[section]}" section. These will be added to a larger test that ultimately has ${target.totalQ} questions across ${target.passages} passages. Follow the section format described earlier. Return a JSON object with a key "questions" containing the array of question objects. Each question must have: question_text, passage, options (A-D), correct_option, explanation, difficulty.`;
+  const userPrompt = `Generate exactly ${batchSize} CLAT-style multiple-choice questions for the "${sectionTitle[section]}" section. These will be added to a larger test that ultimately has ${target.totalQ} questions across ${target.passages} passages. Follow the section format described earlier. Return a JSON object with a key "questions" containing the array of question objects. Each question must have: question_text, passage, options (A-D), correct_option, explanation, difficulty, subtopic (one of: ${SUBTOPICS[section].join(', ')}).`;
 
   // Try DeepSeek first
   if (process.env.DEEPSEEK_API_KEY) {

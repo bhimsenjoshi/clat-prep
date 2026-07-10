@@ -82,6 +82,7 @@ async function generateAllSections(db?: any) {
         correct_option: q.correct_option,
         explanation: q.explanation || null,
         difficulty: q.difficulty || 'medium',
+        subtopic: q.subtopic,
         source: 'daily',
         generated_by: result.aiService || 'deepseek',
         reviewed: false,
