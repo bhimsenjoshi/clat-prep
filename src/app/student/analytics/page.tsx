@@ -56,6 +56,41 @@ interface SectionPracticeStats {
   sessions: number;
 }
 
+// ─── Locked Section Overlay ───
+function LockedSection({ children, title, icon, isPremium }: {
+  children: React.ReactNode;
+  title: string;
+  icon: string;
+  isPremium: boolean;
+}) {
+  if (isPremium) return <>{children}</>;
+
+  return (
+    <div className="relative bg-white border rounded-xl shadow-sm overflow-hidden">
+      {/* Blurred preview of the actual content */}
+      <div className="blur-sm pointer-events-none select-none opacity-40">
+        {children}
+      </div>
+      {/* Lock overlay */}
+      <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/60 backdrop-blur-[2px] p-6">
+        <div className="bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-200 rounded-2xl p-6 text-center max-w-sm shadow-lg">
+          <div className="text-4xl mb-3">🔒</div>
+          <h3 className="text-lg font-bold text-gray-900 mb-1">{icon} {title}</h3>
+          <p className="text-sm text-gray-600 mb-5">
+            Unlock detailed analytics — section-wise breakdowns, time tracking, and session history.
+          </p>
+          <Link
+            href="/student/profile"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold bg-gradient-to-r from-amber-500 to-orange-600 text-white hover:from-amber-600 hover:to-orange-700 transition shadow-md shadow-amber-200"
+          >
+            ⭐ Upgrade to Premium
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function AnalyticsPage() {
   const router = useRouter();
   const supabase = createClient();
@@ -179,6 +214,11 @@ export default function AnalyticsPage() {
     load();
   }, []);
 
+  // ─── Subscription check ───
+  const isPremium = profile?.subscription_plan === 'premium'
+    || profile?.subscription_plan === 'max'
+    || profile?.is_promo_user === true;
+
   // ─── Compute Practice Analytics ───
   const totalPracticeQuestions = practiceSessions.reduce((s, p) => s + p.questions_answered, 0);
   const totalPracticeCorrect = practiceSessions.reduce((s, p) => s + p.correct_count, 0);
@@ -246,6 +286,215 @@ export default function AnalyticsPage() {
   const hasPracticeData = practiceSessions.length > 0;
   const hasTestData = completed.length > 0;
 
+  // ─── Shared detailed content sections (used with LockedSection wrapper) ───
+
+  const PracticeBySectionContent = (
+    <div className="bg-white border rounded-xl shadow-sm">
+      <div className="px-6 py-4 border-b flex items-center justify-between">
+        <h2 className="font-semibold text-gray-900">📈 Practice by Section</h2>
+        <span className="text-xs text-gray-400">Pass / Fail · Avg Time</span>
+      </div>
+      <div className="p-6 space-y-6">
+        {sectionPracticeStats.map(s => (
+          <div key={s.name}>
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-2">
+                <span className="text-lg">{s.icon}</span>
+                <span className="text-sm font-medium text-gray-800">{s.name}</span>
+                <span className="text-[10px] text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded-full">
+                  {s.sessions} session{s.sessions !== 1 ? 's' : ''}
+                </span>
+              </div>
+              <div className="flex items-center gap-4 text-xs text-gray-500">
+                <span className="font-semibold text-green-600">{s.correct}<span className="text-gray-400 font-normal">✓</span></span>
+                <span className="font-semibold text-red-500">{s.incorrect}<span className="text-gray-400 font-normal">✗</span></span>
+                <span className={`font-semibold ${
+                  s.accuracy >= 70 ? 'text-green-600' : s.accuracy >= 40 ? 'text-amber-600' : 'text-red-500'
+                }`}>
+                  {s.accuracy}%
+                </span>
+                {s.avgTimeSeconds > 0 && <span>⏱ {formatTime(s.avgTimeSeconds)}</span>}
+              </div>
+            </div>
+            {/* Accuracy bar */}
+            <div className="flex items-center gap-2">
+              <div className="flex-1 bg-gray-100 rounded-full h-2.5">
+                <div
+                  className={`h-2.5 rounded-full transition-all ${
+                    s.accuracy >= 70 ? 'bg-green-500' : s.accuracy >= 40 ? 'bg-amber-500' : 'bg-red-500'
+                  }`}
+                  style={{ width: `${Math.min(s.accuracy, 100)}%` }}
+                />
+              </div>
+              <span className="text-[10px] text-gray-400 w-16 text-right">
+                {s.totalQuestions} Q
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
+  const PracticeBestWeakContent = (
+    (() => {
+      const sorted = [...sectionPracticeStats].filter(s => s.totalQuestions > 0).sort((a, b) => b.accuracy - a.accuracy);
+      const best = sorted[0];
+      const worst = sorted[sorted.length - 1];
+      if (!best || !worst) return null;
+      return (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div className="bg-green-50 border border-green-200 rounded-xl p-4">
+            <p className="text-xs text-green-600 font-medium uppercase tracking-wider">✅ Strongest Section</p>
+            <p className="text-lg font-bold text-green-800 mt-1">{best.icon} {best.name}</p>
+            <p className="text-sm text-green-600">{best.accuracy}% accuracy · {best.totalQuestions} questions</p>
+          </div>
+          <div className="bg-red-50 border border-red-200 rounded-xl p-4">
+            <p className="text-xs text-red-600 font-medium uppercase tracking-wider">🎯 Needs Practice</p>
+            <p className="text-lg font-bold text-red-800 mt-1">{worst.icon} {worst.name}</p>
+            <p className="text-sm text-red-600">{worst.accuracy}% accuracy · {worst.totalQuestions} questions</p>
+          </div>
+        </div>
+      );
+    })()
+  );
+
+  const PracticeRecentContent = (
+    <div className="bg-white border rounded-xl shadow-sm">
+      <div className="px-6 py-4 border-b flex items-center justify-between">
+        <h2 className="font-semibold text-gray-900">🔄 Recent Practice Sessions</h2>
+        <Link href="/student/practice" className="text-xs text-indigo-600 hover:text-indigo-800 font-medium">
+          Practice Now →
+        </Link>
+      </div>
+      <div className="divide-y divide-gray-100">
+        {practiceSessions.slice(0, 20).map(s => {
+          const pct = s.questions_answered > 0
+            ? Math.round((s.correct_count / s.questions_answered) * 100) : 0;
+          return (
+            <div key={s.id} className="px-6 py-3 flex items-center justify-between hover:bg-gray-50 transition">
+              <div className="flex items-center gap-3 min-w-0 flex-1">
+                <span className="text-lg shrink-0">{SECTION_ICONS[s.section] || '📝'}</span>
+                <div className="min-w-0">
+                  <p className="text-sm font-medium text-gray-900 truncate">{s.section}</p>
+                  <p className="text-[10px] text-gray-500">
+                    {new Date(s.started_at).toLocaleDateString('en-IN', {
+                      day: 'numeric', month: 'short', year: 'numeric'
+                    })}
+                    {s.avg_time_seconds > 0 && <> · ⏱ {formatTime(s.avg_time_seconds)}/q</>}
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-4 shrink-0">
+                <span className="text-xs text-gray-400">
+                  {s.correct_count}/{s.questions_answered}
+                </span>
+                <span className={`text-sm font-bold ${
+                  pct >= 70 ? 'text-green-600' : pct >= 40 ? 'text-amber-600' : 'text-red-600'
+                }`}>
+                  {pct}%
+                </span>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+
+  const TestBestWeakContent = (
+    bestSection && weakSection ? (
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div className="bg-green-50 border border-green-200 rounded-xl p-4">
+          <p className="text-xs text-green-600 font-medium uppercase tracking-wider">✅ Strongest Section</p>
+          <p className="text-lg font-bold text-green-800 mt-1">{bestSection.name}</p>
+          <p className="text-sm text-green-600">Avg {bestSection.avg} · {bestSection.count} attempts</p>
+        </div>
+        <div className="bg-red-50 border border-red-200 rounded-xl p-4">
+          <p className="text-xs text-red-600 font-medium uppercase tracking-wider">🎯 Needs Focus</p>
+          <p className="text-lg font-bold text-red-800 mt-1">{weakSection.name}</p>
+          <p className="text-sm text-red-600">Avg {weakSection.avg} · {weakSection.count} attempts</p>
+        </div>
+      </div>
+    ) : null
+  );
+
+  const TestSectionPerformanceContent = (
+    <div className="bg-white border rounded-xl shadow-sm">
+      <div className="px-6 py-4 border-b">
+        <h2 className="font-semibold text-gray-900">📈 Section-wise Performance</h2>
+      </div>
+      <div className="p-6 space-y-5">
+        {sectionAggs.map(s => {
+          const pct = s.count > 0 ? Math.min((s.avg / 100) * 100, 100) : 0;
+          const avgTime = s.attemptsWithSection > 0
+            ? Math.round(s.totalTime / s.attemptsWithSection / 60)
+            : 0;
+          return (
+            <div key={s.name}>
+              <div className="flex items-center justify-between mb-1.5">
+                <span className="text-sm font-medium text-gray-800">{s.name}</span>
+                <div className="flex items-center gap-3 text-xs text-gray-500">
+                  <span className="font-semibold text-indigo-600">{s.avg}<span className="text-gray-400 font-normal"> avg</span></span>
+                  <span className="font-semibold text-green-600">{s.max}<span className="text-gray-400 font-normal"> best</span></span>
+                  {avgTime > 0 && <span>{avgTime}m avg</span>}
+                </div>
+              </div>
+              <div className="w-full bg-gray-100 rounded-full h-2.5">
+                <div
+                  className={`h-2.5 rounded-full transition-all ${
+                    pct >= 70 ? 'bg-green-500' : pct >= 40 ? 'bg-amber-500' : 'bg-red-500'
+                  }`}
+                  style={{ width: `${Math.min(pct, 100)}%` }}
+                />
+              </div>
+              <p className="text-[10px] text-gray-400 mt-1">{s.count} test{s.count !== 1 ? 's' : ''} attempted</p>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+
+  const TestHistoryContent = (
+    <div className="bg-white border rounded-xl shadow-sm">
+      <div className="px-6 py-4 border-b flex items-center justify-between">
+        <h2 className="font-semibold text-gray-900">📋 Attempt History</h2>
+        <Link href="/student/tests" className="text-xs text-indigo-600 hover:text-indigo-800 font-medium">
+          All Tests →
+        </Link>
+      </div>
+      <div className="divide-y divide-gray-100">
+        {completed.slice(0, 20).map(a => (
+          <div key={a.id} className="px-6 py-3 flex items-center justify-between hover:bg-gray-50 transition">
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-medium text-gray-900 truncate">
+                {a.test_title}
+              </p>
+              <p className="text-[10px] text-gray-500">
+                Attempt #{a.attempt_number} · {new Date(a.started_at).toLocaleDateString('en-IN', {
+                  day: 'numeric', month: 'short', year: 'numeric'
+                })}
+              </p>
+            </div>
+            <div className="flex items-center gap-4 shrink-0">
+              <span className={`text-sm font-bold ${
+                (a.total_score ?? 0) >= 70 ? 'text-green-600' :
+                (a.total_score ?? 0) >= 40 ? 'text-amber-600' : 'text-red-600'
+              }`}>
+                {a.total_score ?? '—'}%
+              </span>
+              <Link href={`/student/tests/${a.test_id}/review?attempt=${a.id}`}
+                className="text-xs text-indigo-600 hover:text-indigo-800 font-medium">
+                Review →
+              </Link>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-indigo-50/30">
       {/* Header */}
@@ -263,6 +512,22 @@ export default function AnalyticsPage() {
       </header>
 
       <main className="max-w-5xl mx-auto px-4 py-6 space-y-6">
+        {/* Premium status chip for free users */}
+        {!isPremium && (
+          <div className="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-xl p-3 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <span className="text-lg">⭐</span>
+              <p className="text-xs text-amber-800">
+                <span className="font-semibold">Free plan</span> — upgrade for section-wise breakdowns, time tracking &amp; full history
+              </p>
+            </div>
+            <Link href="/student/profile"
+              className="text-xs font-bold text-amber-700 bg-amber-200/50 px-3 py-1.5 rounded-lg hover:bg-amber-200 transition shrink-0">
+              Upgrade
+            </Link>
+          </div>
+        )}
+
         {/* ─── Tab Switcher ─── */}
         <div className="flex gap-1 bg-white border rounded-xl p-1 shadow-sm">
           <button
@@ -306,7 +571,7 @@ export default function AnalyticsPage() {
               </div>
             ) : (
               <>
-                {/* Practice Overview Cards */}
+                {/* Practice Overview Cards — FREE for everyone */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                   {[
                     { label: 'Practice Sessions', value: practiceSessions.length, icon: '🔄', color: 'text-indigo-600' },
@@ -324,116 +589,20 @@ export default function AnalyticsPage() {
                   ))}
                 </div>
 
-                {/* Section-wise Practice Performance */}
-                <div className="bg-white border rounded-xl shadow-sm">
-                  <div className="px-6 py-4 border-b flex items-center justify-between">
-                    <h2 className="font-semibold text-gray-900">📈 Practice by Section</h2>
-                    <span className="text-xs text-gray-400">Pass / Fail · Avg Time</span>
-                  </div>
-                  <div className="p-6 space-y-6">
-                    {sectionPracticeStats.map(s => (
-                      <div key={s.name}>
-                        <div className="flex items-center justify-between mb-2">
-                          <div className="flex items-center gap-2">
-                            <span className="text-lg">{s.icon}</span>
-                            <span className="text-sm font-medium text-gray-800">{s.name}</span>
-                            <span className="text-[10px] text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded-full">
-                              {s.sessions} session{s.sessions !== 1 ? 's' : ''}
-                            </span>
-                          </div>
-                          <div className="flex items-center gap-4 text-xs text-gray-500">
-                            <span className="font-semibold text-green-600">{s.correct}<span className="text-gray-400 font-normal">✓</span></span>
-                            <span className="font-semibold text-red-500">{s.incorrect}<span className="text-gray-400 font-normal">✗</span></span>
-                            <span className={`font-semibold ${
-                              s.accuracy >= 70 ? 'text-green-600' : s.accuracy >= 40 ? 'text-amber-600' : 'text-red-500'
-                            }`}>
-                              {s.accuracy}%
-                            </span>
-                            {s.avgTimeSeconds > 0 && <span>⏱ {formatTime(s.avgTimeSeconds)}</span>}
-                          </div>
-                        </div>
-                        {/* Accuracy bar */}
-                        <div className="flex items-center gap-2">
-                          <div className="flex-1 bg-gray-100 rounded-full h-2.5">
-                            <div
-                              className={`h-2.5 rounded-full transition-all ${
-                                s.accuracy >= 70 ? 'bg-green-500' : s.accuracy >= 40 ? 'bg-amber-500' : 'bg-red-500'
-                              }`}
-                              style={{ width: `${Math.min(s.accuracy, 100)}%` }}
-                            />
-                          </div>
-                          <span className="text-[10px] text-gray-400 w-16 text-right">
-                            {s.totalQuestions} Q
-                          </span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+                {/* Practice by Section — PREMIUM locked for free users */}
+                <LockedSection title="Practice by Section" icon="📈" isPremium={isPremium}>
+                  {PracticeBySectionContent}
+                </LockedSection>
 
-                {/* Best / Weakest Practice Section */}
-                {(() => {
-                  const sorted = [...sectionPracticeStats].filter(s => s.totalQuestions > 0).sort((a, b) => b.accuracy - a.accuracy);
-                  const best = sorted[0];
-                  const worst = sorted[sorted.length - 1];
-                  if (!best || !worst) return null;
-                  return (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                      <div className="bg-green-50 border border-green-200 rounded-xl p-4">
-                        <p className="text-xs text-green-600 font-medium uppercase tracking-wider">✅ Strongest Section</p>
-                        <p className="text-lg font-bold text-green-800 mt-1">{best.icon} {best.name}</p>
-                        <p className="text-sm text-green-600">{best.accuracy}% accuracy · {best.totalQuestions} questions</p>
-                      </div>
-                      <div className="bg-red-50 border border-red-200 rounded-xl p-4">
-                        <p className="text-xs text-red-600 font-medium uppercase tracking-wider">🎯 Needs Practice</p>
-                        <p className="text-lg font-bold text-red-800 mt-1">{worst.icon} {worst.name}</p>
-                        <p className="text-sm text-red-600">{worst.accuracy}% accuracy · {worst.totalQuestions} questions</p>
-                      </div>
-                    </div>
-                  );
-                })()}
+                {/* Strongest / Weakest — PREMIUM */}
+                <LockedSection title="Strongest & Weakest" icon="🎯" isPremium={isPremium}>
+                  {PracticeBestWeakContent}
+                </LockedSection>
 
-                {/* Recent Practice Sessions */}
-                <div className="bg-white border rounded-xl shadow-sm">
-                  <div className="px-6 py-4 border-b flex items-center justify-between">
-                    <h2 className="font-semibold text-gray-900">🔄 Recent Practice Sessions</h2>
-                    <Link href="/student/practice" className="text-xs text-indigo-600 hover:text-indigo-800 font-medium">
-                      Practice Now →
-                    </Link>
-                  </div>
-                  <div className="divide-y divide-gray-100">
-                    {practiceSessions.slice(0, 20).map(s => {
-                      const pct = s.questions_answered > 0
-                        ? Math.round((s.correct_count / s.questions_answered) * 100) : 0;
-                      return (
-                        <div key={s.id} className="px-6 py-3 flex items-center justify-between hover:bg-gray-50 transition">
-                          <div className="flex items-center gap-3 min-w-0 flex-1">
-                            <span className="text-lg shrink-0">{SECTION_ICONS[s.section] || '📝'}</span>
-                            <div className="min-w-0">
-                              <p className="text-sm font-medium text-gray-900 truncate">{s.section}</p>
-                              <p className="text-[10px] text-gray-500">
-                                {new Date(s.started_at).toLocaleDateString('en-IN', {
-                                  day: 'numeric', month: 'short', year: 'numeric'
-                                })}
-                                {s.avg_time_seconds > 0 && <> · ⏱ {formatTime(s.avg_time_seconds)}/q</>}
-                              </p>
-                            </div>
-                          </div>
-                          <div className="flex items-center gap-4 shrink-0">
-                            <span className="text-xs text-gray-400">
-                              {s.correct_count}/{s.questions_answered}
-                            </span>
-                            <span className={`text-sm font-bold ${
-                              pct >= 70 ? 'text-green-600' : pct >= 40 ? 'text-amber-600' : 'text-red-600'
-                            }`}>
-                              {pct}%
-                            </span>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
+                {/* Recent Practice Sessions — PREMIUM */}
+                <LockedSection title="Recent Practice Sessions" icon="🔄" isPremium={isPremium}>
+                  {PracticeRecentContent}
+                </LockedSection>
               </>
             )}
           </>
@@ -458,7 +627,7 @@ export default function AnalyticsPage() {
               </div>
             ) : (
               <>
-                {/* Overview Cards */}
+                {/* Overview Cards — FREE for everyone */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                   {[
                     { label: 'Tests Completed', value: completed.length, icon: '✅', color: 'text-green-600' },
@@ -476,95 +645,20 @@ export default function AnalyticsPage() {
                   ))}
                 </div>
 
-                {/* Best / Weak Section */}
-                {bestSection && weakSection && (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    <div className="bg-green-50 border border-green-200 rounded-xl p-4">
-                      <p className="text-xs text-green-600 font-medium uppercase tracking-wider">✅ Strongest Section</p>
-                      <p className="text-lg font-bold text-green-800 mt-1">{bestSection.name}</p>
-                      <p className="text-sm text-green-600">Avg {bestSection.avg} · {bestSection.count} attempts</p>
-                    </div>
-                    <div className="bg-red-50 border border-red-200 rounded-xl p-4">
-                      <p className="text-xs text-red-600 font-medium uppercase tracking-wider">🎯 Needs Focus</p>
-                      <p className="text-lg font-bold text-red-800 mt-1">{weakSection.name}</p>
-                      <p className="text-sm text-red-600">Avg {weakSection.avg} · {weakSection.count} attempts</p>
-                    </div>
-                  </div>
-                )}
+                {/* Best / Weak Section — PREMIUM */}
+                <LockedSection title="Strongest & Weakest" icon="🎯" isPremium={isPremium}>
+                  {TestBestWeakContent}
+                </LockedSection>
 
-                {/* Section Performance */}
-                <div className="bg-white border rounded-xl shadow-sm">
-                  <div className="px-6 py-4 border-b">
-                    <h2 className="font-semibold text-gray-900">📈 Section-wise Performance</h2>
-                  </div>
-                  <div className="p-6 space-y-5">
-                    {sectionAggs.map(s => {
-                      const pct = s.count > 0 ? Math.min((s.avg / 100) * 100, 100) : 0;
-                      const avgTime = s.attemptsWithSection > 0
-                        ? Math.round(s.totalTime / s.attemptsWithSection / 60)
-                        : 0;
-                      return (
-                        <div key={s.name}>
-                          <div className="flex items-center justify-between mb-1.5">
-                            <span className="text-sm font-medium text-gray-800">{s.name}</span>
-                            <div className="flex items-center gap-3 text-xs text-gray-500">
-                              <span className="font-semibold text-indigo-600">{s.avg}<span className="text-gray-400 font-normal"> avg</span></span>
-                              <span className="font-semibold text-green-600">{s.max}<span className="text-gray-400 font-normal"> best</span></span>
-                              {avgTime > 0 && <span>{avgTime}m avg</span>}
-                            </div>
-                          </div>
-                          <div className="w-full bg-gray-100 rounded-full h-2.5">
-                            <div
-                              className={`h-2.5 rounded-full transition-all ${
-                                pct >= 70 ? 'bg-green-500' : pct >= 40 ? 'bg-amber-500' : 'bg-red-500'
-                              }`}
-                              style={{ width: `${Math.min(pct, 100)}%` }}
-                            />
-                          </div>
-                          <p className="text-[10px] text-gray-400 mt-1">{s.count} test{s.count !== 1 ? 's' : ''} attempted</p>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
+                {/* Section Performance — PREMIUM */}
+                <LockedSection title="Section-wise Performance" icon="📈" isPremium={isPremium}>
+                  {TestSectionPerformanceContent}
+                </LockedSection>
 
-                {/* Attempt History */}
-                <div className="bg-white border rounded-xl shadow-sm">
-                  <div className="px-6 py-4 border-b flex items-center justify-between">
-                    <h2 className="font-semibold text-gray-900">📋 Attempt History</h2>
-                    <Link href="/student/tests" className="text-xs text-indigo-600 hover:text-indigo-800 font-medium">
-                      All Tests →
-                    </Link>
-                  </div>
-                  <div className="divide-y divide-gray-100">
-                    {completed.slice(0, 20).map(a => (
-                      <div key={a.id} className="px-6 py-3 flex items-center justify-between hover:bg-gray-50 transition">
-                        <div className="min-w-0 flex-1">
-                          <p className="text-sm font-medium text-gray-900 truncate">
-                            {a.test_title}
-                          </p>
-                          <p className="text-[10px] text-gray-500">
-                            Attempt #{a.attempt_number} · {new Date(a.started_at).toLocaleDateString('en-IN', {
-                              day: 'numeric', month: 'short', year: 'numeric'
-                            })}
-                          </p>
-                        </div>
-                        <div className="flex items-center gap-4 shrink-0">
-                          <span className={`text-sm font-bold ${
-                            (a.total_score ?? 0) >= 70 ? 'text-green-600' :
-                            (a.total_score ?? 0) >= 40 ? 'text-amber-600' : 'text-red-600'
-                          }`}>
-                            {a.total_score ?? '—'}%
-                          </span>
-                          <Link href={`/student/tests/${a.test_id}/review?attempt=${a.id}`}
-                            className="text-xs text-indigo-600 hover:text-indigo-800 font-medium">
-                            Review →
-                          </Link>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+                {/* Attempt History — PREMIUM */}
+                <LockedSection title="Attempt History" icon="📋" isPremium={isPremium}>
+                  {TestHistoryContent}
+                </LockedSection>
               </>
             )}
           </>
