@@ -95,6 +95,7 @@ export default function StudentDashboard() {
   const [dismissedAnnouncements, setDismissedAnnouncements] = useState<Set<string>>(new Set());
   const [editorialItems, setEditorialItems] = useState<any[]>([]);
   const [editorialsLoading, setEditorialsLoading] = useState(true);
+  const [editorialsExpanded, setEditorialsExpanded] = useState(true);
   const [readArticles, setReadArticles] = useState<Set<string>>(new Set());
   const [quizzingArticle, setQuizzingArticle] = useState<any>(null);
   const [quizQuestions, setQuizQuestions] = useState<any[]>([]);
@@ -585,12 +586,19 @@ export default function StudentDashboard() {
         {/* #6 — TODAY'S EDITORIALS (RSS-powered 3x3)     */}
         {/* ════════════════════════════════════════════ */}
         <div>
-          <h2 className="text-sm font-semibold text-slate-300 mb-3 flex items-center gap-2">
-            <span>📰</span> Today's Editorials
+          <button
+            onClick={() => setEditorialsExpanded(!editorialsExpanded)}
+            className="w-full flex items-center gap-2 text-sm font-semibold text-slate-300 mb-3 hover:text-white transition"
+          >
+            <span>📰</span>
+            <span>Today's Editorials</span>
             {editorialsLoading && <span className="text-[10px] font-normal text-slate-500">Loading...</span>}
-          </h2>
+            <span className="ml-auto text-slate-500 text-xs transition-transform duration-200"
+              style={{ transform: editorialsExpanded ? 'rotate(180deg)' : 'rotate(0deg)' }}
+            >▼</span>
+          </button>
 
-          {editorialsLoading ? (
+          {editorialsExpanded && (editorialsLoading ? (
             <div className="space-y-4">
               {[1, 2, 3].map(row => (
                 <div key={row}>
@@ -767,6 +775,11 @@ export default function StudentDashboard() {
               </div>
 
               <div className="px-5 py-4 space-y-5">
+                {/* ⚠️ Copyright disclaimer */}
+                <div className="text-[10px] leading-relaxed text-slate-500 bg-slate-900/60 border border-slate-700/40 rounded-lg px-3 py-2.5">
+                  ⚠️ <strong className="text-slate-400">Practice only.</strong> These questions are AI-generated on topics similar to the editorial — they do <em>not</em> reproduce or summarize the original article's content. For accurate editorial analysis, read the full article.
+                </div>
+
                 {quizLoading ? (
                   <div className="text-center py-8">
                     <div className="animate-spin w-8 h-8 border-2 border-purple-400 border-t-transparent rounded-full mx-auto mb-3" />
