@@ -753,7 +753,7 @@ export default function StudentDashboard() {
                 });
               })()}
             </div>
-          )}
+          ))}          {/* ) closes :(content), ) closes && (...), } closes JSX expr */}
         </div>
 
         {/* ─── Quiz Modal ─── */}
