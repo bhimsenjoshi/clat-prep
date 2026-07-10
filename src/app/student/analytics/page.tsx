@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import ThemeToggle from '@/components/ThemeToggle';
 
 const SECTION_NAMES = [
   'English', 'Current Affairs', 'Legal Reasoning',
@@ -518,7 +519,7 @@ export default function AnalyticsPage() {
             <span className="text-sm font-medium">Dashboard</span>
           </Link>
           <h1 className="text-sm font-bold text-gray-900">📊 Performance Analytics</h1>
-          <div className="w-16" />
+          <ThemeToggle />
         </div>
       </header>
 
