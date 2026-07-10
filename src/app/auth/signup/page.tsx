@@ -11,6 +11,7 @@ export default function SignupPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [confirmed, setConfirmed] = useState(false);
   const router = useRouter();
   const supabase = createClient();
 
@@ -19,7 +20,7 @@ export default function SignupPage() {
     setLoading(true);
     setError('');
 
-    const { error: authError } = await supabase.auth.signUp({
+    const { data, error: authError } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -34,9 +35,52 @@ export default function SignupPage() {
       return;
     }
 
-    // If Supabase is configured with email confirm disabled, redirect immediately
+    // If email confirmation is enabled, Supabase returns no session
+    // Show a "check your email" message instead of redirecting
+    if (!data.session) {
+      setConfirmed(true);
+      setLoading(false);
+      return;
+    }
+
+    // Email confirm is disabled — session is ready, redirect
     router.push('/student/dashboard');
   };
+
+  // Post-signup confirmation screen
+  if (confirmed) {
+    return (
+      <div className="min-h-screen flex items-center justify-center px-4">
+        <div className="w-full max-w-sm space-y-6 text-center">
+          <div className="bg-green-50 rounded-full w-16 h-16 flex items-center justify-center mx-auto">
+            <svg className="w-8 h-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+          </div>
+          <h1 className="text-2xl font-bold">Check your email</h1>
+          <p className="text-gray-500 text-sm">
+            We&apos;ve sent a confirmation link to <strong className="text-gray-700">{email}</strong>.
+            Click the link to activate your account.
+          </p>
+          <p className="text-gray-400 text-xs">
+            Didn&apos;t receive it? Check your spam folder, or{' '}
+            <button
+              onClick={() => setConfirmed(false)}
+              className="text-indigo-600 hover:underline"
+            >
+              try again with a different email
+            </button>
+          </p>
+          <Link
+            href="/auth/login"
+            className="block w-full text-center bg-indigo-600 text-white rounded-lg py-2.5 font-medium hover:bg-indigo-700 transition"
+          >
+            Go to Sign In
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4">
