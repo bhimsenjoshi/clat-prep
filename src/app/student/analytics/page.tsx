@@ -98,7 +98,9 @@ export default function AnalyticsPage() {
   const [attempts, setAttempts] = useState<AttemptWithScores[]>([]);
   const [practiceSessions, setPracticeSessions] = useState<PracticeSession[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'practice' | 'tests'>('practice');
+  const [activeTab, setActiveTab] = useState<'practice' | 'tests' | 'editorials'>('practice');
+  const [editorialStats, setEditorialStats] = useState<any>(null);
+  const [editorialStatsLoading, setEditorialStatsLoading] = useState(true);
 
   useEffect(() => {
     const load = async () => {
@@ -212,6 +214,15 @@ export default function AnalyticsPage() {
       setLoading(false);
     };
     load();
+
+    // ─── Fetch editorial stats ───
+    fetch('/api/editorials/activity')
+      .then(r => r.json())
+      .then(data => {
+        setEditorialStats(data.stats || null);
+        setEditorialStatsLoading(false);
+      })
+      .catch(() => setEditorialStatsLoading(false));
   }, []);
 
   // ─── Subscription check ───
@@ -548,7 +559,17 @@ export default function AnalyticsPage() {
                 : 'text-gray-500 hover:text-gray-800'
             }`}
           >
-            📝 Full Tests
+            📝 Tests
+          </button>
+          <button
+            onClick={() => setActiveTab('editorials')}
+            className={`flex-1 py-2.5 rounded-lg text-sm font-medium transition-all ${
+              activeTab === 'editorials'
+                ? 'bg-indigo-600 text-white shadow-sm'
+                : 'text-gray-500 hover:text-gray-800'
+            }`}
+          >
+            📰 Editorials
           </button>
         </div>
 
@@ -662,6 +683,97 @@ export default function AnalyticsPage() {
               </>
             )}
           </>
+        )}
+
+        {/* ════════════════════════════════════════════ */}
+        {/* EDITORIALS TAB                                 */}
+        {/* ════════════════════════════════════════════ */}
+        {activeTab === 'editorials' && (
+          <div className="space-y-4">
+            {editorialStatsLoading ? (
+              <div className="bg-white border rounded-xl p-8 text-center">
+                <div className="animate-spin w-6 h-6 border-2 border-indigo-500 border-t-transparent rounded-full mx-auto" />
+              </div>
+            ) : !editorialStats || editorialStats.totalRead === 0 ? (
+              <div className="bg-white border-2 border-dashed border-gray-200 rounded-xl p-16 text-center">
+                <div className="text-5xl mb-4">📰</div>
+                <h2 className="text-xl font-bold text-gray-800 mb-2">No Editorial Activity Yet</h2>
+                <p className="text-gray-500 mb-6 max-w-md mx-auto">
+                  Read editorials from the dashboard and take quick quizzes to track your Current Affairs prep.
+                </p>
+                <Link href="/student/dashboard"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-medium bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700 transition shadow-sm">
+                  📰 Go to Editorials
+                </Link>
+              </div>
+            ) : (
+              <>
+                {/* Overview cards */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  <div className="bg-white border rounded-xl p-4 shadow-sm">
+                    <div className="flex items-center justify-between mb-0.5">
+                      <span className="text-lg">📖</span>
+                      <span className="text-2xl font-bold text-indigo-600">{editorialStats.totalRead}</span>
+                    </div>
+                    <p className="text-xs text-gray-500">Editorials Read</p>
+                  </div>
+                  <div className="bg-white border rounded-xl p-4 shadow-sm">
+                    <div className="flex items-center justify-between mb-0.5">
+                      <span className="text-lg">📝</span>
+                      <span className="text-2xl font-bold text-blue-600">{editorialStats.quizedArticles || 0}</span>
+                    </div>
+                    <p className="text-xs text-gray-500">Quizzes Taken</p>
+                  </div>
+                  <div className="bg-white border rounded-xl p-4 shadow-sm">
+                    <div className="flex items-center justify-between mb-0.5">
+                      <span className="text-lg">🎯</span>
+                      <span className={`text-2xl font-bold ${
+                        editorialStats.quizAccuracy >= 70 ? 'text-green-600' : editorialStats.quizAccuracy >= 40 ? 'text-amber-600' : 'text-red-600'
+                      }`}>
+                        {editorialStats.quizAccuracy || 0}%
+                      </span>
+                    </div>
+                    <p className="text-xs text-gray-500">Quiz Accuracy</p>
+                  </div>
+                  <div className="bg-white border rounded-xl p-4 shadow-sm">
+                    <div className="flex items-center justify-between mb-0.5">
+                      <span className="text-lg">🔥</span>
+                      <span className="text-2xl font-bold text-orange-600">{editorialStats.streak || 0}</span>
+                    </div>
+                    <p className="text-xs text-gray-500">Day Streak</p>
+                  </div>
+                </div>
+
+                {/* Sources */}
+                <div className="bg-white border rounded-xl shadow-sm">
+                  <div className="px-6 py-4 border-b">
+                    <h2 className="font-semibold text-gray-900">📰 Sources Covered</h2>
+                  </div>
+                  <div className="p-6">
+                    <p className="text-sm text-gray-600">
+                      Reading from <strong>{editorialStats.uniqueSources || 0}</strong> different sources
+                    </p>
+                  </div>
+                </div>
+
+                {/* Topics */}
+                {editorialStats.topics && editorialStats.topics.length > 0 && (
+                  <div className="bg-white border rounded-xl shadow-sm">
+                    <div className="px-6 py-4 border-b">
+                      <h2 className="font-semibold text-gray-900">🏷️ Topics Covered</h2>
+                    </div>
+                    <div className="p-6 flex flex-wrap gap-2">
+                      {editorialStats.topics.map((t: string) => (
+                        <span key={t} className="px-3 py-1.5 rounded-full text-xs font-medium bg-indigo-50 text-indigo-700 border border-indigo-100">
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
+          </div>
         )}
       </main>
     </div>

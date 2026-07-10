@@ -95,6 +95,12 @@ export default function StudentDashboard() {
   const [dismissedAnnouncements, setDismissedAnnouncements] = useState<Set<string>>(new Set());
   const [editorialItems, setEditorialItems] = useState<any[]>([]);
   const [editorialsLoading, setEditorialsLoading] = useState(true);
+  const [readArticles, setReadArticles] = useState<Set<string>>(new Set());
+  const [quizzingArticle, setQuizzingArticle] = useState<any>(null);
+  const [quizQuestions, setQuizQuestions] = useState<any[]>([]);
+  const [quizLoading, setQuizLoading] = useState(false);
+  const [quizAnswers, setQuizAnswers] = useState<number[]>([]);
+  const [quizSubmitted, setQuizSubmitted] = useState(false);
   const router = useRouter();
   const supabase = createClient();
 
@@ -291,6 +297,17 @@ export default function StudentDashboard() {
         setEditorialsLoading(false);
       })
       .catch(() => setEditorialsLoading(false));
+  }, []);
+
+  // ─── Fetch editorial activity (reads + quizzes) ───
+  useEffect(() => {
+    fetch('/api/editorials/activity')
+      .then(r => r.json())
+      .then(data => {
+        const read = new Set<string>((data.activities || []).map((a: any) => a.article_url));
+        setReadArticles(read);
+      })
+      .catch(() => {});
   }, []);
 
   const completed = attempts.filter(a => a.submitted_at);
@@ -624,38 +641,104 @@ export default function StudentDashboard() {
                         <span className="text-[10px] text-slate-600">· {items.length} article{items.length !== 1 ? 's' : ''}</span>
                       </div>
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5">
-                        {items.map((item: any) => (
-                          <a
-                            key={`${item.sourceId}-${item.link}`}
-                            href={item.link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="bg-slate-800/60 border border-slate-700/50 rounded-xl p-4 hover:border-indigo-600/50 hover:bg-slate-800 transition group flex flex-col"
-                          >
-                            <div className="flex items-center gap-2 mb-2">
-                              {item.pubDate && (
-                                <span className="text-[10px] text-slate-500">
-                                  {(() => {
-                                    const d = new Date(item.pubDate);
-                                    const now = new Date();
-                                    const diff = Math.round((now.getTime() - d.getTime()) / 3600000);
-                                    if (diff < 1) return 'Just now';
-                                    if (diff < 24) return `${diff}h ago`;
-                                    return d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
-                                  })()}
-                                </span>
-                              )}
+                        {items.map((item: any) => {
+                          const isRead = readArticles.has(item.link);
+                          return (
+                            <div
+                              key={`${item.sourceId}-${item.link}`}
+                              className="bg-slate-800/60 border border-slate-700/50 rounded-xl p-4 hover:border-indigo-600/50 hover:bg-slate-800 transition group flex flex-col"
+                            >
+                              <div className="flex items-center gap-2 mb-2">
+                                {item.pubDate && (
+                                  <span className="text-[10px] text-slate-500">
+                                    {(() => {
+                                      const d = new Date(item.pubDate);
+                                      const now = new Date();
+                                      const diff = Math.round((now.getTime() - d.getTime()) / 3600000);
+                                      if (diff < 1) return 'Just now';
+                                      if (diff < 24) return `${diff}h ago`;
+                                      return d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
+                                    })()}
+                                  </span>
+                                )}
+                              </div>
+
+                              {/* Clickable title — opens article */}
+                              <a
+                                href={item.link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-sm font-medium text-white group-hover:text-indigo-300 transition leading-snug line-clamp-3"
+                              >
+                                {item.title}
+                              </a>
+
+                              {/* Action buttons */}
+                              <div className="mt-auto pt-3 flex items-center gap-2">
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    if (!isRead) {
+                                      fetch('/api/editorials/activity', {
+                                        method: 'POST',
+                                        headers: { 'Content-Type': 'application/json' },
+                                        body: JSON.stringify({
+                                          action: 'read',
+                                          source_id: item.sourceId,
+                                          article_url: item.link,
+                                          article_title: item.title,
+                                        }),
+                                      });
+                                      setReadArticles(prev => new Set(prev).add(item.link));
+                                    }
+                                    window.open(item.link, '_blank');
+                                  }}
+                                  className={`text-[11px] font-medium px-2.5 py-1 rounded-lg transition flex items-center gap-1 ${
+                                    isRead
+                                      ? 'bg-emerald-900/40 text-emerald-300 cursor-default'
+                                      : 'bg-slate-700/50 text-slate-300 hover:bg-indigo-700/50 hover:text-indigo-200'
+                                  }`}
+                                >
+                                  {isRead ? '✅ Read' : '📖 Read'}
+                                </button>
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setQuizzingArticle(item);
+                                    setQuizQuestions([]);
+                                    setQuizAnswers([]);
+                                    setQuizSubmitted(false);
+                                    setQuizLoading(true);
+                                    fetch('/api/editorials/quiz', {
+                                      method: 'POST',
+                                      headers: { 'Content-Type': 'application/json' },
+                                      body: JSON.stringify({ headline: item.title, source: item.source }),
+                                    })
+                                      .then(r => r.json())
+                                      .then(data => {
+                                        setQuizQuestions(data.questions || []);
+                                        setQuizAnswers(new Array(data.questions?.length || 3).fill(-1));
+                                        setQuizLoading(false);
+                                      })
+                                      .catch(() => setQuizLoading(false));
+                                  }}
+                                  className="text-[11px] font-medium px-2.5 py-1 rounded-lg bg-slate-700/50 text-slate-300 hover:bg-purple-700/50 hover:text-purple-200 transition flex items-center gap-1"
+                                >
+                                  📝 Quiz
+                                </button>
+                                <a
+                                  href={item.link}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  onClick={(e) => e.stopPropagation()}
+                                  className="ml-auto text-[10px] text-indigo-400/60 hover:text-indigo-300 transition"
+                                >
+                                  ↗
+                                </a>
+                              </div>
                             </div>
-                            <p className="text-sm font-medium text-white group-hover:text-indigo-300 transition leading-snug line-clamp-3">
-                              {item.title}
-                            </p>
-                            <div className="mt-auto pt-2">
-                              <span className="text-[10px] text-indigo-400/70 group-hover:text-indigo-300 transition">
-                                Read full ↗
-                              </span>
-                            </div>
-                          </a>
-                        ))}
+                          );
+                        })}
                       </div>
                     </div>
                   );
@@ -664,6 +747,149 @@ export default function StudentDashboard() {
             </div>
           )}
         </div>
+
+        {/* ─── Quiz Modal ─── */}
+        {quizzingArticle && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+            <div className="bg-slate-800 border border-slate-700 rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-2xl">
+              {/* Modal header */}
+              <div className="px-5 py-4 border-b border-slate-700 flex items-center justify-between">
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs text-purple-400 font-semibold uppercase tracking-wider">Editorial Quiz</p>
+                  <p className="text-sm font-medium text-white truncate mt-0.5">{quizzingArticle.title}</p>
+                </div>
+                <button
+                  onClick={() => setQuizzingArticle(null)}
+                  className="shrink-0 text-slate-500 hover:text-slate-300 transition p-1 ml-3"
+                >
+                  ✕
+                </button>
+              </div>
+
+              <div className="px-5 py-4 space-y-5">
+                {quizLoading ? (
+                  <div className="text-center py-8">
+                    <div className="animate-spin w-8 h-8 border-2 border-purple-400 border-t-transparent rounded-full mx-auto mb-3" />
+                    <p className="text-sm text-slate-400">Generating quiz questions...</p>
+                  </div>
+                ) : quizQuestions.length === 0 ? (
+                  <div className="text-center py-8">
+                    <p className="text-sm text-slate-400">Could not generate quiz. Try again.</p>
+                    <button
+                      onClick={() => setQuizzingArticle(null)}
+                      className="mt-3 text-sm text-indigo-400 hover:text-indigo-300"
+                    >
+                      Close
+                    </button>
+                  </div>
+                ) : (
+                  <>
+                    {quizQuestions.map((q: any, qi: number) => (
+                      <div key={qi}>
+                        <p className="text-sm font-medium text-white mb-3">
+                          Q{qi + 1}. {q.question}
+                        </p>
+                        <div className="space-y-2">
+                          {q.options.map((opt: string, oi: number) => {
+                            let btnStyle = 'border-slate-600 hover:border-indigo-500 hover:bg-indigo-500/10';
+                            if (quizSubmitted) {
+                              if (oi === q.correctIndex) {
+                                btnStyle = 'border-green-600 bg-green-900/30 ring-1 ring-green-600/50';
+                              } else if (oi === quizAnswers[qi] && quizAnswers[qi] !== q.correctIndex) {
+                                btnStyle = 'border-red-600 bg-red-900/30 ring-1 ring-red-600/50';
+                              } else {
+                                btnStyle = 'border-slate-700/50 opacity-50';
+                              }
+                            } else if (quizAnswers[qi] === oi) {
+                              btnStyle = 'border-indigo-500 bg-indigo-900/30 ring-1 ring-indigo-500';
+                            }
+                            return (
+                              <button
+                                key={oi}
+                                onClick={() => {
+                                  if (quizSubmitted) return;
+                                  const next = [...quizAnswers];
+                                  next[qi] = oi;
+                                  setQuizAnswers(next);
+                                }}
+                                disabled={quizSubmitted}
+                                className={`w-full text-left px-3 py-2.5 rounded-xl border text-sm transition ${btnStyle} ${
+                                  quizSubmitted ? 'cursor-default' : 'cursor-pointer'
+                                }`}
+                              >
+                                <span className="text-slate-400 mr-2">{String.fromCharCode(65 + oi)}.</span>
+                                <span className="text-slate-200">{opt.replace(/^[A-D]\)\s*/, '')}</span>
+                              </button>
+                            );
+                          })}
+                        </div>
+                        {quizSubmitted && q.explanation && (
+                          <div className="mt-2 p-3 bg-blue-900/20 border border-blue-800/40 rounded-lg">
+                            <p className="text-[10px] text-blue-400 font-semibold uppercase tracking-wider mb-1">Explanation</p>
+                            <p className="text-xs text-slate-300 leading-relaxed">{q.explanation}</p>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+
+                    {/* Submit button */}
+                    {!quizSubmitted ? (
+                      <button
+                        onClick={() => {
+                          const answered = quizAnswers.filter(a => a >= 0).length;
+                          if (answered < quizQuestions.length) {
+                            // Allow partial submission
+                          }
+                          const correct = quizAnswers.filter((a, i) => a === quizQuestions[i]?.correctIndex).length;
+                          setQuizSubmitted(true);
+
+                          // Log to activity
+                          fetch('/api/editorials/activity', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                              action: 'quiz',
+                              source_id: quizzingArticle.sourceId,
+                              article_url: quizzingArticle.link,
+                              article_title: quizzingArticle.title,
+                              correct,
+                              total: quizQuestions.length,
+                            }),
+                          });
+
+                          // Also mark as read
+                          setReadArticles(prev => new Set(prev).add(quizzingArticle.link));
+                        }}
+                        disabled={quizAnswers.every(a => a < 0)}
+                        className="w-full py-3 rounded-xl font-medium bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:from-purple-500 hover:to-pink-500 transition disabled:opacity-40"
+                      >
+                        {quizAnswers.every(a => a < 0) ? 'Select at least one answer' : 'Submit Quiz'}
+                      </button>
+                    ) : (
+                      <div className="text-center space-y-3">
+                        <div className={`text-xl font-bold ${
+                          (() => {
+                            const c = quizAnswers.filter((a, i) => a === quizQuestions[i]?.correctIndex).length;
+                            const pct = Math.round((c / quizQuestions.length) * 100);
+                            return pct >= 70 ? 'text-green-400' : pct >= 40 ? 'text-amber-400' : 'text-red-400';
+                          })()
+                        }`}>
+                          {quizAnswers.filter((a, i) => a === quizQuestions[i]?.correctIndex).length}/{quizQuestions.length} correct
+                        </div>
+                        <button
+                          onClick={() => setQuizzingArticle(null)}
+                          className="text-sm text-indigo-400 hover:text-indigo-300 transition"
+                        >
+                          Close
+                        </button>
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* ════════════════════════════════════════════ */}
         {/* #7 — QUICK PRACTICE SECTION CARDS             */}
