@@ -37,7 +37,6 @@ export interface Section {
 export interface Question {
   id: string;
   section_id: string;
-  subtopic: string;
   question_text: string;
   passage: string | null;
   options: Record<'A' | 'B' | 'C' | 'D', string>;
@@ -89,7 +88,6 @@ export interface PracticeQuestion {
   id: string;
   section: SectionName;
   topic: string;
-  subtopic: string;
   question_text: string;
   passage: string | null;
   options: Record<'A' | 'B' | 'C' | 'D', string>;
