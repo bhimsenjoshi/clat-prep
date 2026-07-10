@@ -173,7 +173,16 @@ export default function PracticeQuiz() {
     timerRef.current = Date.now();
   };
 
-  const endSession = () => setCompleted(true);
+  const endSession = async () => {
+    if (sessionId) {
+      const supabase = createClient();
+      await supabase
+        .from('quiz_sessions')
+        .update({ ended_at: new Date().toISOString() })
+        .eq('id', sessionId);
+    }
+    setCompleted(true);
+  };
 
   const startNew = () => {
     setStarted(false);
