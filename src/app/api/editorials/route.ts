@@ -40,9 +40,9 @@ function parseRSSItems(xml: string, source: typeof FEEDS[0]): EditorialItem[] {
   while ((match = itemRegex.exec(xml)) !== null) {
     const itemXml = match[1];
 
-    const title = itemXml.match(/<title[^>]*>(?:<!\[CDATA\[(.*?)\]\]>|(.*?))<\/title>/is);
-    const link = itemXml.match(/<link[^>]*>(?:<!\[CDATA\[(.*?)\]\]>|(.*?))<\/link>/is);
-    const pubDate = itemXml.match(/<pubDate[^>]*>(.*?)<\/pubDate>/is);
+    const title = itemXml.match(/<title[^>]*>(?:<!\[CDATA\[([\s\S]*?)\]\]>|([\s\S]*?))<\/title>/i);
+    const link = itemXml.match(/<link[^>]*>(?:<!\[CDATA\[([\s\S]*?)\]\]>|([\s\S]*?))<\/link>/i);
+    const pubDate = itemXml.match(/<pubDate[^>]*>([\s\S]*?)<\/pubDate>/i);
 
     const titleText = (title?.[1] || title?.[2] || '').trim();
     const linkText = (link?.[1] || link?.[2] || '').trim();
