@@ -5,6 +5,8 @@ import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import type { ExtendedProfile } from '@/types';
+import ThemeToggle from '@/components/ThemeToggle';
+import SectionCard from '@/components/SectionCard';
 
 const CLAT_DATE = new Date('2026-12-06T09:00:00+05:30');
 
@@ -95,7 +97,6 @@ export default function StudentDashboard() {
   const [dismissedAnnouncements, setDismissedAnnouncements] = useState<Set<string>>(new Set());
   const [editorialItems, setEditorialItems] = useState<any[]>([]);
   const [editorialsLoading, setEditorialsLoading] = useState(true);
-  const [editorialsExpanded, setEditorialsExpanded] = useState(true);
   const [readArticles, setReadArticles] = useState<Set<string>>(new Set());
   const [quizzingArticle, setQuizzingArticle] = useState<any>(null);
   const [quizQuestions, setQuizQuestions] = useState<any[]>([]);
@@ -400,6 +401,7 @@ export default function StudentDashboard() {
               className="px-3 py-2 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 transition">
               👤 Profile
             </Link>
+            <ThemeToggle />
             <button onClick={() => supabase.auth.signOut().then(() => router.push('/'))}
               className="px-3 py-2 rounded-lg text-sm font-medium text-slate-500 hover:text-red-400 hover:bg-red-900/30 transition">
               Sign Out
@@ -445,6 +447,7 @@ export default function StudentDashboard() {
               className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-300 hover:bg-slate-800">
               👤 My Profile
             </Link>
+            <div className="py-1"><ThemeToggle /></div>
             <button onClick={() => { setMobileMenuOpen(false); supabase.auth.signOut().then(() => router.push('/')); }}
               className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-red-400 hover:bg-red-900/30 w-full text-left">
               🚪 Sign Out
@@ -485,7 +488,8 @@ export default function StudentDashboard() {
         {/* ════════════════════════════════════════════ */}
         {/* #2 — STREAK + TODAY STATS                     */}
         {/* ════════════════════════════════════════════ */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <SectionCard title="Today's Stats" icon="📊">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           <div className="bg-slate-800/60 border border-slate-700/50 rounded-xl p-4 text-center">
             <div className="text-2xl mb-1">{streak > 0 ? '🔥' : '❄️'}</div>
             <p className="text-2xl font-bold text-white">{streak}</p>
@@ -508,12 +512,13 @@ export default function StudentDashboard() {
             <p className="text-2xl font-bold text-white">{totalPracticeQ}</p>
             <p className="text-[10px] text-slate-400 uppercase tracking-wider">Total Q</p>
           </div>
-        </div>
+        </SectionCard>
 
         {/* ════════════════════════════════════════════ */}
         {/* #3 — ANNOUNCEMENTS                            */}
         {/* ════════════════════════════════════════════ */}
-        {ANNOUNCEMENTS.filter(a => !dismissedAnnouncements.has(a.id)).slice(0, 2).map(a => (
+        <SectionCard title="Announcements" icon="📢">
+          {ANNOUNCEMENTS.filter(a => !dismissedAnnouncements.has(a.id)).slice(0, 2).map(a => (
           <div key={a.id} className="bg-gradient-to-r from-blue-900/30 to-indigo-900/30 border border-blue-700/30 rounded-xl p-4">
             <div className="flex items-start gap-3">
               <span className="text-xl shrink-0 mt-0.5">{a.icon}</span>
@@ -536,11 +541,12 @@ export default function StudentDashboard() {
             </div>
           </div>
         ))}
+        </SectionCard>
 
         {/* ════════════════════════════════════════════ */}
         {/* #4 — LEGAL MAXIM OF THE DAY                   */}
         {/* ════════════════════════════════════════════ */}
-        <div className="bg-slate-800/50 border border-slate-700/40 rounded-xl p-4 md:p-5">
+        <SectionCard title="Legal Maxim of the Day" icon="⚖️">
           <div className="flex items-start gap-4">
             <div className="w-10 h-10 rounded-lg bg-amber-800/40 flex items-center justify-center text-xl shrink-0">
               ⚖️
@@ -551,19 +557,15 @@ export default function StudentDashboard() {
               <p className="text-xs text-slate-400 mt-1">{maxim.meaning}</p>
             </div>
           </div>
-        </div>
+        </SectionCard>
 
         {/* ════════════════════════════════════════════ */}
         {/* #5 — TODAY'S FOCUS (smart recommendation)    */}
         {/* ════════════════════════════════════════════ */}
         {weakestSection && totalPracticeQ >= 10 && (
-          <div className="bg-gradient-to-r from-purple-900/40 to-pink-900/40 border border-purple-700/40 rounded-xl p-4 md:p-5">
+          <SectionCard title="Today's Focus" icon="💡" variant="accent">
             <div className="flex items-start md:items-center gap-4 flex-col md:flex-row">
-              <div className="w-12 h-12 rounded-xl bg-purple-800/50 flex items-center justify-center text-2xl shrink-0">
-                💡
-              </div>
               <div className="flex-1 min-w-0">
-                <p className="text-xs text-purple-300 font-semibold uppercase tracking-wider">Today's Focus</p>
                 <p className="text-base font-bold text-white mt-0.5">
                   Your weakest section is <span className="text-purple-300">{SECTION_ICONS[weakestSection]} {weakestSection}</span>
                 </p>
@@ -579,26 +581,14 @@ export default function StudentDashboard() {
                 Practice Now →
               </Link>
             </div>
-          </div>
+          </SectionCard>
         )}
 
         {/* ════════════════════════════════════════════ */}
         {/* #6 — TODAY'S EDITORIALS (RSS-powered 3x3)     */}
         {/* ════════════════════════════════════════════ */}
-        <div>
-          <button
-            onClick={() => setEditorialsExpanded(!editorialsExpanded)}
-            className="w-full flex items-center gap-2 text-sm font-semibold text-slate-300 mb-3 hover:text-white transition"
-          >
-            <span>📰</span>
-            <span>Today's Editorials</span>
-            {editorialsLoading && <span className="text-[10px] font-normal text-slate-500">Loading...</span>}
-            <span className="ml-auto text-slate-500 text-xs transition-transform duration-200"
-              style={{ transform: editorialsExpanded ? 'rotate(180deg)' : 'rotate(0deg)' }}
-            >▼</span>
-          </button>
-
-          {editorialsExpanded && (editorialsLoading ? (
+        <SectionCard title="Today's Editorials" icon="📰" collapsible extra={editorialsLoading ? <span className="text-[10px] text-slate-500">Loading...</span> : undefined}>
+          {editorialsLoading ? (
             <div className="space-y-4">
               {[1, 2, 3].map(row => (
                 <div key={row}>
@@ -753,8 +743,8 @@ export default function StudentDashboard() {
                 });
               })()}
             </div>
-          ))}          {/* ) closes :(content), ) closes && (...), } closes JSX expr */}
-        </div>
+          )}
+        </SectionCard>
 
         {/* ─── Quiz Modal ─── */}
         {quizzingArticle && (
@@ -907,15 +897,11 @@ export default function StudentDashboard() {
         {/* ════════════════════════════════════════════ */}
         {/* #7 — QUICK PRACTICE SECTION CARDS             */}
         {/* ════════════════════════════════════════════ */}
-        <div>
-          <h2 className="text-sm font-semibold text-slate-300 mb-3 flex items-center gap-2">
-            <span>⚡</span> Quick Practice
-            {profile?.subscription_plan === 'free' && (
-              <span className="text-xs font-normal text-slate-500 ml-auto">
-                {(profile.daily_free_questions ?? 10)} free questions remaining
-              </span>
-            )}
-          </h2>
+        <SectionCard title="Quick Practice" icon="⚡" collapsible
+          extra={profile?.subscription_plan === 'free' ? (
+            <span className="text-xs font-normal text-slate-500">{(profile.daily_free_questions ?? 10)} free questions remaining</span>
+          ) : undefined}
+        >
           <div className="grid grid-cols-2 md:grid-cols-5 gap-2.5">
             {SECTIONS.map(s => (
               <Link
@@ -930,43 +916,39 @@ export default function StudentDashboard() {
               </Link>
             ))}
           </div>
-        </div>
+        </SectionCard>
 
         {/* ════════════════════════════════════════════ */}
         {/* #8 — RECENT ACTIVITY                           */}
         {/* ════════════════════════════════════════════ */}
         {noActivity ? (
-          <div className="bg-slate-800/40 border-2 border-dashed border-slate-700/50 rounded-xl p-12 text-center">
-            <div className="text-4xl mb-3">📭</div>
-            <h2 className="text-lg font-bold text-white mb-1">No Practice Yet</h2>
-            <p className="text-sm text-slate-400 mb-5 max-w-sm mx-auto">
-              Pick a section above and start practicing with instant feedback!
-            </p>
-            <div className="flex gap-3 justify-center flex-wrap">
-              <Link href="/student/practice"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-medium bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700 transition shadow-sm">
-                🎯 Start Practicing
-              </Link>
-              <Link href="/student/tests"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-medium bg-slate-800 border border-slate-600 text-slate-300 hover:bg-slate-700 transition shadow-sm">
-                📝 Browse Tests
-              </Link>
+          <SectionCard title="Recent Activity" icon="📋">
+            <div className="text-center py-6">
+              <div className="text-4xl mb-3">📭</div>
+              <h2 className="text-lg font-bold text-white mb-1">No Practice Yet</h2>
+              <p className="text-sm text-slate-400 mb-5 max-w-sm mx-auto">
+                Pick a section above and start practicing with instant feedback!
+              </p>
+              <div className="flex gap-3 justify-center flex-wrap">
+                <Link href="/student/practice"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-medium bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700 transition shadow-sm">
+                  🎯 Start Practicing
+                </Link>
+                <Link href="/student/tests"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-medium bg-slate-800 border border-slate-600 text-slate-300 hover:bg-slate-700 transition shadow-sm">
+                  📝 Browse Tests
+                </Link>
+              </div>
             </div>
-          </div>
+          </SectionCard>
         ) : (
-          <div>
-            <div className="flex items-center justify-between mb-3">
-              <h2 className="text-sm font-semibold text-slate-300 flex items-center gap-2">
-                <span>📋</span> Recent Activity
-                <span className="text-xs font-normal text-slate-500">
-                  {practiceSessions.length > 0 ? `· ${totalPracticeQ} practice Q` : ''}
-                  {attempts.length > 0 ? ` · ${attempts.length} tests` : ''}
-                </span>
-              </h2>
+          <SectionCard title="Recent Activity" icon="📋" collapsible
+            extra={
               <Link href="/student/analytics" className="text-xs text-indigo-400 hover:text-indigo-300 font-medium">
                 View Analytics →
               </Link>
-            </div>
+            }
+          >
 
             <div className="space-y-2.5">
               {/* Practice sessions first (most recent) */}
@@ -1050,7 +1032,7 @@ export default function StudentDashboard() {
                 );
               })}
             </div>
-          </div>
+          </SectionCard>
         )}
       </main>
     </div>

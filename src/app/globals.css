@@ -1,1 +1,50 @@
 @import "tailwindcss";
+
+/* ═══════════════════════════════════════════════
+   Theme system — CSS variables + light overrides
+   ═══════════════════════════════════════════════ */
+
+:root {
+  --theme-bg-primary: #0f172a;        /* slate-950 */
+  --theme-bg-secondary: #1e293b;       /* slate-800 */
+  --theme-bg-card: #1e293b;            /* slate-800 */
+  --theme-bg-card-hover: #334155;      /* slate-700 */
+  --theme-text-primary: #ffffff;
+  --theme-text-secondary: #94a3b8;     /* slate-400 */
+  --theme-text-muted: #64748b;         /* slate-500 */
+  --theme-border: #334155;             /* slate-700 */
+  --theme-border-light: #1e293b;       /* slate-800 */
+  --theme-gradient-from: #0f172a;
+  --theme-gradient-via: #1e1b4b;       /* indigo-950 */
+  --theme-gradient-to: #0f172a;
+}
+
+[data-theme="light"] {
+  --theme-bg-primary: #ffffff;
+  --theme-bg-secondary: #f8fafc;       /* slate-50 */
+  --theme-bg-card: #ffffff;
+  --theme-bg-card-hover: #f1f5f9;      /* slate-100 */
+  --theme-text-primary: #0f172a;       /* slate-900 */
+  --theme-text-secondary: #475569;     /* slate-600 */
+  --theme-text-muted: #94a3b8;         /* slate-400 */
+  --theme-border: #e2e8f0;             /* slate-200 */
+  --theme-border-light: #f1f5f9;       /* slate-100 */
+  --theme-gradient-from: #f8fafc;
+  --theme-gradient-via: #eef2ff;       /* indigo-50 */
+  --theme-gradient-to: #f8fafc;
+}
+
+/* ─── Structural overrides for light mode ─── */
+[data-theme="light"] body {
+  @apply bg-white text-slate-900;
+}
+
+[data-theme="light"] .bg-gradient-to-br\.from-slate-900 {
+  background: linear-gradient(135deg, #f8fafc, #eef2ff, #f8fafc);
+}
+
+/* ─── Page-level background & text ─── */
+html, body {
+  background-color: var(--theme-bg-primary);
+  color: var(--theme-text-primary);
+}
