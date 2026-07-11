@@ -493,24 +493,24 @@ export default function StudentDashboard() {
           <div className="bg-card border border-theme rounded-xl p-4 text-center">
             <div className="text-2xl mb-1">{streak > 0 ? '🔥' : '❄️'}</div>
             <p className="text-2xl font-bold text-primary">{streak}</p>
-            <p className="text-[10px] text-secondary uppercase tracking-wider">Day Streak</p>
+            <p className="text-[10px] text-secondary font-semibold uppercase tracking-wider">Day Streak</p>
           </div>
           <div className="bg-card border border-theme rounded-xl p-4 text-center">
             <div className="text-2xl mb-1">📝</div>
             <p className="text-2xl font-bold text-primary">{todayCount}</p>
-            <p className="text-[10px] text-secondary uppercase tracking-wider">Today</p>
+            <p className="text-[10px] text-secondary font-semibold uppercase tracking-wider">Questions Today</p>
           </div>
           <div className="bg-card border border-theme rounded-xl p-4 text-center">
             <div className="text-2xl mb-1">📊</div>
             <p className="text-2xl font-bold text-primary">
               {totalPracticeQ > 0 ? `${practiceAccuracy}%` : '—'}
             </p>
-            <p className="text-[10px] text-secondary uppercase tracking-wider">Accuracy</p>
+            <p className="text-[10px] text-secondary font-semibold uppercase tracking-wider">Accuracy</p>
           </div>
           <div className="bg-card border border-theme rounded-xl p-4 text-center">
             <div className="text-2xl mb-1">📚</div>
             <p className="text-2xl font-bold text-primary">{totalPracticeQ}</p>
-            <p className="text-[10px] text-secondary uppercase tracking-wider">Total Q</p>
+            <p className="text-[10px] text-secondary font-semibold uppercase tracking-wider">Total Q</p>
           </div>
         </div>
         </SectionCard>
