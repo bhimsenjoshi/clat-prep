@@ -5,12 +5,15 @@ import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
+import ChangePassword from '@/components/ChangePassword';
+
 export default function AdminDashboard() {
   const [stats, setStats] = useState({ tests: 0, users: 0, attempts: 0 });
   const [loading, setLoading] = useState(true);
   const [recentStudents, setRecentStudents] = useState<any[]>([]);
   const [generating, setGenerating] = useState(false);
   const [genResult, setGenResult] = useState<{ ok: boolean; msg: string } | null>(null);
+  const [showChangePassword, setShowChangePassword] = useState(false);
   const router = useRouter();
   const supabase = createClient();
 
@@ -78,6 +81,10 @@ export default function AdminDashboard() {
           <div className="flex gap-3">
             <Link href="/admin/tests" className="border border-theme px-4 py-2 rounded-lg text-sm bg-card-hover text-primary hover:bg-elevated transition">Manage Tests</Link>
             <Link href="/admin/students" className="border border-theme px-4 py-2 rounded-lg text-sm bg-card-hover text-primary hover:bg-elevated transition">Manage Users & Analytics</Link>
+            <button onClick={() => setShowChangePassword(!showChangePassword)}
+              className="border border-theme px-4 py-2 rounded-lg text-sm bg-card-hover text-primary hover:bg-elevated transition">
+              🔑 Change Password
+            </button>
             <button onClick={() => supabase.auth.signOut().then(() => router.push('/'))} className="border border-theme px-4 py-2 rounded-lg text-sm bg-card-hover text-danger hover:bg-tint-danger transition">Sign Out</button>
           </div>
         </div>
@@ -146,6 +153,13 @@ export default function AdminDashboard() {
             </Link>
           </div>
         </div>
+
+        {/* ─── Change Password ─── */}
+        {showChangePassword && (
+          <div className="mt-6">
+            <ChangePassword compact onSuccess={() => setShowChangePassword(false)} />
+          </div>
+        )}
       </div>
     </div>
   );

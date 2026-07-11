@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import type { ExtendedProfile } from '@/types';
+import ChangePassword from '@/components/ChangePassword';
 
 const PLAN_BADGES: Record<string, { label: string; color: string; icon: string; features: string[] }> = {
   free: {
@@ -344,6 +345,9 @@ export default function ProfilePage() {
             )}
           </div>
         </div>
+
+        {/* ─── Change Password ─── */}
+        <ChangePassword />
 
         {/* ─── Privacy Note ─── */}
         <div className="text-center text-xs text-muted py-4">
