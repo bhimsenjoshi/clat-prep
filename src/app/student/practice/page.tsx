@@ -56,7 +56,10 @@ export default function PracticeQuiz() {
   const [showReview, setShowReview] = useState(false);
   const [reviewBackIdx, setReviewBackIdx] = useState<number | null>(null);
   const [trackedResponses, setTrackedResponses] = useState<TrackedResponse[]>([]);
+  const [timerPaused, setTimerPaused] = useState(false);
+  const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const timerRef = useRef<number>(Date.now());
+  const pauseAccumulatedRef = useRef<number>(0);
 
   // Auth check + auto-start from dashboard card click
   useEffect(() => {
@@ -72,6 +75,31 @@ export default function PracticeQuiz() {
       }
     });
   }, [router]);
+
+  // ── Live timer tick ──
+  useEffect(() => {
+    if (!started || completed || result) return;
+    const interval = setInterval(() => {
+      if (!timerPaused) {
+        setElapsedSeconds(Math.floor((Date.now() - timerRef.current) / 1000));
+      }
+    }, 250);
+    return () => clearInterval(interval);
+  }, [started, completed, result, timerPaused]);
+
+  const togglePause = () => {
+    if (timerPaused) {
+      // Resume: shift timerRef forward by the pause duration
+      const pauseDuration = Date.now() - pauseAccumulatedRef.current;
+      timerRef.current = timerRef.current + pauseDuration;
+      pauseAccumulatedRef.current = 0;
+      setTimerPaused(false);
+    } else {
+      // Pause: record when we paused
+      pauseAccumulatedRef.current = Date.now();
+      setTimerPaused(true);
+    }
+  };
 
   const startQuiz = async (section: string) => {
     setLoading(true);
@@ -172,6 +200,9 @@ export default function PracticeQuiz() {
   const nextQuestion = () => {
     setResult(null);
     setSelectedOption(null);
+    setTimerPaused(false);
+    pauseAccumulatedRef.current = 0;
+    setElapsedSeconds(0);
     timerRef.current = Date.now();
   };
 
@@ -198,6 +229,9 @@ export default function PracticeQuiz() {
     setShowReview(false);
     setReviewBackIdx(null);
     setTrackedResponses([]);
+    setTimerPaused(false);
+    pauseAccumulatedRef.current = 0;
+    setElapsedSeconds(0);
   };
 
   const goBackReview = () => {
@@ -439,9 +473,28 @@ export default function PracticeQuiz() {
           <button onClick={startNew} className="text-sm text-muted hover:text-primary transition flex items-center gap-1.5">
             <span className="text-base">←</span>
           </button>
-          <span className="text-xs text-secondary">
-            {typeof dailyRemaining === 'number' ? `${dailyRemaining} free today` : '♾️ Unlimited'}
-          </span>
+          <div className="flex items-center gap-3">
+            {/* Timer */}
+            <span className={`text-xs font-mono font-semibold tabular-nums flex items-center gap-1 ${
+              timerPaused ? 'text-amber-400' : 'text-accent'
+            }`}>
+              <span>{timerPaused ? '⏸️' : '⏱️'}</span>
+              {String(Math.floor(elapsedSeconds / 60)).padStart(2, '0')}:{String(elapsedSeconds % 60).padStart(2, '0')}
+            </span>
+            <button
+              onClick={togglePause}
+              className={`text-[10px] font-medium px-2 py-1 rounded-lg transition ${
+                timerPaused
+                  ? 'bg-tint-green text-stat-emerald hover:bg-emerald-900/40'
+                  : 'bg-tint-amber text-stat-amber hover:bg-amber-900/40'
+              }`}
+            >
+              {timerPaused ? '▶ Resume' : '⏸ Pause'}
+            </button>
+            <span className="text-xs text-secondary">
+              {typeof dailyRemaining === 'number' ? `${dailyRemaining} free today` : '♾️ Unlimited'}
+            </span>
+          </div>
         </div>
       </div>
 
@@ -469,6 +522,12 @@ export default function PracticeQuiz() {
                     {question.difficulty}
                   </span>
                 )}
+              </span>
+              <span className={`text-xs font-mono font-semibold tabular-nums flex items-center gap-1 ${
+                timerPaused ? 'text-amber-400' : 'text-accent'
+              }`}>
+                <span>{timerPaused ? '⏸️' : '⏱️'}</span>
+                {String(Math.floor(elapsedSeconds / 60)).padStart(2, '0')}:{String(elapsedSeconds % 60).padStart(2, '0')}
               </span>
             </div>
             <p className="font-medium text-base mb-5 leading-relaxed text-primary">{question.question_text}</p>
