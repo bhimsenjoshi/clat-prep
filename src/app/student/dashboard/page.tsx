@@ -382,28 +382,28 @@ export default function StudentDashboard() {
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-2">
             <Link href="/student/practice"
-              className="px-4 py-2 rounded-lg text-sm font-medium bg-gradient-to-r from-amber-500 to-orange-600 text-white hover:from-amber-600 hover:to-orange-700 transition shadow-sm">
+              className="px-4 py-2 rounded-lg text-sm font-medium bg-accent text-white hover:bg-accent-hover active:scale-[0.97] transition-all duration-150 shadow-theme-sm">
               🎯 Practice
             </Link>
             <Link href="/student/analytics"
-              className="px-3 py-2 rounded-lg text-sm font-medium text-secondary hover:bg-card-hover transition">
+              className="px-3 py-2 rounded-lg text-sm font-medium text-secondary hover:bg-card-hover hover:text-primary active:scale-[0.97] transition-all duration-150">
               📊 Analytics
             </Link>
             <Link href="/student/leaderboard"
-              className="px-3 py-2 rounded-lg text-sm font-medium text-secondary hover:bg-card-hover transition">
+              className="px-3 py-2 rounded-lg text-sm font-medium text-secondary hover:bg-card-hover hover:text-primary active:scale-[0.97] transition-all duration-150">
               🏆 Leaderboard
             </Link>
             <Link href="/student/tests"
-              className="px-3 py-2 rounded-lg text-sm font-medium text-accent hover:bg-card-hover transition">
+              className="px-3 py-2 rounded-lg text-sm font-medium text-accent hover:bg-card-hover active:scale-[0.97] transition-all duration-150">
               📝 Tests
             </Link>
             <Link href="/student/profile"
-              className="px-3 py-2 rounded-lg text-sm font-medium text-secondary hover:bg-card-hover transition">
+              className="px-3 py-2 rounded-lg text-sm font-medium text-secondary hover:bg-card-hover hover:text-primary active:scale-[0.97] transition-all duration-150">
               👤 Profile
             </Link>
             <ThemeToggle />
             <button onClick={() => supabase.auth.signOut().then(() => router.push('/'))}
-              className="px-3 py-2 rounded-lg text-sm font-medium text-muted hover:text-red-400 hover:bg-tint-red transition">
+              className="px-3 py-2 rounded-lg text-sm font-medium text-muted hover:text-red-400 hover:bg-tint-red active:scale-[0.97] transition-all duration-150">
               Sign Out
             </button>
           </nav>
@@ -411,7 +411,7 @@ export default function StudentDashboard() {
           {/* Mobile Hamburger */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2 rounded-lg hover:bg-card-hover transition"
+            className="md:hidden p-2 rounded-lg hover:bg-card-hover active:scale-[0.95] transition-all duration-150"
             aria-label="Menu"
           >
             <svg className="w-5 h-5 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -449,7 +449,7 @@ export default function StudentDashboard() {
             </Link>
             <div className="py-1"><ThemeToggle /></div>
             <button onClick={() => { setMobileMenuOpen(false); supabase.auth.signOut().then(() => router.push('/')); }}
-              className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-red-400 hover:bg-tint-red w-full text-left">
+              className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-red-400 hover:bg-tint-red hover:scale-[1.02] w-full text-left transition-all duration-150">
               🚪 Sign Out
             </button>
           </div>
@@ -759,7 +759,7 @@ export default function StudentDashboard() {
                 </div>
                 <button
                   onClick={() => setQuizzingArticle(null)}
-                  className="shrink-0 text-muted hover:text-secondary transition p-1 ml-3"
+                  className="shrink-0 text-muted hover:text-secondary active:scale-[0.95] transition-all duration-150 p-1 ml-3"
                 >
                   ✕
                 </button>

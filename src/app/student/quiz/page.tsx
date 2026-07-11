@@ -89,7 +89,7 @@ export default function QuizHub() {
           <div className="flex items-center gap-3">
             <span className="text-2xl">🎯</span>
             <div>
-              <h1 className="text-xl font-bold text-white">Practice Quizzes</h1>
+              <h1 className="text-xl font-bold text-primary">Practice Quizzes</h1>
               <p className="text-xs text-gray-400">
                 {userName ? `Ready, ${userName}?` : 'Pick a section to start'}
               </p>
@@ -116,7 +116,7 @@ export default function QuizHub() {
       <div className="max-w-4xl mx-auto px-4 py-8">
         {/* Prompt */}
         <div className="text-center mb-10">
-          <h2 className="text-2xl font-bold text-white mb-2">Choose Your Section</h2>
+          <h2 className="text-2xl font-bold text-primary mb-2">Choose Your Section</h2>
           <p className="text-gray-400 max-w-lg mx-auto">
             Pick a CLAT section and get non-stop practice questions with instant feedback and explanations.
           </p>
@@ -144,7 +144,7 @@ export default function QuizHub() {
 
               <div className="relative z-10">
                 <span className="text-3xl mb-3 block">{section.icon}</span>
-                <h3 className="text-lg font-bold text-white mb-1">{section.name}</h3>
+                <h3 className="text-lg font-bold text-primary mb-1">{section.name}</h3>
                 <p className="text-sm text-gray-400 mb-4">{section.desc}</p>
 
                 <div className="flex items-center gap-2 text-xs font-medium">

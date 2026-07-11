@@ -237,7 +237,7 @@ export default function QuizPage() {
       <div className="min-h-screen flex items-center justify-center bg-page">
         <div className="text-center">
           <p className="text-5xl mb-4">❌</p>
-          <h2 className="text-xl font-bold text-white mb-2">Section Not Found</h2>
+          <h2 className="text-xl font-bold text-primary mb-2">Section Not Found</h2>
           <Link href="/student/quiz" className="text-indigo-400 hover:text-indigo-300">
             ← Back to sections
           </Link>
@@ -261,7 +261,7 @@ export default function QuizPage() {
       <div className="min-h-screen flex items-center justify-center bg-page">
         <div className="text-center max-w-md">
           <p className="text-5xl mb-4">😅</p>
-          <h2 className="text-xl font-bold text-white mb-2">Daily Limit Reached</h2>
+          <h2 className="text-xl font-bold text-primary mb-2">Daily Limit Reached</h2>
           <p className="text-gray-400 mb-6">
             You&apos;ve used all 10 free questions today. Come back tomorrow or upgrade to premium for unlimited practice!
           </p>
@@ -280,7 +280,7 @@ export default function QuizPage() {
       <div className="min-h-screen flex items-center justify-center bg-page">
         <div className="text-center max-w-md">
           <p className="text-5xl mb-4">🛠️</p>
-          <h2 className="text-xl font-bold text-white mb-2">Questions Coming Soon</h2>
+          <h2 className="text-xl font-bold text-primary mb-2">Questions Coming Soon</h2>
           <p className="text-gray-400 mb-6">
             We&apos;re generating practice questions for this section. Check back shortly!
           </p>
@@ -300,7 +300,7 @@ export default function QuizPage() {
       <div className="min-h-screen flex items-center justify-center bg-page">
         <div className="text-center max-w-md">
           <p className="text-5xl mb-4">🎉</p>
-          <h2 className="text-2xl font-bold text-white mb-2">Session Complete!</h2>
+          <h2 className="text-2xl font-bold text-primary mb-2">Session Complete!</h2>
           <div className="bg-gray-800/50 rounded-xl p-6 mb-6 border border-gray-700/50">
             <div className="grid grid-cols-2 gap-4">
               <div>
@@ -337,7 +337,7 @@ export default function QuizPage() {
         <div className="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span>{SECTION_ICONS[sectionName]}</span>
-            <span className="text-sm font-medium text-white">{sectionName}</span>
+            <span className="text-sm font-medium text-primary">{sectionName}</span>
           </div>
           <div className="flex items-center gap-4 text-xs">
             <span className="text-gray-400">
@@ -391,7 +391,7 @@ export default function QuizPage() {
               )}
 
               {/* Question text */}
-              <p className="text-lg font-medium text-white leading-relaxed mb-6">{question.question_text}</p>
+              <p className="text-lg font-medium text-primary leading-relaxed mb-6">{question.question_text}</p>
 
               {/* Options */}
               <div className="space-y-3">

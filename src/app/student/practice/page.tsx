@@ -275,7 +275,7 @@ export default function PracticeQuiz() {
         <div className="min-h-screen bg-page text-primary">
           <div className="border-b border-gray-800 bg-gray-900/50 backdrop-blur-sm sticky top-0 z-10">
             <div className="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
-              <button onClick={() => setShowReview(false)} className="text-gray-400 hover:text-white transition text-sm">
+              <button onClick={() => setShowReview(false)} className="text-muted hover:text-primary transition text-sm">
                 ← Back to Results
               </button>
               <span className="text-xs text-gray-500">
@@ -421,7 +421,7 @@ export default function PracticeQuiz() {
       {/* Top bar */}
       <div className="border-b border-gray-800 bg-gray-900/50 backdrop-blur-sm sticky top-0 z-10">
         <div className="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
-          <button onClick={startNew} className="text-gray-400 hover:text-white transition text-sm">
+          <button onClick={startNew} className="text-muted hover:text-primary transition text-sm">
             ← {SECTIONS.find(s => s.id === selectedSection)?.icon} {selectedSection}
           </button>
           <span className="text-xs text-gray-500">
