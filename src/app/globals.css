@@ -139,9 +139,8 @@ html {
 }
 
 body {
-  background-color: var(--bg-page);
   color: var(--text-primary);
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition: color 0.2s ease;
 }
 
 /* ─── Semantic Utility Classes ─── */
