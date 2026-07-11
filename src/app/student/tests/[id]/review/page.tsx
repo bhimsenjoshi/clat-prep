@@ -103,7 +103,7 @@ export default function ReviewPage({ params }: ReviewPageProps) {
   if (loading) return (
     <div className="min-h-screen flex items-center justify-center bg-page">
       <div className="animate-pulse flex flex-col items-center gap-3">
-        <div className="w-8 h-8 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-4 border-accent border-t-transparent rounded-full animate-spin" />
         <p className="text-secondary text-sm">Loading review...</p>
       </div>
     </div>
@@ -135,7 +135,7 @@ export default function ReviewPage({ params }: ReviewPageProps) {
           <div className="flex items-center gap-3">
             <div className="text-right">
               <p className={`text-xl font-bold ${
-                score >= 70 ? 'text-green-600' : score >= 40 ? 'text-amber-600' : 'text-red-600'
+                score >= 70 ? 'text-success' : score >= 40 ? 'text-warning' : 'text-danger'
               }`}>{score}%</p>
               <p className="text-[10px] text-muted">
                 {responses.filter((r) => r.is_correct).length}/{responses.length} correct
@@ -156,8 +156,8 @@ export default function ReviewPage({ params }: ReviewPageProps) {
             onClick={() => setActiveSection(null)}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition ${
               !activeSection
-                ? 'bg-indigo-100 text-indigo-800 border border-indigo-200'
-                : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'
+                ? 'bg-accent-subtle text-accent border border-accent/50'
+                : 'bg-card border border-theme text-secondary hover:bg-card-hover'
             }`}
           >
             📋 All ({responses.filter((r) => r.is_correct).length}/{responses.length})
@@ -171,8 +171,8 @@ export default function ReviewPage({ params }: ReviewPageProps) {
                 onClick={() => setActiveSection(s.id)}
                 className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition ${
                   activeSection === s.id
-                    ? 'bg-indigo-100 text-indigo-800 border border-indigo-200'
-                    : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'
+                    ? 'bg-accent-subtle text-accent border border-accent/50'
+                    : 'bg-card border border-theme text-secondary hover:bg-card-hover'
                 }`}
               >
                 {s.name} ({correct}/{secResp.length})
@@ -185,9 +185,9 @@ export default function ReviewPage({ params }: ReviewPageProps) {
         <div className="bg-card border border-theme rounded-xl shadow-theme-sm p-5 mb-6">
           <div className="flex items-center gap-4">
             <div className={`w-16 h-16 rounded-2xl flex items-center justify-center text-2xl font-bold ${
-              score >= 70 ? 'bg-green-100 text-green-700' :
-              score >= 40 ? 'bg-amber-100 text-amber-700' :
-              'bg-red-100 text-red-700'
+              score >= 70 ? 'bg-success/10 text-success' :
+              score >= 40 ? 'bg-warning/10 text-warning' :
+              'bg-danger/10 text-danger'
             }`}>
               {score}%
             </div>
@@ -197,7 +197,7 @@ export default function ReviewPage({ params }: ReviewPageProps) {
                 <span>✅ {responses.filter((r) => r.is_correct).length} correct</span>
                 <span>❌ {responses.filter((r) => r.is_correct === false).length} incorrect</span>
                 <span>⬜ {responses.filter((r) => r.is_correct === null).length} unanswered</span>
-                <span className="text-indigo-500">
+                <span className="text-accent">
                   ⏱ {(() => {
                     const total = responses.reduce((s, r) => s + (r.time_taken_seconds ?? 0), 0);
                     return formatTime(total);
@@ -217,26 +217,26 @@ export default function ReviewPage({ params }: ReviewPageProps) {
 
             return (
               <div key={r.id} className={`bg-card border border-theme rounded-xl shadow-theme-sm overflow-hidden ${
-                isCorrect ? 'border-green-200' :
-                isWrong ? 'border-red-200' :
-                'border-amber-200'
+                isCorrect ? 'border-success/50' :
+                isWrong ? 'border-danger/50' :
+                'border-warning/50'
               }`}>
                 {/* Status bar */}
                 <div className={`px-5 py-2 flex items-center justify-between ${
-                  isCorrect ? 'bg-green-50' :
-                  isWrong ? 'bg-red-50' :
-                  'bg-amber-50'
+                  isCorrect ? 'bg-success/10' :
+                  isWrong ? 'bg-danger/10' :
+                  'bg-warning/10'
                 }`}>
                   <div className="flex items-center gap-2">
-                    <span className="text-sm">
+                    <span className="text-sm text-primary">
                       {isCorrect ? '✅' : isWrong ? '❌' : '⬜'}
                     </span>
                     <span className="text-xs font-medium text-secondary">Q{idx + 1}</span>
                     {r.difficulty && (
                       <span className={`text-[10px] px-1.5 py-0.5 rounded ${
-                        r.difficulty === 'hard' ? 'bg-red-100 text-red-600' :
-                        r.difficulty === 'easy' ? 'bg-green-100 text-green-600' :
-                        'bg-blue-100 text-blue-600'
+                        r.difficulty === 'hard' ? 'bg-danger/10 text-danger' :
+                        r.difficulty === 'easy' ? 'bg-success/10 text-success' :
+                        'bg-info/10 text-info'
                       }`}>{r.difficulty}</span>
                     )}
                   </div>
@@ -250,7 +250,7 @@ export default function ReviewPage({ params }: ReviewPageProps) {
 
                 {/* Passage */}
                 {r.passage && (
-                  <div className="px-5 py-3 bg-tint-indigo border-b border-theme">
+                  <div className="px-5 py-3 bg-card-hover border-b border-theme">
                     <p className="text-[10px] font-medium text-accent uppercase tracking-wider mb-1">Passage</p>
                     <p className="text-xs text-secondary leading-relaxed">{r.passage}</p>
                   </div>
@@ -268,23 +268,23 @@ export default function ReviewPage({ params }: ReviewPageProps) {
                           key={key}
                           className={`flex items-center gap-2 border rounded-lg px-3 py-2 text-sm ${
                             isCorrectOpt
-                              ? 'border-green-400 bg-green-50 ring-1 ring-green-300'
+                              ? 'border-success bg-success/10 ring-1 ring-success/50'
                               : isSelected && !isCorrectOpt
-                              ? 'border-red-400 bg-red-50 ring-1 ring-red-300'
-                              : 'border-gray-200'
+                              ? 'border-danger bg-danger/10 ring-1 ring-danger/50'
+                              : 'border-theme'
                           }`}
                         >
                           <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold ${
-                            isCorrectOpt ? 'bg-green-500 text-white' :
-                            isSelected ? 'bg-red-500 text-white' :
+                            isCorrectOpt ? 'bg-success text-white' :
+                            isSelected ? 'bg-danger text-white' :
                             'bg-elevated text-secondary'
                           }`}>
                             {isCorrectOpt ? '✓' : isSelected ? '✗' : key}
                           </span>
                           <span className={`flex-1 ${
-                            isCorrectOpt ? 'text-green-800 font-medium' :
-                            isSelected ? 'text-red-800' :
-                            'text-gray-700'
+                            isCorrectOpt ? 'text-success font-medium' :
+                            isSelected ? 'text-danger' :
+                            'text-primary'
                           }`}>
                             {value}
                           </span>
@@ -295,7 +295,7 @@ export default function ReviewPage({ params }: ReviewPageProps) {
 
                   {/* Explanation */}
                   {r.explanation && (
-                    <div className="mt-3 p-3 bg-tint-blue border border-theme rounded-lg">
+                    <div className="mt-3 p-3 bg-info/20 border border-info/50 rounded-lg">
                       <p className="text-[10px] font-medium text-info uppercase tracking-wider mb-1">Explanation</p>
                       <p className="text-xs text-secondary leading-relaxed">{r.explanation}</p>
                     </div>
@@ -308,11 +308,11 @@ export default function ReviewPage({ params }: ReviewPageProps) {
 
         {/* Bottom nav */}
         <div className="flex justify-between items-center mt-8 pb-8">
-          <Link href="/student/dashboard" className="text-sm text-accent hover:underline">
+          <Link href="/student/dashboard" className="text-accent hover:underline">
             ← Back to Dashboard
           </Link>
           <Link href={`/student/tests/${searchParams.get('attempt')?.split('?')[0] ?? ''}`}
-            className="px-5 py-2.5 rounded-xl text-sm font-medium bg-gradient-to-r from-green-600 to-emerald-600 text-white hover:from-green-700 hover:to-emerald-700 transition shadow-sm">
+            className="px-5 py-2.5 rounded-xl text-sm font-medium bg-gradient-accent text-white hover:bg-accent-hover transition shadow-sm">
             🔄 Retake This Test
           </Link>
         </div>
