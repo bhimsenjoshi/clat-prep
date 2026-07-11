@@ -263,7 +263,7 @@ export default function TestTakingPage({ params }: TestPageProps) {
   if (loading) return (
     <div className="min-h-screen flex items-center justify-center bg-page">
       <div className="animate-pulse flex flex-col items-center gap-3">
-        <div className="w-8 h-8 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-4 border-accent border-t-transparent rounded-full animate-spin" />
         <p className="text-secondary text-sm">Loading test...</p>
       </div>
     </div>
@@ -273,20 +273,20 @@ export default function TestTakingPage({ params }: TestPageProps) {
   if (submitted) {
     return (
       <div className="max-w-xl mx-auto px-4 py-8">
-        <div className="bg-green-50 border border-green-200 rounded-2xl p-8 mb-6 text-center">
+        <div className="bg-success/10 border border-success/50 rounded-2xl p-8 mb-6 text-center">
           <p className="text-5xl mb-4">🎉</p>
-          <h2 className="text-2xl font-bold mb-2">Test Submitted!</h2>
-          <p className="text-xs text-muted mb-2">Attempt #{attemptNumber}</p>
-          <p className="text-5xl font-bold text-indigo-600 mt-4 mb-1">{resultTotal}%</p>
+          <h2 className="text-2xl font-bold text-primary mb-2">Test Submitted!</h2>
+          <p className="text-xs text-secondary mb-2">Attempt #{attemptNumber}</p>
+          <p className="text-5xl font-bold text-accent mt-4 mb-1">{resultTotal}%</p>
           <p className="text-sm text-secondary">Overall Score</p>
         </div>
 
         <div className="bg-card border border-theme rounded-xl p-6 mb-6 shadow-theme-sm">
-          <h3 className="font-semibold mb-4">Section-wise Breakdown</h3>
+          <h3 className="font-semibold text-primary mb-4">Section-wise Breakdown</h3>
           <div className="space-y-3">
             {resultScores.map((rs) => (
               <div key={rs.section} className="flex items-center justify-between">
-                <span className="text-sm font-medium">{rs.section}</span>
+                <span className="text-sm font-medium text-primary">{rs.section}</span>
                 <span className="text-sm font-bold text-accent">
                   {rs.score}/{rs.total}
                 </span>
@@ -298,7 +298,7 @@ export default function TestTakingPage({ params }: TestPageProps) {
         <div className="flex justify-center gap-4">
           <Link
             href={`/student/tests/${test.id}/review?attempt=${attemptId}`}
-            className="bg-indigo-600 text-white px-6 py-2.5 rounded-lg font-medium hover:bg-indigo-700 transition"
+            className="bg-accent text-white px-6 py-2.5 rounded-lg font-medium hover:bg-accent-hover transition"
           >
             📝 Review Answers
           </Link>
@@ -334,7 +334,7 @@ export default function TestTakingPage({ params }: TestPageProps) {
               </svg>
             </Link>
             <div>
-              <h1 className="text-sm font-bold">{test.title}</h1>
+              <h1 className="text-sm font-bold text-primary">{test.title}</h1>
               <p className="text-[10px] text-secondary">Attempt #{attemptNumber}</p>
             </div>
           </div>
@@ -342,13 +342,13 @@ export default function TestTakingPage({ params }: TestPageProps) {
             <span className="text-xs text-secondary">
               <span className="font-semibold">{questionsAnswered}</span>/{totalQuestions} answered
             </span>
-            <span className={`font-mono text-lg font-bold ${timeLeft < 300 ? 'text-red-600' : ''}`}>
+            <span className={`font-mono text-lg font-bold ${timeLeft < 300 ? 'text-danger' : ''}`}>
               {formatTime(timeLeft)}
             </span>
             <button
               onClick={handleSubmit}
               disabled={submitting}
-              className="bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-700 disabled:opacity-50 transition"
+              className="bg-success text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-success-hover disabled:opacity-50 transition"
             >
               {submitting ? 'Submitting...' : 'Submit Test'}
             </button>
@@ -357,7 +357,7 @@ export default function TestTakingPage({ params }: TestPageProps) {
       </div>
 
       <div className="max-w-5xl mx-auto px-4 py-6">
-        <div className="grid grid-cols-[1fr_220px] gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-[1fr_220px] gap-6">
           {/* Main content */}
           <div>
             {/* Section indicator */}
@@ -365,8 +365,8 @@ export default function TestTakingPage({ params }: TestPageProps) {
               {sections.map((s, i) => (
                 <span key={s.id} className={`text-xs px-2 py-0.5 rounded-full ${
                   i === currentSectionIdx
-                    ? 'bg-indigo-100 text-indigo-800 font-medium'
-                    : 'bg-gray-100 text-gray-500'
+                    ? 'bg-accent-subtle text-accent font-medium'
+                    : 'bg-card-hover text-secondary'
                 }`}>
                   {s.name}
                 </span>
@@ -391,16 +391,16 @@ export default function TestTakingPage({ params }: TestPageProps) {
                 <span className="text-[10px] text-muted">
                   {currentQuestion?.difficulty && (
                     <span className={`px-1.5 py-0.5 rounded ${
-                      currentQuestion.difficulty === 'hard' ? 'bg-red-50 text-red-500' :
-                      currentQuestion.difficulty === 'easy' ? 'bg-green-50 text-green-600' :
-                      'bg-blue-50 text-blue-600'
+                      currentQuestion.difficulty === 'hard' ? 'bg-danger/10 text-danger' :
+                      currentQuestion.difficulty === 'easy' ? 'bg-success/10 text-success' :
+                      'bg-info/10 text-info'
                     }`}>
                       {currentQuestion.difficulty}
                     </span>
                   )}
                 </span>
               </div>
-              <p className="font-medium text-base mb-5">{currentQuestion?.question_text}</p>
+              <p className="font-medium text-base text-primary mb-5">{currentQuestion?.question_text}</p>
               <div className="space-y-2">
                 {currentQuestion &&
                   Object.entries(currentQuestion.options).map(([key, value]) => (
@@ -409,12 +409,12 @@ export default function TestTakingPage({ params }: TestPageProps) {
                       onClick={() => handleAnswer(currentQuestion.id, key)}
                       className={`w-full text-left px-4 py-3 rounded-lg border text-sm transition ${
                         answers[currentQuestion.id] === key
-                          ? 'border-indigo-500 bg-indigo-50 text-indigo-800 font-medium ring-1 ring-indigo-300'
+                          ? 'border-accent bg-accent-subtle text-accent font-medium ring-1 ring-accent/50'
                           : 'border-theme hover:border-theme hover:bg-elevated'
                       }`}
                     >
-                      <span className="font-semibold mr-2">{key}.</span>
-                      {value}
+                      <span className="font-semibold mr-2 text-secondary">{key}.</span>
+                      <span className="text-primary">{value}</span>
                     </button>
                   ))}
               </div>
@@ -445,7 +445,7 @@ export default function TestTakingPage({ params }: TestPageProps) {
                   else if (currentSectionIdx < sections.length - 1) navigateTo(currentSectionIdx + 1, 0);
                 }}
                 disabled={currentSectionIdx === sections.length - 1 && currentQIdx === sectionQuestions.length - 1}
-                className="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm disabled:opacity-30 hover:bg-indigo-700 transition"
+                className="bg-accent text-white px-4 py-2 rounded-lg text-sm disabled:opacity-30 hover:bg-accent-hover transition"
               >
                 Next →
               </button>
@@ -453,7 +453,7 @@ export default function TestTakingPage({ params }: TestPageProps) {
           </div>
 
           {/* Sidebar */}
-          <div className="space-y-4">
+          <div className="md:order-last space-y-4">
             {/* Section nav */}
             <div className="bg-card border border-theme rounded-xl p-4 shadow-theme-sm">
               <p className="text-xs font-semibold text-secondary uppercase tracking-wide mb-2">Sections</p>
@@ -467,11 +467,11 @@ export default function TestTakingPage({ params }: TestPageProps) {
                       onClick={() => navigateTo(i, 0)}
                       className={`w-full text-left px-3 py-2 rounded-lg text-xs transition ${
                         i === currentSectionIdx
-                          ? 'bg-indigo-100 text-indigo-800 font-medium'
+                          ? 'bg-accent-subtle text-accent font-medium'
                           : 'hover:bg-elevated'
                       }`}
                     >
-                      <span>{s.name}</span>
+                      <span className="text-primary">{s.name}</span>
                       <span className="float-right text-muted">{answered}/{sectionQ.length}</span>
                     </button>
                   );
@@ -491,10 +491,10 @@ export default function TestTakingPage({ params }: TestPageProps) {
                     onClick={() => navigateTo(currentSectionIdx, i)}
                     className={`w-8 h-8 rounded text-xs font-medium transition ${
                       i === currentQIdx
-                        ? 'bg-indigo-600 text-white'
+                        ? 'bg-accent text-white'
                         : answers[q.id]
-                        ? 'bg-green-100 text-green-800 border border-green-300'
-                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                        ? 'bg-success/10 text-success border border-success/50'
+                        : 'bg-card-hover text-secondary hover:bg-elevated'
                     }`}
                   >
                     {i + 1}
