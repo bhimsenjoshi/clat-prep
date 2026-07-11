@@ -64,19 +64,52 @@ export async function POST(req: NextRequest) {
 
     const studentName = targetProfile?.full_name || 'there';
 
-    // 3. Delete user from auth.users (cascades to profiles and responses depending on foreign keys, but let's delete them cleanly)
-    // Delete profile first to satisfy any strict foreign keys
+    // 3. Delete all foreign key references first, then profile, then auth user
+    // Order matters to avoid FK constraint violations
+
+    // 3a. Delete any tests created by this user (tests_created_by_fkey)
+    const { data: userTests } = await adminClient
+      .from('tests')
+      .select('id')
+      .eq('created_by', student_id);
+    if (userTests && userTests.length > 0) {
+      const testIds = userTests.map((t: any) => t.id);
+      console.log(`Deleting ${testIds.length} tests created by user`);
+      const { error: delTests } = await adminClient
+        .from('tests')
+        .delete()
+        .in('id', testIds);
+      if (delTests) console.error('Error deleting user tests:', delTests);
+    }
+
+    // 3b. Delete any upgrade_log entries for this user
     await adminClient
+      .from('upgrade_log')
+      .delete()
+      .eq('user_id', student_id);
+
+    // 3c. Delete user responses/attempts
+    await adminClient
+      .from('attempts')
+      .delete()
+      .eq('student_id', student_id);
+
+    // 3d. Now delete the profile
+    const { error: profileDeleteError } = await adminClient
       .from('profiles')
       .delete()
       .eq('id', student_id);
+    if (profileDeleteError) {
+      console.error('Profile deletion error:', profileDeleteError);
+      return NextResponse.json({ error: 'Failed to delete user profile. Please try again.' }, { status: 500 });
+    }
 
-    // Delete auth user via Admin Auth API
+    // 3e. Delete auth user via Admin Auth API
     const { error: deleteAuthError } = await adminClient.auth.admin.deleteUser(student_id);
 
     if (deleteAuthError) {
       console.error('Auth deletion error:', deleteAuthError);
-      return NextResponse.json({ error: 'Failed to delete user from authentication database' }, { status: 500 });
+      return NextResponse.json({ error: 'Profile deleted but failed to revoke login. Auth error: ' + deleteAuthError.message }, { status: 500 });
     }
 
     // 4. Send account deletion notification email
