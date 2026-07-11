@@ -126,6 +126,7 @@ export default function AdminTestsPage() {
           </button>
         </div>
         {error && <p className="text-danger text-sm mt-3">{error}</p>}
+      </div>
 
       {/* Test list */}
       <div className="bg-card border border-theme rounded-xl shadow-theme-sm">

@@ -82,7 +82,7 @@ function LockedSection({ children, title, icon, isPremium }: {
           </p>
           <Link
             href="/student/profile"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold bg-gradient-to-r from-amber-500 to-orange-600 text-white hover:from-amber-600 hover:to-orange-700 transition shadow-theme-md">
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold bg-gradient-to-r from-amber-500 to-orange-600 text-white hover:from-amber-600 hover:to-orange-700 transition shadow-theme-md"
           >
             ⭐ Upgrade to Premium
           </Link>
