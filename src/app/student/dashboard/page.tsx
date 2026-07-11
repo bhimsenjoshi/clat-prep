@@ -461,7 +461,7 @@ export default function StudentDashboard() {
         {/* ════════════════════════════════════════════ */}
         {/* #1 — CLAT 2026 COUNTDOWN                     */}
         {/* ════════════════════════════════════════════ */}
-        <div className="bg-gradient-to-r from-indigo-900/60 via-purple-900/50 to-indigo-900/60 border border-indigo-700/40 rounded-2xl p-6 md:p-8 text-center shadow-lg shadow-theme-sm">
+        <div className="bg-elevated border border-theme rounded-2xl p-6 md:p-8 text-center shadow-lg shadow-theme-sm">
           <div className="flex items-center justify-center gap-2 mb-1">
             <span className="text-2xl">⏳</span>
             <span className="text-xs font-semibold text-accent uppercase tracking-widest">CLAT 2026</span>

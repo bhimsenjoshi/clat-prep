@@ -41,9 +41,9 @@ export default function SectionCard({
   };
 
   const bgMap = {
-    default: 'bg-card',
+    default: 'bg-elevated',
     accent: 'bg-gradient-to-r from-indigo-900/60 via-purple-900/50 to-indigo-900/60',
-    plain: 'bg-card/80',
+    plain: 'bg-elevated/80',
   };
 
   const handleToggle = () => {
