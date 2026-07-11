@@ -200,7 +200,7 @@ export default function PracticeQuiz() {
 
   if (!authCheckDone) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-950">
+      <div className="min-h-screen flex items-center justify-center bg-page">
         <div className="animate-spin w-8 h-8 border-2 border-indigo-500 border-t-transparent rounded-full" />
       </div>
     );
@@ -209,7 +209,7 @@ export default function PracticeQuiz() {
   // ── Section Selector ──
   if (!started) {
     return (
-      <div className="min-h-screen bg-gray-950 text-white">
+      <div className="min-h-screen bg-page text-primary">
         <div className="max-w-2xl mx-auto px-4 py-12">
           <h1 className="text-2xl font-bold mb-2">📝 Practice Quiz</h1>
           <p className="text-gray-400 text-sm mb-8">
@@ -272,7 +272,7 @@ export default function PracticeQuiz() {
 
     if (showReview) {
       return (
-        <div className="min-h-screen bg-gray-950 text-white">
+        <div className="min-h-screen bg-page text-primary">
           <div className="border-b border-gray-800 bg-gray-900/50 backdrop-blur-sm sticky top-0 z-10">
             <div className="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
               <button onClick={() => setShowReview(false)} className="text-gray-400 hover:text-white transition text-sm">
@@ -365,7 +365,7 @@ export default function PracticeQuiz() {
     }
 
     return (
-      <div className="min-h-screen bg-gray-950 text-white flex items-center justify-center">
+      <div className="min-h-screen bg-page text-primary flex items-center justify-center">
         <div className="text-center max-w-md px-4">
           <p className="text-5xl mb-4">{icon}</p>
           <h2 className="text-2xl font-bold mb-2">Session Complete!</h2>
@@ -417,7 +417,7 @@ export default function PracticeQuiz() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white">
+    <div className="min-h-screen bg-page text-primary">
       {/* Top bar */}
       <div className="border-b border-gray-800 bg-gray-900/50 backdrop-blur-sm sticky top-0 z-10">
         <div className="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">

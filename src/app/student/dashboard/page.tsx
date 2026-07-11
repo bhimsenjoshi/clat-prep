@@ -346,14 +346,14 @@ export default function StudentDashboard() {
   const noActivity = attempts.length === 0 && practiceSessions.length === 0;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900">
+    <div className="min-h-screen bg-page">
       {/* ─── Header ─── */}
       <header className="bg-page border-b border-theme backdrop-blur-sm sticky top-0 z-20">
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3 min-w-0">
             <span className="text-xl shrink-0">🎯</span>
             <div className="truncate">
-              <h1 className="text-base font-bold text-white truncate">CLAT Prep</h1>
+              <h1 className="text-base font-bold text-primary truncate">CLAT Prep</h1>
               <p className="text-[11px] text-secondary truncate">
                 {todayStr}
               </p>
@@ -466,7 +466,7 @@ export default function StudentDashboard() {
             <span className="text-2xl">⏳</span>
             <span className="text-xs font-semibold text-accent uppercase tracking-widest">CLAT 2026</span>
           </div>
-          <p className="text-xl md:text-2xl font-bold text-white mb-1">
+          <p className="text-xl md:text-2xl font-bold text-primary mb-1">
             {countdown.days > 0
               ? `${countdown.days} days ${countdown.hours}h ${countdown.minutes}m ${countdown.seconds}s`
               : 'Exam Day! 🚀'}
@@ -492,24 +492,24 @@ export default function StudentDashboard() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           <div className="bg-card border border-theme rounded-xl p-4 text-center">
             <div className="text-2xl mb-1">{streak > 0 ? '🔥' : '❄️'}</div>
-            <p className="text-2xl font-bold text-white">{streak}</p>
+            <p className="text-2xl font-bold text-primary">{streak}</p>
             <p className="text-[10px] text-secondary uppercase tracking-wider">Day Streak</p>
           </div>
           <div className="bg-card border border-theme rounded-xl p-4 text-center">
             <div className="text-2xl mb-1">📝</div>
-            <p className="text-2xl font-bold text-white">{todayCount}</p>
+            <p className="text-2xl font-bold text-primary">{todayCount}</p>
             <p className="text-[10px] text-secondary uppercase tracking-wider">Today</p>
           </div>
           <div className="bg-card border border-theme rounded-xl p-4 text-center">
             <div className="text-2xl mb-1">📊</div>
-            <p className="text-2xl font-bold text-white">
+            <p className="text-2xl font-bold text-primary">
               {totalPracticeQ > 0 ? `${practiceAccuracy}%` : '—'}
             </p>
             <p className="text-[10px] text-secondary uppercase tracking-wider">Accuracy</p>
           </div>
           <div className="bg-card border border-theme rounded-xl p-4 text-center">
             <div className="text-2xl mb-1">📚</div>
-            <p className="text-2xl font-bold text-white">{totalPracticeQ}</p>
+            <p className="text-2xl font-bold text-primary">{totalPracticeQ}</p>
             <p className="text-[10px] text-secondary uppercase tracking-wider">Total Q</p>
           </div>
         </div>
@@ -554,7 +554,7 @@ export default function StudentDashboard() {
             </div>
             <div className="min-w-0 flex-1">
               <p className="text-[10px] text-amber-400/70 font-semibold uppercase tracking-wider">Legal Maxim of the Day</p>
-              <p className="text-sm font-bold text-white mt-0.5 italic">&ldquo;{maxim.maxim}&rdquo;</p>
+              <p className="text-sm font-bold text-primary mt-0.5 italic">&ldquo;{maxim.maxim}&rdquo;</p>
               <p className="text-xs text-secondary mt-1">{maxim.meaning}</p>
             </div>
           </div>
@@ -567,7 +567,7 @@ export default function StudentDashboard() {
           <SectionCard title="Today's Focus" icon="💡" variant="accent" collapsible defaultExpanded={false}>
             <div className="flex items-start md:items-center gap-4 flex-col md:flex-row">
               <div className="flex-1 min-w-0">
-                <p className="text-base font-bold text-white mt-0.5">
+                <p className="text-base font-bold text-primary mt-0.5">
                   Your weakest section is <span className="text-stat-purple">{SECTION_ICONS[weakestSection]} {weakestSection}</span>
                 </p>
                 <p className="text-xs text-secondary mt-0.5">
@@ -667,7 +667,7 @@ export default function StudentDashboard() {
                                 href={item.link}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="text-sm font-medium text-white group-hover:text-indigo-300 transition leading-snug line-clamp-3"
+                                className="text-sm font-medium text-primary group-hover:text-accent transition leading-snug line-clamp-3"
                               >
                                 {item.title}
                               </a>

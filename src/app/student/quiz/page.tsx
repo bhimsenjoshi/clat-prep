@@ -73,7 +73,7 @@ export default function QuizHub() {
   };
 
   if (loading) return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-indigo-950 to-gray-900">
+    <div className="min-h-screen flex items-center justify-center bg-page">
       <div className="animate-pulse flex flex-col items-center gap-3">
         <div className="w-8 h-8 border-4 border-indigo-400 border-t-transparent rounded-full animate-spin" />
         <p className="text-gray-400 text-sm">Loading quiz hub...</p>
@@ -82,7 +82,7 @@ export default function QuizHub() {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-indigo-950 to-gray-900">
+    <div className="min-h-screen bg-page">
       {/* Header */}
       <div className="bg-gray-800/50 border-b border-gray-700/50 backdrop-blur-sm sticky top-0 z-10">
         <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">

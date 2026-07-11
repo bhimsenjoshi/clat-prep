@@ -234,7 +234,7 @@ export default function QuizPage() {
   // Section not found
   if (!sectionName) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-indigo-950 to-gray-900">
+      <div className="min-h-screen flex items-center justify-center bg-page">
         <div className="text-center">
           <p className="text-5xl mb-4">❌</p>
           <h2 className="text-xl font-bold text-white mb-2">Section Not Found</h2>
@@ -247,7 +247,7 @@ export default function QuizPage() {
   }
 
   if (loading) return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-indigo-950 to-gray-900">
+    <div className="min-h-screen flex items-center justify-center bg-page">
       <div className="animate-pulse flex flex-col items-center gap-3">
         <div className="w-8 h-8 border-4 border-indigo-400 border-t-transparent rounded-full animate-spin" />
         <p className="text-gray-400 text-sm">Starting your quiz...</p>
@@ -258,7 +258,7 @@ export default function QuizPage() {
   // Daily limit reached
   if (dailyRemaining === 0) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-indigo-950 to-gray-900">
+      <div className="min-h-screen flex items-center justify-center bg-page">
         <div className="text-center max-w-md">
           <p className="text-5xl mb-4">😅</p>
           <h2 className="text-xl font-bold text-white mb-2">Daily Limit Reached</h2>
@@ -277,7 +277,7 @@ export default function QuizPage() {
   // No questions seeded
   if (needsSeeding) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-indigo-950 to-gray-900">
+      <div className="min-h-screen flex items-center justify-center bg-page">
         <div className="text-center max-w-md">
           <p className="text-5xl mb-4">🛠️</p>
           <h2 className="text-xl font-bold text-white mb-2">Questions Coming Soon</h2>
@@ -297,7 +297,7 @@ export default function QuizPage() {
   if (sessionComplete) {
     const pct = stats.total > 0 ? Math.round((stats.correct / stats.total) * 100) : 0;
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-indigo-950 to-gray-900">
+      <div className="min-h-screen flex items-center justify-center bg-page">
         <div className="text-center max-w-md">
           <p className="text-5xl mb-4">🎉</p>
           <h2 className="text-2xl font-bold text-white mb-2">Session Complete!</h2>
@@ -331,7 +331,7 @@ export default function QuizPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-indigo-950 to-gray-900">
+    <div className="min-h-screen bg-page">
       {/* Top bar */}
       <div className="bg-gray-800/50 border-b border-gray-700/50 backdrop-blur-sm sticky top-0 z-10">
         <div className="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
