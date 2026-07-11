@@ -54,6 +54,7 @@ export default function PracticeQuiz() {
   const [sessionComplete, setSessionComplete] = useState(false);
   const [authCheckDone, setAuthCheckDone] = useState(false);
   const [showReview, setShowReview] = useState(false);
+  const [reviewBackIdx, setReviewBackIdx] = useState<number | null>(null);
   const [trackedResponses, setTrackedResponses] = useState<TrackedResponse[]>([]);
   const timerRef = useRef<number>(Date.now());
 
@@ -195,7 +196,21 @@ export default function PracticeQuiz() {
     setSelectedOption(null);
     setSessionComplete(false);
     setShowReview(false);
+    setReviewBackIdx(null);
     setTrackedResponses([]);
+  };
+
+  const goBackReview = () => {
+    if (trackedResponses.length === 0) return;
+    if (reviewBackIdx !== null && reviewBackIdx > 0) {
+      setReviewBackIdx(reviewBackIdx - 1);
+    } else if (reviewBackIdx === null) {
+      setReviewBackIdx(trackedResponses.length - 1);
+    }
+  };
+
+  const exitReview = () => {
+    setReviewBackIdx(null);
   };
 
   if (!authCheckDone) {
@@ -421,8 +436,8 @@ export default function PracticeQuiz() {
       {/* Top bar */}
       <div className="border-b border-theme bg-card-hover backdrop-blur-sm sticky top-0 z-10">
         <div className="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
-          <button onClick={startNew} className="text-muted hover:text-primary transition text-sm">
-            ← {SECTIONS.find(s => s.id === selectedSection)?.icon} {selectedSection}
+          <button onClick={startNew} className="text-sm text-muted hover:text-primary transition flex items-center gap-1.5">
+            <span className="text-base">←</span>
           </button>
           <span className="text-xs text-secondary">
             {typeof dailyRemaining === 'number' ? `${dailyRemaining} free today` : '♾️ Unlimited'}
@@ -499,8 +514,8 @@ export default function PracticeQuiz() {
               </div>
             )}
             <div className="mt-6 flex justify-between gap-3">
-              <button onClick={startNew} className="flex-1 bg-card border border-theme px-5 py-2.5 rounded-xl font-medium hover:bg-card-hover transition">
-                🔄 Practice New Section
+              <button onClick={goBackReview} disabled={trackedResponses.length === 0} className="flex-1 bg-card border border-theme px-5 py-2.5 rounded-xl font-medium hover:bg-card-hover transition disabled:opacity-40">
+                ← Review ({trackedResponses.length})
               </button>
               <button onClick={nextQuestion} disabled={sessionComplete} className="flex-1 bg-accent text-white px-5 py-2.5 rounded-xl font-medium hover:bg-accent-hover transition disabled:opacity-50">
                 {sessionComplete ? 'Session Complete' : 'Next Question'}
@@ -508,6 +523,80 @@ export default function PracticeQuiz() {
             </div>
           </div>
         )}
+
+        {/* ─── Review Panel (slide-in showing previous answers) ─── */}
+        {reviewBackIdx !== null && trackedResponses[reviewBackIdx] && (() => {
+          const r = trackedResponses[reviewBackIdx];
+          return (
+            <div className="mb-4 border rounded-xl overflow-hidden bg-card border-theme">
+              <div className={`px-4 py-2 flex items-center gap-2 ${
+                r.result.is_correct ? 'bg-success/20' : 'bg-danger/20'
+              }`}>
+                <span>{r.result.is_correct ? '✅' : '❌'}</span>
+                <span className="text-xs font-medium text-secondary">Q{reviewBackIdx + 1} of {trackedResponses.length}</span>
+                <div className="ml-auto flex items-center gap-2">
+                  <button
+                    onClick={() => setReviewBackIdx(reviewBackIdx - 1)}
+                    disabled={reviewBackIdx <= 0}
+                    className="text-xs text-muted hover:text-primary transition disabled:opacity-30 px-1"
+                  >←</button>
+                  <span className="text-[10px] text-muted">{reviewBackIdx + 1}/{trackedResponses.length}</span>
+                  <button
+                    onClick={() => setReviewBackIdx(reviewBackIdx + 1)}
+                    disabled={reviewBackIdx >= trackedResponses.length - 1}
+                    className="text-xs text-muted hover:text-primary transition disabled:opacity-30 px-1"
+                  >→</button>
+                  <button onClick={exitReview} className="text-xs text-muted hover:text-primary transition ml-2">✕</button>
+                </div>
+              </div>
+              <div className="px-4 py-3">
+                {r.question.passage && (
+                  <div className="mb-3 p-3 bg-card-hover border border-theme/50 rounded-lg">
+                    <p className="text-[10px] font-medium text-accent uppercase tracking-wider mb-1">Passage</p>
+                    <p className="text-xs text-secondary leading-relaxed">{r.question.passage}</p>
+                  </div>
+                )}
+                <p className="text-sm font-medium mb-3 text-primary">{r.question.question_text}</p>
+                <div className="grid grid-cols-2 gap-2">
+                  {Object.entries(r.question.options).map(([key, value]) => {
+                    const isSelected = r.result.your_answer === key;
+                    const isCorrectOpt = r.result.correct_option === key;
+                    return (
+                      <div key={key} className={`flex items-center gap-2 border rounded-lg px-3 py-2 text-sm ${
+                        isCorrectOpt
+                          ? 'border-success bg-success/30 ring-1 ring-success/50'
+                          : isSelected
+                          ? 'border-danger bg-danger/30 ring-1 ring-danger/50'
+                          : 'border-theme'
+                      }`}>
+                        <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold ${
+                          isCorrectOpt ? 'bg-success text-white' :
+                          isSelected ? 'bg-danger text-white' :
+                          'bg-theme-subtle text-secondary'
+                        }`}>
+                          {isCorrectOpt ? '✓' : isSelected ? '✗' : key}
+                        </span>
+                        <span className={`flex-1 ${
+                          isCorrectOpt ? 'text-success font-medium' :
+                          isSelected ? 'text-danger' :
+                          'text-primary'
+                        }`}>
+                          {value}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+                {r.result.explanation && (
+                  <div className="mt-3 p-3 bg-info/20 border border-info/50 rounded-lg">
+                    <p className="text-[10px] font-medium text-info uppercase tracking-wider mb-1">Explanation</p>
+                    <p className="text-xs text-secondary leading-relaxed">{r.result.explanation}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          );
+        })()}
       </div>
     </div>
   );
