@@ -49,9 +49,9 @@ export default async function LeaderboardPage() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
+    <div className="max-w-4xl mx-auto px-4 py-8 bg-page text-primary">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold">Leaderboard</h1>
+        <h1 className="text-2xl font-bold text-primary">Leaderboard</h1>
         <Link href="/student/dashboard" className="text-sm text-accent hover:underline">
           ← Dashboard
         </Link>
@@ -65,23 +65,23 @@ export default async function LeaderboardPage() {
         {ranked.length === 0 ? (
           <div className="p-6 text-center text-muted">No tests completed yet.</div>
         ) : (
-          <div className="divide-y">
+          <div className="divide-y divide-theme">
             {ranked.map((entry) => (
               <div key={entry.rank} className="px-6 py-3.5 flex items-center gap-4">
                 <span
                   className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
                     entry.rank === 1
-                      ? 'bg-yellow-100 text-yellow-700'
+                      ? 'bg-warning/10 text-warning'
                       : entry.rank === 2
                       ? 'bg-elevated text-secondary'
                       : entry.rank === 3
-                      ? 'bg-orange-100 text-orange-700'
+                      ? 'bg-amber-100 text-amber-700' // Keeping orange for 3rd place as a distinct color
                       : 'bg-elevated text-secondary'
                   }`}
                 >
                   {entry.rank}
                 </span>
-                <span className="flex-1 font-medium">{entry.name}</span>
+                <span className="flex-1 font-medium text-primary">{entry.name}</span>
                 <span className="text-accent font-bold">{entry.score}%</span>
               </div>
             ))}
@@ -97,18 +97,18 @@ export default async function LeaderboardPage() {
         {!tests || tests.length === 0 ? (
           <div className="p-6 text-center text-muted">No published tests.</div>
         ) : (
-          <div className="divide-y">
+          <div className="divide-y divide-theme">
             {tests.map((test) => {
               const ranks = perTestLeaderboards[test.id] ?? [];
               return (
                 <div key={test.id} className="px-6 py-4">
-                  <h3 className="font-medium text-sm mb-2">{test.title}</h3>
+                  <h3 className="font-medium text-sm mb-2 text-primary">{test.title}</h3>
                   {ranks.length === 0 ? (
                     <p className="text-xs text-muted">No submissions yet.</p>
                   ) : (
                     <div className="flex flex-wrap gap-4 text-xs text-secondary">
                       {ranks.map((r: any) => (
-                        <span key={r.full_name + r.test_rank} className="bg-elevated rounded-full px-3 py-1">
+                        <span key={r.full_name + r.test_rank} className="bg-elevated rounded-full px-3 py-1 text-primary">
                           <strong>#{r.test_rank}</strong> {r.full_name} ({r.total_score}%)
                         </span>
                       ))}
