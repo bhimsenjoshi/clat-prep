@@ -141,6 +141,26 @@ body {
   transition: color 0.2s ease;
 }
 
+/* ─── BASE LAYER: Input defaults (overridable by utility classes) ─── */
+/* 
+   These sit in the Tailwind `base` layer so that any utility class
+   (e.g. `bg-white text-gray-900 border-gray-300`) beats them.
+   Public pages (login, signup) add explicit utility classes to inputs;
+   app pages rely on these CSS-var defaults for dark/light theming.
+*/
+@layer base {
+  input, textarea, select {
+    background-color: var(--bg-input);
+    border-color: var(--border);
+    color: var(--text-primary);
+  }
+  input:focus, textarea:focus, select:focus {
+    border-color: var(--accent);
+    outline: none;
+    box-shadow: 0 0 0 2px var(--accent-subtle);
+  }
+}
+
 /* ─── Semantic Utility Classes ─── */
 
 /* Backgrounds */
@@ -214,18 +234,6 @@ body {
   transition-property: background-color, border-color, color, box-shadow;
   transition-duration: 0.15s;
   transition-timing-function: ease;
-}
-
-/* ─── Input fields ─── */
-input, textarea, select {
-  background-color: var(--bg-input);
-  border-color: var(--border);
-  color: var(--text-primary);
-}
-input:focus, textarea:focus, select:focus {
-  border-color: var(--accent);
-  outline: none;
-  box-shadow: 0 0 0 2px var(--accent-subtle);
 }
 
 /* ─── Button base ─── */
