@@ -403,7 +403,7 @@ export default function StudentDashboard() {
             </Link>
             <ThemeToggle />
             <button onClick={() => supabase.auth.signOut().then(() => router.push('/'))}
-              className="px-3 py-2 rounded-lg text-sm font-medium border border-danger/30 text-danger hover:bg-tint-danger hover:border-danger/60 active:bg-danger/20 transition">
+              className="px-3 py-2 rounded-lg text-sm font-medium text-danger hover:bg-tint-danger active:scale-[0.97] transition-all duration-150 cursor-pointer">
               🚪 Sign Out
             </button>
           </nav>
@@ -449,7 +449,7 @@ export default function StudentDashboard() {
             </Link>
             <div className="py-1"><ThemeToggle /></div>
             <button onClick={() => { setMobileMenuOpen(false); supabase.auth.signOut().then(() => router.push('/')); }}
-              className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-red-400 hover:bg-tint-red hover:scale-[1.02] w-full text-left transition-all duration-150">
+              className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-danger hover:bg-tint-danger w-full text-left transition cursor-pointer">
               🚪 Sign Out
             </button>
           </div>

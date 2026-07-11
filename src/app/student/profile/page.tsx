@@ -122,7 +122,7 @@ export default function ProfilePage() {
               🎯 Practice
             </Link>
             <button onClick={() => supabase.auth.signOut().then(() => router.push('/'))}
-              className="px-3 py-2 rounded-lg text-sm border border-danger/30 text-danger hover:bg-tint-danger hover:border-danger/60 active:bg-danger/20 transition font-medium">
+              className="px-3 py-2 rounded-lg text-sm font-medium text-danger hover:bg-tint-danger active:scale-[0.97] transition-all duration-150 cursor-pointer">
               🚪 Sign Out
             </button>
           </nav>
@@ -140,7 +140,7 @@ export default function ProfilePage() {
               className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm bg-accent/10 text-accent">🎯 Practice</Link>
             <hr className="my-1 border-theme-light" />
             <button onClick={() => { setMobileMenuOpen(false); supabase.auth.signOut().then(() => router.push('/')); }}
-              className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-danger hover:bg-tint-danger w-full text-left">🚪 Sign Out</button>
+              className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-danger hover:bg-tint-danger w-full text-left cursor-pointer">🚪 Sign Out</button>
           </div>
         )}
       </header>
