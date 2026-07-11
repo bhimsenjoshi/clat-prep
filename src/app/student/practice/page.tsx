@@ -201,7 +201,7 @@ export default function PracticeQuiz() {
   if (!authCheckDone) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-page">
-        <div className="animate-spin w-8 h-8 border-2 border-indigo-500 border-t-transparent rounded-full" />
+        <div className="animate-spin w-8 h-8 border-2 border-accent border-t-transparent rounded-full" />
       </div>
     );
   }
@@ -211,25 +211,25 @@ export default function PracticeQuiz() {
     return (
       <div className="min-h-screen bg-page text-primary">
         <div className="max-w-2xl mx-auto px-4 py-12">
-          <h1 className="text-2xl font-bold mb-2">📝 Practice Quiz</h1>
-          <p className="text-gray-400 text-sm mb-8">
+          <h1 className="text-2xl font-bold mb-2 text-heading">📝 Practice Quiz</h1>
+          <p className="text-secondary text-sm mb-8">
             Pick a section to practice. Instant feedback on every answer.
             {typeof dailyRemaining === 'number' && (
-              <span className="ml-2 text-indigo-400">({dailyRemaining} free questions remaining today)</span>
+              <span className="ml-2 text-accent">({dailyRemaining} free questions remaining today)</span>
             )}
           </p>
 
           {/* Upgrade banner for free users */}
           {dailyRemaining !== 'unlimited' && typeof dailyRemaining === 'number' && dailyRemaining <= 3 && (
             <Link href="/student/profile"
-              className="block mb-6 bg-gradient-to-r from-amber-900/30 to-orange-900/30 border border-amber-700/50 rounded-xl p-4 hover:border-amber-600 transition group">
+              className="block mb-6 bg-gradient-to-r from-amber-900/30 to-orange-900/30 border border-warning/50 rounded-xl p-4 hover:border-warning transition group">
               <div className="flex items-center gap-3">
                 <span className="text-xl">🎁</span>
                 <div className="flex-1">
-                  <p className="text-sm font-bold text-amber-300">Running low on free questions!</p>
-                  <p className="text-xs text-amber-400">Get Premium free — limited time offer 🎉</p>
+                  <p className="text-sm font-bold text-warning">Running low on free questions!</p>
+                  <p className="text-xs text-secondary">Get Premium free — limited time offer 🎉</p>
                 </div>
-                <span className="text-amber-400 group-hover:translate-x-1 transition-transform">→</span>
+                <span className="text-warning group-hover:translate-x-1 transition-transform">→</span>
               </div>
             </Link>
           )}
@@ -240,22 +240,22 @@ export default function PracticeQuiz() {
                 key={s.id}
                 onClick={() => startQuiz(s.id)}
                 disabled={loading}
-                className="flex items-center gap-4 p-4 rounded-xl border border-gray-800 bg-gray-900 hover:border-indigo-500 hover:bg-gray-800/50 transition disabled:opacity-50 text-left"
+                className="flex items-center gap-4 p-4 rounded-xl border border-theme bg-card hover:border-accent hover:bg-card-hover transition disabled:opacity-50 text-left"
               >
                 <span className="text-2xl">{s.icon}</span>
                 <div>
-                  <p className="font-medium">{s.label}</p>
-                  <p className="text-xs text-gray-500">Practice {s.label.toLowerCase()} questions</p>
+                  <p className="font-medium text-primary">{s.label}</p>
+                  <p className="text-xs text-secondary">Practice {s.label.toLowerCase()} questions</p>
                 </div>
                 {loading && selectedSection === s.id ? (
-                  <span className="ml-auto animate-spin w-5 h-5 border-2 border-indigo-400 border-t-transparent rounded-full" />
+                  <span className="ml-auto animate-spin w-5 h-5 border-2 border-accent border-t-transparent rounded-full" />
                 ) : (
-                  <span className="ml-auto text-gray-600">→</span>
+                  <span className="ml-auto text-secondary">→</span>
                 )}
               </button>
             ))}
           </div>
-          <Link href="/student/dashboard" className="block text-center text-sm text-gray-500 mt-8 hover:text-gray-300 transition">
+          <Link href="/student/dashboard" className="block text-center text-sm text-muted mt-8 hover:text-primary transition">
             ← Back to Dashboard
           </Link>
         </div>
@@ -273,12 +273,12 @@ export default function PracticeQuiz() {
     if (showReview) {
       return (
         <div className="min-h-screen bg-page text-primary">
-          <div className="border-b border-gray-800 bg-gray-900/50 backdrop-blur-sm sticky top-0 z-10">
+          <div className="border-b border-theme bg-card-hover backdrop-blur-sm sticky top-0 z-10">
             <div className="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
               <button onClick={() => setShowReview(false)} className="text-muted hover:text-primary transition text-sm">
                 ← Back to Results
               </button>
-              <span className="text-xs text-gray-500">
+              <span className="text-xs text-secondary">
                 {SECTIONS.find(s => s.id === selectedSection)?.icon} {selectedSection}
               </span>
             </div>
@@ -286,21 +286,21 @@ export default function PracticeQuiz() {
           <div className="max-w-3xl mx-auto px-4 py-6 space-y-4">
             {trackedResponses.map((r, idx) => (
               <div key={r.question.id} className={`border rounded-xl overflow-hidden ${
-                r.result.is_correct ? 'border-green-800/50' : 'border-red-800/50'
+                r.result.is_correct ? 'border-success/50' : 'border-danger/50'
               }`}>
                 <div className={`px-4 py-2 flex items-center gap-2 ${
-                  r.result.is_correct ? 'bg-green-900/20' : 'bg-red-900/20'
+                  r.result.is_correct ? 'bg-success/20' : 'bg-danger/20'
                 }`}>
                   <span>{r.result.is_correct ? '✅' : '❌'}</span>
-                  <span className="text-xs font-medium text-gray-400">Q{idx + 1}</span>
+                  <span className="text-xs font-medium text-secondary">Q{idx + 1}</span>
                   {r.question.difficulty && (
                     <span className={`text-[10px] px-1.5 py-0.5 rounded ${
-                      r.question.difficulty === 'hard' ? 'bg-red-900/50 text-red-400' :
-                      r.question.difficulty === 'easy' ? 'bg-green-900/50 text-green-400' :
-                      'bg-blue-900/50 text-blue-400'
+                      r.question.difficulty === 'hard' ? 'bg-danger/50 text-danger' :
+                      r.question.difficulty === 'easy' ? 'bg-success/50 text-success' :
+                      'bg-info/50 text-info'
                     }`}>{r.question.difficulty}</span>
                   )}
-                  <span className="ml-auto text-xs text-gray-500 flex items-center gap-2">
+                  <span className="ml-auto text-xs text-secondary flex items-center gap-2">
                     <span>⏱ {r.result.time_taken_seconds}s</span>
                     <span>·</span>
                     <span>Your: {r.result.your_answer} · Correct: {r.result.correct_option}</span>
@@ -308,13 +308,13 @@ export default function PracticeQuiz() {
                 </div>
                 {/* Passage */}
                 {r.question.passage && (
-                  <div className="px-4 py-3 bg-gray-900/50 border-b border-gray-800/50">
-                    <p className="text-[10px] font-medium text-indigo-400 uppercase tracking-wider mb-1">Passage</p>
-                    <p className="text-xs text-gray-400 leading-relaxed">{r.question.passage}</p>
+                  <div className="px-4 py-3 bg-card-hover border-b border-theme/50">
+                    <p className="text-[10px] font-medium text-accent uppercase tracking-wider mb-1">Passage</p>
+                    <p className="text-xs text-secondary leading-relaxed">{r.question.passage}</p>
                   </div>
                 )}
                 <div className="px-4 py-3">
-                  <p className="text-sm font-medium mb-3">{r.question.question_text}</p>
+                  <p className="text-sm font-medium mb-3 text-primary">{r.question.question_text}</p>
                   <div className="grid grid-cols-2 gap-2">
                     {Object.entries(r.question.options).map(([key, value]) => {
                       const isSelected = r.result.your_answer === key;
@@ -322,22 +322,22 @@ export default function PracticeQuiz() {
                       return (
                         <div key={key} className={`flex items-center gap-2 border rounded-lg px-3 py-2 text-sm ${
                           isCorrectOpt
-                            ? 'border-green-700 bg-green-900/30 ring-1 ring-green-600/50'
+                            ? 'border-success bg-success/30 ring-1 ring-success/50'
                             : isSelected
-                            ? 'border-red-700 bg-red-900/30 ring-1 ring-red-600/50'
-                            : 'border-gray-800'
+                            ? 'border-danger bg-danger/30 ring-1 ring-danger/50'
+                            : 'border-theme'
                         }`}>
                           <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold ${
-                            isCorrectOpt ? 'bg-green-600 text-white' :
-                            isSelected ? 'bg-red-600 text-white' :
-                            'bg-gray-800 text-gray-500'
+                            isCorrectOpt ? 'bg-success text-white' :
+                            isSelected ? 'bg-danger text-white' :
+                            'bg-theme-subtle text-secondary'
                           }`}>
                             {isCorrectOpt ? '✓' : isSelected ? '✗' : key}
                           </span>
                           <span className={`flex-1 ${
-                            isCorrectOpt ? 'text-green-300 font-medium' :
-                            isSelected ? 'text-red-300' :
-                            'text-gray-400'
+                            isCorrectOpt ? 'text-success font-medium' :
+                            isSelected ? 'text-danger' :
+                            'text-primary'
                           }`}>
                             {value}
                           </span>
@@ -346,16 +346,16 @@ export default function PracticeQuiz() {
                     })}
                   </div>
                   {r.result.explanation && (
-                    <div className="mt-3 p-3 bg-blue-900/20 border border-blue-800/50 rounded-lg">
-                      <p className="text-[10px] font-medium text-blue-400 uppercase tracking-wider mb-1">Explanation</p>
-                      <p className="text-xs text-gray-300 leading-relaxed">{r.result.explanation}</p>
+                    <div className="mt-3 p-3 bg-info/20 border border-info/50 rounded-lg">
+                      <p className="text-[10px] font-medium text-info uppercase tracking-wider mb-1">Explanation</p>
+                      <p className="text-xs text-secondary leading-relaxed">{r.result.explanation}</p>
                     </div>
                   )}
                 </div>
               </div>
             ))}
             <div className="flex gap-3 justify-center pb-8">
-              <button onClick={() => setShowReview(false)} className="bg-gray-800 border border-gray-700 px-6 py-2.5 rounded-xl font-medium hover:bg-gray-700 transition">
+              <button onClick={() => setShowReview(false)} className="bg-card border border-theme px-6 py-2.5 rounded-xl font-medium hover:bg-card-hover transition">
                 ← Back to Results
               </button>
             </div>
@@ -368,31 +368,31 @@ export default function PracticeQuiz() {
       <div className="min-h-screen bg-page text-primary flex items-center justify-center">
         <div className="text-center max-w-md px-4">
           <p className="text-5xl mb-4">{icon}</p>
-          <h2 className="text-2xl font-bold mb-2">Session Complete!</h2>
-          <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-6">
+          <h2 className="text-2xl font-bold mb-2 text-heading">Session Complete!</h2>
+          <div className="bg-card border border-theme rounded-xl p-6 mb-6">
             <div className="grid grid-cols-2 gap-4 mb-4">
               <div>
-                <p className="text-3xl font-bold text-green-400">{correct}</p>
-                <p className="text-sm text-gray-400">Correct</p>
+                <p className="text-3xl font-bold text-success">{correct}</p>
+                <p className="text-sm text-secondary">Correct</p>
               </div>
               <div>
-                <p className="text-3xl font-bold text-red-400">{total - correct}</p>
-                <p className="text-sm text-gray-400">Incorrect</p>
+                <p className="text-3xl font-bold text-danger">{total - correct}</p>
+                <p className="text-sm text-secondary">Incorrect</p>
               </div>
             </div>
             {trackedResponses.length > 0 && (
-              <div className="text-xs text-gray-500 mb-3">
+              <div className="text-xs text-secondary mb-3">
                 Avg ⏱ {Math.round(trackedResponses.reduce((s, r) => s + (r.result.time_taken_seconds ?? 0), 0) / trackedResponses.length)}s per question
               </div>
             )}
-            <div className="pt-4 border-t border-gray-800">
+            <div className="pt-4 border-t border-theme">
               <p className={`text-4xl font-bold ${
-                pct >= 70 ? 'text-green-400' : pct >= 40 ? 'text-amber-400' : 'text-red-400'
+                pct >= 70 ? 'text-success' : pct >= 40 ? 'text-warning' : 'text-danger'
               }`}>
                 {pct}%
               </p>
-              <p className="text-sm text-gray-400">Accuracy</p>
-              <p className="text-xs text-gray-500 mt-2">
+              <p className="text-sm text-secondary">Accuracy</p>
+              <p className="text-xs text-secondary mt-2">
                 {selectedSection} · {total} question{total !== 1 ? 's' : ''}
               </p>
             </div>
@@ -400,14 +400,14 @@ export default function PracticeQuiz() {
           <div className="flex gap-3 justify-center">
             {trackedResponses.length > 0 && (
               <button onClick={() => setShowReview(true)}
-                className="bg-indigo-600 px-5 py-2.5 rounded-xl font-medium hover:bg-indigo-700 transition">
+                className="bg-accent text-white px-5 py-2.5 rounded-xl font-medium hover:bg-accent-hover transition">
                 📋 Review Answers
               </button>
             )}
-            <button onClick={startNew} className="border border-gray-700 px-5 py-2.5 rounded-xl font-medium hover:bg-gray-800 transition">
+            <button onClick={startNew} className="border border-theme px-5 py-2.5 rounded-xl font-medium hover:bg-card-hover transition">
               🔄 Practice Again
             </button>
-            <Link href="/student/dashboard" className="border border-gray-700 px-5 py-2.5 rounded-xl font-medium hover:bg-gray-800 transition">
+            <Link href="/student/dashboard" className="border border-theme px-5 py-2.5 rounded-xl font-medium hover:bg-card-hover transition">
               📊 Dashboard
             </Link>
           </div>
@@ -419,12 +419,12 @@ export default function PracticeQuiz() {
   return (
     <div className="min-h-screen bg-page text-primary">
       {/* Top bar */}
-      <div className="border-b border-gray-800 bg-gray-900/50 backdrop-blur-sm sticky top-0 z-10">
+      <div className="border-b border-theme bg-card-hover backdrop-blur-sm sticky top-0 z-10">
         <div className="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
           <button onClick={startNew} className="text-muted hover:text-primary transition text-sm">
             ← {SECTIONS.find(s => s.id === selectedSection)?.icon} {selectedSection}
           </button>
-          <span className="text-xs text-gray-500">
+          <span className="text-xs text-secondary">
             {typeof dailyRemaining === 'number' ? `${dailyRemaining} free today` : '♾️ Unlimited'}
           </span>
         </div>
@@ -433,30 +433,30 @@ export default function PracticeQuiz() {
       <div className="max-w-3xl mx-auto px-4 py-6">
         {/* Passage */}
         {question?.passage && !result && (
-          <div className="bg-gray-900 border border-gray-800 rounded-xl p-5 mb-4">
-            <p className="text-xs text-indigo-400 uppercase tracking-wide font-medium mb-2">Passage</p>
-            <p className="text-sm text-gray-300 leading-relaxed">{question.passage}</p>
+          <div className="bg-card border border-theme rounded-xl p-5 mb-4">
+            <p className="text-xs text-accent uppercase tracking-wide font-medium mb-2">Passage</p>
+            <p className="text-sm text-secondary leading-relaxed">{question.passage}</p>
           </div>
         )}
 
         {/* Question */}
         {question && !result && (
-          <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-4">
+          <div className="bg-card border border-theme rounded-xl p-6 mb-4">
             <div className="flex items-center justify-between mb-4">
-              <span className="text-xs text-gray-500">
+              <span className="text-xs text-secondary">
                 {selectedSection}
                 {question.difficulty && (
                   <span className={`ml-2 px-1.5 py-0.5 rounded text-[10px] ${
-                    question.difficulty === 'hard' ? 'bg-red-900/50 text-red-400' :
-                    question.difficulty === 'easy' ? 'bg-green-900/50 text-green-400' :
-                    'bg-blue-900/50 text-blue-400'
+                    question.difficulty === 'hard' ? 'bg-danger/50 text-danger' :
+                    question.difficulty === 'easy' ? 'bg-success/50 text-success' :
+                    'bg-info/50 text-info'
                   }`}>
                     {question.difficulty}
                   </span>
                 )}
               </span>
             </div>
-            <p className="font-medium text-base mb-5 leading-relaxed">{question.question_text}</p>
+            <p className="font-medium text-base mb-5 leading-relaxed text-primary">{question.question_text}</p>
             <div className="space-y-2">
               {Object.entries(question.options).map(([key, value]) => (
                 <button
@@ -465,12 +465,12 @@ export default function PracticeQuiz() {
                   disabled={!!selectedOption}
                   className={`w-full text-left px-4 py-3 rounded-xl border text-sm transition ${
                     selectedOption === key
-                      ? 'border-indigo-500 bg-indigo-900/30 text-indigo-300 ring-1 ring-indigo-500'
-                      : 'border-gray-800 hover:border-gray-600 hover:bg-gray-800/50'
+                      ? 'border-accent bg-accent-subtle text-accent ring-1 ring-accent/50'
+                      : 'border-theme hover:border-theme-subtle hover:bg-card-hover'
                   } disabled:opacity-60`}
                 >
-                  <span className="font-semibold mr-3 text-gray-400">{key}.</span>
-                  {value}
+                  <span className="font-semibold mr-3 text-secondary">{key}.</span>
+                  <span className="text-primary">{value}</span>
                 </button>
               ))}
             </div>
@@ -480,42 +480,32 @@ export default function PracticeQuiz() {
         {/* Result / Feedback */}
         {result && (
           <div className={`border rounded-xl p-6 mb-4 ${
-            result.is_correct ? 'bg-green-900/20 border-green-800' : 'bg-red-900/20 border-red-800'
+            result.is_correct ? 'bg-success/20 border-success' : 'bg-danger/20 border-danger'
           }`}>
             <div className="flex items-center gap-3 mb-3">
               <span className="text-2xl">{result.is_correct ? '✅' : '❌'}</span>
               <div>
-                <p className="font-bold text-lg">{result.is_correct ? 'Correct!' : 'Incorrect'}</p>
-                <p className="text-xs text-gray-400">
+                <p className="font-bold text-lg text-heading">{result.is_correct ? 'Correct!' : 'Incorrect'}</p>
+                <p className="text-xs text-secondary">
                   Your answer: {result.your_answer} · Correct: {result.correct_option}
                   {result.time_taken_seconds != null && <span className="ml-2">· ⏱ {result.time_taken_seconds}s</span>}
                 </p>
               </div>
             </div>
             {result.explanation && (
-              <div className="text-sm text-gray-300 leading-relaxed bg-gray-900/50 rounded-lg p-4 mt-2">
-                <p className="text-xs text-gray-500 uppercase tracking-wide font-medium mb-1">Explanation</p>
+              <div className="text-sm text-secondary leading-relaxed bg-card-hover rounded-lg p-4 mt-2">
+                <p className="text-xs text-muted uppercase tracking-wide font-medium mb-1">Explanation</p>
                 <p>{result.explanation}</p>
               </div>
             )}
-            <div className="mt-4">
-              {sessionComplete ? (
-                <button onClick={endSession} className="bg-indigo-600 px-6 py-2.5 rounded-xl font-medium hover:bg-indigo-700 transition w-full">
-                  📊 See Results
-                </button>
-              ) : (
-                <button onClick={nextQuestion} className="bg-gray-800 hover:bg-gray-700 border border-gray-700 px-6 py-2.5 rounded-xl font-medium transition w-full">
-                  Next Question →
-                </button>
-              )}
+            <div className="mt-6 flex justify-between gap-3">
+              <button onClick={startNew} className="flex-1 bg-card border border-theme px-5 py-2.5 rounded-xl font-medium hover:bg-card-hover transition">
+                🔄 Practice New Section
+              </button>
+              <button onClick={nextQuestion} disabled={sessionComplete} className="flex-1 bg-accent text-white px-5 py-2.5 rounded-xl font-medium hover:bg-accent-hover transition disabled:opacity-50">
+                {sessionComplete ? 'Session Complete' : 'Next Question'}
+              </button>
             </div>
-          </div>
-        )}
-
-        {loading && !question && !result && (
-          <div className="text-center py-12">
-            <div className="animate-spin w-8 h-8 border-2 border-indigo-500 border-t-transparent rounded-full mx-auto mb-3" />
-            <p className="text-sm text-gray-500">Loading next question...</p>
           </div>
         )}
       </div>
