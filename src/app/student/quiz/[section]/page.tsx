@@ -238,7 +238,7 @@ export default function QuizPage() {
         <div className="text-center">
           <p className="text-5xl mb-4">❌</p>
           <h2 className="text-xl font-bold text-primary mb-2">Section Not Found</h2>
-          <Link href="/student/quiz" className="text-indigo-400 hover:text-indigo-300">
+          <Link href="/student/quiz" className="text-accent hover:text-accent-hover">
             ← Back to sections
           </Link>
         </div>
@@ -249,8 +249,8 @@ export default function QuizPage() {
   if (loading) return (
     <div className="min-h-screen flex items-center justify-center bg-page">
       <div className="animate-pulse flex flex-col items-center gap-3">
-        <div className="w-8 h-8 border-4 border-indigo-400 border-t-transparent rounded-full animate-spin" />
-        <p className="text-gray-400 text-sm">Starting your quiz...</p>
+        <div className="w-8 h-8 border-4 border-accent border-t-transparent rounded-full animate-spin" />
+        <p className="text-secondary text-sm">Starting your quiz...</p>
       </div>
     </div>
   );
@@ -262,11 +262,11 @@ export default function QuizPage() {
         <div className="text-center max-w-md">
           <p className="text-5xl mb-4">😅</p>
           <h2 className="text-xl font-bold text-primary mb-2">Daily Limit Reached</h2>
-          <p className="text-gray-400 mb-6">
+          <p className="text-secondary mb-6">
             You&apos;ve used all 10 free questions today. Come back tomorrow or upgrade to premium for unlimited practice!
           </p>
           <Link href="/student/quiz"
-            className="inline-flex px-6 py-3 rounded-xl font-medium bg-indigo-600 text-white hover:bg-indigo-500 transition">
+            className="inline-flex px-6 py-3 rounded-xl font-medium bg-accent text-white hover:bg-accent-hover transition">
             ← Back to sections
           </Link>
         </div>
@@ -281,11 +281,11 @@ export default function QuizPage() {
         <div className="text-center max-w-md">
           <p className="text-5xl mb-4">🛠️</p>
           <h2 className="text-xl font-bold text-primary mb-2">Questions Coming Soon</h2>
-          <p className="text-gray-400 mb-6">
+          <p className="text-secondary mb-6">
             We&apos;re generating practice questions for this section. Check back shortly!
           </p>
           <Link href="/student/quiz"
-            className="inline-flex px-6 py-3 rounded-xl font-medium bg-indigo-600 text-white hover:bg-indigo-500 transition">
+            className="inline-flex px-6 py-3 rounded-xl font-medium bg-accent text-white hover:bg-accent-hover transition">
             ← Back to sections
           </Link>
         </div>
@@ -301,27 +301,27 @@ export default function QuizPage() {
         <div className="text-center max-w-md">
           <p className="text-5xl mb-4">🎉</p>
           <h2 className="text-2xl font-bold text-primary mb-2">Session Complete!</h2>
-          <div className="bg-gray-800/50 rounded-xl p-6 mb-6 border border-gray-700/50">
+          <div className="bg-card rounded-xl p-6 mb-6 border border-theme">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <p className="text-3xl font-bold text-green-400">{stats.correct}</p>
-                <p className="text-sm text-gray-400">Correct</p>
+                <p className="text-3xl font-bold text-success">{stats.correct}</p>
+                <p className="text-sm text-secondary">Correct</p>
               </div>
               <div>
-                <p className="text-3xl font-bold text-red-400">{stats.total - stats.correct}</p>
-                <p className="text-sm text-gray-400">Incorrect</p>
+                <p className="text-3xl font-bold text-danger">{stats.total - stats.correct}</p>
+                <p className="text-sm text-secondary">Incorrect</p>
               </div>
             </div>
-            <div className="mt-4 pt-4 border-t border-gray-700/50">
-              <p className={`text-4xl font-bold ${pct >= 70 ? 'text-green-400' : pct >= 40 ? 'text-amber-400' : 'text-red-400'}`}>
+            <div className="mt-4 pt-4 border-t border-theme">
+              <p className={`text-4xl font-bold ${pct >= 70 ? 'text-success' : pct >= 40 ? 'text-warning' : 'text-danger'}`}>
                 {pct}%
               </p>
-              <p className="text-sm text-gray-400">Accuracy</p>
+              <p className="text-sm text-secondary">Accuracy</p>
             </div>
           </div>
           <div className="flex gap-3 justify-center">
             <button onClick={endSession}
-              className="px-6 py-3 rounded-xl font-medium bg-gray-700 text-gray-300 hover:bg-gray-600 transition">
+              className="px-6 py-3 rounded-xl font-medium bg-card text-secondary hover:bg-card-hover transition">
               ← Back to Sections
             </button>
           </div>
@@ -333,21 +333,21 @@ export default function QuizPage() {
   return (
     <div className="min-h-screen bg-page">
       {/* Top bar */}
-      <div className="bg-gray-800/50 border-b border-gray-700/50 backdrop-blur-sm sticky top-0 z-10">
+      <div className="border-b border-theme bg-card-hover backdrop-blur-sm sticky top-0 z-10">
         <div className="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span>{SECTION_ICONS[sectionName]}</span>
             <span className="text-sm font-medium text-primary">{sectionName}</span>
           </div>
           <div className="flex items-center gap-4 text-xs">
-            <span className="text-gray-400">
+            <span className="text-secondary">
               ✅ {stats.correct}/{stats.total}
             </span>
-            <span className="text-gray-500">
+            <span className="text-secondary">
               {dailyRemaining === 'unlimited' ? '♾️' : `📅 ${dailyRemaining}`}
             </span>
             <button onClick={endSession}
-              className="text-gray-500 hover:text-gray-300 transition">
+              className="text-muted hover:text-primary transition">
               ✕ End
             </button>
           </div>
@@ -357,8 +357,8 @@ export default function QuizPage() {
       <div className="max-w-3xl mx-auto px-4 py-6">
         {/* Error message */}
         {errorMsg && (
-          <div className="mb-4 p-4 bg-red-900/20 border border-red-700/50 rounded-xl">
-            <p className="text-red-400 text-sm font-medium">⚠️ {errorMsg}</p>
+          <div className="mb-4 p-4 bg-danger/20 border border-danger/50 rounded-xl">
+            <p className="text-danger text-sm font-medium">⚠️ {errorMsg}</p>
           </div>
         )}
 
@@ -366,18 +366,18 @@ export default function QuizPage() {
           // ─── Question View ───
           <div className="space-y-6">
             {/* Question card */}
-            <div className="bg-gray-800/40 rounded-xl p-6 border border-gray-700/40">
+            <div className="bg-card rounded-xl p-6 border border-theme">
               {/* Difficulty badge */}
               <div className="flex items-center gap-2 mb-4">
                 <span className={`text-[10px] font-medium uppercase tracking-wider px-2 py-0.5 rounded-full ${
-                  question.difficulty === 'easy' ? 'bg-green-900/50 text-green-300' :
-                  question.difficulty === 'hard' ? 'bg-red-900/50 text-red-300' :
-                  'bg-amber-900/50 text-amber-300'
+                  question.difficulty === 'easy' ? 'bg-success/50 text-success' :
+                  question.difficulty === 'hard' ? 'bg-danger/50 text-danger' :
+                  'bg-warning/50 text-warning'
                 }`}>
                   {question.difficulty}
                 </span>
                 {question.tags?.length > 0 && question.tags.slice(0, 3).map(tag => (
-                  <span key={tag} className="text-[10px] text-gray-500 bg-gray-700/50 px-2 py-0.5 rounded-full">
+                  <span key={tag} className="text-[10px] text-muted bg-card-hover px-2 py-0.5 rounded-full">
                     {tag}
                   </span>
                 ))}
@@ -385,8 +385,8 @@ export default function QuizPage() {
 
               {/* Passage */}
               {question.passage && (
-                <div className="mb-4 p-4 bg-gray-900/50 rounded-lg border-l-2 border-indigo-500/50">
-                  <p className="text-sm text-gray-300 leading-relaxed whitespace-pre-wrap">{question.passage}</p>
+                <div className="mb-4 p-4 bg-card-hover rounded-lg border-l-2 border-accent/50">
+                  <p className="text-sm text-secondary leading-relaxed whitespace-pre-wrap">{question.passage}</p>
                 </div>
               )}
 
@@ -400,17 +400,17 @@ export default function QuizPage() {
                     key={key}
                     onClick={() => submitAnswer(key)}
                     disabled={answering}
-                    className={`w-full text-left p-4 rounded-xl border transition-all duration-150 ${
+                    className={`w-full text-left p-4 rounded-xl border transition-all duration-150 bg-card ${
                       answering
-                        ? 'opacity-50 cursor-not-allowed border-gray-700/50'
-                        : 'border-gray-700/50 hover:border-indigo-500/50 hover:bg-indigo-500/10 cursor-pointer'
-                    } bg-gray-800/30`}
+                        ? 'opacity-50 cursor-not-allowed border-theme'
+                        : 'border-theme hover:border-accent hover:bg-card-hover cursor-pointer'
+                    }`}
                   >
                     <div className="flex items-start gap-3">
-                      <span className="flex-shrink-0 w-8 h-8 rounded-lg bg-gray-700/50 flex items-center justify-center text-sm font-bold text-gray-300">
+                      <span className="flex-shrink-0 w-8 h-8 rounded-lg bg-card-hover flex items-center justify-center text-sm font-bold text-secondary">
                         {key}
                       </span>
-                      <span className="text-sm text-gray-200 pt-1">{value}</span>
+                      <span className="text-sm text-primary pt-1">{value}</span>
                     </div>
                   </button>
                 ))}
@@ -423,19 +423,19 @@ export default function QuizPage() {
             {/* Result banner */}
             <div className={`rounded-xl p-4 border ${
               result.is_correct
-                ? 'bg-green-900/20 border-green-700/50'
-                : 'bg-red-900/20 border-red-700/50'
+                ? 'bg-success/20 border-success/50'
+                : 'bg-danger/20 border-danger/50'
             }`}>
               <div className="flex items-center gap-3">
                 <span className="text-2xl">{result.is_correct ? '✅' : '❌'}</span>
                 <div>
-                  <p className={`font-bold ${result.is_correct ? 'text-green-400' : 'text-red-400'}`}>
+                  <p className={`font-bold ${result.is_correct ? 'text-success' : 'text-danger'}`}>
                     {result.is_correct ? 'Correct!' : 'Incorrect'}
                   </p>
-                  <p className="text-xs text-gray-400 mt-0.5">
+                  <p className="text-xs text-secondary mt-0.5">
                     Your answer: <span className="font-mono">{result.your_answer}</span>
                     {!result.is_correct && (
-                      <> · Correct answer: <span className="font-mono text-green-400">{result.correct_option}</span></>
+                      <> · Correct answer: <span className="font-mono text-success">{result.correct_option}</span></>
                     )}
                   </p>
                 </div>
@@ -444,9 +444,9 @@ export default function QuizPage() {
 
             {/* Explanation */}
             {result.explanation && (
-              <div className="bg-gray-800/40 rounded-xl p-5 border border-gray-700/40">
-                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Explanation</p>
-                <p className="text-sm text-gray-300 leading-relaxed">{result.explanation}</p>
+              <div className="bg-card rounded-xl p-5 border border-theme">
+                <p className="text-xs font-semibold text-muted uppercase tracking-wider mb-2">Explanation</p>
+                <p className="text-sm text-secondary leading-relaxed">{result.explanation}</p>
               </div>
             )}
 
@@ -454,7 +454,7 @@ export default function QuizPage() {
             <button
               onClick={nextQuestion}
               disabled={answering}
-              className="w-full py-4 rounded-xl font-medium bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-500 hover:to-purple-500 transition shadow-lg shadow-indigo-500/20 disabled:opacity-50"
+              className="w-full py-4 rounded-xl font-medium bg-gradient-accent text-white hover:bg-accent-hover transition shadow-lg shadow-accent/20 disabled:opacity-50"
             >
               {answering ? 'Loading...' : 'Next Question →'}
             </button>
