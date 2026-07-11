@@ -1,5 +1,6 @@
 import { cookies } from 'next/headers';
 import Link from 'next/link';
+import StudentTable from '@/components/admin/StudentTable';
 
 const SECTION_NAMES = [
   'English',
@@ -117,47 +118,7 @@ export default async function AdminStudentsPage() {
           </div>
         </div>
 
-        <div className="bg-card border border-theme shadow-theme-sm">
-          <div className="px-6 py-4 border-b border-theme">
-            <h2 className="font-semibold text-primary">All Users</h2>
-          </div>
-          {studentStats.length === 0 ? (
-            <div className="p-6 text-center text-muted">No users registered.</div>
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead className="bg-elevated text-secondary">
-                  <tr>
-                    <th className="text-left px-6 py-3 font-medium text-primary">Name</th>
-                    <th className="text-center px-4 py-3 font-medium text-primary">Role</th>
-                    <th className="text-center px-4 py-3 font-medium text-primary">Tests</th>
-                    <th className="text-center px-4 py-3 font-medium text-primary">Avg</th>
-                    <th className="text-center px-4 py-3 font-medium text-primary">Best</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-theme">
-                  {studentStats.map((s: any) => (
-                    <tr key={s.id} className="hover:bg-elevated">
-                      <td className="px-6 py-3 font-medium text-primary">{s.full_name || '—'}</td>
-                      <td className="px-4 py-3 text-center">
-                        <span className={`text-xs px-2 py-0.5 rounded-full ${s.role === 'admin' ? 'bg-tint-info text-info' : 'bg-elevated text-secondary'}`}>
-                          {s.role}
-                        </span>
-                      </td>
-                      <td className="px-4 py-3 text-center text-primary">{s.testsTaken}</td>
-                      <td className={`px-4 py-3 text-center font-medium ${
-                        s.testsTaken > 0 ? (s.avgScore >= 70 ? 'text-success' : s.avgScore >= 40 ? 'text-warning' : 'text-danger') : 'text-muted'
-                      }`}>{s.testsTaken > 0 ? `${s.avgScore}%` : '—'}</td>
-                      <td className="px-4 py-3 text-center font-medium text-accent">
-                        {s.testsTaken > 0 ? `${s.bestScore}%` : '—'}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </div>
+        <StudentTable initialStudents={studentStats} />
       </div>
     </div>
   );
