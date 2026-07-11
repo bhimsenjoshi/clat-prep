@@ -118,7 +118,6 @@ export default function AdminTestEditPage({ params }: PageProps) {
     } catch (err: any) {
       alert(`Failed to generate: ${err.message}`);
     }
-
     setGenerating(false);
   };
 
@@ -245,7 +244,7 @@ export default function AdminTestEditPage({ params }: PageProps) {
   if (loading) return (
     <div className="min-h-screen flex items-center justify-center bg-page">
       <div className="animate-pulse flex flex-col items-center gap-3">
-        <div className="w-8 h-8 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-4 border-accent border-t-transparent rounded-full animate-spin" />
         <p className="text-secondary text-sm">Loading editor...</p>
       </div>
     </div>
@@ -269,9 +268,9 @@ export default function AdminTestEditPage({ params }: PageProps) {
   const totalQuestionsTarget = sectionStats.reduce((sum, s) => sum + s.target.max, 0);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-page to-indigo-50/30">
+    <div className="min-h-screen bg-page">
       {/* Header */}
-      <div className="bg-card border-b shadow-theme-sm sticky top-0 z-10">
+      <div className="bg-card border-b border-theme shadow-theme-sm sticky top-0 z-10">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Link href="/admin/tests" className="text-muted hover:text-secondary transition">
@@ -282,19 +281,19 @@ export default function AdminTestEditPage({ params }: PageProps) {
             <div>
               <h1 className="text-xl font-bold text-primary">{test.title}</h1>
               <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
-                test.status === 'published' ? 'bg-green-100 text-green-700' :
-                test.status === 'draft' ? 'bg-yellow-100 text-yellow-700' :
-                'bg-gray-100 text-gray-600'
+                test.status === 'published' ? 'bg-tint-success text-success' :
+                test.status === 'draft' ? 'bg-tint-warning text-warning' :
+                'bg-elevated text-secondary'
               }`}>
                 {test.status}
               </span>
             </div>
           </div>
           <div className="text-right text-sm text-secondary">
-            <span className="font-semibold text-accent">{allQuestions.length}</span>
-            <span className="mx-1">/</span>
+            <span className="font-semibold text-primary">{allQuestions.length}</span>
+            <span className="mx-1 text-muted">/</span>
             <span>{totalQuestionsTarget}</span>
-            <span className="ml-1">questions</span>
+            <span className="ml-1 text-muted">questions</span>
           </div>
         </div>
       </div>
@@ -310,26 +309,26 @@ export default function AdminTestEditPage({ params }: PageProps) {
               <button
                 key={s.id}
                 onClick={() => { setActiveSection(s.id); setReviewAll(false); }}
-                className={`relative overflow-hidden rounded-xl p-3 text-left transition-all duration-200 ${
+                className={`relative overflow-hidden rounded-xl p-3 text-left transition-all duration-200 border border-theme ${
                   isActive
-                    ? 'bg-card shadow-theme-md ring-2 ring-indigo-500 scale-[1.02]'
-                    : 'bg-card/80 hover:bg-card hover:shadow-theme-sm border border-theme'
+                    ? 'bg-card shadow-theme-md ring-2 ring-accent scale-[1.02]'
+                    : 'bg-card hover:bg-card-hover hover:shadow-theme-sm'
                 }`}
               >
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-lg">{s.target.icon}</span>
-                  {isFull && <span className="text-[10px] font-bold text-green-600 bg-green-50 px-1.5 py-0.5 rounded-full">✓ Full</span>}
+                  {isFull && <span className="text-[10px] font-bold text-success bg-tint-success px-1.5 py-0.5 rounded-full">✓ Full</span>}
                 </div>
                 <p className="text-xs font-semibold text-primary leading-tight mb-1">{s.name}</p>
                 <p className="text-sm font-bold">
-                  <span className={isFull ? 'text-green-600' : 'text-accent'}>{s.count}</span>
+                  <span className={isFull ? 'text-success' : 'text-accent'}>{s.count}</span>
                   <span className="text-muted text-xs font-normal">/{s.target.label}</span>
                 </p>
                 {/* Progress bar */}
                 <div className="mt-1.5 h-1.5 bg-elevated rounded-full overflow-hidden">
                   <div
                     className={`h-full rounded-full transition-all duration-500 ${
-                      isFull ? 'bg-green-500' : 'bg-indigo-500'
+                      isFull ? 'bg-success' : 'bg-accent'
                     }`}
                     style={{ width: `${pct}%` }}
                   />
@@ -354,7 +353,7 @@ export default function AdminTestEditPage({ params }: PageProps) {
               <span className="text-sm text-secondary">
                 <span className="font-semibold text-primary">{allQuestions.length}</span>
                 <span className="mx-1">total</span>
-                <span className="text-yellow-600 ml-2">{totalPending} pending review</span>
+                <span className="text-warning ml-2">{totalPending} pending review</span>
               </span>
             )}
           </div>
@@ -363,7 +362,7 @@ export default function AdminTestEditPage({ params }: PageProps) {
               onClick={() => { setReviewAll(!reviewAll); setActiveSection(''); }}
               className={`px-3 py-1.5 rounded-lg text-xs font-medium transition ${
                 reviewAll
-                  ? 'bg-green-100 text-green-800 ring-1 ring-green-300'
+                  ? 'bg-tint-success text-success ring-1 ring-success/50'
                   : 'bg-elevated text-secondary hover:bg-elevated ring-1 ring-theme'
               }`}
             >
@@ -373,7 +372,7 @@ export default function AdminTestEditPage({ params }: PageProps) {
               <button
                 onClick={handleMarkAllReviewed}
                 disabled={allReviewed}
-                className="px-3 py-1.5 rounded-lg text-xs font-medium bg-green-600 text-white hover:bg-green-700 disabled:opacity-40 disabled:cursor-not-allowed transition"
+                className="px-3 py-1.5 rounded-lg text-xs font-medium bg-success text-white hover:bg-success-hover disabled:opacity-40 disabled:cursor-not-allowed transition"
               >
                 {allReviewed ? '✅ All Done' : '✅ Mark All Reviewed'}
               </button>
@@ -382,7 +381,7 @@ export default function AdminTestEditPage({ params }: PageProps) {
               <button
                 onClick={handleGenerate}
                 disabled={generating || activeQuestions.length >= (activeTarget?.max ?? 10)}
-                className="px-4 py-1.5 rounded-lg text-xs font-medium bg-gradient-to-r from-purple-600 to-indigo-600 text-white hover:from-purple-700 hover:to-indigo-700 disabled:opacity-40 disabled:cursor-not-allowed transition shadow-sm"
+                className="px-4 py-1.5 rounded-lg text-xs font-medium bg-gradient-accent text-white hover:bg-gradient-accent-hover disabled:opacity-40 disabled:cursor-not-allowed transition shadow-sm"
               >
                 {generating ? (
                   <span className="flex items-center gap-1">
@@ -398,7 +397,7 @@ export default function AdminTestEditPage({ params }: PageProps) {
               <button
                 onClick={handleComposePaper}
                 disabled={composing}
-                className="px-3 py-1.5 rounded-lg text-xs font-medium bg-gradient-to-r from-amber-500 to-orange-600 text-white hover:from-amber-600 hover:to-orange-700 disabled:opacity-40 disabled:cursor-not-allowed transition shadow-sm"
+                className="px-3 py-1.5 rounded-lg text-xs font-medium bg-gradient-warm text-white hover:bg-gradient-warm-hover disabled:opacity-40 disabled:cursor-not-allowed transition shadow-sm"
               >
                 {composing ? (
                   <span className="flex items-center gap-1">
@@ -415,29 +414,29 @@ export default function AdminTestEditPage({ params }: PageProps) {
 
         {/* Composition result */}
         {composition && (
-          <div className="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-xl p-5 mb-6">
+          <div className="bg-tint-warning border border-warning/50 rounded-xl p-5 mb-6">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
                 <span className="text-lg">🎯</span>
                 <h3 className="font-bold text-primary">120-Question Paper Composed</h3>
               </div>
               <button onClick={clearComposition}
-                className="text-xs px-2.5 py-1 rounded-md font-medium bg-card border border-theme text-stat-amber hover:bg-tint-amber transition">
+                className="text-xs px-2.5 py-1 rounded-md font-medium bg-card border border-theme text-warning hover:bg-tint-warning transition">
                 ✕ Dismiss
               </button>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-4">
               {Object.entries(composition).map(([name, info]) => (
-                <div key={name} className="bg-card/80 rounded-lg p-3 border border-amber-100">
+                <div key={name} className="bg-card/80 rounded-lg p-3 border border-warning/50">
                   <p className="text-[10px] font-semibold text-secondary uppercase tracking-wider mb-1">{name}</p>
-                  <p className="text-lg font-bold text-amber-700">{info.picked}</p>
+                  <p className="text-lg font-bold text-warning">{info.picked}</p>
                   <p className="text-[10px] text-muted">of {info.total} available</p>
                 </div>
               ))}
             </div>
             <div className="flex items-center justify-between text-sm">
               <p className="text-secondary">
-                <span className="font-bold text-amber-700">{Object.values(composition).reduce((s, i) => s + i.picked, 0)}</span>
+                <span className="font-bold text-warning">{Object.values(composition).reduce((s, i) => s + i.picked, 0)}</span>
                 <span className="mx-1">questions total</span>
                 <span className="text-muted">· random selection from each section</span>
               </p>
@@ -463,7 +462,7 @@ export default function AdminTestEditPage({ params }: PageProps) {
                 <button
                   onClick={handleGenerate}
                   disabled={generating}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium bg-gradient-to-r from-purple-600 to-indigo-600 text-white hover:from-purple-700 hover:to-indigo-700 disabled:opacity-40 transition shadow-sm"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium bg-gradient-accent text-white hover:bg-gradient-accent-hover disabled:opacity-40 transition shadow-sm"
                 >
                   {generating ? (
                     <span className="flex items-center gap-2">
@@ -493,111 +492,76 @@ export default function AdminTestEditPage({ params }: PageProps) {
                     )}
                     <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${
                       q.reviewed
-                        ? 'bg-green-50 text-green-700 ring-1 ring-green-200'
-                        : 'bg-amber-50 text-amber-700 ring-1 ring-amber-200'
+                        ? 'bg-tint-success text-success ring-1 ring-success/50'
+                        : 'bg-tint-warning text-warning ring-1 ring-warning/50'
                     }`}>
                       {q.reviewed ? 'Reviewed' : 'Pending'}
                     </span>
-                    <span className={`text-[10px] px-2 py-0.5 rounded-full ${
-                      q.difficulty === 'hard' ? 'bg-red-50 text-red-600' :
-                      q.difficulty === 'easy' ? 'bg-green-50 text-green-600' :
-                      'bg-blue-50 text-blue-600'
-                    }`}>
-                      {q.difficulty || 'medium'}
-                    </span>
                   </div>
-                  <div className="flex gap-1.5">
-                    <button onClick={() => updateQuestion(q.id, 'reviewed', !q.reviewed)}
-                      className={`text-[11px] px-2.5 py-1 rounded-md font-medium transition ${
-                        q.reviewed
-                          ? 'text-amber-600 hover:bg-amber-50'
-                          : 'text-green-600 hover:bg-green-50'
-                      }`}>
-                      {q.reviewed ? '↩ Unreview' : '✓ Review'}
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => setDeleteConfirm(q.id)}
+                      className="text-xs font-medium text-danger hover:underline"
+                    >
+                      Delete
                     </button>
-                    {deleteConfirm === q.id ? (
-                      <div className="flex gap-1">
-                        <button onClick={() => deleteQuestion(q.id)}
-                          className="text-[11px] px-2.5 py-1 rounded-md font-medium bg-red-600 text-white hover:bg-red-700 transition">
-                          Confirm
-                        </button>
-                        <button onClick={() => setDeleteConfirm(null)}
-                          className="text-[11px] px-2.5 py-1 rounded-md font-medium bg-elevated text-secondary bg-card-hover transition">
-                          Cancel
-                        </button>
-                      </div>
-                    ) : (
-                      <button onClick={() => setDeleteConfirm(q.id)}
-                        className="text-[11px] px-2.5 py-1 rounded-md font-medium text-red-500 hover:bg-red-50 transition">
-                        🗑 Delete
-                      </button>
-                    )}
+                    <button
+                      onClick={() => updateQuestion(q.id, 'reviewed', !q.reviewed)}
+                      className={`text-xs px-2.5 py-1 rounded-md font-medium ${
+                        q.reviewed
+                          ? 'bg-elevated text-secondary hover:bg-card-hover'
+                          : 'bg-success text-white hover:bg-success-hover'
+                      }`}
+                    >
+                      {q.reviewed ? 'Unmark Reviewed' : 'Mark Reviewed'}
+                    </button>
                   </div>
                 </div>
 
-                {/* Passage area */}
+                {/* Passage */}
                 {q.passage && (
-                  <div className="px-5 py-4 bg-gradient-to-r from-indigo-50/50 to-purple-50/50 border-b">
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="text-xs text-indigo-400">📄</span>
-                      <p className="text-[11px] font-medium text-indigo-500 uppercase tracking-wider">Passage</p>
-                    </div>
-                    <textarea value={q.passage}
-                      onChange={(e) => updateQuestion(q.id, 'passage', e.target.value)}
-                      className="w-full bg-card/80 border border-indigo-100 rounded-lg p-3 text-sm text-secondary leading-relaxed resize-y focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-300 transition min-h-[100px]"
-                      rows={5} />
+                  <div className="px-5 py-3 bg-card-hover border-b border-theme">
+                    <p className="text-[10px] font-medium text-accent uppercase tracking-wider mb-1">Passage</p>
+                    <p className="text-sm text-secondary leading-relaxed">{q.passage}</p>
                   </div>
                 )}
 
-                {/* Question body */}
-                <div className="px-5 py-3">
-                  <textarea value={q.question_text}
-                    onChange={(e) => updateQuestion(q.id, 'question_text', e.target.value)}
-                    className="w-full text-sm font-medium text-primary bg-elevated border border-theme rounded-lg p-3 resize-y focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-300 transition mb-3 min-h-[60px]"
-                    rows={3} />
-
-                  {/* Options */}
-                  <div className="grid grid-cols-2 gap-2">
-                    {(['A', 'B', 'C', 'D'] as const).map((opt) => (
-                      <label key={opt}
-                        className={`flex items-center gap-2 border rounded-lg px-3 py-2 text-sm cursor-pointer transition ${
-                          q.correct_option === opt
-                            ? 'border-green-400 bg-green-50 ring-1 ring-green-300'
-                            : 'border-theme hover:bg-elevated hover:border-theme'
-                        }`}>
-                        <input type="radio" name={`correct_${q.id}`} checked={q.correct_option === opt}
-                          onChange={() => updateQuestion(q.id, 'correct_option', opt)}
-                          className="accent-green-600 w-3.5 h-3.5" />
-                        <span className={`font-bold text-xs mr-1 ${
-                          q.correct_option === opt ? 'text-green-700' : 'text-muted'
-                        }`}>
-                          {opt}.
+                {/* Question Text */}
+                <div className="px-5 py-4">
+                  <p className="text-sm font-medium text-primary mb-3">{q.question_text}</p>
+                  <div className="space-y-2">
+                    {Object.entries(q.options).map(([key, value]) => (
+                      <div key={key} className="flex items-center gap-3">
+                        <span className="flex-shrink-0 w-8 h-8 rounded-lg bg-elevated flex items-center justify-center text-sm font-bold text-secondary">
+                          {key}
                         </span>
-                        <input type="text" value={q.options[opt]}
-                          onChange={(e) => {
-                            const newOpts = { ...q.options, [opt]: e.target.value };
-                            updateQuestion(q.id, 'options', JSON.stringify(newOpts));
-                          }}
-                          className={`flex-1 bg-transparent text-sm focus:outline-none ${
-                            q.correct_option === opt ? 'text-green-800 font-medium' : 'text-secondary'
-                          }`} />
-                        {q.correct_option === opt && (
-                          <span className="text-[10px] font-bold text-green-600">✓</span>
+                        <span className="text-sm text-primary">{value}</span>
+                        {q.correct_option === key && (
+                          <span className="ml-auto text-success text-sm font-medium">✓ Correct</span>
                         )}
-                      </label>
+                      </div>
                     ))}
                   </div>
 
                   {/* Explanation */}
-                  <div className="mt-3">
-                    <p className="text-[10px] font-medium text-muted mb-1 uppercase tracking-wider">Explanation</p>
-                    <textarea value={q.explanation ?? ''}
-                      onChange={(e) => updateQuestion(q.id, 'explanation', e.target.value)}
-                      placeholder="Add explanation..."
-                      className="w-full border border-dashed border-theme rounded-lg p-2 text-xs text-secondary bg-elevated/50 resize-none focus:outline-none focus:ring-1 focus:ring-indigo-300 focus:border-indigo-300 transition"
-                      rows={2} />
-                  </div>
+                  {q.explanation && (
+                    <div className="mt-4 p-3 bg-tint-info border border-info/50 rounded-lg">
+                      <p className="text-[10px] font-medium text-info uppercase tracking-wider mb-1">Explanation</p>
+                      <p className="text-xs text-secondary leading-relaxed">{q.explanation}</p>
+                    </div>
+                  )}
                 </div>
+
+                {/* Delete confirmation */}
+                {deleteConfirm === q.id && (
+                  <div className="bg-danger/10 border-t border-danger/50 p-4 flex items-center justify-between text-sm">
+                    <p className="text-danger">Are you sure you want to delete this question?</p>
+                    <div className="flex gap-2">
+                      <button onClick={() => setDeleteConfirm(null)} className="text-secondary hover:underline">Cancel</button>
+                      <button onClick={() => deleteQuestion(q.id)} className="text-danger font-medium hover:underline">Delete</button>
+                    </div>
+                  </div>
+                )}
               </div>
             );
           })}
