@@ -1,9 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import PageHeader from '@/components/PageHeader';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 import type { Test, Section, Question } from '@/types';
 
 interface PageProps {
@@ -269,34 +269,7 @@ export default function AdminTestEditPage({ params }: PageProps) {
 
   return (
     <div className="min-h-screen bg-page">
-      {/* Header */}
-      <div className="bg-card border-b border-theme shadow-theme-sm sticky top-0 z-10">
-        <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Link href="/admin/tests" className="text-muted hover:text-secondary transition">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
-            </Link>
-            <div>
-              <h1 className="text-xl font-bold text-primary">{test.title}</h1>
-              <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
-                test.status === 'published' ? 'bg-tint-success text-success' :
-                test.status === 'draft' ? 'bg-tint-warning text-warning' :
-                'bg-elevated text-secondary'
-              }`}>
-                {test.status}
-              </span>
-            </div>
-          </div>
-          <div className="text-right text-sm text-secondary">
-            <span className="font-semibold text-primary">{allQuestions.length}</span>
-            <span className="mx-1 text-muted">/</span>
-            <span>{totalQuestionsTarget}</span>
-            <span className="ml-1 text-muted">questions</span>
-          </div>
-        </div>
-      </div>
+      <PageHeader title='Tests' isAdmin navItems={[{href:'/admin/dashboard',label:'Dashboard',icon:'⚙️'}]} />
 
       <div className="max-w-6xl mx-auto px-4 py-6">
         {/* Section progress cards */}

@@ -1,30 +1,64 @@
-import { createServerSupabaseClient } from '@/lib/supabase/server';
+'use client';
+
+import { useEffect, useState } from 'react';
+import { createClient } from '@/lib/supabase/client';
 import Link from 'next/link';
+import PageHeader from '@/components/PageHeader';
 
-export default async function StudentTestsPage() {
-  const supabase = await createServerSupabaseClient();
+interface Test {
+  id: string;
+  title: string;
+  published_at: string | null;
+  created_at: string;
+}
 
-  const { data: tests } = await supabase
-    .from('tests')
-    .select('id, title, published_at, created_at')
-    .eq('status', 'published')
-    .order('published_at', { ascending: false, nullsFirst: false });
+interface Attempt {
+  test_id: string;
+  submitted_at: string | null;
+}
 
-  // Check which tests the user has already attempted
-  const { data: { user } } = await supabase.auth.getUser();
-  const { data: attempts } = user
-    ? await supabase
-        .from('attempts')
-        .select('test_id, submitted_at')
-        .eq('student_id', user.id)
-    : { data: [] };
+export default function StudentTestsPage() {
+  const supabase = createClient();
+  const [tests, setTests] = useState<Test[] | null>(null);
+  const [attemptedMap, setAttemptedMap] = useState<Map<string, boolean>>(new Map());
+  const [user, setUser] = useState<any>(null);
 
-  const attemptedMap = new Map(
-    (attempts ?? []).map((a) => [a.test_id, a.submitted_at !== null])
-  );
+  useEffect(() => {
+    async function fetchData() {
+      const { data: testsData } = await supabase
+        .from('tests')
+        .select('id, title, published_at, created_at')
+        .eq('status', 'published')
+        .order('published_at', { ascending: false, nullsFirst: false });
+
+      setTests(testsData);
+
+      const { data: { user: authUser } } = await supabase.auth.getUser();
+      setUser(authUser);
+
+      if (authUser) {
+        const { data: attemptsData } = await supabase
+          .from('attempts')
+          .select('test_id, submitted_at')
+          .eq('student_id', authUser.id);
+
+        const map = new Map<string, boolean>(
+          (attemptsData ?? []).map((a: Attempt) => [a.test_id, a.submitted_at !== null])
+        );
+        setAttemptedMap(map);
+      }
+    }
+
+    fetchData();
+  }, []);
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-8">
+      <PageHeader
+        title="Tests"
+        navItems={[{ href: '/student/dashboard', label: 'Dashboard', icon: '📊' }]}
+      />
+
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-2xl font-bold text-primary">Practice Tests</h1>

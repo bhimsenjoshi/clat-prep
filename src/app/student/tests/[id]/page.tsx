@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback, useRef } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import PageHeader from '@/components/PageHeader';
 import type { Test, Section, Question } from '@/types';
 
 interface TestPageProps {
@@ -324,6 +325,7 @@ export default function TestTakingPage({ params }: TestPageProps) {
 
   return (
     <div className="min-h-screen bg-page">
+      <PageHeader title='Test' />
       {/* Top bar */}
       <div className="bg-card border-b border-theme shadow-theme-sm sticky top-0 z-10">
         <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">

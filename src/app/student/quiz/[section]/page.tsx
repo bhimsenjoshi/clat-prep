@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/client';
 import { persistSessionToCookie } from '@/lib/supabase/client';
 import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
+import PageHeader from '@/components/PageHeader';
 import type { SectionName } from '@/types';
 
 interface QuestionData {
@@ -332,6 +333,7 @@ export default function QuizPage() {
 
   return (
     <div className="min-h-screen bg-page">
+      <PageHeader title="Section Quiz" />
       {/* Top bar */}
       <div className="border-b border-theme bg-card-hover backdrop-blur-sm sticky top-0 z-10">
         <div className="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import PageHeader from '@/components/PageHeader';
 
 type TestRow = {
   id: string;
@@ -100,12 +101,7 @@ export default function AdminTestsPage() {
   return (
     <div className="min-h-screen bg-page text-primary">
       <div className="max-w-4xl mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl font-bold text-primary">Manage Tests</h1>
-          <Link href="/admin/dashboard" className="text-sm text-accent hover:underline">
-            ← Dashboard
-          </Link>
-        </div>
+        <PageHeader title='Manage Tests' isAdmin navItems={[{href:'/admin/dashboard',label:'Dashboard',icon:'⚙️'}]} />
 
         {/* Create test */}
         <div className="bg-card border border-theme rounded-xl p-5 mb-6 shadow-theme-sm">

@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import type { SectionName } from '@/types';
+import PageHeader from '@/components/PageHeader';
 
 const SECTIONS: { name: SectionName; icon: string; desc: string; color: string }[] = [
   {
@@ -83,35 +84,7 @@ export default function QuizHub() {
 
   return (
     <div className="min-h-screen bg-page">
-      {/* Header */}
-      <div className="border-b border-theme bg-card-hover backdrop-blur-sm sticky top-0 z-10">
-        <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <span className="text-2xl">🎯</span>
-            <div>
-              <h1 className="text-xl font-bold text-primary">Practice Quizzes</h1>
-              <p className="text-secondary">
-                {userName ? `Ready, ${userName}?` : 'Pick a section to start'}
-              </p>
-            </div>
-          </div>
-          <div className="flex items-center gap-3">
-            <div className={`text-xs px-3 py-1.5 rounded-full font-medium ${
-              dailyRemaining === 'unlimited'
-                ? 'bg-info/20 text-info border border-info/50'
-                : dailyRemaining > 0
-                  ? 'bg-success/20 text-success border border-success/50'
-                  : 'bg-danger/20 text-danger border border-danger/50'
-            }`}>
-              {dailyRemaining === 'unlimited' ? '♾️ Unlimited' : `📅 ${dailyRemaining} free today`}
-            </div>
-            <Link href="/student/dashboard"
-              className="px-3 py-1.5 rounded-lg text-xs font-medium bg-card text-secondary hover:bg-card-hover transition">
-              ← Dashboard
-            </Link>
-          </div>
-        </div>
-      </div>
+      <PageHeader title='Practice Quiz' />
 
       <div className="max-w-4xl mx-auto px-4 py-8">
         {/* Prompt */}

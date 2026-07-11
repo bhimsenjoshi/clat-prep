@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import PageHeader from '@/components/PageHeader';
 import type { Section, Question } from '@/types';
 
 interface ReviewPageProps {
@@ -118,6 +119,7 @@ export default function ReviewPage({ params }: ReviewPageProps) {
 
   return (
     <div className="min-h-screen bg-page">
+      <PageHeader title='Review' />
       {/* Header */}
       <div className="bg-card border-b border-theme shadow-theme-sm sticky top-0 z-10">
         <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">

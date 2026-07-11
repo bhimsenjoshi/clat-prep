@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import ThemeToggle from '@/components/ThemeToggle';
+import PageHeader from '@/components/PageHeader';
 
 const SECTION_NAMES = [
   'English', 'Current Affairs', 'Legal Reasoning',
@@ -102,7 +102,6 @@ export default function AnalyticsPage() {
   const [activeTab, setActiveTab] = useState<'practice' | 'tests' | 'editorials'>('practice');
   const [editorialStats, setEditorialStats] = useState<any>(null);
   const [editorialStatsLoading, setEditorialStatsLoading] = useState(true);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false); // <--- Added this line
 
   useEffect(() => {
     const load = async () => {
@@ -594,43 +593,7 @@ export default function AnalyticsPage() {
 
   return (
     <div className="min-h-screen bg-page">
-      {/* Header */}
-      <header className="bg-card border-b border-theme shadow-theme-sm sticky top-0 z-20">
-        <div className="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Link href="/student/dashboard" className="text-muted hover:text-secondary">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
-            </Link>
-            <span className="text-lg font-bold text-primary">Analytics</span>
-          </div>
-          <nav className="hidden md:flex items-center gap-2">
-            <Link href="/student/dashboard" className="px-3 py-2 rounded-lg text-sm font-medium text-secondary hover:bg-elevated transition">
-              📊 Dashboard
-            </Link>
-            <Link href="/student/profile" className="px-3 py-2 rounded-lg text-sm font-medium text-secondary hover:bg-elevated transition">
-              👤 Profile
-            </Link>
-            <ThemeToggle />
-          </nav>
-          <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="md:hidden p-2 rounded-lg hover:bg-elevated transition">
-            <svg className="w-5 h-5 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={mobileMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"} />
-            </svg>
-          </button>
-        </div>
-        {mobileMenuOpen && (
-          <div className="md:hidden border-t border-theme-light bg-card px-4 py-3 space-y-1">
-            <Link href="/student/dashboard" onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-secondary hover:bg-elevated">📊 Dashboard</Link>
-            <Link href="/student/profile" onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-secondary hover:bg-elevated">👤 Profile</Link>
-            <ThemeToggle /> {/* Re-added ThemeToggle to mobile menu */}
-            <hr className="my-1 border-theme-light" />
-          </div>
-        )}
-      </header>
+      <PageHeader title='Analytics' navItems={[{href:'/student/dashboard',label:'Dashboard',icon:'📊'}]} />
 
       <main className="max-w-4xl mx-auto px-4 py-6 space-y-6">
         {/* Tabs */}
