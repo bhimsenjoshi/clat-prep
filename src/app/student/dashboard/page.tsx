@@ -382,7 +382,7 @@ export default function StudentDashboard() {
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-2">
             <Link href="/student/practice"
-              className="px-4 py-2 rounded-lg text-sm font-medium bg-accent text-white hover:bg-accent-hover active:scale-[0.97] transition-all duration-150 shadow-theme-sm">
+              className="px-3 py-2 rounded-lg text-sm font-medium text-accent hover:bg-card-hover active:scale-[0.97] transition-all duration-150">
               🎯 Practice
             </Link>
             <Link href="/student/analytics"
