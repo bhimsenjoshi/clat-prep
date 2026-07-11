@@ -134,12 +134,10 @@
 
 /* ─── Apply theme to page shell ─── */
 html {
-  background-color: var(--bg-page);
   transition: background-color 0.2s ease;
 }
 
 body {
-  color: var(--text-primary);
   transition: color 0.2s ease;
 }
 

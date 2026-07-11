@@ -508,7 +508,7 @@ export default function AnalyticsPage() {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-elevated to-tint-indigo/30">
+    <div className="min-h-screen bg-page">
       {/* Header */}
       <header className="bg-card border-b border-theme shadow-theme-sm sticky top-0 z-10">
         <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
