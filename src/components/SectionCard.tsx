@@ -35,15 +35,15 @@ export default function SectionCard({
   const showBody = !collapsible || expanded;
 
   const borderMap = {
-    default: 'border-slate-700/50',
-    accent: 'border-indigo-700/40',
-    plain: 'border-slate-700/30',
+    default: 'border-theme',
+    accent: 'border-indigo-500/40',
+    plain: 'border-theme/70',
   };
 
   const bgMap = {
-    default: 'bg-slate-800/60',
+    default: 'bg-card',
     accent: 'bg-gradient-to-r from-indigo-900/60 via-purple-900/50 to-indigo-900/60',
-    plain: 'bg-slate-800/40',
+    plain: 'bg-card/80',
   };
 
   const handleToggle = () => {
@@ -63,7 +63,7 @@ export default function SectionCard({
       >
         {icon && <span className="text-lg shrink-0 leading-none">{icon}</span>}
 
-        <span className="text-sm font-semibold text-slate-300 flex-1 truncate">
+        <span className="text-sm font-semibold text-primary flex-1 truncate">
           {title}
         </span>
 
