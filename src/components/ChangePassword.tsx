@@ -36,10 +36,17 @@ export default function ChangePassword({ onSuccess, compact }: ChangePasswordPro
     setLoading(true);
 
     try {
-      // Supabase requires re-authentication for password change
-      // First re-auth with current password, then update
+      // Get current user email for re-authentication
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user?.email) {
+        setMessage({ type: 'error', text: 'Could not verify your session. Please sign in again.' });
+        setLoading(false);
+        return;
+      }
+
+      // Re-authenticate with current password before allowing change
       const { error: signInError } = await supabase.auth.signInWithPassword({
-        email: '', // will be fetched from session
+        email: user.email,
         password: currentPassword,
       });
 

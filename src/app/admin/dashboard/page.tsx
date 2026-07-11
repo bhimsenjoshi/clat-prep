@@ -85,7 +85,10 @@ export default function AdminDashboard() {
               className="border border-theme px-4 py-2 rounded-lg text-sm bg-card-hover text-primary hover:bg-elevated transition">
               🔑 Change Password
             </button>
-            <button onClick={() => supabase.auth.signOut().then(() => router.push('/'))} className="border border-theme px-4 py-2 rounded-lg text-sm bg-card-hover text-danger hover:bg-tint-danger transition">Sign Out</button>
+            <button onClick={() => supabase.auth.signOut().then(() => router.push('/'))} 
+              className="border border-danger/30 px-4 py-2 rounded-lg text-sm text-danger hover:bg-tint-danger hover:border-danger/60 active:bg-danger/20 transition font-medium">
+              🚪 Sign Out
+            </button>
           </div>
         </div>
 
