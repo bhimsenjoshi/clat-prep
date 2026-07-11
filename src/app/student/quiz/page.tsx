@@ -75,8 +75,8 @@ export default function QuizHub() {
   if (loading) return (
     <div className="min-h-screen flex items-center justify-center bg-page">
       <div className="animate-pulse flex flex-col items-center gap-3">
-        <div className="w-8 h-8 border-4 border-indigo-400 border-t-transparent rounded-full animate-spin" />
-        <p className="text-gray-400 text-sm">Loading quiz hub...</p>
+        <div className="w-8 h-8 border-4 border-accent border-t-transparent rounded-full animate-spin" />
+        <p className="text-secondary text-sm">Loading quiz hub...</p>
       </div>
     </div>
   );
@@ -84,13 +84,13 @@ export default function QuizHub() {
   return (
     <div className="min-h-screen bg-page">
       {/* Header */}
-      <div className="bg-gray-800/50 border-b border-gray-700/50 backdrop-blur-sm sticky top-0 z-10">
+      <div className="border-b border-theme bg-card-hover backdrop-blur-sm sticky top-0 z-10">
         <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <span className="text-2xl">🎯</span>
             <div>
               <h1 className="text-xl font-bold text-primary">Practice Quizzes</h1>
-              <p className="text-xs text-gray-400">
+              <p className="text-secondary">
                 {userName ? `Ready, ${userName}?` : 'Pick a section to start'}
               </p>
             </div>
@@ -98,15 +98,15 @@ export default function QuizHub() {
           <div className="flex items-center gap-3">
             <div className={`text-xs px-3 py-1.5 rounded-full font-medium ${
               dailyRemaining === 'unlimited'
-                ? 'bg-purple-900/50 text-purple-300 border border-purple-700/50'
+                ? 'bg-info/20 text-info border border-info/50'
                 : dailyRemaining > 0
-                  ? 'bg-green-900/50 text-green-300 border border-green-700/50'
-                  : 'bg-red-900/50 text-red-300 border border-red-700/50'
+                  ? 'bg-success/20 text-success border border-success/50'
+                  : 'bg-danger/20 text-danger border border-danger/50'
             }`}>
               {dailyRemaining === 'unlimited' ? '♾️ Unlimited' : `📅 ${dailyRemaining} free today`}
             </div>
             <Link href="/student/dashboard"
-              className="px-3 py-1.5 rounded-lg text-xs font-medium bg-gray-700 text-gray-300 hover:bg-gray-600 transition">
+              className="px-3 py-1.5 rounded-lg text-xs font-medium bg-card text-secondary hover:bg-card-hover transition">
               ← Dashboard
             </Link>
           </div>
@@ -116,8 +116,8 @@ export default function QuizHub() {
       <div className="max-w-4xl mx-auto px-4 py-8">
         {/* Prompt */}
         <div className="text-center mb-10">
-          <h2 className="text-2xl font-bold text-primary mb-2">Choose Your Section</h2>
-          <p className="text-gray-400 max-w-lg mx-auto">
+          <h2 className="text-2xl font-bold text-heading mb-2">Choose Your Section</h2>
+          <p className="text-secondary max-w-lg mx-auto">
             Pick a CLAT section and get non-stop practice questions with instant feedback and explanations.
           </p>
         </div>
@@ -129,15 +129,11 @@ export default function QuizHub() {
               key={section.name}
               onClick={() => startQuiz(section.name)}
               disabled={dailyRemaining !== 'unlimited' && dailyRemaining <= 0}
-              className={`group relative overflow-hidden rounded-xl p-6 text-left transition-all duration-200 ${
+              className={`group relative overflow-hidden rounded-xl p-6 text-left transition-all duration-200 bg-card border border-theme ${
                 dailyRemaining !== 'unlimited' && dailyRemaining <= 0
                   ? 'opacity-40 cursor-not-allowed'
-                  : 'hover:scale-[1.02] hover:shadow-xl hover:shadow-indigo-500/10 cursor-pointer'
+                  : 'hover:scale-[1.02] hover:shadow-xl hover:shadow-accent/10 cursor-pointer hover:border-accent'
               }`}
-              style={{
-                background: `linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02))`,
-                borderImage: `linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02)) 1`,
-              }}
             >
               {/* Gradient accent top */}
               <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${section.color}`} />
@@ -145,7 +141,7 @@ export default function QuizHub() {
               <div className="relative z-10">
                 <span className="text-3xl mb-3 block">{section.icon}</span>
                 <h3 className="text-lg font-bold text-primary mb-1">{section.name}</h3>
-                <p className="text-sm text-gray-400 mb-4">{section.desc}</p>
+                <p className="text-sm text-secondary mb-4">{section.desc}</p>
 
                 <div className="flex items-center gap-2 text-xs font-medium">
                   <span className={`bg-gradient-to-r ${section.color} text-white px-3 py-1 rounded-full`}>
@@ -159,7 +155,7 @@ export default function QuizHub() {
 
         {/* Daily limit info */}
         <div className="mt-10 text-center">
-          <p className="text-xs text-gray-500">
+          <p className="text-xs text-muted">
             {dailyRemaining === 'unlimited'
               ? '✨ Premium plan — unlimited practice questions'
               : `📅 ${dailyRemaining} free questions remaining today. Upgrade for unlimited!`
