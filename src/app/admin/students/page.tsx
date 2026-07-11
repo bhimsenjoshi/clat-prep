@@ -86,7 +86,7 @@ export default async function AdminStudentsPage() {
     <div className="min-h-screen bg-page text-primary">
       <div className="max-w-5xl mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl font-bold text-primary">Student Analytics</h1>
+          <h1 className="text-2xl font-bold text-primary">Manage Users & Student Analytics</h1>
           <Link href="/admin/dashboard" className="text-sm text-accent hover:underline">← Dashboard</Link>
         </div>
 

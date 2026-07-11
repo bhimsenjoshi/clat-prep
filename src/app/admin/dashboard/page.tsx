@@ -77,7 +77,7 @@ export default function AdminDashboard() {
           <h1 className="text-2xl font-bold text-primary">Admin Dashboard</h1>
           <div className="flex gap-3">
             <Link href="/admin/tests" className="border border-theme px-4 py-2 rounded-lg text-sm bg-card-hover text-primary hover:bg-elevated transition">Manage Tests</Link>
-            <Link href="/admin/students" className="border border-theme px-4 py-2 rounded-lg text-sm bg-card-hover text-primary hover:bg-elevated transition">Student Analytics</Link>
+            <Link href="/admin/students" className="border border-theme px-4 py-2 rounded-lg text-sm bg-card-hover text-primary hover:bg-elevated transition">Manage Users & Analytics</Link>
             <button onClick={() => supabase.auth.signOut().then(() => router.push('/'))} className="border border-theme px-4 py-2 rounded-lg text-sm bg-card-hover text-danger hover:bg-tint-danger transition">Sign Out</button>
           </div>
         </div>
@@ -92,12 +92,12 @@ export default function AdminDashboard() {
           <Link href="/admin/students" className="bg-card border border-theme rounded-xl p-6 shadow-theme-sm hover:shadow-theme-md transition block">
             <p className="text-4xl font-bold text-stat-green">{stats.users}</p>
             <p className="text-sm text-secondary mt-1">Total Users</p>
-            <p className="text-xs text-stat-green mt-2">Click to view analytics →</p>
+            <p className="text-xs text-stat-green mt-2">Manage Users & Analytics →</p>
           </Link>
           <Link href="/admin/students" className="bg-card border border-theme rounded-xl p-6 shadow-theme-sm hover:shadow-theme-md transition block">
             <p className="text-4xl font-bold text-stat-blue">{stats.attempts}</p>
             <p className="text-sm text-secondary mt-1">Completed Attempts</p>
-            <p className="text-xs text-stat-blue mt-2">Click to view →</p>
+            <p className="text-xs text-stat-blue mt-2">Manage Users & Analytics →</p>
           </Link>
         </div>
 
@@ -141,8 +141,8 @@ export default function AdminDashboard() {
               )}
             </button>
             <Link href="/admin/students" className="border-2 border-dashed border-theme rounded-xl p-6 text-center hover:bg-elevated transition">
-              <p className="text-lg font-semibold text-primary">View Student Analytics</p>
-              <p className="text-sm text-secondary mt-1">See performance across all tests</p>
+              <p className="text-lg font-semibold text-primary">Manage Users & Analytics</p>
+              <p className="text-sm text-secondary mt-1">Promote, delete, and view student performance</p>
             </Link>
           </div>
         </div>
