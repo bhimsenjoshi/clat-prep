@@ -86,8 +86,8 @@ export default function SignupPage() {
     <div className="min-h-screen bg-white text-gray-900 flex items-center justify-center px-4">
       <div className="w-full max-w-sm bg-white border border-gray-200 rounded-xl p-8 shadow-md space-y-6">
         <div className="text-center">
-          <h1 className="text-2xl font-bold">Create your account</h1>
-          <p className="text-gray-500 text-sm mt-1">Start your CLAT preparation journey</p>
+          <h1 className="text-2xl font-bold">Join CLATly</h1>
+          <p className="text-gray-500 text-sm mt-1">Your AI-powered CLAT prep starts here</p>
         </div>
 
         <form onSubmit={handleSignup} className="space-y-4">
@@ -99,7 +99,7 @@ export default function SignupPage() {
               required
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full bg-white text-gray-900 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
               placeholder="Your name"
             />
           </div>
@@ -111,7 +111,7 @@ export default function SignupPage() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full bg-white text-gray-900 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
               placeholder="you@example.com"
             />
           </div>
@@ -124,7 +124,7 @@ export default function SignupPage() {
               minLength={6}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full bg-white text-gray-900 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
               placeholder="At least 6 characters"
             />
           </div>

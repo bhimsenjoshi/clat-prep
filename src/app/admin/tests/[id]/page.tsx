@@ -18,7 +18,7 @@ const SECTION_NAMES = [
   'Quantitative Techniques',
 ] as const;
 
-// CLAT 2027 question targets per section
+// CLAT 2026 question targets per section
 const SECTION_TARGETS: Record<string, { min: number; max: number; label: string; icon: string }> = {
   'English':               { min: 22, max: 26, label: '22-26', icon: '📖' },
   'Current Affairs':       { min: 28, max: 32, label: '28-32', icon: '🌍' },

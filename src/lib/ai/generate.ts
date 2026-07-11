@@ -26,7 +26,7 @@ export interface GeneratedQuestion {
   difficulty: 'easy' | 'medium' | 'hard';
 }
 
-// ─── Per-section question targets (CLAT 2027 pattern) ───
+// ─── Per-section question targets (CLAT 2026 pattern) ───
 
 const PER_SECTION_TARGET: Record<SectionName, { passages: number; totalQ: string; format: string }> = {
   'English':               { passages: 5, totalQ: '22-26', format: '5 reading comprehension passages (~450 words each), 4-6 questions per passage' },
@@ -188,7 +188,7 @@ Example passage structure (DO NOT copy, use as style guide):
 
 Return ONLY a valid JSON object with a "questions" key containing the array. Every question must have the 'passage' field filled.`,
 
-  'Quantitative Techniques': `You are a CLAT Quantitative Techniques content creator. Generate questions for the CLAT 2027 exam pattern.
+  'Quantitative Techniques': `You are a CLAT Quantitative Techniques content creator. Generate questions for the CLAT 2026 exam pattern.
 
 ### EXAM GUIDELINES:
 1. Format: 2-3 passage-based caselets (Data Interpretation)

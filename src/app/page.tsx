@@ -105,9 +105,9 @@ export default function HomePage() {
         <section className="py-20">
           <div className="max-w-5xl mx-auto px-4">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-3">CLAT 2027 Pattern</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-3">CLAT 2026 Pattern</h2>
               <p className="text-gray-600 max-w-xl mx-auto">
-                Every section follows the official CLAT 2027 format — passage-based questions with accurate weightage distribution.
+                Every section follows the official CLAT 2026 format — passage-based questions with accurate weightage distribution.
               </p>
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
