@@ -74,7 +74,7 @@ function LockedSection({ children, title, icon, isPremium }: {
       </div>
       {/* Lock overlay */}
       <div className="absolute inset-0 flex flex-col items-center justify-center bg-card/60 backdrop-blur-[2px] p-6">
-        <div className="bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-200 rounded-2xl p-6 text-center max-w-sm shadow-lg">
+        <div className="bg-tint-warning border border-warning/50 rounded-2xl p-6 text-center max-w-sm shadow-theme-lg">
           <div className="text-4xl mb-3">🔒</div>
           <h3 className="text-lg font-bold text-primary mb-1">{icon} {title}</h3>
           <p className="text-sm text-secondary mb-5">
@@ -82,7 +82,7 @@ function LockedSection({ children, title, icon, isPremium }: {
           </p>
           <Link
             href="/student/profile"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold bg-gradient-to-r from-amber-500 to-orange-600 text-white hover:from-amber-600 hover:to-orange-700 transition shadow-theme-md"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold bg-gradient-warm text-white hover:bg-gradient-warm-hover transition shadow-theme-md"
           >
             ⭐ Upgrade to Premium
           </Link>
@@ -102,6 +102,7 @@ export default function AnalyticsPage() {
   const [activeTab, setActiveTab] = useState<'practice' | 'tests' | 'editorials'>('practice');
   const [editorialStats, setEditorialStats] = useState<any>(null);
   const [editorialStatsLoading, setEditorialStatsLoading] = useState(true);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false); // <--- Added this line
 
   useEffect(() => {
     const load = async () => {
@@ -291,7 +292,7 @@ export default function AnalyticsPage() {
 
   if (loading) return (
     <div className="min-h-screen flex items-center justify-center bg-page">
-      <div className="animate-spin w-8 h-8 border-2 border-indigo-500 border-t-transparent rounded-full" />
+      <div className="animate-spin w-8 h-8 border-2 border-accent border-t-transparent rounded-full" />
     </div>
   );
 
@@ -318,10 +319,10 @@ export default function AnalyticsPage() {
                 </span>
               </div>
               <div className="flex items-center gap-4 text-xs text-secondary">
-                <span className="font-semibold text-green-600">{s.correct}<span className="text-muted font-normal">✓</span></span>
+                <span className="font-semibold text-success">{s.correct}<span className="text-muted font-normal">✓</span></span>
                 <span className="font-semibold text-danger">{s.incorrect}<span className="text-muted font-normal">✗</span></span>
                 <span className={`font-semibold ${
-                  s.accuracy >= 70 ? 'text-green-600' : s.accuracy >= 40 ? 'text-stat-amber' : 'text-danger'
+                  s.accuracy >= 70 ? 'text-success' : s.accuracy >= 40 ? 'text-warning' : 'text-danger'
                 }`}>
                   {s.accuracy}%
                 </span>
@@ -333,7 +334,7 @@ export default function AnalyticsPage() {
               <div className="flex-1 bg-elevated rounded-full h-2.5">
                 <div
                   className={`h-2.5 rounded-full transition-all ${
-                    s.accuracy >= 70 ? 'bg-green-500' : s.accuracy >= 40 ? 'bg-amber-500' : 'bg-red-500'
+                    s.accuracy >= 70 ? 'bg-success' : s.accuracy >= 40 ? 'bg-warning' : 'bg-danger'
                   }`}
                   style={{ width: `${Math.min(s.accuracy, 100)}%` }}
                 />
@@ -356,14 +357,14 @@ export default function AnalyticsPage() {
       if (!best || !worst) return null;
       return (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          <div className="bg-tint-green border border-green-200 rounded-xl p-4">
-            <p className="text-xs text-stat-green font-medium uppercase tracking-wider">✅ Strongest Section</p>
-            <p className="text-lg font-bold text-green-800 mt-1">{best.icon} {best.name}</p>
-            <p className="text-sm text-stat-green">{best.accuracy}% accuracy · {best.totalQuestions} questions</p>
+          <div className="bg-tint-success border border-success/50 rounded-xl p-4">
+            <p className="text-xs text-success font-medium uppercase tracking-wider">✅ Strongest Section</p>
+            <p className="text-lg font-bold text-primary mt-1">{best.icon} {best.name}</p>
+            <p className="text-sm text-success">{best.accuracy}% accuracy · {best.totalQuestions} questions</p>
           </div>
-          <div className="bg-tint-red border border-red-200 rounded-xl p-4">
+          <div className="bg-tint-danger border border-danger/50 rounded-xl p-4">
             <p className="text-xs text-danger font-medium uppercase tracking-wider">🎯 Needs Practice</p>
-            <p className="text-lg font-bold text-red-800 mt-1">{worst.icon} {worst.name}</p>
+            <p className="text-lg font-bold text-primary mt-1">{worst.icon} {worst.name}</p>
             <p className="text-sm text-danger">{worst.accuracy}% accuracy · {worst.totalQuestions} questions</p>
           </div>
         </div>
@@ -402,7 +403,7 @@ export default function AnalyticsPage() {
                   {s.correct_count}/{s.questions_answered}
                 </span>
                 <span className={`text-sm font-bold ${
-                  pct >= 70 ? 'text-green-600' : pct >= 40 ? 'text-stat-amber' : 'text-red-600'
+                  pct >= 70 ? 'text-success' : pct >= 40 ? 'text-warning' : 'text-danger'
                 }`}>
                   {pct}%
                 </span>
@@ -417,14 +418,14 @@ export default function AnalyticsPage() {
   const TestBestWeakContent = (
     bestSection && weakSection ? (
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-        <div className="bg-tint-green border border-green-200 rounded-xl p-4">
-          <p className="text-xs text-stat-green font-medium uppercase tracking-wider">✅ Strongest Section</p>
-          <p className="text-lg font-bold text-green-800 mt-1">{bestSection.name}</p>
-          <p className="text-sm text-stat-green">Avg {bestSection.avg} · {bestSection.count} attempts</p>
+        <div className="bg-tint-success border border-success/50 rounded-xl p-4">
+          <p className="text-xs text-success font-medium uppercase tracking-wider">✅ Strongest Section</p>
+          <p className="text-lg font-bold text-primary mt-1">{bestSection.name}</p>
+          <p className="text-sm text-success">Avg {bestSection.avg} · {bestSection.count} attempts</p>
         </div>
-        <div className="bg-tint-red border border-red-200 rounded-xl p-4">
+        <div className="bg-tint-danger border border-danger/50 rounded-xl p-4">
           <p className="text-xs text-danger font-medium uppercase tracking-wider">🎯 Needs Focus</p>
-          <p className="text-lg font-bold text-red-800 mt-1">{weakSection.name}</p>
+          <p className="text-lg font-bold text-primary mt-1">{weakSection.name}</p>
           <p className="text-sm text-danger">Avg {weakSection.avg} · {weakSection.count} attempts</p>
         </div>
       </div>
@@ -448,14 +449,14 @@ export default function AnalyticsPage() {
                 <span className="text-sm font-medium text-primary">{s.name}</span>
                 <div className="flex items-center gap-3 text-xs text-secondary">
                   <span className="font-semibold text-accent">{s.avg}<span className="text-muted font-normal"> avg</span></span>
-                  <span className="font-semibold text-stat-green">{s.max}<span className="text-muted font-normal"> best</span></span>
+                  <span className="font-semibold text-success">{s.max}<span className="text-muted font-normal"> best</span></span>
                   {avgTime > 0 && <span>{avgTime}m avg</span>}
                 </div>
               </div>
               <div className="w-full bg-elevated rounded-full h-2.5">
                 <div
                   className={`h-2.5 rounded-full transition-all ${
-                    pct >= 70 ? 'bg-green-500' : pct >= 40 ? 'bg-amber-500' : 'bg-red-500'
+                    pct >= 70 ? 'bg-success' : pct >= 40 ? 'bg-warning' : 'bg-danger'
                   }`}
                   style={{ width: `${Math.min(pct, 100)}%` }}
                 />
@@ -491,8 +492,8 @@ export default function AnalyticsPage() {
             </div>
             <div className="flex items-center gap-4 shrink-0">
               <span className={`text-sm font-bold ${
-                (a.total_score ?? 0) >= 70 ? 'text-green-600' :
-                (a.total_score ?? 0) >= 40 ? 'text-stat-amber' : 'text-red-600'
+                (a.total_score ?? 0) >= 70 ? 'text-success' :
+                (a.total_score ?? 0) >= 40 ? 'text-warning' : 'text-danger'
               }`}>
                 {a.total_score ?? '—'}%
               </span>
@@ -507,275 +508,236 @@ export default function AnalyticsPage() {
     </div>
   );
 
+  const OverallSummaryContent = (
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      {/* Total Practice Questions */}
+      <div className="bg-card border border-theme rounded-xl p-4 text-center shadow-theme-sm">
+        <p className="text-4xl font-bold text-accent mb-1">{totalPracticeQuestions}</p>
+        <p className="text-sm text-secondary">Questions Practiced</p>
+      </div>
+
+      {/* Practice Accuracy */}
+      <div className="bg-card border border-theme rounded-xl p-4 text-center shadow-theme-sm">
+        <p className={`text-4xl font-bold ${
+          practiceAccuracy >= 70 ? 'text-success' : practiceAccuracy >= 40 ? 'text-warning' : 'text-danger'
+        }`}>
+          {practiceAccuracy}%
+        </p>
+        <p className="text-sm text-secondary">Practice Accuracy</p>
+      </div>
+
+      {/* Avg Time Per Question */}
+      <div className="bg-card border border-theme rounded-xl p-4 text-center shadow-theme-sm">
+        <p className="text-4xl font-bold text-info mb-1">{avgPracticeTimePerQ}s</p>
+        <p className="text-sm text-secondary">Avg Time/Q (Practice)</p>
+      </div>
+
+      {/* Total Tests Taken */}
+      <div className="bg-card border border-theme rounded-xl p-4 text-center shadow-theme-sm">
+        <p className="text-4xl font-bold text-accent mb-1">{completed.length}</p>
+        <p className="text-sm text-secondary">Tests Taken</p>
+      </div>
+
+      {/* Overall Test Accuracy */}
+      <div className="bg-card border border-theme rounded-xl p-4 text-center shadow-theme-sm">
+        <p className={`text-4xl font-bold ${
+          overallAccuracy >= 70 ? 'text-success' : overallAccuracy >= 40 ? 'text-warning' : 'text-danger'
+        }`}>
+          {overallAccuracy}%
+        </p>
+        <p className="text-sm text-secondary">Overall Test Accuracy</p>
+      </div>
+
+      {/* Average Test Score */}
+      <div className="bg-card border border-theme rounded-xl p-4 text-center shadow-theme-sm">
+        <p className={`text-4xl font-bold ${
+          avgScore >= 70 ? 'text-success' : avgScore >= 40 ? 'text-warning' : 'text-danger'
+        }`}>
+          {avgScore}%
+        </p>
+        <p className="text-sm text-secondary">Average Test Score</p>
+      </div>
+    </div>
+  );
+
+  const EditorialActivityContent = (
+    <div className="bg-card border border-theme rounded-xl shadow-theme-sm">
+      <div className="px-6 py-4 border-b border-theme">
+        <h2 className="font-semibold text-primary">📰 Editorial Quiz Activity</h2>
+      </div>
+      {!editorialStatsLoading && editorialStats ? (
+        <div className="p-6 space-y-4">
+          <div className="flex items-center justify-between">
+            <p className="text-sm text-primary">Total Editorials Read</p>
+            <p className="text-sm font-bold text-accent">{editorialStats.read}</p>
+          </div>
+          <div className="flex items-center justify-between">
+            <p className="text-sm text-primary">Quizzes Attempted</p>
+            <p className="text-sm font-bold text-accent">{editorialStats.quizzes}</p>
+          </div>
+          <div className="flex items-center justify-between">
+            <p className="text-sm text-primary">Average Score</p>
+            <p className="text-sm font-bold text-accent">{editorialStats.avg_score}%</p>
+          </div>
+        </div>
+      ) : !editorialStatsLoading && !editorialStats ? (
+        <div className="p-6 text-center text-muted">
+          No editorial activity yet. Start reading from the dashboard!
+        </div>
+      ) : (
+        <div className="p-6 text-center text-muted">
+          Loading editorial stats...
+        </div>
+      )}
+    </div>
+  );
+
   return (
     <div className="min-h-screen bg-page">
       {/* Header */}
-      <header className="bg-card border-b border-theme shadow-theme-sm sticky top-0 z-10">
-        <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
-          <Link href="/student/dashboard" className="flex items-center gap-2 text-secondary hover:text-primary transition">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-            <span className="text-sm font-medium">Dashboard</span>
-          </Link>
-          <h1 className="text-sm font-bold text-primary">📊 Performance Analytics</h1>
-          <ThemeToggle />
-        </div>
-      </header>
-
-      <main className="max-w-5xl mx-auto px-4 py-6 space-y-6">
-        {/* Premium status chip for free users */}
-        {!isPremium && (
-          <div className="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-xl p-3 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <span className="text-lg">⭐</span>
-              <p className="text-xs text-amber-800">
-                <span className="font-semibold">Free plan</span> — upgrade for section-wise breakdowns, time tracking &amp; full history
-              </p>
-            </div>
-            <Link href="/student/profile"
-              className="text-xs font-bold text-amber-700 bg-amber-200/50 px-3 py-1.5 rounded-lg hover:bg-amber-200 transition shrink-0">
-              Upgrade
+      <header className="bg-card border-b border-theme shadow-theme-sm sticky top-0 z-20">
+        <div className="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Link href="/student/dashboard" className="text-muted hover:text-secondary">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
             </Link>
+            <span className="text-lg font-bold text-primary">Analytics</span>
+          </div>
+          <nav className="hidden md:flex items-center gap-2">
+            <Link href="/student/dashboard" className="px-3 py-2 rounded-lg text-sm font-medium text-secondary hover:bg-elevated transition">
+              📊 Dashboard
+            </Link>
+            <Link href="/student/profile" className="px-3 py-2 rounded-lg text-sm font-medium text-secondary hover:bg-elevated transition">
+              👤 Profile
+            </Link>
+            <ThemeToggle />
+          </nav>
+          <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="md:hidden p-2 rounded-lg hover:bg-elevated transition">
+            <svg className="w-5 h-5 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={mobileMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"} />
+            </svg>
+          </button>
+        </div>
+        {mobileMenuOpen && (
+          <div className="md:hidden border-t border-theme-light bg-card px-4 py-3 space-y-1">
+            <Link href="/student/dashboard" onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-secondary hover:bg-elevated">📊 Dashboard</Link>
+            <Link href="/student/profile" onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-secondary hover:bg-elevated">👤 Profile</Link>
+            <ThemeToggle /> {/* Re-added ThemeToggle to mobile menu */}
+            <hr className="my-1 border-theme-light" />
           </div>
         )}
+      </header>
 
-        {/* ─── Tab Switcher ─── */}
-        <div className="flex gap-1 bg-card border border-theme rounded-xl p-1 shadow-theme-sm">
+      <main className="max-w-4xl mx-auto px-4 py-6 space-y-6">
+        {/* Tabs */}
+        <div className="flex border-b border-theme mb-6">
           <button
             onClick={() => setActiveTab('practice')}
-            className={`flex-1 py-2.5 rounded-lg text-sm font-medium transition-all ${
-              activeTab === 'practice'
-                ? 'bg-indigo-600 text-white shadow-sm'
-                : 'text-secondary hover:text-primary'
+            className={`px-4 py-2 text-sm font-medium border-b-2 ${
+              activeTab === 'practice' ? 'border-accent text-accent' : 'border-transparent text-secondary hover:text-primary'
             }`}
           >
-            🎯 Practice
+            Practice
           </button>
           <button
             onClick={() => setActiveTab('tests')}
-            className={`flex-1 py-2.5 rounded-lg text-sm font-medium transition-all ${
-              activeTab === 'tests'
-                ? 'bg-indigo-600 text-white shadow-sm'
-                : 'text-secondary hover:text-primary'
+            className={`px-4 py-2 text-sm font-medium border-b-2 ${
+              activeTab === 'tests' ? 'border-accent text-accent' : 'border-transparent text-secondary hover:text-primary'
             }`}
           >
-            📝 Tests
+            Tests
           </button>
           <button
             onClick={() => setActiveTab('editorials')}
-            className={`flex-1 py-2.5 rounded-lg text-sm font-medium transition-all ${
-              activeTab === 'editorials'
-                ? 'bg-indigo-600 text-white shadow-sm'
-                : 'text-secondary hover:text-primary'
+            className={`px-4 py-2 text-sm font-medium border-b-2 ${
+              activeTab === 'editorials' ? 'border-accent text-accent' : 'border-transparent text-secondary hover:text-primary'
             }`}
           >
-            📰 Editorials
+            Editorials
           </button>
         </div>
 
-        {/* ════════════════════════════════════════════ */}
-        {/* PRACTICE TAB                                    */}
-        {/* ════════════════════════════════════════════ */}
         {activeTab === 'practice' && (
-          <>
-            {!hasPracticeData ? (
-              <div className="bg-card border-2 border-dashed border-theme rounded-xl p-16 text-center">
-                <div className="text-5xl mb-4">🎯</div>
-                <h2 className="text-xl font-bold text-primary mb-2">No Practice Data Yet</h2>
-                <p className="text-secondary mb-6 max-w-md mx-auto">
-                  Complete some practice quizzes to see your performance analytics here.
-                </p>
-                <Link href="/student/practice"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-medium bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700 transition shadow-sm">
-                  🎯 Start Practicing
-                </Link>
-              </div>
-            ) : (
+          <div className="space-y-6">
+            <h2 className="text-xl font-bold text-primary">Practice Overview</h2>
+            <LockedSection title="Practice Summary" icon="🎯" isPremium={isPremium}>
+              {OverallSummaryContent}
+            </LockedSection>
+            {hasPracticeData ? (
               <>
-                {/* Practice Overview Cards — FREE for everyone */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                  {[
-                    { label: 'Practice Sessions', value: practiceSessions.length, icon: '🔄', color: 'text-accent' },
-                    { label: 'Questions Attempted', value: totalPracticeQuestions, icon: '📝', color: 'text-stat-blue' },
-                    { label: 'Overall Accuracy', value: `${practiceAccuracy}%`, icon: '🎯', color: practiceAccuracy >= 70 ? 'text-stat-green' : practiceAccuracy >= 40 ? 'text-stat-amber' : 'text-danger' },
-                    { label: 'Avg Time / Q', value: formatTime(avgPracticeTimePerQ), icon: '⏱️', color: 'text-secondary' },
-                  ].map(s => (
-                    <div key={s.label} className="bg-card border border-theme rounded-xl p-4 shadow-theme-sm">
-                      <div className="flex items-center justify-between mb-0.5">
-                        <span className="text-lg">{s.icon}</span>
-                        <span className={`text-2xl font-bold ${s.color}`}>{s.value}</span>
-                      </div>
-                      <p className="text-xs text-secondary">{s.label}</p>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Practice by Section — PREMIUM locked for free users */}
                 <LockedSection title="Practice by Section" icon="📈" isPremium={isPremium}>
                   {PracticeBySectionContent}
                 </LockedSection>
-
-                {/* Strongest / Weakest — PREMIUM */}
-                <LockedSection title="Strongest & Weakest" icon="🎯" isPremium={isPremium}>
+                <LockedSection title="Strongest & Weakest" icon="💪" isPremium={isPremium}>
                   {PracticeBestWeakContent}
                 </LockedSection>
-
-                {/* Recent Practice Sessions — PREMIUM */}
-                <LockedSection title="Recent Practice Sessions" icon="🔄" isPremium={isPremium}>
+                <LockedSection title="Recent Sessions" icon="🔄" isPremium={isPremium}>
                   {PracticeRecentContent}
                 </LockedSection>
               </>
-            )}
-          </>
-        )}
-
-        {/* ════════════════════════════════════════════ */}
-        {/* TESTS TAB                                      */}
-        {/* ════════════════════════════════════════════ */}
-        {activeTab === 'tests' && (
-          <>
-            {!hasTestData ? (
-              <div className="bg-card border-2 border-dashed border-theme rounded-xl p-16 text-center">
-                <div className="text-5xl mb-4">📊</div>
-                <h2 className="text-xl font-bold text-primary mb-2">No Test Data Yet</h2>
-                <p className="text-secondary mb-6 max-w-md mx-auto">
-                  Complete some full-length tests to see your performance analytics here.
-                </p>
-                <Link href="/student/tests"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-medium bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700 transition shadow-sm">
-                  📝 Browse Tests
+            ) : (
+              <div className="bg-card border border-theme rounded-xl p-10 text-center text-muted">
+                <p>No practice data yet. Start a quiz to see your analytics!</p>
+                <Link href="/student/practice" className="mt-4 inline-flex px-6 py-3 rounded-xl font-medium bg-accent text-white hover:bg-accent-hover transition">
+                  Start Practice →
                 </Link>
               </div>
-            ) : (
+            )}
+          </div>
+        )}
+
+        {activeTab === 'tests' && (
+          <div className="space-y-6">
+            <h2 className="text-xl font-bold text-primary">Test Performance</h2>
+            <LockedSection title="Test Summary" icon="📝" isPremium={isPremium}>
+              {OverallSummaryContent}
+            </LockedSection>
+            {hasTestData ? (
               <>
-                {/* Overview Cards — FREE for everyone */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                  {[
-                    { label: 'Tests Completed', value: completed.length, icon: '✅', color: 'text-stat-green' },
-                    { label: 'Overall Accuracy', value: `${overallAccuracy}%`, icon: '🎯', color: overallAccuracy >= 70 ? 'text-stat-green' : overallAccuracy >= 40 ? 'text-stat-amber' : 'text-danger' },
-                    { label: 'Avg Score', value: `${avgScore}%`, icon: '📊', color: avgScore >= 70 ? 'text-stat-green' : avgScore >= 40 ? 'text-stat-amber' : 'text-danger' },
-                    { label: 'Total Q Answered', value: totalQuestions, icon: '📝', color: 'text-accent' },
-                  ].map(s => (
-                    <div key={s.label} className="bg-card border border-theme rounded-xl p-4 shadow-theme-sm">
-                      <div className="flex items-center justify-between mb-0.5">
-                        <span className="text-lg">{s.icon}</span>
-                        <span className={`text-2xl font-bold ${s.color}`}>{s.value}</span>
-                      </div>
-                      <p className="text-xs text-secondary">{s.label}</p>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Best / Weak Section — PREMIUM */}
-                <LockedSection title="Strongest & Weakest" icon="🎯" isPremium={isPremium}>
-                  {TestBestWeakContent}
-                </LockedSection>
-
-                {/* Section Performance — PREMIUM */}
-                <LockedSection title="Section-wise Performance" icon="📈" isPremium={isPremium}>
+                <LockedSection title="Section-wise Performance" icon="📊" isPremium={isPremium}>
                   {TestSectionPerformanceContent}
                 </LockedSection>
-
-                {/* Attempt History — PREMIUM */}
+                <LockedSection title="Strongest & Weakest Sections" icon="💪" isPremium={isPremium}>
+                  {TestBestWeakContent}
+                </LockedSection>
                 <LockedSection title="Attempt History" icon="📋" isPremium={isPremium}>
                   {TestHistoryContent}
                 </LockedSection>
               </>
-            )}
-          </>
-        )}
-
-        {/* ════════════════════════════════════════════ */}
-        {/* EDITORIALS TAB                                 */}
-        {/* ════════════════════════════════════════════ */}
-        {activeTab === 'editorials' && (
-          <div className="space-y-4">
-            {editorialStatsLoading ? (
-              <div className="bg-card border border-theme rounded-xl p-8 text-center">
-                <div className="animate-spin w-6 h-6 border-2 border-indigo-500 border-t-transparent rounded-full mx-auto" />
-              </div>
-            ) : !editorialStats || editorialStats.totalRead === 0 ? (
-              <div className="bg-card border-2 border-dashed border-theme rounded-xl p-16 text-center">
-                <div className="text-5xl mb-4">📰</div>
-                <h2 className="text-xl font-bold text-primary mb-2">No Editorial Activity Yet</h2>
-                <p className="text-secondary mb-6 max-w-md mx-auto">
-                  Read editorials from the dashboard and take quick quizzes to track your Current Affairs prep.
-                </p>
-                <Link href="/student/dashboard"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-medium bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700 transition shadow-sm">
-                  📰 Go to Editorials
+            ) : (
+              <div className="bg-card border border-theme rounded-xl p-10 text-center text-muted">
+                <p>No test data yet. Complete a mock test to see your analytics!</p>
+                <Link href="/student/tests" className="mt-4 inline-flex px-6 py-3 rounded-xl font-medium bg-accent text-white hover:bg-accent-hover transition">
+                  Start Test →
                 </Link>
               </div>
-            ) : (
-              <>
-                {/* Overview cards */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                  <div className="bg-card border border-theme rounded-xl p-4 shadow-theme-sm">
-                    <div className="flex items-center justify-between mb-0.5">
-                      <span className="text-lg">📖</span>
-                      <span className="text-2xl font-bold text-accent">{editorialStats.totalRead}</span>
-                    </div>
-                    <p className="text-xs text-secondary">Editorials Read</p>
-                  </div>
-                  <div className="bg-card border border-theme rounded-xl p-4 shadow-theme-sm">
-                    <div className="flex items-center justify-between mb-0.5">
-                      <span className="text-lg">📝</span>
-                      <span className="text-2xl font-bold text-stat-blue">{editorialStats.quizedArticles || 0}</span>
-                    </div>
-                    <p className="text-xs text-secondary">Quizzes Taken</p>
-                  </div>
-                  <div className="bg-card border border-theme rounded-xl p-4 shadow-theme-sm">
-                    <div className="flex items-center justify-between mb-0.5">
-                      <span className="text-lg">🎯</span>
-                      <span className={`text-2xl font-bold ${
-                        editorialStats.quizAccuracy >= 70 ? 'text-stat-green' : editorialStats.quizAccuracy >= 40 ? 'text-stat-amber' : 'text-danger'
-                      }`}>
-                        {editorialStats.quizAccuracy || 0}%
-                      </span>
-                    </div>
-                    <p className="text-xs text-secondary">Quiz Accuracy</p>
-                  </div>
-                  <div className="bg-card border border-theme rounded-xl p-4 shadow-theme-sm">
-                    <div className="flex items-center justify-between mb-0.5">
-                      <span className="text-lg">🔥</span>
-                      <span className="text-2xl font-bold text-orange-600">{editorialStats.streak || 0}</span>
-                    </div>
-                    <p className="text-xs text-secondary">Day Streak</p>
-                  </div>
-                </div>
-
-                {/* Sources */}
-                <div className="bg-card border border-theme rounded-xl shadow-theme-sm">
-                  <div className="px-6 py-4 border-b border-theme">
-                    <h2 className="font-semibold text-primary">📰 Sources Covered</h2>
-                  </div>
-                  <div className="p-6">
-                    <p className="text-sm text-secondary">
-                      Reading from <strong>{editorialStats.uniqueSources || 0}</strong> different sources
-                    </p>
-                  </div>
-                </div>
-
-                {/* Topics */}
-                {editorialStats.topics && editorialStats.topics.length > 0 && (
-                  <div className="bg-card border border-theme rounded-xl shadow-theme-sm">
-                    <div className="px-6 py-4 border-b border-theme">
-                      <h2 className="font-semibold text-primary">🏷️ Topics Covered</h2>
-                    </div>
-                    <div className="p-6 flex flex-wrap gap-2">
-                      {editorialStats.topics.map((t: string) => (
-                        <span key={t} className="px-3 py-1.5 rounded-full text-xs font-medium bg-tint-indigo text-accent border border-indigo-100">
-                          {t}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </>
             )}
           </div>
         )}
+
+        {activeTab === 'editorials' && (
+          <div className="space-y-6">
+            <h2 className="text-xl font-bold text-primary">Editorial Quizzes</h2>
+            <LockedSection title="Editorial Activity" icon="📰" isPremium={isPremium}>
+              {EditorialActivityContent}
+            </LockedSection>
+            {!editorialStatsLoading && !editorialStats ? (
+              <div className="bg-card border border-theme rounded-xl p-10 text-center text-muted">
+                <p>No editorial quiz activity yet. Read editorials from the dashboard!</p>
+                <Link href="/student/dashboard" className="mt-4 inline-flex px-6 py-3 rounded-xl font-medium bg-accent text-white hover:bg-accent-hover transition">
+                  Go to Dashboard →
+                </Link>
+              </div>
+            ) : (
+              !editorialStatsLoading && editorialStats && EditorialActivityContent // Show content if loaded and exists
+            )}
+          </div>
+        )}
+
       </main>
     </div>
   );
