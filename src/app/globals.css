@@ -114,10 +114,10 @@
   --bg-tint-danger: rgba(220, 38, 38, 0.08);
   --bg-tint-info: rgba(37, 99, 235, 0.08);
 
-  --text-primary: #0f172a;
-  --text-secondary: #334155; /* Changed from #475569 (slate-700 -> slate-800) */
-  --text-muted: #475569;     /* Changed from #94a3b8 (slate-400 -> slate-700) */
-  --text-accent: #4f46e5;    /* Changed from #6366f1 (indigo-600 -> indigo-700) */
+  --text-primary: #0f172a;    /* slate-950 - unchanged */
+  --text-secondary: #1e293b; /* New: slate-900 (was slate-800) */
+  --text-muted: #334155;     /* New: slate-800 (was slate-700) */
+  --text-accent: #4f46e5;    /* indigo-700 - unchanged */
   --text-on-accent: #ffffff;
   --text-heading: #0f172a;
 
