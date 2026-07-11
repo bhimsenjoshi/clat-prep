@@ -46,16 +46,23 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'You cannot delete your own admin account!' }, { status: 400 });
     }
 
-    // 2. Fetch the target student profile to get email and name before deletion
-    const { data: targetProfile, error: fetchError } = await adminClient
+    // 2. Fetch the target student from Admin Auth API to get email
+    const { data: authUserData, error: authFetchError } = await adminClient.auth.admin.getUserById(student_id);
+    if (authFetchError || !authUserData?.user) {
+      console.error('Auth fetch error:', authFetchError);
+      return NextResponse.json({ error: 'User not found in authentication database' }, { status: 404 });
+    }
+
+    const studentEmail = authUserData.user.email;
+
+    // Fetch the display name from profiles (without selecting the email column, which might not exist)
+    const { data: targetProfile } = await adminClient
       .from('profiles')
-      .select('full_name, email')
+      .select('full_name')
       .eq('id', student_id)
       .single();
 
-    if (fetchError || !targetProfile) {
-      return NextResponse.json({ error: 'User profile not found' }, { status: 404 });
-    }
+    const studentName = targetProfile?.full_name || 'there';
 
     // 3. Delete user from auth.users (cascades to profiles and responses depending on foreign keys, but let's delete them cleanly)
     // Delete profile first to satisfy any strict foreign keys
@@ -73,12 +80,12 @@ export async function POST(req: NextRequest) {
     }
 
     // 4. Send account deletion notification email
-    if (targetProfile.email) {
+    if (studentEmail) {
       const subject = `Your CLATly account has been closed`;
       const html = `
         <div style="font-family: sans-serif; padding: 20px; color: #333;">
           <h2 style="color: #dc2626;">Account Closed</h2>
-          <p>Hello ${targetProfile.full_name || 'there'},</p>
+          <p>Hello ${studentName},</p>
           <p>We are writing to inform you that your CLATly account has been closed by the administrator.</p>
           <p>Your subscription has been canceled, and all your practice data has been permanently deleted from our servers in compliance with our data retention policy.</p>
           <p>Thank you for trying out CLATly, and we wish you the best in your future endeavors!</p>
@@ -86,7 +93,7 @@ export async function POST(req: NextRequest) {
           <p style="font-size: 11px; color: #999;">Best regards,<br />The CLATly Team</p>
         </div>
       `;
-      await sendEmail({ to: targetProfile.email, subject, html });
+      await sendEmail({ to: studentEmail, subject, html });
     }
 
     return NextResponse.json({ success: true, message: 'User deleted successfully' });
