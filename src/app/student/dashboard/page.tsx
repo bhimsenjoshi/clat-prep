@@ -403,8 +403,8 @@ export default function StudentDashboard() {
             </Link>
             <ThemeToggle />
             <button onClick={() => supabase.auth.signOut().then(() => router.push('/'))}
-              className="px-3 py-2 rounded-lg text-sm font-medium text-muted hover:text-red-400 hover:bg-tint-red active:scale-[0.97] transition-all duration-150">
-              Sign Out
+              className="px-3 py-2 rounded-lg text-sm font-medium border border-danger/30 text-danger hover:bg-tint-danger hover:border-danger/60 active:bg-danger/20 transition">
+              🚪 Sign Out
             </button>
           </nav>
 

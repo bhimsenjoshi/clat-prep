@@ -122,8 +122,8 @@ export default function ProfilePage() {
               🎯 Practice
             </Link>
             <button onClick={() => supabase.auth.signOut().then(() => router.push('/'))}
-              className="px-3 py-2 rounded-lg text-sm text-muted hover:text-danger hover:bg-tint-danger transition">
-              Sign Out
+              className="px-3 py-2 rounded-lg text-sm border border-danger/30 text-danger hover:bg-tint-danger hover:border-danger/60 active:bg-danger/20 transition font-medium">
+              🚪 Sign Out
             </button>
           </nav>
           <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="md:hidden p-2 rounded-lg hover:bg-elevated transition">
