@@ -50,7 +50,7 @@ export default function SignupPage() {
   // Post-signup confirmation screen
   if (confirmed) {
     return (
-      <div className="min-h-screen flex items-center justify-center px-4">
+      <div className="min-h-screen bg-white flex items-center justify-center px-4">
         <div className="w-full max-w-sm bg-white border border-gray-200 rounded-xl p-8 shadow-md space-y-6 text-center">
           <div className="bg-green-50 rounded-full w-16 h-16 flex items-center justify-center mx-auto">
             <svg className="w-8 h-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -83,7 +83,7 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4">
+    <div className="min-h-screen bg-white flex items-center justify-center px-4">
       <div className="w-full max-w-sm bg-white border border-gray-200 rounded-xl p-8 shadow-md space-y-6">
         <div className="text-center">
           <h1 className="text-2xl font-bold">Create your account</h1>
