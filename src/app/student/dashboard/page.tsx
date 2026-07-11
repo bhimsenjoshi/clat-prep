@@ -525,7 +525,7 @@ export default function StudentDashboard() {
               <span className="text-xl shrink-0 mt-0.5">{a.icon}</span>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-bold text-stat-blue">{a.title}</p>
-                <p className="text-xs text-secondary mt-0.5">{a.body}</p>
+                <p className="text-xs text-primary mt-0.5">{a.body}</p>
               </div>
               <button
                 onClick={() => {
@@ -555,7 +555,7 @@ export default function StudentDashboard() {
             <div className="min-w-0 flex-1">
               <p className="text-[10px] text-amber-400/70 font-semibold uppercase tracking-wider">Legal Maxim of the Day</p>
               <p className="text-sm font-bold text-primary mt-0.5 italic">&ldquo;{maxim.maxim}&rdquo;</p>
-              <p className="text-xs text-secondary mt-1">{maxim.meaning}</p>
+              <p className="text-xs text-primary mt-1">{maxim.meaning}</p>
             </div>
           </div>
         </SectionCard>
@@ -570,7 +570,7 @@ export default function StudentDashboard() {
                 <p className="text-base font-bold text-primary mt-0.5">
                   Your weakest section is <span className="text-stat-purple">{SECTION_ICONS[weakestSection]} {weakestSection}</span>
                 </p>
-                <p className="text-xs text-secondary mt-0.5">
+                <p className="text-xs text-primary mt-0.5">
                   You've answered {totalPracticeQ} practice questions — let's improve that score!
                 </p>
               </div>
@@ -636,7 +636,7 @@ export default function StudentDashboard() {
                     <div key={sourceId}>
                       <div className="flex items-center gap-2 mb-2">
                         <span className="text-sm">{meta?.icon}</span>
-                        <span className="text-xs font-semibold text-secondary uppercase tracking-wider">{meta?.name}</span>
+                        <span className="text-xs font-semibold text-primary uppercase tracking-wider">{meta?.name}</span>
                         <span className="text-[10px] text-slate-600">· {items.length} article{items.length !== 1 ? 's' : ''}</span>
                       </div>
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5">
@@ -900,7 +900,7 @@ export default function StudentDashboard() {
         {/* ════════════════════════════════════════════ */}
         <SectionCard title="Quick Practice" icon="⚡" collapsible defaultExpanded={false}
           extra={profile?.subscription_plan === 'free' ? (
-            <span className="text-xs font-normal text-secondary">{(profile.daily_free_questions ?? 10)} free questions remaining</span>
+            <span className="text-xs font-normal text-primary">{(profile.daily_free_questions ?? 10)} free questions remaining</span>
           ) : undefined}
         >
           <div className="grid grid-cols-2 md:grid-cols-5 gap-2.5">
@@ -927,7 +927,7 @@ export default function StudentDashboard() {
             <div className="text-center py-6">
               <div className="text-4xl mb-3">📭</div>
               <h2 className="text-lg font-bold text-primary mb-1">No Practice Yet</h2>
-              <p className="text-sm text-secondary mb-5 max-w-sm mx-auto">
+              <p className="text-sm text-primary mb-5 max-w-sm mx-auto">
                 Pick a section above and start practicing with instant feedback!
               </p>
               <div className="flex gap-3 justify-center flex-wrap">
@@ -936,7 +936,7 @@ export default function StudentDashboard() {
                   🎯 Start Practicing
                 </Link>
                 <Link href="/student/tests"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-medium bg-card border border-theme text-secondary bg-card-hover transition shadow-theme-sm">
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-medium bg-card border border-theme text-primary bg-card-hover transition shadow-theme-sm">
                   📝 Browse Tests
                 </Link>
               </div>
@@ -961,7 +961,7 @@ export default function StudentDashboard() {
                         </p>
                       </div>
                       <div className="flex items-center gap-3 shrink-0">
-                        <span className="text-xs text-secondary">
+                        <span className="text-xs text-primary">
                           {s.correct_count_from_resp}/{s.response_count}
                         </span>
                         <span className={`text-sm font-bold ${
