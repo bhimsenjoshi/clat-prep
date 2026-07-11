@@ -451,7 +451,7 @@ async function callGemini(
   if (!apiKey) throw new Error('GEMINI_API_KEY not configured');
 
   const response = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${apiKey}`,
     {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -523,26 +523,7 @@ export async function generateSection(
   const batchSize = Math.min(maxQuestions ?? 12, 12);
   const userPrompt = `Generate exactly ${batchSize} CLAT-style multiple-choice questions for the "${sectionTitle[section]}" section. These will be added to a larger test that ultimately has ${target.totalQ} questions across ${target.passages} passages. Follow the section format described earlier. Return a JSON object with a key "questions" containing the array of question objects. Each question must have: question_text, passage, options (A-D), correct_option, explanation, difficulty.`;
 
-  // Try DeepSeek first
-  if (process.env.DEEPSEEK_API_KEY) {
-    try {
-      const questions = await callDeepSeek(SYSTEM_PROMPTS[section], userPrompt);
-      return {
-        section,
-        questions,
-        success: questions.length > 0,
-        aiService: 'deepseek',
-        error: questions.length === 0 ? 'No valid questions generated' : undefined,
-      };
-    } catch (err: any) {
-      // DeepSeek failed — fall through to Gemini if available
-      if (!process.env.GEMINI_API_KEY) {
-        return { section, questions: [], success: false, error: err.message };
-      }
-    }
-  }
-
-  // Fallback to Gemini
+  // Try Gemini first (primary)
   if (process.env.GEMINI_API_KEY) {
     try {
       const questions = await callGemini(SYSTEM_PROMPTS[section], userPrompt);
@@ -551,6 +532,25 @@ export async function generateSection(
         questions,
         success: questions.length > 0,
         aiService: 'gemini',
+        error: questions.length === 0 ? 'No valid questions generated' : undefined,
+      };
+    } catch (err: any) {
+      // Gemini failed — fall through to DeepSeek if available
+      if (!process.env.DEEPSEEK_API_KEY) {
+        return { section, questions: [], success: false, error: err.message };
+      }
+    }
+  }
+
+  // Fallback to DeepSeek
+  if (process.env.DEEPSEEK_API_KEY) {
+    try {
+      const questions = await callDeepSeek(SYSTEM_PROMPTS[section], userPrompt);
+      return {
+        section,
+        questions,
+        success: questions.length > 0,
+        aiService: 'deepseek',
         error: questions.length === 0 ? 'No valid questions generated' : undefined,
       };
     } catch (err: any) {
