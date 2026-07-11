@@ -71,78 +71,80 @@ export default function AdminDashboard() {
   };
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8">
-      <div className="flex items-center justify-between mb-8">
-        <h1 className="text-2xl font-bold">Admin Dashboard</h1>
-        <div className="flex gap-3">
-          <Link href="/admin/tests" className="border px-4 py-2 rounded-lg text-sm bg-card-hover transition">Manage Tests</Link>
-          <Link href="/admin/students" className="border px-4 py-2 rounded-lg text-sm bg-card-hover transition">Student Analytics</Link>
-          <button onClick={() => supabase.auth.signOut().then(() => router.push('/'))} className="border px-4 py-2 rounded-lg text-sm bg-card-hover transition">Sign Out</button>
-        </div>
-      </div>
-
-      {/* Clickable stats cards */}
-      <div className="grid grid-cols-3 gap-6 mb-8">
-        <Link href="/admin/tests" className="bg-card border-theme rounded-xl p-6 shadow-theme-sm hover:shadow-theme-md transition block">
-          <p className="text-4xl font-bold text-stat-indigo">{stats.tests}</p>
-          <p className="text-sm text-secondary mt-1">Total Tests</p>
-          <p className="text-xs text-stat-indigo mt-2">Click to manage →</p>
-        </Link>
-        <Link href="/admin/students" className="bg-card border-theme rounded-xl p-6 shadow-theme-sm hover:shadow-theme-md transition block">
-          <p className="text-4xl font-bold text-stat-green">{stats.users}</p>
-          <p className="text-sm text-secondary mt-1">Total Users</p>
-          <p className="text-xs text-stat-green mt-2">Click to view analytics →</p>
-        </Link>
-        <Link href="/admin/students" className="bg-card border-theme rounded-xl p-6 shadow-theme-sm hover:shadow-theme-md transition block">
-          <p className="text-4xl font-bold text-stat-blue">{stats.attempts}</p>
-          <p className="text-sm text-secondary mt-1">Completed Attempts</p>
-          <p className="text-xs text-stat-blue mt-2">Click to view →</p>
-        </Link>
-      </div>
-
-      {/* Recent sign-ups */}
-      {recentStudents.length > 0 && (
-        <div className="bg-card border-theme rounded-xl shadow-theme-sm mb-8">
-          <div className="px-6 py-4 border-b flex justify-between items-center">
-            <h2 className="font-semibold">Recent Sign-ups</h2>
-            <Link href="/admin/students" className="text-xs text-accent hover:underline">View all</Link>
+    <div className="min-h-screen bg-page text-primary">
+      <div className="max-w-5xl mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <h1 className="text-2xl font-bold text-primary">Admin Dashboard</h1>
+          <div className="flex gap-3">
+            <Link href="/admin/tests" className="border border-theme px-4 py-2 rounded-lg text-sm bg-card-hover text-primary hover:bg-elevated transition">Manage Tests</Link>
+            <Link href="/admin/students" className="border border-theme px-4 py-2 rounded-lg text-sm bg-card-hover text-primary hover:bg-elevated transition">Student Analytics</Link>
+            <button onClick={() => supabase.auth.signOut().then(() => router.push('/'))} className="border border-theme px-4 py-2 rounded-lg text-sm bg-card-hover text-danger hover:bg-tint-danger transition">Sign Out</button>
           </div>
-          <div className="divide-y">
-            {recentStudents.map((s: any, i: number) => (
-              <div key={i} className="px-6 py-3 flex items-center justify-between text-sm">
-                <div className="flex items-center gap-2">
-                  <span className="font-medium">{s.full_name || '—'}</span>
-                  <span className={`text-xs px-2 py-0.5 rounded-full ${s.role === 'admin' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700'}`}>
-                    {s.role}
-                  </span>
+        </div>
+
+        {/* Clickable stats cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <Link href="/admin/tests" className="bg-card border border-theme rounded-xl p-6 shadow-theme-sm hover:shadow-theme-md transition block">
+            <p className="text-4xl font-bold text-stat-indigo">{stats.tests}</p>
+            <p className="text-sm text-secondary mt-1">Total Tests</p>
+            <p className="text-xs text-stat-indigo mt-2">Click to manage →</p>
+          </Link>
+          <Link href="/admin/students" className="bg-card border border-theme rounded-xl p-6 shadow-theme-sm hover:shadow-theme-md transition block">
+            <p className="text-4xl font-bold text-stat-green">{stats.users}</p>
+            <p className="text-sm text-secondary mt-1">Total Users</p>
+            <p className="text-xs text-stat-green mt-2">Click to view analytics →</p>
+          </Link>
+          <Link href="/admin/students" className="bg-card border border-theme rounded-xl p-6 shadow-theme-sm hover:shadow-theme-md transition block">
+            <p className="text-4xl font-bold text-stat-blue">{stats.attempts}</p>
+            <p className="text-sm text-secondary mt-1">Completed Attempts</p>
+            <p className="text-xs text-stat-blue mt-2">Click to view →</p>
+          </Link>
+        </div>
+
+        {/* Recent sign-ups */}
+        {recentStudents.length > 0 && (
+          <div className="bg-card border border-theme rounded-xl shadow-theme-sm mb-8">
+            <div className="px-6 py-4 border-b border-theme flex justify-between items-center">
+              <h2 className="font-semibold text-primary">Recent Sign-ups</h2>
+              <Link href="/admin/students" className="text-xs text-accent hover:underline">View all</Link>
+            </div>
+            <div className="divide-y divide-theme">
+              {recentStudents.map((s: any, i: number) => (
+                <div key={i} className="px-6 py-3 flex items-center justify-between text-sm hover:bg-elevated transition">
+                  <div className="flex items-center gap-2">
+                    <span className="font-medium text-primary">{s.full_name || '—'}</span>
+                    <span className={`text-xs px-2 py-0.5 rounded-full ${s.role === 'admin' ? 'bg-tint-info text-info' : 'bg-tint-accent text-accent'}`}>
+                      {s.role}
+                    </span>
+                  </div>
+                  <span className="text-xs text-muted">{new Date(s.created_at).toLocaleDateString('en-IN')}</span>
                 </div>
-                <span className="text-xs text-muted">{new Date(s.created_at).toLocaleDateString('en-IN')}</span>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Quick actions */}
-      <div className="bg-card border-theme rounded-xl shadow-theme-sm">
-        <div className="px-6 py-4 border-b"><h2 className="font-semibold">Quick Actions</h2></div>
-        <div className="p-6 grid sm:grid-cols-2 gap-4">
-          <Link href="/admin/tests" className="border-2 border-dashed border-indigo-200 rounded-xl p-6 text-center hover:bg-tint-indigo transition group">
-            <p className="text-lg font-semibold text-accent group-hover:text-accent">+ Create New Test</p>
-            <p className="text-sm text-secondary mt-1">Generate with AI or manually</p>
-          </Link>
-          <button onClick={handleGenerateDaily} disabled={generating}
-            className="border-2 border-dashed border-emerald-200 rounded-xl p-6 text-center hover:bg-tint-green transition group disabled:opacity-50 disabled:cursor-not-allowed">
-            <p className="text-lg font-semibold text-emerald-600">{generating ? '⏳ Generating...' : '📅 Generate Daily Questions'}</p>
-            <p className="text-sm text-secondary mt-1">25 new questions (5 per section) via DeepSeek</p>
-            {genResult && (
-              <p className={`text-xs mt-2 ${genResult.ok ? 'text-emerald-600' : 'text-red-500'}`}>{genResult.msg}</p>
-            )}
-          </button>
-          <Link href="/admin/students" className="border-2 border-dashed border-theme rounded-xl p-6 text-center hover:bg-elevated transition">
-            <p className="text-lg font-semibold text-primary">View Student Analytics</p>
-            <p className="text-sm text-secondary mt-1">See performance across all tests</p>
-          </Link>
+        {/* Quick actions */}
+        <div className="bg-card border border-theme rounded-xl shadow-theme-sm">
+          <div className="px-6 py-4 border-b border-theme"><h2 className="font-semibold text-primary">Quick Actions</h2></div>
+          <div className="p-6 grid sm:grid-cols-2 gap-4">
+            <Link href="/admin/tests" className="border-2 border-dashed border-accent-subtle rounded-xl p-6 text-center hover:bg-tint-indigo transition group">
+              <p className="text-lg font-semibold text-accent group-hover:text-accent">+ Create New Test</p>
+              <p className="text-sm text-secondary mt-1">Generate with AI or manually</p>
+            </Link>
+            <button onClick={handleGenerateDaily} disabled={generating}
+              className="border-2 border-dashed border-success/50 rounded-xl p-6 text-center hover:bg-tint-success transition group disabled:opacity-50 disabled:cursor-not-allowed">
+              <p className="text-lg font-semibold text-success">{generating ? '⏳ Generating...' : '📅 Generate Daily Questions'}</p>
+              <p className="text-sm text-secondary mt-1">25 new questions (5 per section) via DeepSeek</p>
+              {genResult && (
+                <p className={`text-xs mt-2 ${genResult.ok ? 'text-success' : 'text-danger'}`}>{genResult.msg}</p>
+              )}
+            </button>
+            <Link href="/admin/students" className="border-2 border-dashed border-theme rounded-xl p-6 text-center hover:bg-elevated transition">
+              <p className="text-lg font-semibold text-primary">View Student Analytics</p>
+              <p className="text-sm text-secondary mt-1">See performance across all tests</p>
+            </Link>
+          </div>
         </div>
       </div>
     </div>
