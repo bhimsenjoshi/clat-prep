@@ -503,6 +503,10 @@ export default function ExamTakingPage({ params }: TestPageProps) {
                   className="w-full border border-theme px-5 py-3 rounded-xl font-medium text-secondary hover:bg-elevated transition">
                   Save & Exit to Dashboard
                 </button>
+                <button onClick={() => { setShowPauseModal(false); router.push('/student/dashboard'); }}
+                  className="w-full text-xs text-muted hover:text-danger transition py-2">
+                  Exit without saving
+                </button>
               </div>
             </div>
           </div>
