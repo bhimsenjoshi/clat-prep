@@ -64,9 +64,10 @@ export default function ExamTakingPage({ params }: TestPageProps) {
   const router = useRouter();
   const supabase = createClient();
   const questionStartRef = useRef<number>(Date.now());
-  
-   // Added absolute timer state
-   const [expiresAt, setExpiresAt] = useState<number | null>(null);
+  const hasExitedRef = useRef(false);
+ 
+  // Added absolute timer state
+  const [expiresAt, setExpiresAt] = useState<number | null>(null);
   
   const currentSection = sections[currentSectionIdx];
   const sectionQuestions = useMemo(
@@ -231,14 +232,15 @@ export default function ExamTakingPage({ params }: TestPageProps) {
           }
         }
        
-        // Professional Pattern: Periodically save remaining seconds to LocalStorage
-        // This ensures a refresh picks up the exact second count instantly
-        try {
-          const testId = window.location.pathname.split('/').pop();
-          if (testId) {
-            localStorage.setItem(`clatly_timer_val_${testId}`, nextTime.toString());
-          }
-        } catch (e) {}
+        // Only cache if user hasn't exited — prevents stale timer resumption
+        if (!hasExitedRef.current) {
+          try {
+            const testId = window.location.pathname.split('/').pop();
+            if (testId) {
+              localStorage.setItem(`clatly_timer_val_${testId}`, nextTime.toString());
+            }
+          } catch (e) {}
+        }
 
         return nextTime;
       });
@@ -249,6 +251,7 @@ export default function ExamTakingPage({ params }: TestPageProps) {
 
   // Navigate away
   const handleQuit = () => {
+    hasExitedRef.current = true;
     // Clear the timer cache when leaving to dashboard
     try {
       const testId = window.location.pathname.split('/').pop();
