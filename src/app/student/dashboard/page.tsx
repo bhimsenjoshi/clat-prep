@@ -379,6 +379,17 @@ export default function StudentDashboard() {
             )}
           </div>
 
+          {/* Avatar — always visible (mobile + desktop) */}
+          <Link href="/student/profile" className="shrink-0 hover:opacity-80 transition hidden xs:flex md:hidden">
+            <div className="w-7 h-7 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-[10px] font-bold overflow-hidden">
+              {(profile as any)?.avatar_url ? (
+                <img src={(profile as any).avatar_url} alt="" className="w-full h-full object-cover" />
+              ) : (
+                <span>{(profile?.full_name || '?').split(' ').map((w: string) => w[0]).join('').toUpperCase().slice(0, 2)}</span>
+              )}
+            </div>
+          </Link>
+
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-2">
             <Link href="/student/practice"
