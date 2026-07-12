@@ -49,7 +49,6 @@ export default function ExamTakingPage({ params }: TestPageProps) {
   const [loading, setLoading] = useState(true);
   const [passageExpanded, setPassageExpanded] = useState(true);
   const [userName, setUserName] = useState('');
-  const [showPauseModal, setShowPauseModal] = useState(false);
   const router = useRouter();
   const supabase = createClient();
   const questionStartRef = useRef<number>(Date.now());
@@ -94,9 +93,9 @@ export default function ExamTakingPage({ params }: TestPageProps) {
       const { data: existingAttempts } = await supabase.from('attempts').select('*').eq('test_id', id).eq('student_id', user.id).order('started_at', { ascending: false });
 
       const unsubmitted = (existingAttempts ?? []).find((a: any) => !a.submitted_at);
+      console.log('Timer debug:', { unsubmittedFound: !!unsubmitted, startedAt: unsubmitted?.started_at, allAttemptsCount: existingAttempts?.length });
       if (unsubmitted) {
         setAttemptId(unsubmitted.id);
-        setAttemptNumber(unsubmitted.attempt_number ?? 1);
         // Compute remaining time from started_at
         const startedAt = new Date(unsubmitted.started_at).getTime();
         const elapsed = Math.floor((Date.now() - startedAt) / 1000);
@@ -114,13 +113,13 @@ export default function ExamTakingPage({ params }: TestPageProps) {
           setQuestionTimes(timeMap);
         }
       } else {
-        const latestAttempt = (existingAttempts ?? [])[0];
-        const nextNum = latestAttempt ? (latestAttempt.attempt_number ?? 1) + 1 : 1;
         const { data: attempt } = await supabase.from('attempts').insert({
-          test_id: id, student_id: user.id, attempt_number: nextNum,
+          test_id: id, student_id: user.id,
         }).select().single();
-        if (attempt) { setAttemptId(attempt.id); setAttemptNumber(nextNum); setTimeLeft(120 * 60); }
+        if (attempt) { setAttemptId(attempt.id); setTimeLeft(120 * 60); }
       }
+      // Ensure timeLeft settles before hiding loading
+      await new Promise(r => setTimeout(r, 0));
       setLoading(false);
     };
     init();
@@ -184,13 +183,7 @@ export default function ExamTakingPage({ params }: TestPageProps) {
     }
   };
 
-  /** Show pause confirmation modal */
-  const handlePauseClick = async () => {
-    await recordTimeForCurrentQuestion();
-    setShowPauseModal(true);
-  };
-
-  /** Quit to dashboard (already saved via handlePauseClick) */
+  /** Navigate away (no pause/resume — just leave) */
   const handleQuit = () => {
     router.push('/student/dashboard');
   };
@@ -281,11 +274,13 @@ export default function ExamTakingPage({ params }: TestPageProps) {
             ))}
           </div>
         </div>
-        <div className="flex justify-center gap-4">
+        <div className="flex justify-center gap-4 flex-wrap">
           <Link href={`/student/exams/${test.id}/review?attempt=${attemptId}`}
-            className="bg-accent text-white px-6 py-2.5 rounded-lg font-medium hover:bg-accent-hover transition">📝 Review Answers</Link>
+            className="bg-accent text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-accent-hover transition">📝 Review Answers</Link>
+          <Link href={`/student/exams/${test.id}`}
+            className="bg-amber-500 text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-amber-600 transition">🔄 Retake Exam</Link>
           <Link href="/student/dashboard"
-            className="border border-theme px-6 py-2.5 rounded-lg font-medium hover:bg-elevated transition">Go to Dashboard</Link>
+            className="border border-theme px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-elevated transition">Exit</Link>
         </div>
       </div>
     );
@@ -298,7 +293,7 @@ export default function ExamTakingPage({ params }: TestPageProps) {
       <div className="bg-card border-b border-theme shadow-theme-sm sticky top-0 z-10">
         <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3 min-w-0">
-            <button onClick={handlePauseClick} className="text-muted hover:text-secondary shrink-0" title="Save & quit">
+            <button onClick={handleQuit} className="text-muted hover:text-secondary shrink-0" title="Back to dashboard">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
@@ -317,10 +312,6 @@ export default function ExamTakingPage({ params }: TestPageProps) {
             <span className={`font-mono text-base sm:text-lg font-bold ${timeLeft < 300 ? 'text-danger' : 'text-accent'}`}>
               {formatTime(timeLeft)}
             </span>
-            <button onClick={handlePauseClick}
-              className="border border-theme px-3 py-1.5 rounded-lg text-xs font-medium text-secondary hover:bg-elevated transition hidden sm:inline-block">
-              ⏸ Pause
-            </button>
             <button onClick={handleSubmit} disabled={submitting}
               className="bg-success text-white px-3 py-1.5 rounded-lg text-xs font-medium hover:bg-success-hover disabled:opacity-50 transition">
               {submitting ? '...' : 'Submit'}
@@ -482,42 +473,17 @@ export default function ExamTakingPage({ params }: TestPageProps) {
               </div>
             </div>
 
-            <button onClick={handlePauseClick}
-              className="w-full border border-theme px-4 py-3 rounded-xl text-sm font-medium text-secondary hover:bg-elevated transition flex items-center justify-center gap-2">
-              <span>⏸</span> Pause & Save
+            <button onClick={handleQuit}
+              className="w-full border border-theme px-4 py-3 rounded-xl text-sm font-medium text-danger hover:bg-tint-danger transition flex items-center justify-center gap-2">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+              </svg>
+              Exit
             </button>
           </div>
         </div>
       </div>
 
-      {/* ─── Pause Modal ─── */}
-      {showPauseModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-          <div className="bg-card border border-theme rounded-2xl p-8 max-w-sm w-full mx-4 shadow-xl">
-            <div className="text-center">
-              <p className="text-4xl mb-3">⏸</p>
-              <h2 className="text-lg font-bold text-primary mb-2">Exam Paused</h2>
-              <p className="text-sm text-secondary mb-6">
-                Your progress has been saved. You can resume anytime from your dashboard.
-              </p>
-              <div className="flex flex-col gap-3">
-                <button onClick={() => setShowPauseModal(false)}
-                  className="w-full bg-accent text-white px-5 py-3 rounded-xl font-medium hover:bg-accent-hover transition">
-                  Resume Exam
-                </button>
-                <button onClick={handleQuit}
-                  className="w-full border border-theme px-5 py-3 rounded-xl font-medium text-secondary hover:bg-elevated transition">
-                  Save & Exit to Dashboard
-                </button>
-                <button onClick={() => { setShowPauseModal(false); router.push('/student/dashboard'); }}
-                  className="w-full text-xs text-muted hover:text-danger transition py-2">
-                  Exit without saving
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
