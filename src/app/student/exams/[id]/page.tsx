@@ -42,17 +42,8 @@ export default function ExamTakingPage({ params }: TestPageProps) {
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [questionTimes, setQuestionTimes] = useState<Record<string, number>>({});
   
-  // Professional Pattern: Initialize from localStorage to prevent ANY flicker/delay on refresh
-  const [timeLeft, setTimeLeft] = useState<number>(() => {
-    if (typeof window !== 'undefined') {
-      const cached = localStorage.getItem(`clatly_timer_val_${window.location.pathname.split('/').pop()}`);
-      if (cached) {
-        const parsed = parseInt(cached, 10);
-        if (!isNaN(parsed) && parsed > 0) return parsed;
-      }
-    }
-    return 120 * 60; // Default to 120 minutes if no cache
-  });
+  // Always start fresh. init() will restore from DB if needed.
+  const [timeLeft, setTimeLeft] = useState<number>(120 * 60);
 
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -134,6 +125,19 @@ export default function ExamTakingPage({ params }: TestPageProps) {
 
       const unsubmitted = (existingAttempts ?? []).find((a: any) => !a.submitted_at);
       console.log('Timer debug:', { unsubmittedFound: !!unsubmitted, startedAt: unsubmitted?.started_at, allAttemptsCount: existingAttempts?.length });
+     
+      // Reset all volatile state unconditionally on mount
+      hasExitedRef.current = false;
+      timerIntervalRef.current = null;
+      setShowExitModal(false);
+      setSubmitted(false);
+      setSubmitting(false);
+      setAnswers({});
+      setQuestionTimes({});
+      setCurrentSectionIdx(0);
+      setCurrentGroupIdx(0);
+      setCurrentQIdx(0);
+      setPassageExpanded(true);
      
       if (unsubmitted) {
         setAttemptId(unsubmitted.id);
