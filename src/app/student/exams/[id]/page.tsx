@@ -151,12 +151,15 @@ export default function ExamTakingPage({ params }: TestPageProps) {
           // Fallback logic if expires_at is not present in DB
           const startedAtStr = unsubmitted.started_at.replace(' ', 'T'); // Convert PostgreSQL space to standard ISO T
           const startedAtTime = new Date(startedAtStr).getTime();
-         
+        
           if (!isNaN(startedAtTime)) {
+            const calculatedExpiresAt = startedAtTime + (120 * 60 * 1000);
+            setExpiresAt(calculatedExpiresAt);
+           
             const adjustedClientNow = Date.now() + clientClockOffset;
             const elapsed = Math.floor((adjustedClientNow - startedAtTime) / 1000);
             const remaining = Math.max(0, 120 * 60 - elapsed);
-           
+          
             setTimeLeft(remaining);
             localStorage.setItem(`clatly_timer_val_${id}`, remaining.toString());
           }
