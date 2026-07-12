@@ -252,6 +252,14 @@ export default function ExamTakingPage({ params }: TestPageProps) {
   // Navigate away
   const handleQuit = () => {
     hasExitedRef.current = true;
+    // Abandon the current attempt so next visit starts fresh at 120 min
+    if (attemptId) {
+      supabase.from('attempts').update({
+        submitted_at: new Date().toISOString(),
+      }).eq('id', attemptId).then(() => {
+        console.log('Attempt abandoned on exit');
+      });
+    }
     // Clear the timer cache when leaving to dashboard
     try {
       const testId = window.location.pathname.split('/').pop();
