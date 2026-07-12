@@ -254,25 +254,24 @@ export default function ExamTakingPage({ params }: TestPageProps) {
   const handleQuit = () => {
     setShowExitModal(true);
    };
-  
-   const confirmExit = () => {
+ 
+   const confirmExit = async () => {
     hasExitedRef.current = true;
-    // Delete the unfinished attempt so next visit starts fresh without counting as a retake
-    if (attemptId) {
-      supabase.from('attempts').delete().eq('id', attemptId).then(() => {
-        console.log('In-progress attempt deleted on exit');
-      });
-    }
-    // Clear the timer cache when leaving to dashboard
-    try {
-      const testId = window.location.pathname.split('/').pop();
-      if (testId) {
+     // Delete the unfinished attempt AWAITED so it's gone before navigating
+     if (attemptId) {
+       await supabase.from('attempts').delete().eq('id', attemptId);
+       console.log('In-progress attempt deleted on exit');
+     }
+     // Clear the timer cache and navigate after delete completes
+     try {
+       const testId = window.location.pathname.split('/').pop();
+       if (testId) {
         localStorage.removeItem(`clatly_timer_val_${testId}`);
       }
     } catch (e) {}
     router.push('/student/dashboard');
    };
-  
+ 
    const cancelExit = () => {
     setShowExitModal(false);
    };
