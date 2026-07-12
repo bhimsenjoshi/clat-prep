@@ -67,25 +67,25 @@ export default function PageHeader({ title, navItems, isAdmin, backHref }: PageH
           <span className="text-lg font-bold text-primary">{title}</span>
         </div>
 
-        <nav className="flex items-center gap-2">
+        <nav className="flex items-center gap-1 sm:gap-2">
           {navItems?.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className="px-3 py-2 rounded-lg text-sm font-medium text-secondary hover:bg-card-hover active:scale-[0.97] transition-all duration-150"
+              className="hidden sm:inline-block px-3 py-2 rounded-lg text-sm font-medium text-secondary hover:bg-card-hover active:scale-[0.97] transition-all duration-150"
             >
               {item.icon && <span>{item.icon} </span>}{item.label}
             </Link>
           ))}
           {isAdmin && (
             <Link href="/admin/dashboard"
-              className="px-3 py-2 rounded-lg text-sm font-medium text-accent hover:bg-card-hover active:scale-[0.97] transition-all duration-150">
+              className="hidden sm:inline-block px-3 py-2 rounded-lg text-sm font-medium text-accent hover:bg-card-hover active:scale-[0.97] transition-all duration-150">
               ⚙️ Admin
             </Link>
           )}
 
           {/* User avatar + name — clickable to profile */}
-          <Link href="/student/profile" className="flex items-center gap-2 pl-3 border-l border-theme ml-1 hover:opacity-80 transition">
+          <Link href="/student/profile" className="flex items-center gap-2 pl-3 border-l border-theme ml-1 hover:opacity-80 transition shrink-0">
             <div className="hidden sm:block text-right">
               <p className="text-xs font-medium text-primary leading-tight">{userName || 'User'}</p>
               <p className="text-[10px] text-muted leading-tight">{isAdmin ? 'Admin' : 'Student'}</p>
