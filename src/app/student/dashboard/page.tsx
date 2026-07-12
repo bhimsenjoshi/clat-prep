@@ -380,7 +380,7 @@ export default function StudentDashboard() {
           </div>
 
           {/* Avatar — always visible (mobile + desktop) */}
-          <Link href="/student/profile" className="shrink-0 hover:opacity-80 transition hidden xs:flex md:hidden">
+          <Link href="/student/profile" className="shrink-0 hover:opacity-80 transition flex sm:hidden">
             <div className="w-7 h-7 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-[10px] font-bold overflow-hidden">
               {(profile as any)?.avatar_url ? (
                 <img src={(profile as any).avatar_url} alt="" className="w-full h-full object-cover" />
