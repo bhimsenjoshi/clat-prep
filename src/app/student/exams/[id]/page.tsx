@@ -97,6 +97,11 @@ export default function ExamTakingPage({ params }: TestPageProps) {
       if (unsubmitted) {
         setAttemptId(unsubmitted.id);
         setAttemptNumber(unsubmitted.attempt_number ?? 1);
+        // Compute remaining time from started_at
+        const startedAt = new Date(unsubmitted.started_at).getTime();
+        const elapsed = Math.floor((Date.now() - startedAt) / 1000);
+        const remaining = Math.max(0, 120 * 60 - elapsed);
+        setTimeLeft(remaining);
         const { data: responses } = await supabase.from('responses').select('*').eq('attempt_id', unsubmitted.id);
         if (responses) {
           const answerMap: Record<string, string> = {};
