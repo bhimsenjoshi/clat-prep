@@ -116,9 +116,10 @@ export default function ExamTakingPage({ params }: TestPageProps) {
         const { data: attempt } = await supabase.from('attempts').insert({
           test_id: id, student_id: user.id,
         }).select().single();
-        if (attempt) { setAttemptId(attempt.id); setTimeLeft(120 * 60); }
+        if (attempt) { setAttemptId(attempt.id); }
       }
-      // Ensure timeLeft settles before hiding loading
+      // Ensure timeLeft is 7200 for new attempts even if React batches
+      if (!unsubmitted) setTimeLeft(120 * 60);
       await new Promise(r => setTimeout(r, 0));
       setLoading(false);
     };
@@ -152,7 +153,7 @@ export default function ExamTakingPage({ params }: TestPageProps) {
     if (submitted || loading || !test) return;
     const timer = setInterval(() => {
       setTimeLeft((t) => {
-        if (t <= 1) { clearInterval(timer); return 0; }
+        if (t <= 1) { return 0; }
         return t - 1;
       });
     }, 1000);
