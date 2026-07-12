@@ -41,7 +41,7 @@ export default function ExamTakingPage({ params }: TestPageProps) {
   const [currentQIdx, setCurrentQIdx] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [questionTimes, setQuestionTimes] = useState<Record<string, number>>({});
-  const [timeLeft, setTimeLeft] = useState<number>(120 * 60);
+  const [timeLeft, setTimeLeft] = useState<number>(0);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [resultScores, setResultScores] = useState<{ section: string; score: number; total: number }[]>([]);
@@ -119,7 +119,7 @@ export default function ExamTakingPage({ params }: TestPageProps) {
         const { data: attempt } = await supabase.from('attempts').insert({
           test_id: id, student_id: user.id, attempt_number: nextNum,
         }).select().single();
-        if (attempt) { setAttemptId(attempt.id); setAttemptNumber(nextNum); }
+        if (attempt) { setAttemptId(attempt.id); setAttemptNumber(nextNum); setTimeLeft(120 * 60); }
       }
       setLoading(false);
     };
@@ -153,7 +153,7 @@ export default function ExamTakingPage({ params }: TestPageProps) {
     if (submitted || loading || !test) return;
     const timer = setInterval(() => {
       setTimeLeft((t) => {
-        if (t <= 1) { clearInterval(timer); handleSubmit(); return 0; }
+        if (t <= 1) { clearInterval(timer); return 0; }
         return t - 1;
       });
     }, 1000);
@@ -233,6 +233,12 @@ export default function ExamTakingPage({ params }: TestPageProps) {
     setSubmitted(true);
     setSubmitting(false);
   }, [attemptId, questions, sections, answers, questionTimes, submitting]);
+
+  // Auto-submit when timer reaches 0
+  useEffect(() => {
+    if (submitted || loading || !test || timeLeft > 0) return;
+    handleSubmit();
+  }, [timeLeft, submitted, loading, test]);
 
   // ─── Helpers ───
   const answeredInSection = sectionQuestions.filter((q) => answers[q.id]).length;
