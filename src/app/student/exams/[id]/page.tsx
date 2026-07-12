@@ -278,8 +278,8 @@ export default function ExamTakingPage({ params }: TestPageProps) {
         <div className="flex justify-center gap-4 flex-wrap">
           <Link href={`/student/exams/${test.id}/review?attempt=${attemptId}`}
             className="bg-accent text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-accent-hover transition">📝 Review Answers</Link>
-          <Link href={`/student/exams/${test.id}`}
-            className="bg-amber-500 text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-amber-600 transition">🔄 Retake Exam</Link>
+          <a href={`/student/exams/${test.id}`}
+            className="bg-amber-500 text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-amber-600 transition">🔄 Retake Exam</a>
           <Link href="/student/dashboard"
             className="border border-theme px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-elevated transition">Exit</Link>
         </div>
