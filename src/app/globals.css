@@ -200,6 +200,16 @@ body {
 .bg-elevated { background-color: var(--bg-elevated); }
 .bg-hover:hover { background-color: var(--bg-hover); }
 
+/* Status backgrounds for buttons */
+.bg-success { background-color: var(--success); }
+.bg-success-hover:hover { background-color: var(--success-hover); }
+.bg-danger { background-color: var(--danger); }
+.bg-danger-hover:hover { background-color: var(--danger-hover); }
+.bg-warning { background-color: var(--warning); }
+.bg-warning-hover:hover { background-color: var(--warning-hover); }
+.bg-info { background-color: var(--info); }
+.bg-info-hover:hover { background-color: var(--info-hover); }
+
 /* Tinted backgrounds for stat cards */
 .bg-tint-indigo { background-color: var(--bg-tint-indigo); }
 .bg-tint-green { background-color: var(--bg-tint-green); }
