@@ -65,6 +65,7 @@ export default function ExamTakingPage({ params }: TestPageProps) {
   const supabase = createClient();
   const questionStartRef = useRef<number>(Date.now());
   const hasExitedRef = useRef(false);
+  const timerIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const [showExitModal, setShowExitModal] = useState(false);
  
   // Added absolute timer state
@@ -219,11 +220,16 @@ export default function ExamTakingPage({ params }: TestPageProps) {
   // ─── Timer Countdown & Local Cache Sync ───
   useEffect(() => {
     if (submitted || loading || !test) return;
-   
+  
     const timer = setInterval(() => {
+      // If user has exited, stop the timer immediately — no more ticks
+      if (hasExitedRef.current) {
+        clearInterval(timer);
+        return;
+      }
       setTimeLeft((t) => {
         let nextTime = t <= 1 ? 0 : t - 1;
-       
+      
         if (expiresAt) {
           // Professional Pattern: Recalibrate based on absolute end time
           const remaining = Math.floor(Math.max(0, expiresAt - Date.now()) / 1000);
@@ -232,7 +238,7 @@ export default function ExamTakingPage({ params }: TestPageProps) {
             nextTime = remaining;
           }
         }
-       
+      
         // Only cache if user hasn't exited — prevents stale timer resumption
         if (!hasExitedRef.current) {
           try {
@@ -247,6 +253,7 @@ export default function ExamTakingPage({ params }: TestPageProps) {
       });
     }, 1000);
     
+    timerIntervalRef.current = timer;
     return () => clearInterval(timer);
   }, [submitted, loading, test]);
 
@@ -256,7 +263,12 @@ export default function ExamTakingPage({ params }: TestPageProps) {
    };
  
    const confirmExit = async () => {
-    hasExitedRef.current = true;
+     hasExitedRef.current = true;
+     // Kill the timer interval immediately — no more ticks, prevents auto-submit at 0
+     if (timerIntervalRef.current) {
+       clearInterval(timerIntervalRef.current);
+       timerIntervalRef.current = null;
+     }
      // Delete the unfinished attempt AWAITED so it's gone before navigating
      if (attemptId) {
        await supabase.from('attempts').delete().eq('id', attemptId);
@@ -266,14 +278,14 @@ export default function ExamTakingPage({ params }: TestPageProps) {
      try {
        const testId = window.location.pathname.split('/').pop();
        if (testId) {
-        localStorage.removeItem(`clatly_timer_val_${testId}`);
-      }
-    } catch (e) {}
-    router.push('/student/dashboard');
+         localStorage.removeItem(`clatly_timer_val_${testId}`);
+       }
+     } catch (e) {}
+     router.push('/student/dashboard');
    };
- 
+
    const cancelExit = () => {
-    setShowExitModal(false);
+     setShowExitModal(false);
    };
 
    // ─── Navigation ───
@@ -351,6 +363,8 @@ export default function ExamTakingPage({ params }: TestPageProps) {
   // Auto-submit when timer reaches 0
   useEffect(() => {
     if (submitted || loading || !test || timeLeft > 0) return;
+    // Never auto-submit if user has already exited
+    if (hasExitedRef.current) return;
     handleSubmit();
   }, [timeLeft, submitted, loading, test]);
 
