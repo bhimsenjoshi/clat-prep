@@ -114,7 +114,6 @@ export default function ExamTakingPage({ params }: TestPageProps) {
         .order('started_at', { ascending: false });
 
       const unsubmitted = (existingAttempts ?? []).find((a: any) => !a.submitted_at);
-      console.log('INIT: unsubmitted found?', !!unsubmitted, 'id:', unsubmitted?.id, 'count:', existingAttempts?.length);
 
       if (unsubmitted) {
         // Check if it's stale (older than 150 min) — delete and start fresh
@@ -193,16 +192,11 @@ export default function ExamTakingPage({ params }: TestPageProps) {
 
   // ─── Timer Countdown ───
   useEffect(() => {
-    if (submitted || loading || !test || !attemptId) {
-      console.log('TIMER: skipped', { submitted, loading, hasTest: !!test, attemptId });
-      return;
-    }
-    console.log('TIMER: STARTING COUNTDOWN from', timeLeft, 'for attempt', attemptId);
+    if (submitted || loading || !test || !attemptId) return;
 
     timerRef.current = setInterval(() => {
       setTimeLeft((t) => {
         if (t <= 1) {
-          // Auto-submit when timer hits 0
           clearInterval(timerRef.current!);
           timerRef.current = null;
           return 0;
@@ -219,12 +213,6 @@ export default function ExamTakingPage({ params }: TestPageProps) {
     };
   }, [submitted, loading, test, attemptId]);
 
-  // ─── Auto-submit at 0 ───
-  useEffect(() => {
-    if (submitted || loading || !test || !attemptId || timeLeft > 0) return;
-    handleSubmit();
-  }, [timeLeft]);
-
   // ─── Quit / Exit ───
   const handleQuit = () => setShowExitModal(true);
 
@@ -238,7 +226,6 @@ export default function ExamTakingPage({ params }: TestPageProps) {
     if (attemptId) {
       const { error } = await supabase.from('attempts').delete().eq('id', attemptId);
       if (error) console.error('Exit delete failed:', error);
-      else console.log('Attempt deleted on exit:', attemptId);
     }
     setShowExitModal(false);
     router.push('/student/dashboard');
@@ -272,7 +259,6 @@ export default function ExamTakingPage({ params }: TestPageProps) {
   // ─── Submit ───
   const handleSubmit = useCallback(async () => {
     if (!attemptId || submitting) return;
-    console.log('SUBMIT: initiating', { attemptId, submitting, submitted });
     // Kill timer
     if (timerRef.current) {
       clearInterval(timerRef.current);
@@ -316,6 +302,12 @@ export default function ExamTakingPage({ params }: TestPageProps) {
     setSubmitted(true);
     setSubmitting(false);
   }, [attemptId, questions, sections, answers, questionTimes, submitting]);
+
+  // ─── Auto-submit at 0 (must be after handleSubmit declaration) ───
+  useEffect(() => {
+    if (submitted || loading || !test || !attemptId || timeLeft > 0) return;
+    handleSubmit();
+  }, [timeLeft, handleSubmit]);
 
   // ─── Helpers ───
   const answeredInSection = sectionQuestions.filter((q) => answers[q.id]).length;
