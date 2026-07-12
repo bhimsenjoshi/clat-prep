@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -36,6 +36,9 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(true);
   const [upgrading, setUpgrading] = useState(false);
   const [upgradeMsg, setUpgradeMsg] = useState<{ type: 'success' | 'error' | 'info'; text: string } | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const loadProfile = async () => {
@@ -49,30 +52,63 @@ export default function ProfilePage() {
         .single();
 
       setProfile(prof as ExtendedProfile);
+      setAvatarUrl((prof as any)?.avatar_url ?? null);
       setLoading(false);
     };
     loadProfile();
   }, [router, supabase]);
 
+  const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !profile) return;
+    if (file.size > 2 * 1024 * 1024) {
+      setUpgradeMsg({ type: 'error', text: 'Image too large. Max 2MB.' });
+      return;
+    }
+    setUploading(true);
+    setUpgradeMsg(null);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error('Not authenticated');
+      const ext = file.name.split('.').pop();
+      const filePath = `${user.id}/${Date.now()}.${ext}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('avatars')
+        .upload(filePath, file, { upsert: true });
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('avatars')
+        .getPublicUrl(filePath);
+
+      // Store URL in profile
+      const { error: updateError } = await supabase
+        .from('profiles')
+        .update({ avatar_url: publicUrl } as any)
+        .eq('id', user.id);
+      if (updateError) throw updateError;
+
+      setAvatarUrl(publicUrl);
+      setUpgradeMsg({ type: 'success', text: '✅ Profile picture updated!' });
+    } catch (err: any) {
+      setUpgradeMsg({ type: 'error', text: err.message || 'Upload failed' });
+    }
+    setUploading(false);
+  };
+
+  // Rest of the handlers
   const handleUpgrade = async () => {
     setUpgrading(true);
     setUpgradeMsg(null);
     try {
-      const res = await fetch('/api/subscription/upgrade', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-      });
+      const res = await fetch('/api/subscription/upgrade', { method: 'POST' });
       const data = await res.json();
       if (!res.ok) {
         setUpgradeMsg({ type: 'error', text: data.message || data.error || 'Upgrade failed' });
       } else {
         setUpgradeMsg({ type: 'success', text: data.message || '🎉 Upgraded to Premium!' });
-        // Refresh profile
-        const { data: prof } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('id', profile?.id)
-          .single();
+        const { data: prof } = await supabase.from('profiles').select('*').eq('id', profile?.id).single();
         setProfile(prof as ExtendedProfile);
       }
     } catch {
@@ -94,12 +130,10 @@ export default function ProfilePage() {
 
   const currentPlan = PLAN_BADGES[profile.subscription_plan] || PLAN_BADGES.free;
   const isFree = profile.subscription_plan === 'free';
-  const memberSince = new Date(profile.created_at).toLocaleDateString('en-IN', {
-    day: 'numeric', month: 'long', year: 'numeric',
-  });
-
-  // Check if the promo campaign is still active (ends July 31, 2026)
+  const memberSince = new Date(profile.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
   const isCampaignActive = new Date() < new Date('2026-07-31T23:59:59+05:30');
+
+  const initials = (profile.full_name || '?').split(' ').map((w: string) => w[0]).join('').toUpperCase().slice(0, 2);
 
   return (
     <div className="min-h-screen bg-page">
@@ -110,12 +144,33 @@ export default function ProfilePage() {
         <div className="bg-card border border-theme rounded-xl shadow-theme-sm overflow-hidden">
           <div className="bg-gradient-accent px-6 py-8 text-white">
             <div className="flex items-center gap-4">
-              <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center text-3xl font-bold">
-                {(profile.full_name || 'U')[0].toUpperCase()}
+              {/* Avatar with upload */}
+              <div className="relative group">
+                <div className="w-20 h-20 rounded-full bg-white/20 flex items-center justify-center overflow-hidden">
+                  {avatarUrl ? (
+                    <img src={avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
+                  ) : (
+                    <span className="text-4xl font-bold">{initials[0]}</span>
+                  )}
+                </div>
+                <button
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={uploading}
+                  className="absolute inset-0 rounded-full bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition text-white text-xs font-medium cursor-pointer"
+                >
+                  {uploading ? '⏳' : '📷'}
+                </button>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleAvatarUpload}
+                />
               </div>
               <div>
                 <h1 className="text-xl font-bold">{profile.full_name || 'Student'}</h1>
-                <p className="text-sm text-accent-subtle">Member since {memberSince}</p>
+                <p className="text-sm text-white/70">Member since {memberSince}</p>
               </div>
             </div>
           </div>
@@ -153,11 +208,27 @@ export default function ProfilePage() {
           </div>
         </div>
 
+        {/* ─── Change Password ─── */}
+        <ChangePassword />
+
+        {/* Upload message */}
+        {upgradeMsg && (
+          <div className={`p-4 rounded-xl text-sm ${
+            upgradeMsg.type === 'success' ? 'bg-success/10 border border-success/50 text-success' :
+            upgradeMsg.type === 'error' ? 'bg-danger/10 border border-danger/50 text-danger' :
+            'bg-info/10 border border-info/50 text-info'
+          }`}>
+            {upgradeMsg.text}
+          </div>
+        )}
+
         {/* ─── Subscription Card ─── */}
         <div className={`bg-card border border-theme rounded-xl shadow-theme-sm overflow-hidden ${
           isFree && isCampaignActive ? 'border-warning ring-1 ring-warning/50' : 'border-theme'
         }`}>
           <div className="px-6 py-5">
+            {/* Subscription content — unchanged */}
+
             <div className="flex items-center justify-between mb-4">
               <div>
                 <h2 className="text-lg font-bold text-primary flex items-center gap-2">
@@ -172,7 +243,6 @@ export default function ProfilePage() {
               </span>
             </div>
 
-            {/* Features list */}
             <div className="space-y-2 mb-5">
               {currentPlan.features.map((f, i) => (
                 <div key={i} className="flex items-center gap-2 text-sm text-secondary">
@@ -194,21 +264,8 @@ export default function ProfilePage() {
               )}
             </div>
 
-            {/* Upgrade options */}
             {isFree && (
               <div className="border-t border-theme-light pt-5 space-y-4">
-                {/* Upgrade message */}
-                {upgradeMsg && (
-                  <div className={`p-4 rounded-xl text-sm ${
-                    upgradeMsg.type === 'success' ? 'bg-success/10 border border-success/50 text-success' :
-                    upgradeMsg.type === 'error' ? 'bg-danger/10 border border-danger/50 text-danger' :
-                    'bg-info/10 border border-info/50 text-info'
-                  }`}>
-                    {upgradeMsg.text}
-                  </div>
-                )}
-
-                {/* Campaign: Free Premium upgrade */}
                 {isCampaignActive && (
                   <div className="bg-tint-warning border border-warning/50 rounded-xl p-5">
                     <div className="flex items-start gap-3">
@@ -224,95 +281,59 @@ export default function ProfilePage() {
                           <li>✓ Detailed analytics & insights</li>
                           <li>✓ No daily limits</li>
                         </ul>
-                        <button
-                          onClick={handleUpgrade}
-                          disabled={upgrading}
-                          className="mt-4 w-full py-3 rounded-xl font-bold bg-gradient-accent text-white hover:bg-accent-hover transition disabled:opacity-50 shadow-sm"
-                        >
+                        <button onClick={handleUpgrade} disabled={upgrading}
+                          className="mt-4 w-full py-3 rounded-xl font-bold bg-gradient-accent text-white hover:bg-accent-hover transition disabled:opacity-50 shadow-sm">
                           {upgrading ? '⏳ Upgrading...' : '⭐ Claim Free Premium Upgrade'}
                         </button>
                       </div>
                     </div>
                   </div>
                 )}
-
                 {!isCampaignActive && (
                   <div className="bg-tint-info border border-info/50 rounded-xl p-5">
                     <div className="flex items-start gap-3">
                       <span className="text-2xl">ℹ️</span>
                       <div className="flex-1">
                         <h3 className="font-bold text-info">Campaign Ended</h3>
-                        <p className="text-sm text-secondary mt-1">
-                          The free Premium upgrade campaign ended on July 31, 2026. 
-                          Stay tuned for future offers or upgrade to a paid plan!
-                        </p>
+                        <p className="text-sm text-secondary mt-1">The free Premium upgrade campaign ended on July 31, 2026. Stay tuned for future offers!</p>
                       </div>
                     </div>
                   </div>
                 )}
-
-                {/* Max plan teaser */}
                 <div className="bg-tint-info border border-info/50 rounded-xl p-5">
                   <div className="flex items-start gap-3">
                     <span className="text-2xl">👑</span>
                     <div className="flex-1">
                       <h3 className="font-bold text-info">Max Plan — Coming Soon</h3>
-                      <p className="text-sm text-secondary mt-1">
-                        Everything in Premium plus <strong>AI Mentor / Personal Tutor</strong>, advanced analytics, 
-                        and WhatsApp quiz bot access.
-                      </p>
-                      <p className="text-xs text-muted mt-2">Stay tuned for launch details!</p>
+                      <p className="text-sm text-secondary mt-1">Everything in Premium plus <strong>AI Mentor</strong>, advanced analytics, and WhatsApp bot access.</p>
                     </div>
                   </div>
                 </div>
               </div>
             )}
 
-            {/* Show what's next for Premium users */}
             {profile.subscription_plan === 'premium' && (
               <div className="border-t border-theme-light pt-5">
                 <div className="bg-tint-info border border-info/50 rounded-xl p-5">
-                  <div className="flex items-start gap-3">
-                    <span className="text-2xl">👑</span>
-                    <div className="flex-1">
-                      <h3 className="font-bold text-info">Max Plan — Coming Soon</h3>
-                      <p className="text-sm text-secondary mt-1">
-                        Upgrade to <strong>Max</strong> for AI Mentor / Personal Tutor, advanced analytics, 
-                        and WhatsApp bot access.
-                      </p>
-                      <p className="text-xs text-muted mt-2">You'll get early access when it launches!</p>
-                    </div>
-                  </div>
+                  <h3 className="font-bold text-info">👑 Max Plan — Coming Soon</h3>
+                  <p className="text-sm text-secondary mt-1">Upgrade to <strong>Max</strong> for AI Mentor, advanced analytics, and WhatsApp bot access.</p>
                 </div>
               </div>
             )}
-
-            {/* Max users - already at top */}
             {profile.subscription_plan === 'max' && (
               <div className="border-t border-theme-light pt-5">
                 <div className="bg-tint-success border border-success/50 rounded-xl p-5">
-                  <div className="flex items-start gap-3">
-                    <span className="text-2xl">👑</span>
-                    <div className="flex-1">
-                      <h3 className="font-bold text-success">You're on Max — the ultimate plan!</h3>
-                      <p className="text-sm text-secondary mt-1">
-                        You have access to everything: unlimited questions, AI Mentor, WhatsApp bot, advanced analytics, and early access to all new features.
-                      </p>
-                    </div>
-                  </div>
+                  <h3 className="font-bold text-success">👑 You're on Max — the ultimate plan!</h3>
+                  <p className="text-sm text-secondary mt-1">You have access to everything: unlimited questions, AI Mentor, WhatsApp bot, advanced analytics, and early access.</p>
                 </div>
               </div>
             )}
           </div>
         </div>
 
-        {/* ─── Change Password ─── */}
-        <ChangePassword />
-
         {/* ─── Privacy Note ─── */}
         <div className="text-center text-xs text-muted py-4">
-          🔒 Your data is protected in accordance with DPDP (Digital Personal Data Protection) guidelines.
-          We collect only the information needed to provide and improve our services.
+          🔒 Your data is protected in accordance with DPDP guidelines.
           <Link href="#" className="text-accent hover:underline ml-1">Privacy Policy</Link>
         </div>
       </main>

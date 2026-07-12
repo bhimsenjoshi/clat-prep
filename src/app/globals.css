@@ -167,7 +167,8 @@ html {
 }
 
 body {
-  transition: color 0.2s ease;
+  background-color: var(--bg-page);
+  transition: color 0.2s ease, background-color 0.2s ease;
 }
 
 /* ─── BASE LAYER: Input defaults (overridable by utility classes) ─── */

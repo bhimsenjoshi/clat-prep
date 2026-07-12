@@ -397,14 +397,24 @@ export default function StudentDashboard() {
               className="px-3 py-2 rounded-lg text-sm font-medium text-accent hover:bg-card-hover active:scale-[0.97] transition-all duration-150">
               📝 Exams
             </Link>
-            <Link href="/student/profile"
-              className="px-3 py-2 rounded-lg text-sm font-medium text-secondary hover:bg-card-hover hover:text-primary active:scale-[0.97] transition-all duration-150">
-              👤 Profile
-            </Link>
             <ThemeToggle />
+            {/* Avatar — clickable to profile */}
+            <Link href="/student/profile"
+              className="flex items-center gap-2 pl-2 ml-1 border-l border-theme hover:opacity-80 transition">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-xs font-bold shrink-0 overflow-hidden">
+                {(profile as any)?.avatar_url ? (
+                  <img src={(profile as any).avatar_url} alt="" className="w-full h-full object-cover" />
+                ) : (
+                  <span>{(profile?.full_name || '?').split(' ').map((w: string) => w[0]).join('').toUpperCase().slice(0, 2)}</span>
+                )}
+              </div>
+            </Link>
             <button onClick={() => supabase.auth.signOut().then(() => router.push('/'))}
-              className="px-3 py-2 rounded-lg text-sm font-medium text-danger hover:bg-tint-danger active:scale-[0.97] transition-all duration-150 cursor-pointer">
-              🚪 Sign Out
+              className="px-3 py-2 rounded-lg text-sm font-medium text-danger hover:bg-tint-danger active:scale-[0.97] transition-all duration-150 cursor-pointer shrink-0">
+                <svg className="w-4 h-4 inline-block mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+                Sign Out
             </button>
           </nav>
 

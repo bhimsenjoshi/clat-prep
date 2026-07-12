@@ -53,26 +53,22 @@ export default function StudentTestsPage() {
   }, []);
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-8">
+    <div className="min-h-screen bg-page">
       <PageHeader
-        title="Tests"
+        title="Exams"
         navItems={[{ href: '/student/dashboard', label: 'Dashboard', icon: '📊' }]}
       />
 
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h1 className="text-2xl font-bold text-primary">Practice Tests</h1>
-          <p className="text-sm text-secondary mt-1">
-            Select a test to begin. Each test covers all 5 CLAT sections.
-          </p>
+      <div className="max-w-6xl mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h1 className="text-2xl font-bold text-primary">Practice Exams</h1>
+            <p className="text-sm text-secondary mt-1">
+              Select an exam to begin. Each test covers all 5 CLAT sections with 120-minute timer.
+            </p>
+          </div>
+          <Link href="/student/dashboard" className="text-accent hover:underline text-sm">← Dashboard</Link>
         </div>
-        <Link
-          href="/student/dashboard"
-          className="text-accent hover:underline"
-        >
-          ← Dashboard
-        </Link>
-      </div>
 
       {!tests || tests.length === 0 ? (
         <div className="bg-card border border-theme rounded-xl p-10 text-center text-muted">
@@ -102,12 +98,19 @@ export default function StudentTestsPage() {
                 </div>
                 {isAttempted === true ? (
                   <span className="text-sm text-success font-medium">Completed ✓</span>
+                ) : isAttempted === false ? (
+                  <Link
+                    href={`/student/exams/${test.id}`}
+                    className="bg-amber-500 text-white px-5 py-2 rounded-lg text-sm font-medium hover:bg-amber-600 transition flex items-center gap-1.5"
+                  >
+                    <span>⏸</span> Resume
+                  </Link>
                 ) : (
                   <Link
                     href={`/student/exams/${test.id}`}
                     className="bg-accent text-white px-5 py-2 rounded-lg text-sm font-medium hover:bg-accent-hover transition"
                   >
-                    {isAttempted === false ? 'Resume' : 'Start Test'}
+                    Start Exam
                   </Link>
                 )}
               </div>
@@ -115,6 +118,7 @@ export default function StudentTestsPage() {
           })}
         </div>
       )}
+      </div>
     </div>
   );
 }
