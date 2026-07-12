@@ -140,6 +140,24 @@ export default function ExamTakingPage({ params }: TestPageProps) {
       setPassageExpanded(true);
      
       if (unsubmitted) {
+        // Guard: if the unsubmitted attempt is VERY stale (older than 2.5 hours),
+        // delete it and create a fresh one — prevents orphaned attempt bugs
+        const startedAtStr = (unsubmitted.started_at ?? '').replace(' ', 'T');
+        const startedAtTime = new Date(startedAtStr).getTime();
+        if (!isNaN(startedAtTime) && (Date.now() - startedAtTime) > 150 * 60 * 1000) {
+          console.log('Stale unsubmitted attempt found, deleting and creating fresh');
+          await supabase.from('attempts').delete().eq('id', unsubmitted.id);
+          const { data: attempt } = await supabase.from('attempts').insert({
+            test_id: id, student_id: user.id,
+          }).select().single();
+          if (attempt) {
+            setAttemptId(attempt.id);
+            setTimeLeft(120 * 60);
+            localStorage.setItem(`clatly_timer_val_${id}`, (120 * 60).toString());
+          }
+          setLoading(false);
+          return;
+        }
         setAttemptId(unsubmitted.id);
        
         if (unsubmitted.expires_at) {
