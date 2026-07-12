@@ -41,7 +41,19 @@ export default function ExamTakingPage({ params }: TestPageProps) {
   const [currentQIdx, setCurrentQIdx] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [questionTimes, setQuestionTimes] = useState<Record<string, number>>({});
-  const [timeLeft, setTimeLeft] = useState<number>(0);
+  
+  // Professional Pattern: Initialize from localStorage to prevent ANY flicker/delay on refresh
+  const [timeLeft, setTimeLeft] = useState<number>(() => {
+    if (typeof window !== 'undefined') {
+      const cached = localStorage.getItem(`clatly_timer_val_${window.location.pathname.split('/').pop()}`);
+      if (cached) {
+        const parsed = parseInt(cached, 10);
+        if (!isNaN(parsed) && parsed > 0) return parsed;
+      }
+    }
+    return 120 * 60; // Default to 120 minutes if no cache
+  });
+
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [resultScores, setResultScores] = useState<{ section: string; score: number; total: number }[]>([]);
@@ -52,7 +64,10 @@ export default function ExamTakingPage({ params }: TestPageProps) {
   const router = useRouter();
   const supabase = createClient();
   const questionStartRef = useRef<number>(Date.now());
-
+  
+   // Added absolute timer state
+   const [expiresAt, setExpiresAt] = useState<number | null>(null);
+  
   const currentSection = sections[currentSectionIdx];
   const sectionQuestions = useMemo(
     () => questions.filter((q) => q.section_id === currentSection?.id),
@@ -90,17 +105,63 @@ export default function ExamTakingPage({ params }: TestPageProps) {
         setQuestions(qData ?? []);
       }
 
-      const { data: existingAttempts } = await supabase.from('attempts').select('*').eq('test_id', id).eq('student_id', user.id).order('started_at', { ascending: false });
+      // Fetch existing attempts
+      const { data: existingAttempts } = await supabase
+        .from('attempts')
+        .select('*')
+        .eq('test_id', id)
+        .eq('student_id', user.id)
+        .order('started_at', { ascending: false });
+
+      // Professional Pattern: Server-Client clock drift compensation
+      // Parse precise UTC server time from a fast HEAD request to the origin
+      let serverTimeNow = Date.now();
+      try {
+        const headRes = await fetch('/', { method: 'HEAD' });
+        if (headRes && headRes.headers.get('date')) {
+          const parsedHeaderDate = new Date(headRes.headers.get('date')!).getTime();
+          if (!isNaN(parsedHeaderDate)) {
+            serverTimeNow = parsedHeaderDate;
+          }
+        }
+      } catch (e) {
+        console.error('Server time sync failed, falling back to client clock:', e);
+      }
+      const clientClockOffset = serverTimeNow - Date.now();
 
       const unsubmitted = (existingAttempts ?? []).find((a: any) => !a.submitted_at);
       console.log('Timer debug:', { unsubmittedFound: !!unsubmitted, startedAt: unsubmitted?.started_at, allAttemptsCount: existingAttempts?.length });
+     
       if (unsubmitted) {
         setAttemptId(unsubmitted.id);
-        // Compute remaining time from started_at
-        const startedAt = new Date(unsubmitted.started_at).getTime();
-        const elapsed = Math.floor((Date.now() - startedAt) / 1000);
-        const remaining = Math.max(0, 120 * 60 - elapsed);
-        setTimeLeft(remaining);
+       
+        if (unsubmitted.expires_at) {
+          const expAtStr = unsubmitted.expires_at.replace(' ', 'T');
+          const expAtTime = new Date(expAtStr).getTime();
+         
+          if (!isNaN(expAtTime)) {
+            setExpiresAt(expAtTime);
+            const adjustedClientNow = Date.now() + clientClockOffset;
+            const remaining = Math.floor(Math.max(0, expAtTime - adjustedClientNow) / 1000);
+           
+            setTimeLeft(remaining);
+            localStorage.setItem(`clatly_timer_val_${id}`, remaining.toString());
+          }
+        } else {
+          // Fallback logic if expires_at is not present in DB
+          const startedAtStr = unsubmitted.started_at.replace(' ', 'T'); // Convert PostgreSQL space to standard ISO T
+          const startedAtTime = new Date(startedAtStr).getTime();
+         
+          if (!isNaN(startedAtTime)) {
+            const adjustedClientNow = Date.now() + clientClockOffset;
+            const elapsed = Math.floor((adjustedClientNow - startedAtTime) / 1000);
+            const remaining = Math.max(0, 120 * 60 - elapsed);
+           
+            setTimeLeft(remaining);
+            localStorage.setItem(`clatly_timer_val_${id}`, remaining.toString());
+          }
+        }
+       
         const { data: responses } = await supabase.from('responses').select('*').eq('attempt_id', unsubmitted.id);
         if (responses) {
           const answerMap: Record<string, string> = {};
@@ -116,11 +177,13 @@ export default function ExamTakingPage({ params }: TestPageProps) {
         const { data: attempt } = await supabase.from('attempts').insert({
           test_id: id, student_id: user.id,
         }).select().single();
-        if (attempt) { setAttemptId(attempt.id); }
+        if (attempt) { 
+          setAttemptId(attempt.id); 
+          setTimeLeft(120 * 60);
+          localStorage.setItem(`clatly_timer_val_${id}`, (120 * 60).toString());
+        }
       }
-      // Ensure timeLeft is 7200 for new attempts even if React batches
-      if (!unsubmitted) setTimeLeft(120 * 60);
-      await new Promise(r => setTimeout(r, 0));
+
       setLoading(false);
     };
     init();
@@ -148,17 +211,50 @@ export default function ExamTakingPage({ params }: TestPageProps) {
     questionStartRef.current = Date.now();
   }, [attemptId, currentQuestion, questionTimes, answers, supabase]);
 
-  // ─── Timer ───
+  // ─── Timer Countdown & Local Cache Sync ───
   useEffect(() => {
     if (submitted || loading || !test) return;
+   
     const timer = setInterval(() => {
       setTimeLeft((t) => {
-        if (t <= 1) { return 0; }
-        return t - 1;
+        let nextTime = t <= 1 ? 0 : t - 1;
+       
+        if (expiresAt) {
+          // Professional Pattern: Recalibrate based on absolute end time
+          const remaining = Math.floor(Math.max(0, expiresAt - Date.now()) / 1000);
+          // Only sync if drift > 2 seconds
+          if (Math.abs(remaining - nextTime) > 2) {
+            nextTime = remaining;
+          }
+        }
+       
+        // Professional Pattern: Periodically save remaining seconds to LocalStorage
+        // This ensures a refresh picks up the exact second count instantly
+        try {
+          const testId = window.location.pathname.split('/').pop();
+          if (testId) {
+            localStorage.setItem(`clatly_timer_val_${testId}`, nextTime.toString());
+          }
+        } catch (e) {}
+
+        return nextTime;
       });
     }, 1000);
+    
     return () => clearInterval(timer);
   }, [submitted, loading, test]);
+
+  // Navigate away
+  const handleQuit = () => {
+    // Clear the timer cache when leaving to dashboard
+    try {
+      const testId = window.location.pathname.split('/').pop();
+      if (testId) {
+        localStorage.removeItem(`clatly_timer_val_${testId}`);
+      }
+    } catch (e) {}
+    router.push('/student/dashboard');
+  };
 
   // ─── Navigation ───
   const navigateTo = async (sectionIdx: number, groupIdx: number, qIdx: number) => {
@@ -182,11 +278,6 @@ export default function ExamTakingPage({ params }: TestPageProps) {
         attempt_id: attemptId, question_id: questionId, selected_option: newVal || null,
       }, { onConflict: 'attempt_id, question_id' });
     }
-  };
-
-  /** Navigate away (no pause/resume — just leave) */
-  const handleQuit = () => {
-    router.push('/student/dashboard');
   };
 
   // ─── Submit ───
@@ -217,11 +308,20 @@ export default function ExamTakingPage({ params }: TestPageProps) {
       }
       return { attempt_id: attemptId, question_id: q.id, selected_option: selected, is_correct: correct, time_taken_seconds: questionTimes[q.id] ?? null };
     });
-    // Clamp negative total to 0
+    
     totalScore = Math.max(0, totalScore);
     const totalPct = Math.round((totalScore / questions.length) * 100);
     for (const r of responsesToUpsert) await supabase.from('responses').upsert(r, { onConflict: 'attempt_id, question_id' });
     await supabase.from('attempts').update({ submitted_at: new Date().toISOString(), total_score: totalPct, section_scores: sectionScores }).eq('id', attemptId);
+    
+    // Clear timer cache upon successful submission
+    try {
+      const testId = window.location.pathname.split('/').pop();
+      if (testId) {
+        localStorage.removeItem(`clatly_timer_val_${testId}`);
+      }
+    } catch (e) {}
+
     setResultScores(sections.map((s) => ({ section: s.name, score: Math.max(0, Math.round(sectionScores[s.name]?.raw ?? 0)), total: allSectionQuestions[s.id]?.length ?? 0 })));
     setResultTotal(totalPct);
     setSubmitted(true);
@@ -244,14 +344,17 @@ export default function ExamTakingPage({ params }: TestPageProps) {
   const isLastQInGroup = currentQIdx >= allQuestionsInGroup.length - 1;
 
   // ─── Loading / Submitted ───
-  if (loading) return (
-    <div className="min-h-screen flex items-center justify-center bg-page">
-      <div className="animate-pulse flex flex-col items-center gap-3">
-        <div className="w-8 h-8 border-4 border-accent border-t-transparent rounded-full animate-spin" />
-        <p className="text-secondary text-sm">Loading exam...</p>
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-page">
+        <div className="animate-pulse flex flex-col items-center gap-3">
+          <div className="w-8 h-8 border-4 border-accent border-t-transparent rounded-full animate-spin" />
+          <p className="text-secondary text-sm">Loading exam...</p>
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
+  
   if (!test) return <div className="p-8 text-center text-secondary">Exam not found.</div>;
 
   if (submitted) {
@@ -396,78 +499,91 @@ export default function ExamTakingPage({ params }: TestPageProps) {
               <div>
                 {currentQIdx > 0 ? (
                   <button onClick={() => navigateTo(currentSectionIdx, currentGroupIdx, currentQIdx - 1)}
-                    className="border border-theme px-4 py-2 rounded-lg text-sm hover:bg-elevated transition">← Previous</button>
+                    className="border border-theme px-4 py-2 rounded-lg text-xs font-medium text-secondary hover:bg-elevated transition">← Previous</button>
                 ) : currentGroupIdx > 0 ? (
                   <button onClick={() => {
-                    const prevGroup = passageGroups[currentGroupIdx - 1];
-                    navigateTo(currentSectionIdx, currentGroupIdx - 1, (prevGroup?.questions.length ?? 1) - 1);
-                  }} className="border border-theme px-4 py-2 rounded-lg text-sm hover:bg-elevated transition">← Prev Passage</button>
+                    const prevGroupQs = passageGroups[currentGroupIdx - 1].questions;
+                    navigateTo(currentSectionIdx, currentGroupIdx - 1, prevGroupQs.length - 1);
+                  }} className="border border-theme px-4 py-2 rounded-lg text-xs font-medium text-secondary hover:bg-elevated transition">← Previous Group</button>
                 ) : currentSectionIdx > 0 ? (
                   <button onClick={() => {
-                    const prevSec = sections[currentSectionIdx - 1];
-                    const prevGroups = groupByPassage(questions.filter((q) => q.section_id === prevSec.id));
-                    navigateTo(currentSectionIdx - 1, prevGroups.length - 1, (prevGroups[prevGroups.length - 1]?.questions.length ?? 1) - 1);
-                  }} className="border border-theme px-4 py-2 rounded-lg text-sm hover:bg-elevated transition">← Prev Section</button>
-                ) : (
-                  <div />
-                )}
+                    const prevSecQs = questions.filter((q) => q.section_id === sections[currentSectionIdx - 1].id);
+                    const prevSecGroups = groupByPassage(prevSecQs);
+                    const lastGroupQs = prevSecGroups[prevSecGroups.length - 1].questions;
+                    navigateTo(currentSectionIdx - 1, prevSecGroups.length - 1, lastGroupQs.length - 1);
+                  }} className="border border-theme px-4 py-2 rounded-lg text-xs font-medium text-secondary hover:bg-elevated transition">← Previous Section</button>
+                ) : <div />}
               </div>
-
-              <span className="text-xs text-muted hidden sm:inline">
-                Passage {currentGroupIdx + 1}/{totalGroupCount} · Q{currentQIdx + 1}/{allQuestionsInGroup.length}
-              </span>
 
               <div>
                 {!isLastQInGroup ? (
                   <button onClick={() => navigateTo(currentSectionIdx, currentGroupIdx, currentQIdx + 1)}
-                    className="bg-accent text-white px-4 py-2 rounded-lg text-sm hover:bg-accent-hover transition">Next →</button>
+                    className="bg-accent text-white px-5 py-2 rounded-lg text-xs font-medium hover:bg-accent-hover transition">Next →</button>
                 ) : currentGroupIdx < totalGroupCount - 1 ? (
                   <button onClick={() => navigateTo(currentSectionIdx, currentGroupIdx + 1, 0)}
-                    className="bg-accent text-white px-4 py-2 rounded-lg text-sm hover:bg-accent-hover transition">Next Passage →</button>
+                    className="bg-accent text-white px-5 py-2 rounded-lg text-xs font-medium hover:bg-accent-hover transition">Next Group →</button>
                 ) : currentSectionIdx < sections.length - 1 ? (
                   <button onClick={() => navigateTo(currentSectionIdx + 1, 0, 0)}
-                    className="bg-accent text-white px-4 py-2 rounded-lg text-sm hover:bg-accent-hover transition">Next Section →</button>
+                    className="bg-accent text-white px-5 py-2 rounded-lg text-xs font-medium hover:bg-accent-hover transition">Next Section →</button>
                 ) : (
                   <button onClick={handleSubmit} disabled={submitting}
-                    className="bg-success text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-success-hover disabled:opacity-50 transition">
-                    {submitting ? '...' : 'Finish Exam'}
-                  </button>
+                    className="bg-success text-white px-5 py-2 rounded-lg text-xs font-medium hover:bg-success-hover transition">Submit Exam</button>
                 )}
               </div>
             </div>
           </div>
 
-          {/* ─── Sidebar ─── */}
-          <div className="md:order-last space-y-4">
-            <div className="bg-card border border-theme rounded-xl p-4 shadow-theme-sm">
-              <p className="text-xs font-semibold text-secondary uppercase tracking-wide mb-2">Sections</p>
+          {/* ─── Sidebar / Question Palette ─── */}
+          <div>
+            <div className="bg-card border border-theme rounded-xl p-4 shadow-theme-sm mb-4">
+              <h3 className="text-xs font-bold text-primary uppercase tracking-wider mb-3">Sections</h3>
               <div className="space-y-1">
-                {sections.map((s, i) => {
-                  const sq = questions.filter((q) => q.section_id === s.id);
-                  const sa = sq.filter((q) => answers[q.id]).length;
+                {sections.map((s, sIdx) => {
+                  const secQs = questions.filter((q) => q.section_id === s.id);
+                  const answeredCount = secQs.filter((q) => answers[q.id]).length;
                   return (
-                    <button key={s.id} onClick={() => navigateTo(i, 0, 0)}
-                      className={`w-full text-left px-3 py-2 rounded-lg text-xs transition ${i === currentSectionIdx ? 'bg-accent-subtle text-accent font-medium' : 'hover:bg-elevated'}`}>
-                      <span className="text-primary">{s.name}</span>
-                      <span className="float-right text-muted">{sa}/{sq.length}</span>
+                    <button key={s.id} onClick={() => navigateTo(sIdx, 0, 0)}
+                      className={`w-full text-left px-3 py-2 rounded-lg text-xs transition ${sIdx === currentSectionIdx ? 'bg-accent-subtle text-accent font-medium' : 'text-secondary hover:bg-elevated'}`}>
+                      <div className="flex justify-between items-center">
+                        <span>{s.name}</span>
+                        <span className="text-[10px] text-muted">{answeredCount}/{secQs.length}</span>
+                      </div>
                     </button>
                   );
                 })}
               </div>
             </div>
 
-            <div className="bg-card border border-theme rounded-xl p-4 shadow-theme-sm">
-              <p className="text-xs font-semibold text-secondary uppercase tracking-wide mb-2">{currentSection?.name}</p>
-              <div className="space-y-1">
-                {passageGroups.map((g, i) => {
-                  const ga = g.questions.filter((q) => answers[q.id]).length;
+            <div className="bg-card border border-theme rounded-xl p-4 shadow-theme-sm mb-4">
+              <h3 className="text-xs font-bold text-primary uppercase tracking-wider mb-3">Questions</h3>
+              <div className="grid grid-cols-5 gap-1.5">
+                {sectionQuestions.map((q, idx) => {
+                  const isSelected = q.id === currentQuestion?.id;
+                  const isAnswered = !!answers[q.id];
+                  
+                  // Find passage index
+                  let groupIdx = 0;
+                  let qIdx = 0;
+                  for (let g = 0; g < passageGroups.length; g++) {
+                    const qlist = passageGroups[g].questions;
+                    const qInListIdx = qlist.findIndex((item) => item.id === q.id);
+                    if (qInListIdx !== -1) {
+                      groupIdx = g;
+                      qIdx = qInListIdx;
+                      break;
+                    }
+                  }
+
                   return (
-                    <button key={i} onClick={() => navigateTo(currentSectionIdx, i, 0)}
-                      className={`w-full text-left px-3 py-1.5 rounded-lg text-xs transition flex items-center justify-between ${
-                        i === currentGroupIdx ? 'bg-accent-subtle text-accent font-medium' : 'hover:bg-elevated'
+                    <button key={q.id} onClick={() => navigateTo(currentSectionIdx, groupIdx, qIdx)}
+                      className={`w-8 h-8 rounded-lg text-xs font-medium flex items-center justify-center transition ${
+                        isSelected
+                          ? 'bg-accent text-white font-bold ring-2 ring-offset-2 ring-accent'
+                          : isAnswered
+                          ? 'bg-success/20 text-success border border-success/30 hover:bg-success/30'
+                          : 'bg-elevated text-secondary hover:bg-card-hover border border-theme'
                       }`}>
-                      <span>Passage {i + 1}</span>
-                      <span className={`text-[10px] ${ga === g.questions.length ? 'text-success' : 'text-muted'}`}>{ga}/{g.questions.length}</span>
+                      {idx + 1}
                     </button>
                   );
                 })}
@@ -484,7 +600,6 @@ export default function ExamTakingPage({ params }: TestPageProps) {
           </div>
         </div>
       </div>
-
     </div>
   );
 }
