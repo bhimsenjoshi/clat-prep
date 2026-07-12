@@ -65,6 +65,7 @@ export default function ExamTakingPage({ params }: TestPageProps) {
   const supabase = createClient();
   const questionStartRef = useRef<number>(Date.now());
   const hasExitedRef = useRef(false);
+  const [showExitModal, setShowExitModal] = useState(false);
  
   // Added absolute timer state
   const [expiresAt, setExpiresAt] = useState<number | null>(null);
@@ -251,6 +252,10 @@ export default function ExamTakingPage({ params }: TestPageProps) {
 
   // Navigate away
   const handleQuit = () => {
+    setShowExitModal(true);
+   };
+  
+   const confirmExit = () => {
     hasExitedRef.current = true;
     // Delete the unfinished attempt so next visit starts fresh without counting as a retake
     if (attemptId) {
@@ -266,10 +271,14 @@ export default function ExamTakingPage({ params }: TestPageProps) {
       }
     } catch (e) {}
     router.push('/student/dashboard');
-  };
+   };
+  
+   const cancelExit = () => {
+    setShowExitModal(false);
+   };
 
-  // ─── Navigation ───
-  const navigateTo = async (sectionIdx: number, groupIdx: number, qIdx: number) => {
+   // ─── Navigation ───
+   const navigateTo = async (sectionIdx: number, groupIdx: number, qIdx: number) => {
     await recordTimeForCurrentQuestion();
     setCurrentSectionIdx(sectionIdx);
     setCurrentGroupIdx(groupIdx);
@@ -609,9 +618,41 @@ export default function ExamTakingPage({ params }: TestPageProps) {
               </svg>
               Exit
             </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
+            </div>
+            </div>
+            </div>
+
+            {/* ─── Exit confirmation modal ─── */}
+            {showExitModal && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+            <div className="bg-card border border-theme rounded-2xl p-6 max-w-sm w-full mx-4 shadow-theme-xl">
+             <div className="text-center">
+               <div className="w-14 h-14 rounded-full bg-danger/10 flex items-center justify-center mx-auto mb-4">
+                 <svg className="w-7 h-7 text-danger" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                 </svg>
+               </div>
+               <h3 className="text-lg font-bold text-primary mb-2">Exit Exam?</h3>
+               <p className="text-sm text-secondary mb-1">
+                 Your current progress will be <span className="font-semibold text-danger">lost</span>.
+               </p>
+               <p className="text-sm text-secondary mb-6">
+                 All answers and time spent will not be saved.
+               </p>
+               <div className="flex gap-3">
+                 <button onClick={cancelExit}
+                   className="flex-1 px-4 py-2.5 rounded-xl border border-theme text-sm font-medium text-primary hover:bg-elevated transition">
+                   Continue Exam
+                 </button>
+                 <button onClick={confirmExit}
+                   className="flex-1 px-4 py-2.5 rounded-xl bg-danger text-white text-sm font-medium hover:bg-danger-hover transition">
+                   Yes, Exit
+                 </button>
+               </div>
+             </div>
+            </div>
+            </div>
+            )}
+            </div>
+            );
+            }
