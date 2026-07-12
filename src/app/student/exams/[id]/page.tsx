@@ -41,10 +41,7 @@ export default function ExamTakingPage({ params }: TestPageProps) {
   const [currentQIdx, setCurrentQIdx] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [questionTimes, setQuestionTimes] = useState<Record<string, number>>({});
-  
-  // Always start fresh. init() will restore from DB if needed.
-  const [timeLeft, setTimeLeft] = useState<number>(120 * 60);
-
+  const [timeLeft, setTimeLeft] = useState<number>(7200);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [resultScores, setResultScores] = useState<{ section: string; score: number; total: number }[]>([]);
@@ -52,16 +49,12 @@ export default function ExamTakingPage({ params }: TestPageProps) {
   const [loading, setLoading] = useState(true);
   const [passageExpanded, setPassageExpanded] = useState(true);
   const [userName, setUserName] = useState('');
+  const [showExitModal, setShowExitModal] = useState(false);
   const router = useRouter();
   const supabase = createClient();
   const questionStartRef = useRef<number>(Date.now());
-  const hasExitedRef = useRef(false);
-  const timerIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const [showExitModal, setShowExitModal] = useState(false);
- 
-  // Added absolute timer state
-  const [expiresAt, setExpiresAt] = useState<number | null>(null);
-  
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
   const currentSection = sections[currentSectionIdx];
   const sectionQuestions = useMemo(
     () => questions.filter((q) => q.section_id === currentSection?.id),
@@ -93,11 +86,24 @@ export default function ExamTakingPage({ params }: TestPageProps) {
       const { data: sectionsData } = await supabase.from('sections').select('*').eq('test_id', id).order('order_index');
       setSections(sectionsData ?? []);
 
-      const sectionIds = (sectionsData ?? []).map((s) => s.id);
+      const sectionIds = (sectionsData ?? []).map((s: any) => s.id);
       if (sectionIds.length) {
         const { data: qData } = await supabase.from('questions').select('*').in('section_id', sectionIds);
         setQuestions(qData ?? []);
       }
+
+      // Reset all state to defaults
+      setAttemptId(null);
+      setTimeLeft(7200);
+      setAnswers({});
+      setQuestionTimes({});
+      setCurrentSectionIdx(0);
+      setCurrentGroupIdx(0);
+      setCurrentQIdx(0);
+      setShowExitModal(false);
+      setSubmitted(false);
+      setSubmitting(false);
+      setPassageExpanded(true);
 
       // Fetch existing attempts
       const { data: existingAttempts } = await supabase
@@ -107,89 +113,35 @@ export default function ExamTakingPage({ params }: TestPageProps) {
         .eq('student_id', user.id)
         .order('started_at', { ascending: false });
 
-      // Professional Pattern: Server-Client clock drift compensation
-      // Parse precise UTC server time from a fast HEAD request to the origin
-      let serverTimeNow = Date.now();
-      try {
-        const headRes = await fetch('/', { method: 'HEAD' });
-        if (headRes && headRes.headers.get('date')) {
-          const parsedHeaderDate = new Date(headRes.headers.get('date')!).getTime();
-          if (!isNaN(parsedHeaderDate)) {
-            serverTimeNow = parsedHeaderDate;
-          }
-        }
-      } catch (e) {
-        console.error('Server time sync failed, falling back to client clock:', e);
-      }
-      const clientClockOffset = serverTimeNow - Date.now();
-
       const unsubmitted = (existingAttempts ?? []).find((a: any) => !a.submitted_at);
-      console.log('Timer debug:', { unsubmittedFound: !!unsubmitted, startedAt: unsubmitted?.started_at, allAttemptsCount: existingAttempts?.length });
-     
-      // Reset all volatile state unconditionally on mount
-      hasExitedRef.current = false;
-      timerIntervalRef.current = null;
-      setShowExitModal(false);
-      setSubmitted(false);
-      setSubmitting(false);
-      setAnswers({});
-      setQuestionTimes({});
-      setCurrentSectionIdx(0);
-      setCurrentGroupIdx(0);
-      setCurrentQIdx(0);
-      setPassageExpanded(true);
-     
+
       if (unsubmitted) {
-        // Guard: if the unsubmitted attempt is VERY stale (older than 2.5 hours),
-        // delete it and create a fresh one — prevents orphaned attempt bugs
-        const startedAtStr = (unsubmitted.started_at ?? '').replace(' ', 'T');
-        const startedAtTime = new Date(startedAtStr).getTime();
+        // Check if it's stale (older than 150 min) — delete and start fresh
+        const startedAtTime = new Date(unsubmitted.started_at).getTime();
         if (!isNaN(startedAtTime) && (Date.now() - startedAtTime) > 150 * 60 * 1000) {
-          console.log('Stale unsubmitted attempt found, deleting and creating fresh');
           await supabase.from('attempts').delete().eq('id', unsubmitted.id);
           const { data: attempt } = await supabase.from('attempts').insert({
             test_id: id, student_id: user.id,
           }).select().single();
           if (attempt) {
             setAttemptId(attempt.id);
-            setTimeLeft(120 * 60);
-            localStorage.setItem(`clatly_timer_val_${id}`, (120 * 60).toString());
+            setTimeLeft(7200);
           }
           setLoading(false);
           return;
         }
+
         setAttemptId(unsubmitted.id);
-       
-        if (unsubmitted.expires_at) {
-          const expAtStr = unsubmitted.expires_at.replace(' ', 'T');
-          const expAtTime = new Date(expAtStr).getTime();
-         
-          if (!isNaN(expAtTime)) {
-            setExpiresAt(expAtTime);
-            const adjustedClientNow = Date.now() + clientClockOffset;
-            const remaining = Math.floor(Math.max(0, expAtTime - adjustedClientNow) / 1000);
-           
-            setTimeLeft(remaining);
-            localStorage.setItem(`clatly_timer_val_${id}`, remaining.toString());
-          }
-        } else {
-          // Fallback logic if expires_at is not present in DB
-          const startedAtStr = unsubmitted.started_at.replace(' ', 'T'); // Convert PostgreSQL space to standard ISO T
-          const startedAtTime = new Date(startedAtStr).getTime();
-        
-          if (!isNaN(startedAtTime)) {
-            const calculatedExpiresAt = startedAtTime + (120 * 60 * 1000);
-            setExpiresAt(calculatedExpiresAt);
-           
-            const adjustedClientNow = Date.now() + clientClockOffset;
-            const elapsed = Math.floor((adjustedClientNow - startedAtTime) / 1000);
-            const remaining = Math.max(0, 120 * 60 - elapsed);
-          
-            setTimeLeft(remaining);
-            localStorage.setItem(`clatly_timer_val_${id}`, remaining.toString());
-          }
+
+        // Calculate remaining time from started_at
+        const started = new Date(unsubmitted.started_at).getTime();
+        if (!isNaN(started)) {
+          const elapsed = Math.floor((Date.now() - started) / 1000);
+          const remaining = Math.max(0, 7200 - elapsed);
+          setTimeLeft(remaining);
         }
-       
+
+        // Restore answers
         const { data: responses } = await supabase.from('responses').select('*').eq('attempt_id', unsubmitted.id);
         if (responses) {
           const answerMap: Record<string, string> = {};
@@ -205,10 +157,9 @@ export default function ExamTakingPage({ params }: TestPageProps) {
         const { data: attempt } = await supabase.from('attempts').insert({
           test_id: id, student_id: user.id,
         }).select().single();
-        if (attempt) { 
-          setAttemptId(attempt.id); 
-          setTimeLeft(120 * 60);
-          localStorage.setItem(`clatly_timer_val_${id}`, (120 * 60).toString());
+        if (attempt) {
+          setAttemptId(attempt.id);
+          setTimeLeft(7200);
         }
       }
 
@@ -239,79 +190,57 @@ export default function ExamTakingPage({ params }: TestPageProps) {
     questionStartRef.current = Date.now();
   }, [attemptId, currentQuestion, questionTimes, answers, supabase]);
 
-  // ─── Timer Countdown & Local Cache Sync ───
+  // ─── Timer Countdown ───
   useEffect(() => {
-    if (submitted || loading || !test) return;
-  
-    const timer = setInterval(() => {
-      // If user has exited, stop the timer immediately — no more ticks
-      if (hasExitedRef.current) {
-        clearInterval(timer);
-        return;
-      }
-      setTimeLeft((t) => {
-        let nextTime = t <= 1 ? 0 : t - 1;
-      
-        if (expiresAt) {
-          // Professional Pattern: Recalibrate based on absolute end time
-          const remaining = Math.floor(Math.max(0, expiresAt - Date.now()) / 1000);
-          // Only sync if drift > 2 seconds
-          if (Math.abs(remaining - nextTime) > 2) {
-            nextTime = remaining;
-          }
-        }
-      
-        // Only cache if user hasn't exited — prevents stale timer resumption
-        if (!hasExitedRef.current) {
-          try {
-            const testId = window.location.pathname.split('/').pop();
-            if (testId) {
-              localStorage.setItem(`clatly_timer_val_${testId}`, nextTime.toString());
-            }
-          } catch (e) {}
-        }
+    if (submitted || loading || !test || !attemptId) return;
 
-        return nextTime;
+    timerRef.current = setInterval(() => {
+      setTimeLeft((t) => {
+        if (t <= 1) {
+          // Auto-submit when timer hits 0
+          clearInterval(timerRef.current!);
+          timerRef.current = null;
+          return 0;
+        }
+        return t - 1;
       });
     }, 1000);
-    
-    timerIntervalRef.current = timer;
-    return () => clearInterval(timer);
-  }, [submitted, loading, test]);
 
-  // Navigate away
-  const handleQuit = () => {
-    setShowExitModal(true);
-   };
- 
-   const confirmExit = async () => {
-     hasExitedRef.current = true;
-     // Kill the timer interval immediately — no more ticks, prevents auto-submit at 0
-     if (timerIntervalRef.current) {
-       clearInterval(timerIntervalRef.current);
-       timerIntervalRef.current = null;
-     }
-     // Delete the unfinished attempt AWAITED so it's gone before navigating
-     if (attemptId) {
-       await supabase.from('attempts').delete().eq('id', attemptId);
-       console.log('In-progress attempt deleted on exit');
-     }
-     // Clear the timer cache and navigate after delete completes
-     try {
-       const testId = window.location.pathname.split('/').pop();
-       if (testId) {
-         localStorage.removeItem(`clatly_timer_val_${testId}`);
-       }
-     } catch (e) {}
-     router.push('/student/dashboard');
-   };
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+        timerRef.current = null;
+      }
+    };
+  }, [submitted, loading, test, attemptId]);
 
-   const cancelExit = () => {
-     setShowExitModal(false);
-   };
+  // ─── Auto-submit at 0 ───
+  useEffect(() => {
+    if (submitted || loading || !test || !attemptId || timeLeft > 0) return;
+    handleSubmit();
+  }, [timeLeft]);
 
-   // ─── Navigation ───
-   const navigateTo = async (sectionIdx: number, groupIdx: number, qIdx: number) => {
+  // ─── Quit / Exit ───
+  const handleQuit = () => setShowExitModal(true);
+
+  const confirmExit = async () => {
+    // Kill timer first
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+    // Delete attempt from DB
+    if (attemptId) {
+      await supabase.from('attempts').delete().eq('id', attemptId);
+    }
+    setShowExitModal(false);
+    router.push('/student/dashboard');
+  };
+
+  const cancelExit = () => setShowExitModal(false);
+
+  // ─── Navigation ───
+  const navigateTo = async (sectionIdx: number, groupIdx: number, qIdx: number) => {
     await recordTimeForCurrentQuestion();
     setCurrentSectionIdx(sectionIdx);
     setCurrentGroupIdx(groupIdx);
@@ -324,7 +253,6 @@ export default function ExamTakingPage({ params }: TestPageProps) {
   };
 
   const handleAnswer = (questionId: string, option: string) => {
-    // Toggle: if already selected, deselect (set to empty)
     const newVal = answers[questionId] === option ? '' : option;
     setAnswers((prev) => ({ ...prev, [questionId]: newVal }));
     if (attemptId) {
@@ -337,12 +265,19 @@ export default function ExamTakingPage({ params }: TestPageProps) {
   // ─── Submit ───
   const handleSubmit = useCallback(async () => {
     if (!attemptId || submitting) return;
+    // Kill timer
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
     await recordTimeForCurrentQuestion();
     setSubmitting(true);
+
     let totalScore = 0;
     const sectionScores: Record<string, { raw: number; attempted: number }> = {};
     const allSectionQuestions: Record<string, Question[]> = {};
     for (const s of sections) allSectionQuestions[s.id] = questions.filter((q) => q.section_id === s.id);
+
     const responsesToUpsert = questions.map((q) => {
       const selected = answers[q.id] ?? null;
       const correct = selected === q.correct_option;
@@ -362,33 +297,17 @@ export default function ExamTakingPage({ params }: TestPageProps) {
       }
       return { attempt_id: attemptId, question_id: q.id, selected_option: selected, is_correct: correct, time_taken_seconds: questionTimes[q.id] ?? null };
     });
-    
+
     totalScore = Math.max(0, totalScore);
     const totalPct = Math.round((totalScore / questions.length) * 100);
     for (const r of responsesToUpsert) await supabase.from('responses').upsert(r, { onConflict: 'attempt_id, question_id' });
     await supabase.from('attempts').update({ submitted_at: new Date().toISOString(), total_score: totalPct, section_scores: sectionScores }).eq('id', attemptId);
-    
-    // Clear timer cache upon successful submission
-    try {
-      const testId = window.location.pathname.split('/').pop();
-      if (testId) {
-        localStorage.removeItem(`clatly_timer_val_${testId}`);
-      }
-    } catch (e) {}
 
     setResultScores(sections.map((s) => ({ section: s.name, score: Math.max(0, Math.round(sectionScores[s.name]?.raw ?? 0)), total: allSectionQuestions[s.id]?.length ?? 0 })));
     setResultTotal(totalPct);
     setSubmitted(true);
     setSubmitting(false);
   }, [attemptId, questions, sections, answers, questionTimes, submitting]);
-
-  // Auto-submit when timer reaches 0
-  useEffect(() => {
-    if (submitted || loading || !test || timeLeft > 0) return;
-    // Never auto-submit if user has already exited
-    if (hasExitedRef.current) return;
-    handleSubmit();
-  }, [timeLeft, submitted, loading, test]);
 
   // ─── Helpers ───
   const answeredInSection = sectionQuestions.filter((q) => answers[q.id]).length;
@@ -410,7 +329,7 @@ export default function ExamTakingPage({ params }: TestPageProps) {
       </div>
     );
   }
-  
+
   if (!test) return <div className="p-8 text-center text-secondary">Exam not found.</div>;
 
   if (submitted) {
@@ -616,8 +535,7 @@ export default function ExamTakingPage({ params }: TestPageProps) {
                 {sectionQuestions.map((q, idx) => {
                   const isSelected = q.id === currentQuestion?.id;
                   const isAnswered = !!answers[q.id];
-                  
-                  // Find passage index
+
                   let groupIdx = 0;
                   let qIdx = 0;
                   for (let g = 0; g < passageGroups.length; g++) {
