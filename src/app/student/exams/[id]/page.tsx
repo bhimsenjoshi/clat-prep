@@ -43,7 +43,7 @@ export default function TestTakingPage({ params }: TestPageProps) {
         .select('*')
         .eq('id', id)
         .single();
-      if (!testData) { router.push('/student/tests'); return; }
+      if (!testData) { router.push('/student/exams'); return; }
       setTest(testData);
 
       // Load sections (ordered)
@@ -298,7 +298,7 @@ export default function TestTakingPage({ params }: TestPageProps) {
 
         <div className="flex justify-center gap-4">
           <Link
-            href={`/student/tests/${test.id}/review?attempt=${attemptId}`}
+            href={`/student/exams/${test.id}/review?attempt=${attemptId}`}
             className="bg-accent text-white px-6 py-2.5 rounded-lg font-medium hover:bg-accent-hover transition"
           >
             📝 Review Answers
@@ -405,7 +405,12 @@ export default function TestTakingPage({ params }: TestPageProps) {
               <p className="font-medium text-base text-primary mb-5">{currentQuestion?.question_text}</p>
               <div className="space-y-2">
                 {currentQuestion &&
-                  Object.entries(currentQuestion.options).map(([key, value]) => (
+                  (() => {
+                    let opts = currentQuestion.options;
+                    if (typeof opts === 'string') {
+                      try { opts = JSON.parse(opts); } catch {}
+                    }
+                    return Object.entries(opts).map(([key, value]) => (
                     <button
                       key={key}
                       onClick={() => handleAnswer(currentQuestion.id, key)}
@@ -418,7 +423,8 @@ export default function TestTakingPage({ params }: TestPageProps) {
                       <span className="font-semibold mr-2 text-secondary">{key}.</span>
                       <span className="text-primary">{value}</span>
                     </button>
-                  ))}
+                    ));
+                  })()}
               </div>
             </div>
 

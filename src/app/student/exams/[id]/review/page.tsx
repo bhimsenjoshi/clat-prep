@@ -143,7 +143,7 @@ export default function ReviewPage({ params }: ReviewPageProps) {
                 {responses.filter((r) => r.is_correct).length}/{responses.length} correct
               </p>
             </div>
-            <Link href={`/student/tests/${searchParams.get('attempt')?.split('?')[0] ?? ''}`}
+            <Link href={`/student/exams/${searchParams.get('attempt')?.split('?')[0] ?? ''}`}
               className="px-3 py-1.5 rounded-lg text-xs font-medium bg-tint-green text-stat-green hover:bg-tint-green border border-theme transition">
               🔄 Retake
             </Link>
@@ -262,7 +262,12 @@ export default function ReviewPage({ params }: ReviewPageProps) {
                 <div className="px-5 py-4">
                   <p className="text-sm font-medium text-primary mb-3">{r.question_text}</p>
                   <div className="grid grid-cols-2 gap-2">
-                    {Object.entries(r.options).map(([key, value]) => {
+                    {(() => {
+                      let opts = r.options;
+                      if (typeof opts === 'string') {
+                        try { opts = JSON.parse(opts); } catch {}
+                      }
+                      return Object.entries(opts).map(([key, value]) => {
                       const isSelected = r.selected_option === key;
                       const isCorrectOpt = r.correct_option === key;
                       return (
@@ -292,7 +297,8 @@ export default function ReviewPage({ params }: ReviewPageProps) {
                           </span>
                         </div>
                       );
-                    })}
+                    });
+                    })()}
                   </div>
 
                   {/* Explanation */}
@@ -313,7 +319,7 @@ export default function ReviewPage({ params }: ReviewPageProps) {
           <Link href="/student/dashboard" className="text-accent hover:underline">
             ← Back to Dashboard
           </Link>
-          <Link href={`/student/tests/${searchParams.get('attempt')?.split('?')[0] ?? ''}`}
+          <Link href={`/student/exams/${searchParams.get('attempt')?.split('?')[0] ?? ''}`}
             className="px-5 py-2.5 rounded-xl text-sm font-medium bg-gradient-accent text-white hover:bg-accent-hover transition shadow-sm">
             🔄 Retake This Test
           </Link>

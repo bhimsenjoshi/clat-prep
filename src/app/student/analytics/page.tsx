@@ -472,7 +472,7 @@ export default function AnalyticsPage() {
     <div className="bg-card border border-theme rounded-xl shadow-theme-sm">
       <div className="px-6 py-4 border-b border-theme flex items-center justify-between">
         <h2 className="font-semibold text-primary">📋 Attempt History</h2>
-        <Link href="/student/tests" className="text-xs text-accent hover:text-accent/80 font-medium">
+        <Link href="/student/exams" className="text-xs text-accent hover:text-accent/80 font-medium">
           All Tests →
         </Link>
       </div>
@@ -496,7 +496,7 @@ export default function AnalyticsPage() {
               }`}>
                 {a.total_score ?? '—'}%
               </span>
-              <Link href={`/student/tests/${a.test_id}/review?attempt=${a.id}`}
+              <Link href={`/student/exams/${a.test_id}/review?attempt=${a.id}`}
                 className="text-xs text-accent hover:text-accent/80 font-medium">
                 Review →
               </Link>
@@ -674,7 +674,7 @@ export default function AnalyticsPage() {
             ) : (
               <div className="bg-card border border-theme rounded-xl p-10 text-center text-muted">
                 <p>No test data yet. Complete a mock test to see your analytics!</p>
-                <Link href="/student/tests" className="mt-4 inline-flex px-6 py-3 rounded-xl font-medium bg-accent text-white hover:bg-accent-hover transition">
+                <Link href="/student/exams" className="mt-4 inline-flex px-6 py-3 rounded-xl font-medium bg-accent text-white hover:bg-accent-hover transition">
                   Start Test →
                 </Link>
               </div>

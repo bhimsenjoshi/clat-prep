@@ -293,7 +293,12 @@ export default function PracticeQuiz() {
         )}
         <p className="text-sm font-medium mb-3 text-primary">{q.question_text}</p>
         <div className="grid grid-cols-2 gap-2">
-          {Object.entries(q.options).map(([key, value]) => {
+          {(() => {
+            let opts = q.options;
+            if (typeof opts === 'string') {
+              try { opts = JSON.parse(opts); } catch {}
+            }
+            return Object.entries(opts).map(([key, value]) => {
             const isSelected = response.your_answer === key;
             const isCorrectOpt = response.correct_option === key;
             return (
@@ -320,7 +325,8 @@ export default function PracticeQuiz() {
                 </span>
               </div>
             );
-          })}
+          });
+        })()}
         </div>
         {response.explanation && (
           <div className="mt-3 p-3 bg-info/20 border border-info/50 rounded-lg">
@@ -568,7 +574,10 @@ export default function PracticeQuiz() {
             </div>
             <p className="font-medium text-base mb-5 leading-relaxed text-primary">{question.question_text}</p>
             <div className="space-y-2">
-              {Object.entries(question.options).map(([key, value]) => (
+              {(() => {
+                let opts = question.options;
+                if (typeof opts === 'string') { try { opts = JSON.parse(opts); } catch {} }
+                return Object.entries(opts).map(([key, value]) => (
                 <button
                   key={key}
                   onClick={() => answerQuestion(key)}
@@ -582,7 +591,8 @@ export default function PracticeQuiz() {
                   <span className="font-semibold mr-3 text-secondary">{key}.</span>
                   <span className="text-primary">{value}</span>
                 </button>
-              ))}
+              ));
+            })()}
             </div>
           </div>
         )}

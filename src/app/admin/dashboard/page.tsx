@@ -79,7 +79,7 @@ export default function AdminDashboard() {
         <div className="flex items-center justify-between mb-8">
           <h1 className="text-2xl font-bold text-primary">Admin Dashboard</h1>
           <div className="flex gap-3">
-            <Link href="/admin/tests" className="border border-theme px-4 py-2 rounded-lg text-sm bg-card-hover text-primary hover:bg-elevated transition">Manage Tests</Link>
+            <Link href="/admin/tests" className="border border-theme px-4 py-2 rounded-lg text-sm bg-card-hover text-primary hover:bg-elevated transition">Manage Exams</Link>
             <Link href="/admin/students" className="border border-theme px-4 py-2 rounded-lg text-sm bg-card-hover text-primary hover:bg-elevated transition">Manage Users & Analytics</Link>
             <button onClick={() => setShowChangePassword(!showChangePassword)}
               className="border border-theme px-4 py-2 rounded-lg text-sm bg-card-hover text-primary hover:bg-elevated transition">
@@ -96,8 +96,8 @@ export default function AdminDashboard() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <Link href="/admin/tests" className="bg-card border border-theme rounded-xl p-6 shadow-theme-sm hover:shadow-theme-md transition block">
             <p className="text-4xl font-bold text-stat-indigo">{stats.tests}</p>
-            <p className="text-sm text-secondary mt-1">Total Tests</p>
-            <p className="text-xs text-stat-indigo mt-2">Click to manage →</p>
+            <p className="text-sm text-secondary mt-1">Total Exams</p>
+            <p className="text-xs text-stat-indigo mt-2">Click to manage exams →</p>
           </Link>
           <Link href="/admin/students" className="bg-card border border-theme rounded-xl p-6 shadow-theme-sm hover:shadow-theme-md transition block">
             <p className="text-4xl font-bold text-stat-green">{stats.users}</p>
@@ -139,7 +139,7 @@ export default function AdminDashboard() {
           <div className="px-6 py-4 border-b border-theme"><h2 className="font-semibold text-primary">Quick Actions</h2></div>
           <div className="p-6 grid sm:grid-cols-2 gap-4">
             <Link href="/admin/tests" className="border-2 border-dashed border-accent-subtle rounded-xl p-6 text-center hover:bg-tint-indigo transition group">
-              <p className="text-lg font-semibold text-accent group-hover:text-accent">+ Create New Test</p>
+              <p className="text-lg font-semibold text-accent group-hover:text-accent">+ Create New Exam</p>
               <p className="text-sm text-secondary mt-1">Generate with AI or manually</p>
             </Link>
             <button onClick={handleGenerateDaily} disabled={generating}

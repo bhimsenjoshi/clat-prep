@@ -101,11 +101,11 @@ export default function AdminTestsPage() {
   return (
     <div className="min-h-screen bg-page text-primary">
       <div className="max-w-4xl mx-auto px-4 py-8">
-        <PageHeader title='Manage Tests' isAdmin navItems={[{href:'/admin/dashboard',label:'Dashboard',icon:'⚙️'}]} />
+        <PageHeader title='Manage Exams' isAdmin navItems={[{href:'/admin/dashboard',label:'Dashboard',icon:'⚙️'}]} />
 
         {/* Create test */}
         <div className="bg-card border border-theme rounded-xl p-5 mb-6 shadow-theme-sm">
-          <h2 className="font-semibold text-primary mb-3">Create New Test</h2>
+          <h2 className="font-semibold text-primary mb-3">Create New Exam</h2>
           <div className="flex gap-3">
             <input
               type="text"

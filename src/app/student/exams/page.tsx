@@ -104,7 +104,7 @@ export default function StudentTestsPage() {
                   <span className="text-sm text-success font-medium">Completed ✓</span>
                 ) : (
                   <Link
-                    href={`/student/tests/${test.id}`}
+                    href={`/student/exams/${test.id}`}
                     className="bg-accent text-white px-5 py-2 rounded-lg text-sm font-medium hover:bg-accent-hover transition"
                   >
                     {isAttempted === false ? 'Resume' : 'Start Test'}

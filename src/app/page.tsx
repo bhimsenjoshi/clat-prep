@@ -139,7 +139,7 @@ export default function HomePage() {
             <div className="grid md:grid-cols-3 gap-8">
               {[
                 { step: '01', title: 'Create Account', desc: 'Sign up as a student in seconds. No credit card needed.', color: 'from-indigo-600 to-indigo-700' },
-                { step: '02', title: 'Take Tests', desc: 'Attempt AI-generated mock papers. Each test is unique, covering all 5 CLAT sections.', color: 'from-purple-600 to-purple-700' },
+                { step: '02', title: 'Take Exams', desc: 'Attempt AI-generated mock exams. Each test is unique, covering all 5 CLAT sections.', color: 'from-purple-600 to-purple-700' },
                 { step: '03', title: 'Track Progress', desc: 'Review section-wise scores, track improvements, and compete on the leaderboard.', color: 'from-pink-600 to-pink-700' },
               ].map((item) => (
                 <div key={item.step} className="text-center">

@@ -393,9 +393,9 @@ export default function StudentDashboard() {
               className="px-3 py-2 rounded-lg text-sm font-medium text-secondary hover:bg-card-hover hover:text-primary active:scale-[0.97] transition-all duration-150">
               🏆 Leaderboard
             </Link>
-            <Link href="/student/tests"
+            <Link href="/student/exams"
               className="px-3 py-2 rounded-lg text-sm font-medium text-accent hover:bg-card-hover active:scale-[0.97] transition-all duration-150">
-              📝 Tests
+              📝 Exams
             </Link>
             <Link href="/student/profile"
               className="px-3 py-2 rounded-lg text-sm font-medium text-secondary hover:bg-card-hover hover:text-primary active:scale-[0.97] transition-all duration-150">
@@ -438,9 +438,9 @@ export default function StudentDashboard() {
               className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-secondary hover:bg-card-hover">
               🏆 Leaderboard
             </Link>
-            <Link href="/student/tests" onClick={() => setMobileMenuOpen(false)}
+            <Link href="/student/exams" onClick={() => setMobileMenuOpen(false)}
               className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-accent hover:bg-card-hover">
-              📝 Available Tests
+              📝 Available Exams
             </Link>
             <hr className="my-1 border-theme-light" />
             <Link href="/student/profile" onClick={() => setMobileMenuOpen(false)}
@@ -935,7 +935,7 @@ export default function StudentDashboard() {
                   className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-medium bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700 transition shadow-sm">
                   🎯 Start Practicing
                 </Link>
-                <Link href="/student/tests"
+                <Link href="/student/exams"
                   className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-medium bg-card border border-theme text-primary bg-card-hover transition shadow-theme-sm">
                   📝 Browse Tests
                 </Link>
@@ -1004,7 +1004,7 @@ export default function StudentDashboard() {
                             <span className={`text-sm font-bold ${
                               pct >= 70 ? 'text-green-400' : pct >= 40 ? 'text-amber-400' : 'text-red-400'
                             }`}>{pct}%</span>
-                            <Link href={`/student/tests/${a.test_id}/review?attempt=${a.id}`}
+                            <Link href={`/student/exams/${a.test_id}/review?attempt=${a.id}`}
                               className="px-2.5 py-1 rounded-lg text-[10px] font-medium bg-tint-indigo text-accent bg-card-hover transition">
                               Review
                             </Link>
@@ -1014,7 +1014,7 @@ export default function StudentDashboard() {
                             <span className="text-[10px] font-medium text-stat-amber bg-tint-amber px-2 py-1 rounded-full">
                               ⏳ In Progress
                             </span>
-                            <Link href={`/student/tests/${a.test_id}`}
+                            <Link href={`/student/exams/${a.test_id}`}
                               className="px-2.5 py-1 rounded-lg text-[10px] font-medium bg-tint-amber text-stat-amber bg-card-hover transition">
                               Resume
                             </Link>
