@@ -14,6 +14,7 @@ interface QuestionData {
   topic: string;
   question_text: string;
   passage: string | null;
+  passage_id: string | null;
   options: Record<string, string>;
   difficulty: string;
   explanation: string | null;
@@ -64,6 +65,9 @@ export default function QuizPage() {
   const [needsSeeding, setNeedsSeeding] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [passageText, setPassageText] = useState<string | null>(null);
+  const [passageExpanded, setPassageExpanded] = useState(true);
+  const prevPassageIdRef = useRef<string | null>(null);
 
   const questionStartTime = useRef<number>(Date.now());
 
@@ -72,6 +76,26 @@ export default function QuizPage() {
     if (!sectionName) return;
     startSession();
   }, [sectionName]);
+
+  // Fetch passage text from practice_passages when passage_id changes
+  useEffect(() => {
+    if (!question?.passage_id) {
+      setPassageText(null);
+      prevPassageIdRef.current = null;
+      return;
+    }
+    if (question.passage_id === prevPassageIdRef.current && passageText) return;
+    prevPassageIdRef.current = question.passage_id;
+
+    supabase
+      .from('practice_passages')
+      .select('content')
+      .eq('id', question.passage_id)
+      .single()
+      .then(({ data }) => {
+        if (data?.content) setPassageText(data.content);
+      });
+  }, [question?.passage_id, supabase]);
 
   const startSession = async () => {
     setLoading(true);
@@ -385,10 +409,27 @@ export default function QuizPage() {
                 ))}
               </div>
 
-              {/* Passage */}
-              {question.passage && (
-                <div className="mb-4 p-4 bg-card-hover rounded-lg border-l-2 border-accent/50">
-                  <p className="text-sm text-secondary leading-relaxed whitespace-pre-wrap">{question.passage}</p>
+              {/* Passage — collapsible (from practice_passages or inline) */}
+              {(passageText || question.passage) && (
+                <div className="mb-4 bg-card border border-theme rounded-xl overflow-hidden">
+                  <button
+                    onClick={() => setPassageExpanded(!passageExpanded)}
+                    className="w-full flex items-center justify-between px-5 py-3 text-left hover:bg-card-hover transition"
+                  >
+                    <div className="flex items-center gap-2">
+                      <span className="font-medium text-xs text-accent uppercase tracking-wide">Passage</span>
+                    </div>
+                    <svg className={`w-4 h-4 text-secondary transition-transform ${passageExpanded ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+                  {passageExpanded && (
+                    <div className="px-5 pb-5 max-h-60 overflow-y-auto">
+                      <p className="text-sm text-secondary leading-relaxed whitespace-pre-wrap">
+                        {passageText || question.passage}
+                      </p>
+                    </div>
+                  )}
                 </div>
               )}
 

@@ -96,7 +96,7 @@ export async function POST(req: NextRequest) {
     const [questionResult, sessionResult] = await Promise.all([
       supabase
         .from('practice_questions')
-        .select('id, section, topic, question_text, passage, options, correct_option, difficulty, explanation, tags')
+        .select('id, section, topic, question_text, passage, passage_id, options, correct_option, difficulty, explanation, tags')
         .eq('id', firstId)
         .single(),
       supabase
