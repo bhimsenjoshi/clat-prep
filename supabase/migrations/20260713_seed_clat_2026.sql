@@ -53,27 +53,27 @@ begin
 
   -- Q1
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 1, 'From the passage it is evident that:', $JSON$[{"label": "A", "text": "The idea of Swaraj seemed futile"}, {"label": "B", "text": "The non-cooperation movement was a complete success"}, {"label": "C", "text": "The non-cooperation movement gained the sympathy of majority of the Indians"}, {"label": "D", "text": "The Indian National Congress represented microscopic minority"}]$JSON$::jsonb, 'C', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 1, 'From the passage it is evident that:', $JSON${"A": "The idea of Swaraj seemed futile", "B": "The non-cooperation movement was a complete success", "C": "The non-cooperation movement gained the sympathy of majority of the Indians", "D": "The Indian National Congress represented microscopic minority"}$JSON$::jsonb, 'C', NULL, 1, 0.25);
 
 
   -- Q2
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 2, 'The term "poor dumb millions" refer to-', $JSON$[{"label": "A", "text": "The vast number of common people who are impoverished"}, {"label": "B", "text": "Large number of common people who are hearing impaired"}, {"label": "C", "text": "Large number of people who are vulnerable"}, {"label": "D", "text": "The vast number of people who are impoverished and uneducated"}]$JSON$::jsonb, 'D', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 2, 'The term "poor dumb millions" refer to-', $JSON${"A": "The vast number of common people who are impoverished", "B": "Large number of common people who are hearing impaired", "C": "Large number of people who are vulnerable", "D": "The vast number of people who are impoverished and uneducated"}$JSON$::jsonb, 'D', NULL, 1, 0.25);
 
 
   -- Q3
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 3, 'Which of the statements is true?', $JSON$[{"label": "A", "text": "The Swaraj movement happened before the non co-operation movement"}, {"label": "B", "text": "The non co-operation movement failed due to sudden withdrawal"}, {"label": "C", "text": "There was a fine show of communal unity in the movement"}, {"label": "D", "text": "The rich and the educated kept themselves away from the non co-operation movement"}]$JSON$::jsonb, 'C', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 3, 'Which of the statements is true?', $JSON${"A": "The Swaraj movement happened before the non co-operation movement", "B": "The non co-operation movement failed due to sudden withdrawal", "C": "There was a fine show of communal unity in the movement", "D": "The rich and the educated kept themselves away from the non co-operation movement"}$JSON$::jsonb, 'C', NULL, 1, 0.25);
 
 
   -- Q4
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 4, 'The main idea of the passage is-', $JSON$[{"label": "A", "text": "The Non co-operation movement did not give impetus to the future movements"}, {"label": "B", "text": "The movement made the Indians realize their potential to fight against the mighty British"}, {"label": "C", "text": "The British became fearful and worried of Gandhiji's leadership and co-operation of Indians"}, {"label": "D", "text": "That the most positive feature of the movement was that it was repeated in later years"}]$JSON$::jsonb, 'B', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 4, 'The main idea of the passage is-', $JSON${"A": "The Non co-operation movement did not give impetus to the future movements", "B": "The movement made the Indians realize their potential to fight against the mighty British", "C": "The British became fearful and worried of Gandhiji's leadership and co-operation of Indians", "D": "That the most positive feature of the movement was that it was repeated in later years"}$JSON$::jsonb, 'B', NULL, 1, 0.25);
 
 
   -- Q5
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 5, 'The word "Communalism" in the above passage refers to-', $JSON$[{"label": "A", "text": "Religious identity"}, {"label": "B", "text": "Caste identity"}, {"label": "C", "text": "Regional identity"}, {"label": "D", "text": "Secularism"}]$JSON$::jsonb, 'A', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 5, 'The word "Communalism" in the above passage refers to-', $JSON${"A": "Religious identity", "B": "Caste identity", "C": "Regional identity", "D": "Secularism"}$JSON$::jsonb, 'A', NULL, 1, 0.25);
 
 
   -- Passage II
@@ -84,27 +84,27 @@ begin
 
   -- Q6
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 6, 'Which of the following can be inferred as the most significant characteristic of prehistoric humans, as per the passage?', $JSON$[{"label": "A", "text": "Their conscious effort to alter and shape their environment for survival"}, {"label": "B", "text": "Their complex social organization and clear hierarchical structures that set them apart from other species"}, {"label": "C", "text": "Their evolutionary divergence was marked by warfare and the pursuit of dominance over rival species"}, {"label": "D", "text": "Their inability to distinguish themselves from other species in terms of environmental impact"}]$JSON$::jsonb, 'D', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 6, 'Which of the following can be inferred as the most significant characteristic of prehistoric humans, as per the passage?', $JSON${"A": "Their conscious effort to alter and shape their environment for survival", "B": "Their complex social organization and clear hierarchical structures that set them apart from other species", "C": "Their evolutionary divergence was marked by warfare and the pursuit of dominance over rival species", "D": "Their inability to distinguish themselves from other species in terms of environmental impact"}$JSON$::jsonb, 'D', NULL, 1, 0.25);
 
 
   -- Q7
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 7, 'In the context of the passage, the term ''incognisant'' most likely means:', $JSON$[{"label": "A", "text": "Lacking intelligence"}, {"label": "B", "text": "Unaware of their future potential"}, {"label": "C", "text": "Incapable of social interaction"}, {"label": "D", "text": "Disinterested in the environment"}]$JSON$::jsonb, 'B', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 7, 'In the context of the passage, the term ''incognisant'' most likely means:', $JSON${"A": "Lacking intelligence", "B": "Unaware of their future potential", "C": "Incapable of social interaction", "D": "Disinterested in the environment"}$JSON$::jsonb, 'B', NULL, 1, 0.25);
 
 
   -- Q8
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 8, 'Which of the following best explains why humans did not initially stand out among other organisms?', $JSON$[{"label": "A", "text": "They had fewer offspring than other species"}, {"label": "B", "text": "Their behaviours were not unique compared to other animals"}, {"label": "C", "text": "They did not yet evolve the ability to use tools"}, {"label": "D", "text": "They lacked the genetic capacity to develop language"}]$JSON$::jsonb, 'B', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 8, 'Which of the following best explains why humans did not initially stand out among other organisms?', $JSON${"A": "They had fewer offspring than other species", "B": "Their behaviours were not unique compared to other animals", "C": "They did not yet evolve the ability to use tools", "D": "They lacked the genetic capacity to develop language"}$JSON$::jsonb, 'B', NULL, 1, 0.25);
 
 
   -- Q9
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 9, 'According to the passage, what determines whether two animals belong to the same species?', $JSON$[{"label": "A", "text": "Their ability to produce fertile offspring"}, {"label": "B", "text": "Their physical appearance and size"}, {"label": "C", "text": "Their shared evolutionary ancestor"}, {"label": "D", "text": "Their capacity to adapt to the environment"}]$JSON$::jsonb, 'A', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 9, 'According to the passage, what determines whether two animals belong to the same species?', $JSON${"A": "Their ability to produce fertile offspring", "B": "Their physical appearance and size", "C": "Their shared evolutionary ancestor", "D": "Their capacity to adapt to the environment"}$JSON$::jsonb, 'A', NULL, 1, 0.25);
 
 
   -- Q10
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 10, 'The passage explains the concept of species classification by', $JSON$[{"label": "A", "text": "Highlighting the behavioural differences between species like horses, donkeys, bulldogs and spaniels"}, {"label": "B", "text": "Focusing on the DNA pool they share"}, {"label": "C", "text": "Contrasting horses and bulldogs with donkeys and spaniels to explain reproductive compatibility"}, {"label": "D", "text": "Discussing the environmental impact of different species like horses and donkeys, and bulldogs and spaniels"}]$JSON$::jsonb, 'B', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 10, 'The passage explains the concept of species classification by', $JSON${"A": "Highlighting the behavioural differences between species like horses, donkeys, bulldogs and spaniels", "B": "Focusing on the DNA pool they share", "C": "Contrasting horses and bulldogs with donkeys and spaniels to explain reproductive compatibility", "D": "Discussing the environmental impact of different species like horses and donkeys, and bulldogs and spaniels"}$JSON$::jsonb, 'B', NULL, 1, 0.25);
 
 
   -- Passage III
@@ -115,27 +115,27 @@ begin
 
   -- Q11
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 11, 'Which of the following aspects is most critical in understanding Freedom House''s evaluation process?', $JSON$[{"label": "A", "text": "The methodology by which it quantifies the relative freedoms in different political systems"}, {"label": "B", "text": "Its emphasis on electoral participation and voter turnout in measuring democracy"}, {"label": "C", "text": "Its role in advising governments on democratic reforms based on its rankings"}, {"label": "D", "text": "Its primary focus on economic disparities within democracies"}]$JSON$::jsonb, 'A', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 11, 'Which of the following aspects is most critical in understanding Freedom House''s evaluation process?', $JSON${"A": "The methodology by which it quantifies the relative freedoms in different political systems", "B": "Its emphasis on electoral participation and voter turnout in measuring democracy", "C": "Its role in advising governments on democratic reforms based on its rankings", "D": "Its primary focus on economic disparities within democracies"}$JSON$::jsonb, 'A', NULL, 1, 0.25);
 
 
   -- Q12
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 12, 'What does the phrase ''vote with their feet'' imply in the context of the passage?', $JSON$[{"label": "A", "text": "Engaging in electoral processes to demand political change"}, {"label": "B", "text": "Demonstrating political preferences through public protests"}, {"label": "C", "text": "Migrating to countries with better governance or conditions"}, {"label": "D", "text": "Participating in local government initiatives and reforms"}]$JSON$::jsonb, 'C', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 12, 'What does the phrase ''vote with their feet'' imply in the context of the passage?', $JSON${"A": "Engaging in electoral processes to demand political change", "B": "Demonstrating political preferences through public protests", "C": "Migrating to countries with better governance or conditions", "D": "Participating in local government initiatives and reforms"}$JSON$::jsonb, 'C', NULL, 1, 0.25);
 
 
   -- Q13
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 13, 'The term ''third wave of democratization'' as used in the passage refers to:', $JSON$[{"label": "A", "text": "The rise of communism in Eastern Europe"}, {"label": "B", "text": "The spread of democracy and market-oriented economies"}, {"label": "C", "text": "The decline of authoritarian regimes in the 1960s"}, {"label": "D", "text": "The global movement for civil rights"}]$JSON$::jsonb, 'B', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 13, 'The term ''third wave of democratization'' as used in the passage refers to:', $JSON${"A": "The rise of communism in Eastern Europe", "B": "The spread of democracy and market-oriented economies", "C": "The decline of authoritarian regimes in the 1960s", "D": "The global movement for civil rights"}$JSON$::jsonb, 'B', NULL, 1, 0.25);
 
 
   -- Q14
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 14, 'Which of the following was not mentioned as a factor contributing to social mobilization and the shift to democracy?', $JSON$[{"label": "A", "text": "Increased access to education"}, {"label": "B", "text": "Expanding information technology"}, {"label": "C", "text": "Heightened global military presence"}, {"label": "D", "text": "Greater prosperity"}]$JSON$::jsonb, 'C', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 14, 'Which of the following was not mentioned as a factor contributing to social mobilization and the shift to democracy?', $JSON${"A": "Increased access to education", "B": "Expanding information technology", "C": "Heightened global military presence", "D": "Greater prosperity"}$JSON$::jsonb, 'C', NULL, 1, 0.25);
 
 
   -- Q15
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 15, 'According to this passage, when was the first time the freedom had declined around the world', $JSON$[{"label": "A", "text": "1973"}, {"label": "B", "text": "1990"}, {"label": "C", "text": "2006"}, {"label": "D", "text": "2009"}]$JSON$::jsonb, 'C', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 15, 'According to this passage, when was the first time the freedom had declined around the world', $JSON${"A": "1973", "B": "1990", "C": "2006", "D": "2009"}$JSON$::jsonb, 'C', NULL, 1, 0.25);
 
 
   -- Passage IV
@@ -146,27 +146,27 @@ begin
 
   -- Q16
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 16, 'The narrator and his kinsman''s initial impression of the "unusual man" highlights which theme most strongly?', $JSON$[{"label": "A", "text": "The deceptive nature of appearances"}, {"label": "B", "text": "The superiority of Western education"}, {"label": "C", "text": "The danger of blind faith"}, {"label": "D", "text": "The reliability of cultural stereotypes"}]$JSON$::jsonb, 'A', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 16, 'The narrator and his kinsman''s initial impression of the "unusual man" highlights which theme most strongly?', $JSON${"A": "The deceptive nature of appearances", "B": "The superiority of Western education", "C": "The danger of blind faith", "D": "The reliability of cultural stereotypes"}$JSON$::jsonb, 'A', NULL, 1, 0.25);
 
 
   -- Q17
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 17, 'Which literary device is most evident in the narrator''s line: "one might think the Disposer of All Things sought his counsel in every decision"?', $JSON$[{"label": "A", "text": "Irony"}, {"label": "B", "text": "Euphemism"}, {"label": "C", "text": "Allegory"}, {"label": "D", "text": "Hyperbole"}]$JSON$::jsonb, 'D', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 17, 'Which literary device is most evident in the narrator''s line: "one might think the Disposer of All Things sought his counsel in every decision"?', $JSON${"A": "Irony", "B": "Euphemism", "C": "Allegory", "D": "Hyperbole"}$JSON$::jsonb, 'D', NULL, 1, 0.25);
 
 
   -- Q18
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 18, 'The word "theosophist" means:', $JSON$[{"label": "A", "text": "Skeptic"}, {"label": "B", "text": "Mystic"}, {"label": "C", "text": "Agnostic"}, {"label": "D", "text": "Materialist"}]$JSON$::jsonb, 'B', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 18, 'The word "theosophist" means:', $JSON${"A": "Skeptic", "B": "Mystic", "C": "Agnostic", "D": "Materialist"}$JSON$::jsonb, 'B', NULL, 1, 0.25);
 
 
   -- Q19
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 19, 'The word "Boorish" mean:', $JSON$[{"label": "A", "text": "Discourteous"}, {"label": "B", "text": "Genteel"}, {"label": "C", "text": "Well-bred"}, {"label": "D", "text": "Courtly"}]$JSON$::jsonb, 'A', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 19, 'The word "Boorish" mean:', $JSON${"A": "Discourteous", "B": "Genteel", "C": "Well-bred", "D": "Courtly"}$JSON$::jsonb, 'A', NULL, 1, 0.25);
 
 
   -- Q20
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 20, 'The narrator''s suspicion that the extraordinary man was "quietly pleased" suggests:', $JSON$[{"label": "A", "text": "The man was genuinely humble and embarrassed by the attention"}, {"label": "B", "text": "The man wished to avoid any recognition of his authority"}, {"label": "C", "text": "The man was indifferent to how others perceived him"}, {"label": "D", "text": "The man derived satisfaction from impressing and influencing others"}]$JSON$::jsonb, 'D', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 20, 'The narrator''s suspicion that the extraordinary man was "quietly pleased" suggests:', $JSON${"A": "The man was genuinely humble and embarrassed by the attention", "B": "The man wished to avoid any recognition of his authority", "C": "The man was indifferent to how others perceived him", "D": "The man derived satisfaction from impressing and influencing others"}$JSON$::jsonb, 'D', NULL, 1, 0.25);
 
 
   -- Passage V
@@ -177,22 +177,22 @@ begin
 
   -- Q21
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 21, 'Which of the following best describes the tone of the passage?', $JSON$[{"label": "A", "text": "Detached and neutral"}, {"label": "B", "text": "Critical, somber, and resentful, evoking both awareness and outrage"}, {"label": "C", "text": "Humorous and light-hearted"}, {"label": "D", "text": "Admiring and celebratory"}]$JSON$::jsonb, 'B', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 21, 'Which of the following best describes the tone of the passage?', $JSON${"A": "Detached and neutral", "B": "Critical, somber, and resentful, evoking both awareness and outrage", "C": "Humorous and light-hearted", "D": "Admiring and celebratory"}$JSON$::jsonb, 'B', NULL, 1, 0.25);
 
 
   -- Q22
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 22, 'The speaker frequently contrasts animals'' work with human gain. This literary technique is best classified as:', $JSON$[{"label": "A", "text": "Allegory of class exploitation"}, {"label": "B", "text": "Hyperbole for comic effect"}, {"label": "C", "text": "Irony about farm management"}, {"label": "D", "text": "Metaphor for animal biology"}]$JSON$::jsonb, 'A', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 22, 'The speaker frequently contrasts animals'' work with human gain. This literary technique is best classified as:', $JSON${"A": "Allegory of class exploitation", "B": "Hyperbole for comic effect", "C": "Irony about farm management", "D": "Metaphor for animal biology"}$JSON$::jsonb, 'A', NULL, 1, 0.25);
 
 
   -- Q23
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 23, 'Who is ''knacker''?', $JSON$[{"label": "A", "text": "A slaughterer"}, {"label": "B", "text": "A trader whose business is disposal of dead and unwanted animals"}, {"label": "C", "text": "A person whose business is disposal of dead or unwanted animals especially those whose flesh is not fit for human consumption"}, {"label": "D", "text": "Harness-maker"}]$JSON$::jsonb, 'C', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 23, 'Who is ''knacker''?', $JSON${"A": "A slaughterer", "B": "A trader whose business is disposal of dead and unwanted animals", "C": "A person whose business is disposal of dead or unwanted animals especially those whose flesh is not fit for human consumption", "D": "Harness-maker"}$JSON$::jsonb, 'C', NULL, 1, 0.25);
 
 
   -- Q24
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 24, 'The repeated reference to slaughter, drowning, and the knacker in the passage primarily implies to:', $JSON$[{"label": "A", "text": "Provide a detailed account of animal husbandry"}, {"label": "B", "text": "Evoke emotional outrage and highlight the brutality of exploitation"}, {"label": "C", "text": "Suggest that animals are naturally subservient"}, {"label": "D", "text": "Indicate that humans value animals"}]$JSON$::jsonb, 'B', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 24, 'The repeated reference to slaughter, drowning, and the knacker in the passage primarily implies to:', $JSON${"A": "Provide a detailed account of animal husbandry", "B": "Evoke emotional outrage and highlight the brutality of exploitation", "C": "Suggest that animals are naturally subservient", "D": "Indicate that humans value animals"}$JSON$::jsonb, 'B', NULL, 1, 0.25);
 
 
   raise notice '✅ English Language seeded';
@@ -224,27 +224,27 @@ begin
 
   -- Q25
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 25, 'What percentage tariff did President Trump initially impose on Indian imports in 2025?', $JSON$[{"label": "A", "text": "15%"}, {"label": "B", "text": "25%"}, {"label": "C", "text": "40%"}, {"label": "D", "text": "50%"}]$JSON$::jsonb, 'B', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 25, 'What percentage tariff did President Trump initially impose on Indian imports in 2025?', $JSON${"A": "15%", "B": "25%", "C": "40%", "D": "50%"}$JSON$::jsonb, 'B', NULL, 1, 0.25);
 
 
   -- Q26
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 26, 'What strategic reason did Donald Trump cite for penalizing India with additional tariffs apart from trade imbalances?', $JSON$[{"label": "A", "text": "India’s IT service exports"}, {"label": "B", "text": "Indian Banknote Demonetization"}, {"label": "C", "text": "India’s immigration policies"}, {"label": "D", "text": "India’s defense and energy ties with Russia"}]$JSON$::jsonb, 'D', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 26, 'What strategic reason did Donald Trump cite for penalizing India with additional tariffs apart from trade imbalances?', $JSON${"A": "India’s IT service exports", "B": "Indian Banknote Demonetization", "C": "India’s immigration policies", "D": "India’s defense and energy ties with Russia"}$JSON$::jsonb, 'D', NULL, 1, 0.25);
 
 
   -- Q27
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 27, 'What is the strategic significance of Chabahar Port for India?', $JSON$[{"label": "A", "text": "Provides trade access to China through Pakistan"}, {"label": "B", "text": "Acts as counterbalance to China’s presence in nearby Gwadar Port, Pakistan"}, {"label": "C", "text": "Serves as the primary naval base for India"}, {"label": "D", "text": "Connects India directly to the Mediterranean Sea"}]$JSON$::jsonb, 'B', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 27, 'What is the strategic significance of Chabahar Port for India?', $JSON${"A": "Provides trade access to China through Pakistan", "B": "Acts as counterbalance to China’s presence in nearby Gwadar Port, Pakistan", "C": "Serves as the primary naval base for India", "D": "Connects India directly to the Mediterranean Sea"}$JSON$::jsonb, 'B', NULL, 1, 0.25);
 
 
   -- Q28
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 28, 'What is the primary purpose of the H-1B Visa?', $JSON$[{"label": "A", "text": "Exchange Visitor Visa"}, {"label": "B", "text": "Employment Visa"}, {"label": "C", "text": "Immigrant visa for permanent residence in the U.S."}, {"label": "D", "text": "Non-immigrant visa that allows US companies to hire foreign professionals in specialized field"}]$JSON$::jsonb, 'D', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 28, 'What is the primary purpose of the H-1B Visa?', $JSON${"A": "Exchange Visitor Visa", "B": "Employment Visa", "C": "Immigrant visa for permanent residence in the U.S.", "D": "Non-immigrant visa that allows US companies to hire foreign professionals in specialized field"}$JSON$::jsonb, 'D', NULL, 1, 0.25);
 
 
   -- Q29
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 29, 'The acronym ‘MAGA’ mentioned in the above passage refers to:', $JSON$[{"label": "A", "text": "Multilateral Agencies Global Association"}, {"label": "B", "text": "Make America Great Again"}, {"label": "C", "text": "Mutual Agreements for Global Advantage"}, {"label": "D", "text": "Monetary Advantage For Great America"}]$JSON$::jsonb, 'B', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 29, 'The acronym ‘MAGA’ mentioned in the above passage refers to:', $JSON${"A": "Multilateral Agencies Global Association", "B": "Make America Great Again", "C": "Mutual Agreements for Global Advantage", "D": "Monetary Advantage For Great America"}$JSON$::jsonb, 'B', NULL, 1, 0.25);
 
 
   -- Passage VII
@@ -255,27 +255,27 @@ begin
 
   -- Q30
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 30, 'Where is the origin of chess believed to be?', $JSON$[{"label": "A", "text": "China"}, {"label": "B", "text": "Russia"}, {"label": "C", "text": "India"}, {"label": "D", "text": "Egypt"}]$JSON$::jsonb, 'C', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 30, 'Where is the origin of chess believed to be?', $JSON${"A": "China", "B": "Russia", "C": "India", "D": "Egypt"}$JSON$::jsonb, 'C', NULL, 1, 0.25);
 
 
   -- Q31
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 31, 'Who was the first Indian to earn the title of chess Grandmaster ?', $JSON$[{"label": "A", "text": "D. Gukesh"}, {"label": "B", "text": "Praveen Thipsay"}, {"label": "C", "text": "Dibyendu Barua"}, {"label": "D", "text": "Vishwanathan Anand"}]$JSON$::jsonb, 'D', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 31, 'Who was the first Indian to earn the title of chess Grandmaster ?', $JSON${"A": "D. Gukesh", "B": "Praveen Thipsay", "C": "Dibyendu Barua", "D": "Vishwanathan Anand"}$JSON$::jsonb, 'D', NULL, 1, 0.25);
 
 
   -- Q32
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 32, 'Who was the first official World Chess Champion?', $JSON$[{"label": "A", "text": "Bobby Fischer"}, {"label": "B", "text": "Gary Kasparov"}, {"label": "C", "text": "Vishwanathan Anand"}, {"label": "D", "text": "Wilhelm Steinitz"}]$JSON$::jsonb, 'D', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 32, 'Who was the first official World Chess Champion?', $JSON${"A": "Bobby Fischer", "B": "Gary Kasparov", "C": "Vishwanathan Anand", "D": "Wilhelm Steinitz"}$JSON$::jsonb, 'D', NULL, 1, 0.25);
 
 
   -- Q33
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 33, 'Which of the following computers successfully defeated Garry Kasparov, the reigning world chess champion, in a tournament match?', $JSON$[{"label": "A", "text": "Deep AI"}, {"label": "B", "text": "Deep Thought"}, {"label": "C", "text": "Deep Blue"}, {"label": "D", "text": "Deep Water"}]$JSON$::jsonb, 'C', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 33, 'Which of the following computers successfully defeated Garry Kasparov, the reigning world chess champion, in a tournament match?', $JSON${"A": "Deep AI", "B": "Deep Thought", "C": "Deep Blue", "D": "Deep Water"}$JSON$::jsonb, 'C', NULL, 1, 0.25);
 
 
   -- Q34
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 34, 'Which of the following cities is the venue for hosting the 11th edition of Chess World Cup 2025?', $JSON$[{"label": "A", "text": "Paris, France"}, {"label": "B", "text": "Baku, Azerbaijan"}, {"label": "C", "text": "Goa, India"}, {"label": "D", "text": "Chennai, India"}]$JSON$::jsonb, 'C', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 34, 'Which of the following cities is the venue for hosting the 11th edition of Chess World Cup 2025?', $JSON${"A": "Paris, France", "B": "Baku, Azerbaijan", "C": "Goa, India", "D": "Chennai, India"}$JSON$::jsonb, 'C', NULL, 1, 0.25);
 
 
   -- Passage VIII
@@ -286,32 +286,32 @@ begin
 
   -- Q35
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 35, 'Where is Pahalgam situated in India?', $JSON$[{"label": "A", "text": "Punjab"}, {"label": "B", "text": "Himachal Pradesh"}, {"label": "C", "text": "Jammu & Kashmir"}, {"label": "D", "text": "Uttarakhand"}]$JSON$::jsonb, 'C', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 35, 'Where is Pahalgam situated in India?', $JSON${"A": "Punjab", "B": "Himachal Pradesh", "C": "Jammu & Kashmir", "D": "Uttarakhand"}$JSON$::jsonb, 'C', NULL, 1, 0.25);
 
 
   -- Q36
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 36, 'The Checkpost Attari is located in', $JSON$[{"label": "A", "text": "Near Amritsar Punjab"}, {"label": "B", "text": "Near Baramulla in Jammu & Kashmir"}, {"label": "C", "text": "Near Kutch in Gujrat"}, {"label": "D", "text": "Near Barmer in Rajasthan"}]$JSON$::jsonb, 'A', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 36, 'The Checkpost Attari is located in', $JSON${"A": "Near Amritsar Punjab", "B": "Near Baramulla in Jammu & Kashmir", "C": "Near Kutch in Gujrat", "D": "Near Barmer in Rajasthan"}$JSON$::jsonb, 'A', NULL, 1, 0.25);
 
 
   -- Q37
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 37, 'Which amongst the following is not a SAARC Nation?', $JSON$[{"label": "A", "text": "Afghanistan"}, {"label": "B", "text": "Maldives"}, {"label": "C", "text": "Mauritius"}, {"label": "D", "text": "Bangladesh"}]$JSON$::jsonb, 'C', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 37, 'Which amongst the following is not a SAARC Nation?', $JSON${"A": "Afghanistan", "B": "Maldives", "C": "Mauritius", "D": "Bangladesh"}$JSON$::jsonb, 'C', NULL, 1, 0.25);
 
 
   -- Q38
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 38, 'Expression ‘Persona Non Grata’ means:', $JSON$[{"label": "A", "text": "An ungrateful person"}, {"label": "B", "text": "An unwelcome person"}, {"label": "C", "text": "An untrustworthy person"}, {"label": "D", "text": "A displaced person"}]$JSON$::jsonb, 'B', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 38, 'Expression ‘Persona Non Grata’ means:', $JSON${"A": "An ungrateful person", "B": "An unwelcome person", "C": "An untrustworthy person", "D": "A displaced person"}$JSON$::jsonb, 'B', NULL, 1, 0.25);
 
 
   -- Q39
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 39, 'The Indus Water Treaty signed in 1960 between India and Pakistan was facilitated by:', $JSON$[{"label": "A", "text": "The United Nations General Assembly"}, {"label": "B", "text": "The United Nations Security Council"}, {"label": "C", "text": "The World Bank"}, {"label": "D", "text": "The permanent Indus Commission"}]$JSON$::jsonb, 'C', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 39, 'The Indus Water Treaty signed in 1960 between India and Pakistan was facilitated by:', $JSON${"A": "The United Nations General Assembly", "B": "The United Nations Security Council", "C": "The World Bank", "D": "The permanent Indus Commission"}$JSON$::jsonb, 'C', NULL, 1, 0.25);
 
 
   -- Q40
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 40, 'Which amongst the following is not a tributary of River Indus?', $JSON$[{"label": "A", "text": "Ravi"}, {"label": "B", "text": "Jhelum"}, {"label": "C", "text": "Tapti"}, {"label": "D", "text": "Chenab"}]$JSON$::jsonb, 'C', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 40, 'Which amongst the following is not a tributary of River Indus?', $JSON${"A": "Ravi", "B": "Jhelum", "C": "Tapti", "D": "Chenab"}$JSON$::jsonb, 'C', NULL, 1, 0.25);
 
 
   -- Passage IX
@@ -322,32 +322,32 @@ begin
 
   -- Q41
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 41, 'The civilizational dialogue forum (CDF) proposed by the Prime Minister of India at the 25th Meeting of Shanghai Cooperation Organization, is intended to promote', $JSON$[{"label": "A", "text": "Peace and security"}, {"label": "B", "text": "Sustainable development"}, {"label": "C", "text": "Reform of Global governance"}, {"label": "D", "text": "Cultural Understanding"}]$JSON$::jsonb, 'D', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 41, 'The civilizational dialogue forum (CDF) proposed by the Prime Minister of India at the 25th Meeting of Shanghai Cooperation Organization, is intended to promote', $JSON${"A": "Peace and security", "B": "Sustainable development", "C": "Reform of Global governance", "D": "Cultural Understanding"}$JSON$::jsonb, 'D', NULL, 1, 0.25);
 
 
   -- Q42
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 42, 'The next Presidency of SCO is taken over by:', $JSON$[{"label": "A", "text": "Kyrgyzstan"}, {"label": "B", "text": "Tajikistan"}, {"label": "C", "text": "Uzbekistan"}, {"label": "D", "text": "Kazakhistan"}]$JSON$::jsonb, 'A', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 42, 'The next Presidency of SCO is taken over by:', $JSON${"A": "Kyrgyzstan", "B": "Tajikistan", "C": "Uzbekistan", "D": "Kazakhistan"}$JSON$::jsonb, 'A', NULL, 1, 0.25);
 
 
   -- Q43
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 43, 'Prime Minister of India stated that India strongly supported projects such as Chabahar port. Where is this port located?', $JSON$[{"label": "A", "text": "Oman"}, {"label": "B", "text": "Iran"}, {"label": "C", "text": "Afghanistan"}, {"label": "D", "text": "Saudi Arabia"}]$JSON$::jsonb, 'B', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 43, 'Prime Minister of India stated that India strongly supported projects such as Chabahar port. Where is this port located?', $JSON${"A": "Oman", "B": "Iran", "C": "Afghanistan", "D": "Saudi Arabia"}$JSON$::jsonb, 'B', NULL, 1, 0.25);
 
 
   -- Q44
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 44, 'Which of the following countries is not a member of SCO?', $JSON$[{"label": "A", "text": "Belarus"}, {"label": "B", "text": "Iran"}, {"label": "C", "text": "Pakistan"}, {"label": "D", "text": "Myanmar"}]$JSON$::jsonb, 'D', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 44, 'Which of the following countries is not a member of SCO?', $JSON${"A": "Belarus", "B": "Iran", "C": "Pakistan", "D": "Myanmar"}$JSON$::jsonb, 'D', NULL, 1, 0.25);
 
 
   -- Q45
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 45, 'The Secretariat of SCO is located in:', $JSON$[{"label": "A", "text": "Beijing, China"}, {"label": "B", "text": "Tianjin, China"}, {"label": "C", "text": "Shanghai, China"}, {"label": "D", "text": "Wuhan, China"}]$JSON$::jsonb, 'A', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 45, 'The Secretariat of SCO is located in:', $JSON${"A": "Beijing, China", "B": "Tianjin, China", "C": "Shanghai, China", "D": "Wuhan, China"}$JSON$::jsonb, 'A', NULL, 1, 0.25);
 
 
   -- Q46
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 46, 'At the conclusion of 25th SCO summit, the member countries adopted the:', $JSON$[{"label": "A", "text": "Beijing Declaration"}, {"label": "B", "text": "Tianjin Declaration"}, {"label": "C", "text": "Shanghai Declaration"}, {"label": "D", "text": "Wuhan Declaration"}]$JSON$::jsonb, 'B', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 46, 'At the conclusion of 25th SCO summit, the member countries adopted the:', $JSON${"A": "Beijing Declaration", "B": "Tianjin Declaration", "C": "Shanghai Declaration", "D": "Wuhan Declaration"}$JSON$::jsonb, 'B', NULL, 1, 0.25);
 
 
   -- Passage X
@@ -358,32 +358,32 @@ begin
 
   -- Q47
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 47, 'Air India flight AI-171 was operating from Ahmedabad to:', $JSON$[{"label": "A", "text": "London Gatwick airport"}, {"label": "B", "text": "Heathrow Airport"}, {"label": "C", "text": "London Luton Airport"}, {"label": "D", "text": "London Stansted Airport"}]$JSON$::jsonb, 'A', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 47, 'Air India flight AI-171 was operating from Ahmedabad to:', $JSON${"A": "London Gatwick airport", "B": "Heathrow Airport", "C": "London Luton Airport", "D": "London Stansted Airport"}$JSON$::jsonb, 'A', NULL, 1, 0.25);
 
 
   -- Q48
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 48, 'Who is the Minister of Civil Aviation of India?', $JSON$[{"label": "A", "text": "Shri Piyush Goyal"}, {"label": "B", "text": "Shri Jyotiraditya Scindia"}, {"label": "C", "text": "Shri Ram Mohan Naidu"}, {"label": "D", "text": "Shri Prafulla Patel"}]$JSON$::jsonb, 'C', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 48, 'Who is the Minister of Civil Aviation of India?', $JSON${"A": "Shri Piyush Goyal", "B": "Shri Jyotiraditya Scindia", "C": "Shri Ram Mohan Naidu", "D": "Shri Prafulla Patel"}$JSON$::jsonb, 'C', NULL, 1, 0.25);
 
 
   -- Q49
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 49, 'The AI-171 Memorial and Welfare Trust'' is registered by Tata Group as a public charitable trust in:', $JSON$[{"label": "A", "text": "Ahmedabad"}, {"label": "B", "text": "Gandhinagar"}, {"label": "C", "text": "Mumbai"}, {"label": "D", "text": "Delhi"}]$JSON$::jsonb, 'C', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 49, 'The AI-171 Memorial and Welfare Trust'' is registered by Tata Group as a public charitable trust in:', $JSON${"A": "Ahmedabad", "B": "Gandhinagar", "C": "Mumbai", "D": "Delhi"}$JSON$::jsonb, 'C', NULL, 1, 0.25);
 
 
   -- Q50
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 50, 'The sole survivor of ''The Air India flight AI-171 accident'' is:', $JSON$[{"label": "A", "text": "British National of Indian Origin"}, {"label": "B", "text": "Canadian National of Indian origin"}, {"label": "C", "text": "Portuguese National of Indian Origin"}, {"label": "D", "text": "Indian National"}]$JSON$::jsonb, 'A', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 50, 'The sole survivor of ''The Air India flight AI-171 accident'' is:', $JSON${"A": "British National of Indian Origin", "B": "Canadian National of Indian origin", "C": "Portuguese National of Indian Origin", "D": "Indian National"}$JSON$::jsonb, 'A', NULL, 1, 0.25);
 
 
   -- Q51
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 51, 'The agency that probes the fatal crash of AI-171 is:', $JSON$[{"label": "A", "text": "DGCA"}, {"label": "B", "text": "AAI"}, {"label": "C", "text": "AAIB"}, {"label": "D", "text": "FIP"}]$JSON$::jsonb, 'C', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 51, 'The agency that probes the fatal crash of AI-171 is:', $JSON${"A": "DGCA", "B": "AAI", "C": "AAIB", "D": "FIP"}$JSON$::jsonb, 'C', NULL, 1, 0.25);
 
 
   -- Q52
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 52, 'The Air India flight AI-171 was:', $JSON$[{"label": "A", "text": "Boeing 737-800 aircraft"}, {"label": "B", "text": "Boeing 787-8 Dreamliner"}, {"label": "C", "text": "Boeing 737 Max aircraft"}, {"label": "D", "text": "Boeing Next Generation 737"}]$JSON$::jsonb, 'B', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 52, 'The Air India flight AI-171 was:', $JSON${"A": "Boeing 737-800 aircraft", "B": "Boeing 787-8 Dreamliner", "C": "Boeing 737 Max aircraft", "D": "Boeing Next Generation 737"}$JSON$::jsonb, 'B', NULL, 1, 0.25);
 
 
   raise notice '✅ Current Affairs Including General Knowledge seeded';
@@ -415,32 +415,32 @@ begin
 
   -- Q53
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 53, 'What is the underlying idea behind the “One Nation” policies of the government?', $JSON$[{"label": "A", "text": "To strengthen federalism by empowering states with greater autonomy"}, {"label": "B", "text": "To apply uniform solutions across India, replacing state-specific variations"}, {"label": "C", "text": "To decentralize governance to local self-government institutions"}, {"label": "D", "text": "To promote diversity by encouraging state-specific policies"}]$JSON$::jsonb, 'B', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 53, 'What is the underlying idea behind the “One Nation” policies of the government?', $JSON${"A": "To strengthen federalism by empowering states with greater autonomy", "B": "To apply uniform solutions across India, replacing state-specific variations", "C": "To decentralize governance to local self-government institutions", "D": "To promote diversity by encouraging state-specific policies"}$JSON$::jsonb, 'B', NULL, 1, 0.25);
 
 
   -- Q54
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 54, 'Which of the following Constitution Amendment Bill deals with empowerment of the Election Commission of India (ECI) to implement simultaneous state and national elections.', $JSON$[{"label": "A", "text": "One Hundred and Twenty-Ninth Amendment"}, {"label": "B", "text": "One Hundred and Twenty-Eighth Amendment"}, {"label": "C", "text": "One Hundred and Twenty-Seventh Amendment"}, {"label": "D", "text": "One Hundred and Twenty-Sixth Amendment"}]$JSON$::jsonb, 'A', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 54, 'Which of the following Constitution Amendment Bill deals with empowerment of the Election Commission of India (ECI) to implement simultaneous state and national elections.', $JSON${"A": "One Hundred and Twenty-Ninth Amendment", "B": "One Hundred and Twenty-Eighth Amendment", "C": "One Hundred and Twenty-Seventh Amendment", "D": "One Hundred and Twenty-Sixth Amendment"}$JSON$::jsonb, 'A', NULL, 1, 0.25);
 
 
   -- Q55
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 55, 'Which committee or report has discussed the feasibility of simultaneous elections in India?', $JSON$[{"label": "A", "text": "Justice Verma Committee 2013"}, {"label": "B", "text": "Law Commission of India Report 2018"}, {"label": "C", "text": "Sarkaria Commission Report 1988"}, {"label": "D", "text": "Punchhi Commission Report 2010"}]$JSON$::jsonb, 'B', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 55, 'Which committee or report has discussed the feasibility of simultaneous elections in India?', $JSON${"A": "Justice Verma Committee 2013", "B": "Law Commission of India Report 2018", "C": "Sarkaria Commission Report 1988", "D": "Punchhi Commission Report 2010"}$JSON$::jsonb, 'B', NULL, 1, 0.25);
 
 
   -- Q56
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 56, 'A High-Level Committee was constituted by the government to examine the policy of One Nation One Election. The Committee was led by:', $JSON$[{"label": "A", "text": "Shri Ram Nath Kovind"}, {"label": "B", "text": "Shri Jagdip Dhankar"}, {"label": "C", "text": "Shri Pranab Mukherjee"}, {"label": "D", "text": "Smt. Draupadi Murmu"}]$JSON$::jsonb, 'A', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 56, 'A High-Level Committee was constituted by the government to examine the policy of One Nation One Election. The Committee was led by:', $JSON${"A": "Shri Ram Nath Kovind", "B": "Shri Jagdip Dhankar", "C": "Shri Pranab Mukherjee", "D": "Smt. Draupadi Murmu"}$JSON$::jsonb, 'A', NULL, 1, 0.25);
 
 
   -- Q57
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 57, 'As per the new GST reforms introduced in September 2025, the structure of new GST rates are as follows', $JSON$[{"label": "A", "text": "5%, 12%, 18% and 28%"}, {"label": "B", "text": "5%, 12% and 18%"}, {"label": "C", "text": "5%, 12% and 40%"}, {"label": "D", "text": "5%, 18% and 40%"}]$JSON$::jsonb, 'D', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 57, 'As per the new GST reforms introduced in September 2025, the structure of new GST rates are as follows', $JSON${"A": "5%, 12%, 18% and 28%", "B": "5%, 12% and 18%", "C": "5%, 12% and 40%", "D": "5%, 18% and 40%"}$JSON$::jsonb, 'D', NULL, 1, 0.25);
 
 
   -- Q58
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 58, 'The object of One Nation, One Ration Card scheme is to benefit:', $JSON$[{"label": "A", "text": "The rural population"}, {"label": "B", "text": "The Farmers"}, {"label": "C", "text": "The Migrant labourers"}, {"label": "D", "text": "The ration shopkeepers"}]$JSON$::jsonb, 'C', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 58, 'The object of One Nation, One Ration Card scheme is to benefit:', $JSON${"A": "The rural population", "B": "The Farmers", "C": "The Migrant labourers", "D": "The ration shopkeepers"}$JSON$::jsonb, 'C', NULL, 1, 0.25);
 
 
   -- Passage XII
@@ -451,32 +451,32 @@ begin
 
   -- Q59
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 59, 'According to the passage, the relationship between the Constitution and the Preamble can best be described as:', $JSON$[{"label": "A", "text": "The Preamble was drafted in isolation"}, {"label": "B", "text": "The Constitution and the Preamble were framed independent of each other"}, {"label": "C", "text": "Both the Constitution and the Preamble were shaped in light of each other"}, {"label": "D", "text": "The Preamble had no relevance to the Constitution"}]$JSON$::jsonb, 'C', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 59, 'According to the passage, the relationship between the Constitution and the Preamble can best be described as:', $JSON${"A": "The Preamble was drafted in isolation", "B": "The Constitution and the Preamble were framed independent of each other", "C": "Both the Constitution and the Preamble were shaped in light of each other", "D": "The Preamble had no relevance to the Constitution"}$JSON$::jsonb, 'C', NULL, 1, 0.25);
 
 
   -- Q60
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 60, 'What did the earliest draft of the Preamble emphasize?', $JSON$[{"label": "A", "text": "Liberty, equality, and fraternity"}, {"label": "B", "text": "Sovereign, socialist, secular democratic republic"}, {"label": "C", "text": "Formal enactment by the people through representatives"}, {"label": "D", "text": "Unity and integrity of the nation"}]$JSON$::jsonb, 'C', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 60, 'What did the earliest draft of the Preamble emphasize?', $JSON${"A": "Liberty, equality, and fraternity", "B": "Sovereign, socialist, secular democratic republic", "C": "Formal enactment by the people through representatives", "D": "Unity and integrity of the nation"}$JSON$::jsonb, 'C', NULL, 1, 0.25);
 
 
   -- Q61
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 61, 'Which of the following is not enshrined in the Preamble of the Constitution of India?', $JSON$[{"label": "A", "text": "Equality of status and of opportunity"}, {"label": "B", "text": "Liberty of thought, expression, belief, faith and worship"}, {"label": "C", "text": "Justice-moral, ethical and legal"}, {"label": "D", "text": "Fraternity assuring the dignity of the individual"}]$JSON$::jsonb, 'C', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 61, 'Which of the following is not enshrined in the Preamble of the Constitution of India?', $JSON${"A": "Equality of status and of opportunity", "B": "Liberty of thought, expression, belief, faith and worship", "C": "Justice-moral, ethical and legal", "D": "Fraternity assuring the dignity of the individual"}$JSON$::jsonb, 'C', NULL, 1, 0.25);
 
 
   -- Q62
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 62, 'Which has been rightly arranged according to the Preamble of the Constitution of India-', $JSON$[{"label": "A", "text": "Sovereign Socialist Secular Democratic Republic"}, {"label": "B", "text": "Sovereign Secular Socialist Democratic Republic"}, {"label": "C", "text": "Sovereign Socialist Democratic Secular Republic"}, {"label": "D", "text": "Secular, Socialist, Sovereign and Democratic Republic"}]$JSON$::jsonb, 'A', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 62, 'Which has been rightly arranged according to the Preamble of the Constitution of India-', $JSON${"A": "Sovereign Socialist Secular Democratic Republic", "B": "Sovereign Secular Socialist Democratic Republic", "C": "Sovereign Socialist Democratic Secular Republic", "D": "Secular, Socialist, Sovereign and Democratic Republic"}$JSON$::jsonb, 'A', NULL, 1, 0.25);
 
 
   -- Q63
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 63, 'The Preamble of the Constitution of India is finally based on:', $JSON$[{"label": "A", "text": "The Objectives Resolution"}, {"label": "B", "text": "The Report of the Union Constitution Committee"}, {"label": "C", "text": "The June 3 plan of the British Government"}, {"label": "D", "text": "The Report of special Sub-committee of the Constituent Assembly"}]$JSON$::jsonb, 'A', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 63, 'The Preamble of the Constitution of India is finally based on:', $JSON${"A": "The Objectives Resolution", "B": "The Report of the Union Constitution Committee", "C": "The June 3 plan of the British Government", "D": "The Report of special Sub-committee of the Constituent Assembly"}$JSON$::jsonb, 'A', NULL, 1, 0.25);
 
 
   -- Q64
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 64, 'What was the role of Sir B. N. Rau in the making of the Indian Constitution?', $JSON$[{"label": "A", "text": "Chairman of the Drafting Committee"}, {"label": "B", "text": "Constitutional Advisor to the Constituent Assembly"}, {"label": "C", "text": "President of the Constituent Assembly"}, {"label": "D", "text": "Member of the Union Powers Committee"}]$JSON$::jsonb, 'B', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 64, 'What was the role of Sir B. N. Rau in the making of the Indian Constitution?', $JSON${"A": "Chairman of the Drafting Committee", "B": "Constitutional Advisor to the Constituent Assembly", "C": "President of the Constituent Assembly", "D": "Member of the Union Powers Committee"}$JSON$::jsonb, 'B', NULL, 1, 0.25);
 
 
   -- Passage XIII
@@ -487,32 +487,32 @@ begin
 
   -- Q65
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 65, 'According to the passage, the Court cannot decide what is “good” or “bad” governance, but it can:', $JSON$[{"label": "A", "text": "Disqualify Ministers from holding office"}, {"label": "B", "text": "Indicate constitutional ethos on governance and remind functionaries of their duty"}, {"label": "C", "text": "Frame rules on qualifications of Ministers"}, {"label": "D", "text": "Amend the Constitution to insert explicit standards of morality"}]$JSON$::jsonb, 'B', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 65, 'According to the passage, the Court cannot decide what is “good” or “bad” governance, but it can:', $JSON${"A": "Disqualify Ministers from holding office", "B": "Indicate constitutional ethos on governance and remind functionaries of their duty", "C": "Frame rules on qualifications of Ministers", "D": "Amend the Constitution to insert explicit standards of morality"}$JSON$::jsonb, 'B', NULL, 1, 0.25);
 
 
   -- Q66
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 66, 'Dr. B.R. Ambedkar believed that the working of the Constitution ultimately depends on:', $JSON$[{"label": "A", "text": "The rigidity of the constitutional text"}, {"label": "B", "text": "The good sense and integrity of those who are going to administer this constitution"}, {"label": "C", "text": "The presence of a strong opposition"}, {"label": "D", "text": "Judicial intervention in governance"}]$JSON$::jsonb, 'B', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 66, 'Dr. B.R. Ambedkar believed that the working of the Constitution ultimately depends on:', $JSON${"A": "The rigidity of the constitutional text", "B": "The good sense and integrity of those who are going to administer this constitution", "C": "The presence of a strong opposition", "D": "Judicial intervention in governance"}$JSON$::jsonb, 'B', NULL, 1, 0.25);
 
 
   -- Q67
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 67, 'The Court, while respecting the prerogative of the Prime Minister and Chief Minister to select Ministers emphasized that:', $JSON$[{"label": "A", "text": "They should avoid appointing persons against whom criminal charges involving moral turpitude are framed"}, {"label": "B", "text": "They must appoint Ministers strictly from the ruling party only"}, {"label": "C", "text": "They should consult the Supreme Court before finalizing appointments"}, {"label": "D", "text": "They are bound to appoint only members of the Lok Sabha/Legislative Assembly"}]$JSON$::jsonb, 'A', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 67, 'The Court, while respecting the prerogative of the Prime Minister and Chief Minister to select Ministers emphasized that:', $JSON${"A": "They should avoid appointing persons against whom criminal charges involving moral turpitude are framed", "B": "They must appoint Ministers strictly from the ruling party only", "C": "They should consult the Supreme Court before finalizing appointments", "D": "They are bound to appoint only members of the Lok Sabha/Legislative Assembly"}$JSON$::jsonb, 'A', NULL, 1, 0.25);
 
 
   -- Q68
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 68, 'What role does the Court assume, as described in the passage, regarding governance and appointments to the Council of Ministers?', $JSON$[{"label": "A", "text": "Judicial review of all ministerial appointments"}, {"label": "B", "text": "Prophetic duty to remind key functionaries of their constitutional role"}, {"label": "C", "text": "Power to veto ministerial selections made by the Prime Minister"}, {"label": "D", "text": "Directing Parliament to amend the law on disqualification"}]$JSON$::jsonb, 'B', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 68, 'What role does the Court assume, as described in the passage, regarding governance and appointments to the Council of Ministers?', $JSON${"A": "Judicial review of all ministerial appointments", "B": "Prophetic duty to remind key functionaries of their constitutional role", "C": "Power to veto ministerial selections made by the Prime Minister", "D": "Directing Parliament to amend the law on disqualification"}$JSON$::jsonb, 'B', NULL, 1, 0.25);
 
 
   -- Q69
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 69, 'Who are the constitutional functionaries, this passage primarily refers to?', $JSON$[{"label": "A", "text": "Council of Ministers"}, {"label": "B", "text": "Prime Minister and Council of Ministers"}, {"label": "C", "text": "Chief Minister and Council of Ministers"}, {"label": "D", "text": "Prime Minister and Chief Minister"}]$JSON$::jsonb, 'D', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 69, 'Who are the constitutional functionaries, this passage primarily refers to?', $JSON${"A": "Council of Ministers", "B": "Prime Minister and Council of Ministers", "C": "Chief Minister and Council of Ministers", "D": "Prime Minister and Chief Minister"}$JSON$::jsonb, 'D', NULL, 1, 0.25);
 
 
   -- Q70
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 70, 'Who, according to the above passage shall not be appointed as a Minister?', $JSON$[{"label": "A", "text": "Against whom charges have been framed in a court of law"}, {"label": "B", "text": "Against whom charges involving moral turpitude have been framed in a court of law"}, {"label": "C", "text": "Against whom charges have been proved in a court of law"}, {"label": "D", "text": "Against whom case is pending in a court of law"}]$JSON$::jsonb, 'B', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 70, 'Who, according to the above passage shall not be appointed as a Minister?', $JSON${"A": "Against whom charges have been framed in a court of law", "B": "Against whom charges involving moral turpitude have been framed in a court of law", "C": "Against whom charges have been proved in a court of law", "D": "Against whom case is pending in a court of law"}$JSON$::jsonb, 'B', NULL, 1, 0.25);
 
 
   -- Passage XIV
@@ -523,32 +523,32 @@ begin
 
   -- Q71
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 71, 'The Legislative Assembly of State X passes a controversial bill and sends it to the Governor for assent. The Governor, strongly disagreeing with the bill''s provisions, decides to neither give assent nor return the bill, hoping it will be forgotten over the time. Which of the following statements accurately describes the legal position of the Governor''s action?', $JSON$[{"label": "A", "text": "The Governor’s action is a legitimate exercise of a “pocket veto”, allowing for indefinite delay of bills"}, {"label": "B", "text": "The Governor’s inaction is unconstitutional, as the Supreme Court has explicitly rejected the power to an absolute or “pocket” veto, and they are obligated to return the bill “as soon as possible” if assent is withheld"}, {"label": "C", "text": "The Governor is within their rights to delay the bill indefinitely as long as they do not explicitly reject it, reflecting the true spirit of gubernatorial discretion"}, {"label": "D", "text": "The bill will automatically lapse after six months of gubernatorial inaction, making the delay a de facto rejection"}]$JSON$::jsonb, 'B', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 71, 'The Legislative Assembly of State X passes a controversial bill and sends it to the Governor for assent. The Governor, strongly disagreeing with the bill''s provisions, decides to neither give assent nor return the bill, hoping it will be forgotten over the time. Which of the following statements accurately describes the legal position of the Governor''s action?', $JSON${"A": "The Governor’s action is a legitimate exercise of a “pocket veto”, allowing for indefinite delay of bills", "B": "The Governor’s inaction is unconstitutional, as the Supreme Court has explicitly rejected the power to an absolute or “pocket” veto, and they are obligated to return the bill “as soon as possible” if assent is withheld", "C": "The Governor is within their rights to delay the bill indefinitely as long as they do not explicitly reject it, reflecting the true spirit of gubernatorial discretion", "D": "The bill will automatically lapse after six months of gubernatorial inaction, making the delay a de facto rejection"}$JSON$::jsonb, 'B', NULL, 1, 0.25);
 
 
   -- Q72
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 72, 'Governor Y receives a bill from the State Assembly and, after careful consideration, decides to withhold assent, promptly returning it with a message for reconsideration. The State Assembly then re-enacts the bill without any change and sends it back to Governor Y. What is the constitutional obligation of Governor Y at this point?', $JSON$[{"label": "A", "text": "Governor Y has no choice but to give assent to the re-enacted bill, as the Supreme Court has ruled that the Governor cannot withhold assent for a second time"}, {"label": "B", "text": "Governor Y can again withhold assent if they continue to disagree with the bill’s content, sending it back for further reconsideration"}, {"label": "C", "text": "Governor Y can refer the bill to the President of India for a final decision, exercising a higher discretionary power"}, {"label": "D", "text": "Governor Y can dissolve the State Assembly for consistently passing erroneous bills"}]$JSON$::jsonb, 'A', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 72, 'Governor Y receives a bill from the State Assembly and, after careful consideration, decides to withhold assent, promptly returning it with a message for reconsideration. The State Assembly then re-enacts the bill without any change and sends it back to Governor Y. What is the constitutional obligation of Governor Y at this point?', $JSON${"A": "Governor Y has no choice but to give assent to the re-enacted bill, as the Supreme Court has ruled that the Governor cannot withhold assent for a second time", "B": "Governor Y can again withhold assent if they continue to disagree with the bill’s content, sending it back for further reconsideration", "C": "Governor Y can refer the bill to the President of India for a final decision, exercising a higher discretionary power", "D": "Governor Y can dissolve the State Assembly for consistently passing erroneous bills"}$JSON$::jsonb, 'A', NULL, 1, 0.25);
 
 
   -- Q73
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 73, 'After the Supreme Court''s judgment in State of Tamil Nadu v. Governor of Tamil Nadu (2025), a State Governor holds a bill for eight months without taking any action—neither assenting nor returning it. The State Government believes that this delay is unconstitutional. Based on the precedent set by the judgment, what recourse is available to the State Government?', $JSON$[{"label": "A", "text": "The State Government must wait for a full year before any action can be taken, as gubernatorial delays are typically permitted for this duration"}, {"label": "B", "text": "The bill automatically lapses after six months of inaction, making any further action by the State Government unnecessary"}, {"label": "C", "text": "The State Government's only recourse is to re-enact the bill, which would then compel the Governor to act"}, {"label": "D", "text": "The State Government can approach the courts, as the judgment had prescribed timelines for the Governor’s actions on bills since indefinite delay was construed unconstitutional"}]$JSON$::jsonb, 'D', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 73, 'After the Supreme Court''s judgment in State of Tamil Nadu v. Governor of Tamil Nadu (2025), a State Governor holds a bill for eight months without taking any action—neither assenting nor returning it. The State Government believes that this delay is unconstitutional. Based on the precedent set by the judgment, what recourse is available to the State Government?', $JSON${"A": "The State Government must wait for a full year before any action can be taken, as gubernatorial delays are typically permitted for this duration", "B": "The bill automatically lapses after six months of inaction, making any further action by the State Government unnecessary", "C": "The State Government's only recourse is to re-enact the bill, which would then compel the Governor to act", "D": "The State Government can approach the courts, as the judgment had prescribed timelines for the Governor’s actions on bills since indefinite delay was construed unconstitutional"}$JSON$::jsonb, 'D', NULL, 1, 0.25);
 
 
   -- Q74
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 74, 'In a situation mirroring the Tamil Nadu case, a Supreme Court bench is reviewing several instances where a particular Governor has indefinitely delayed assent on multiple bills passed by the State Assembly, despite Constitutional obligations. If the Supreme Court decides to follow the precedent established in State of Tamil Nadu v. Governor of Tamil Nadu (2025) regarding pending bills, what would be a likely outcome for these delayed bills?', $JSON$[{"label": "A", "text": "The Supreme Court would order the Governor to explicitly reject all the delayed bills"}, {"label": "B", "text": "The Supreme Court would direct the State Assembly to conduct a public referendum on each delayed bill"}, {"label": "C", "text": "The Supreme Court could deem assent on the pending bills, establishing a critical precedent for judicial review of gubernatorial powers in such cases, as it did in the Tamil Nadu case"}, {"label": "D", "text": "The Supreme Court would advise the Governor to seek legal counsel and then re-evaluate each bill individually without a set timeline"}]$JSON$::jsonb, 'C', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 74, 'In a situation mirroring the Tamil Nadu case, a Supreme Court bench is reviewing several instances where a particular Governor has indefinitely delayed assent on multiple bills passed by the State Assembly, despite Constitutional obligations. If the Supreme Court decides to follow the precedent established in State of Tamil Nadu v. Governor of Tamil Nadu (2025) regarding pending bills, what would be a likely outcome for these delayed bills?', $JSON${"A": "The Supreme Court would order the Governor to explicitly reject all the delayed bills", "B": "The Supreme Court would direct the State Assembly to conduct a public referendum on each delayed bill", "C": "The Supreme Court could deem assent on the pending bills, establishing a critical precedent for judicial review of gubernatorial powers in such cases, as it did in the Tamil Nadu case", "D": "The Supreme Court would advise the Governor to seek legal counsel and then re-evaluate each bill individually without a set timeline"}$JSON$::jsonb, 'C', NULL, 1, 0.25);
 
 
   -- Q75
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 75, 'A newly appointed Governor publicly declares that he intend to use his discretion to permanently halt any legislation he deems inappropriate, by simply not acting on the bills, citing an inherent gubernatorial power. How does this declaration align with the constitutional interpretation provided by the Supreme Court of India?', $JSON$[{"label": "A", "text": "The Governor's declaration is consistent with the broad discretionary powers traditionally afforded to Governors, allowing them significant influence over state legislation"}, {"label": "B", "text": "The Governor’s declaration is valid only for non-money bills, as money bills have different Constitutional protocols"}, {"label": "C", "text": "The Governor’s declaration is partially valid, as indefinite delay is permissible only if the State Assembly is not in session"}, {"label": "D", "text": "The Governor’s declaration is unconstitutional; the Supreme Court explicitly rejected the Governor’s power to an absolute or “pocket” veto"}]$JSON$::jsonb, 'D', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 75, 'A newly appointed Governor publicly declares that he intend to use his discretion to permanently halt any legislation he deems inappropriate, by simply not acting on the bills, citing an inherent gubernatorial power. How does this declaration align with the constitutional interpretation provided by the Supreme Court of India?', $JSON${"A": "The Governor's declaration is consistent with the broad discretionary powers traditionally afforded to Governors, allowing them significant influence over state legislation", "B": "The Governor’s declaration is valid only for non-money bills, as money bills have different Constitutional protocols", "C": "The Governor’s declaration is partially valid, as indefinite delay is permissible only if the State Assembly is not in session", "D": "The Governor’s declaration is unconstitutional; the Supreme Court explicitly rejected the Governor’s power to an absolute or “pocket” veto"}$JSON$::jsonb, 'D', NULL, 1, 0.25);
 
 
   -- Q76
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 76, 'What are the three primary courses of action for a Governor when a Bill is enacted by the State Assembly and sent to him/her for his/her assent. Which option correctly lists these three courses?', $JSON$[{"label": "A", "text": "(i) Give assent, (ii) Veto absolutely, or (iii) Refer to the Supreme Court"}, {"label": "B", "text": "(i) Give assent, (ii) Withhold assent (allowing the Bill to fail, unless the proviso is followed), or (iii) Recommend amendments"}, {"label": "C", "text": "(i) Give assent, (ii) Withhold assent (with the option to return for reconsideration), or (iii) Reserve for the consideration of the President"}, {"label": "D", "text": "(i) Give assent, (ii) Return for reconsideration, or (iii) Refer to the Union Government"}]$JSON$::jsonb, 'C', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 76, 'What are the three primary courses of action for a Governor when a Bill is enacted by the State Assembly and sent to him/her for his/her assent. Which option correctly lists these three courses?', $JSON${"A": "(i) Give assent, (ii) Veto absolutely, or (iii) Refer to the Supreme Court", "B": "(i) Give assent, (ii) Withhold assent (allowing the Bill to fail, unless the proviso is followed), or (iii) Recommend amendments", "C": "(i) Give assent, (ii) Withhold assent (with the option to return for reconsideration), or (iii) Reserve for the consideration of the President", "D": "(i) Give assent, (ii) Return for reconsideration, or (iii) Refer to the Union Government"}$JSON$::jsonb, 'C', NULL, 1, 0.25);
 
 
   -- Passage XV
@@ -559,32 +559,32 @@ begin
 
   -- Q77
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 77, 'In October 2023, two individuals in India, Ramesh and Sameer, who identify as a same-sex couple, sought to legally solemnize their marriage. Based on the Supreme Court''s ruling, what is the current legal standing of their ability to marry?', $JSON$[{"label": "A", "text": "Their marriage is legally recognized nationwide under a new constitutional right"}, {"label": "B", "text": "Their marriage is not legally recognized, as the Supreme Court ruled that this issue is for Parliament to address"}, {"label": "C", "text": "Their marriage is recognized only if both of them identify as transgender"}, {"label": "D", "text": "Their marriage is temporarily recognized until Parliament decides otherwise"}]$JSON$::jsonb, 'B', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 77, 'In October 2023, two individuals in India, Ramesh and Sameer, who identify as a same-sex couple, sought to legally solemnize their marriage. Based on the Supreme Court''s ruling, what is the current legal standing of their ability to marry?', $JSON${"A": "Their marriage is legally recognized nationwide under a new constitutional right", "B": "Their marriage is not legally recognized, as the Supreme Court ruled that this issue is for Parliament to address", "C": "Their marriage is recognized only if both of them identify as transgender", "D": "Their marriage is temporarily recognized until Parliament decides otherwise"}$JSON$::jsonb, 'B', NULL, 1, 0.25);
 
 
   -- Q78
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 78, 'During a legal proceeding in India, an advocate argues that the Supreme Court should directly legislate on same-sex marriage because the right to choose a partner inherently implies a fundamental right to marry for all citizens. How would the Supreme Court''s judgment likely to counter this argument?', $JSON$[{"label": "A", "text": "The Court acknowledged the right to choose a partner, therefore it would agree to legislate on marriage"}, {"label": "B", "text": "The Court held that there is no fundamental right to marry under the Indian Constitution, and such a policy can be made only by the Parliament"}, {"label": "C", "text": "The Court has held that it will set up a panel to look into the fundamental right to marry"}, {"label": "D", "text": "The Court upheld the fundamental right to marry, but declined to recognise same sex marriage"}]$JSON$::jsonb, 'B', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 78, 'During a legal proceeding in India, an advocate argues that the Supreme Court should directly legislate on same-sex marriage because the right to choose a partner inherently implies a fundamental right to marry for all citizens. How would the Supreme Court''s judgment likely to counter this argument?', $JSON${"A": "The Court acknowledged the right to choose a partner, therefore it would agree to legislate on marriage", "B": "The Court held that there is no fundamental right to marry under the Indian Constitution, and such a policy can be made only by the Parliament", "C": "The Court has held that it will set up a panel to look into the fundamental right to marry", "D": "The Court upheld the fundamental right to marry, but declined to recognise same sex marriage"}$JSON$::jsonb, 'B', NULL, 1, 0.25);
 
 
   -- Q79
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 79, 'Following the Supreme Court''s decision, an LGBTQ+ advocacy group in India aims to achieve legal recognition for same-sex marriage. To which governmental body or bodies should this group primarily direct its lobbying efforts to secure the necessary legislation?', $JSON$[{"label": "A", "text": "The Supreme Court of India, as they are ultimately responsible for interpreting constitutional rights"}, {"label": "B", "text": "The President of India as head of the Union legislature"}, {"label": "C", "text": "The Parliament and state legislatures, as the power to legislate on same-sex marriage rests with them"}, {"label": "D", "text": "The National Commission for Human Rights, to advocate for a new directive"}]$JSON$::jsonb, 'C', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 79, 'Following the Supreme Court''s decision, an LGBTQ+ advocacy group in India aims to achieve legal recognition for same-sex marriage. To which governmental body or bodies should this group primarily direct its lobbying efforts to secure the necessary legislation?', $JSON${"A": "The Supreme Court of India, as they are ultimately responsible for interpreting constitutional rights", "B": "The President of India as head of the Union legislature", "C": "The Parliament and state legislatures, as the power to legislate on same-sex marriage rests with them", "D": "The National Commission for Human Rights, to advocate for a new directive"}$JSON$::jsonb, 'C', NULL, 1, 0.25);
 
 
   -- Q80
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 80, 'While same-sex marriage is not legally recognized in India, however, the Supreme Court''s verdict did offer some acknowledgments of rights for same-sex couples. Which of the following rights was specifically affirmed by the Court?', $JSON$[{"label": "A", "text": "The automatic right to inheritance for same-sex partners"}, {"label": "B", "text": "The right of same-sex couples to adopt children jointly"}, {"label": "C", "text": "The right of same-sex couples to cohabit privately"}, {"label": "D", "text": "The right to maintenance for same-sex partners"}]$JSON$::jsonb, 'C', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 80, 'While same-sex marriage is not legally recognized in India, however, the Supreme Court''s verdict did offer some acknowledgments of rights for same-sex couples. Which of the following rights was specifically affirmed by the Court?', $JSON${"A": "The automatic right to inheritance for same-sex partners", "B": "The right of same-sex couples to adopt children jointly", "C": "The right of same-sex couples to cohabit privately", "D": "The right to maintenance for same-sex partners"}$JSON$::jsonb, 'C', NULL, 1, 0.25);
 
 
   -- Q81
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 81, 'Ramesh and Suresh, a same-sex couple in India, have lived together for a decade and want to ensure they receive legal benefits equivalent to those of married couples, such as automatic inheritance and pension rights. Based on the Supreme Court''s judgment, what is the primary obstacle they face in achieving these benefits?', $JSON$[{"label": "A", "text": "They must first register their union with the government panel that was urged to be formed"}, {"label": "B", "text": "They cannot legally marry and therefore cannot automatically be entitled to these specific legal rights"}, {"label": "C", "text": "These rights are only available to same-sex couples where one partner is transgender"}, {"label": "D", "text": "They can receive these benefits if they convert to a religion that recognizes same-sex unions"}]$JSON$::jsonb, 'B', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 81, 'Ramesh and Suresh, a same-sex couple in India, have lived together for a decade and want to ensure they receive legal benefits equivalent to those of married couples, such as automatic inheritance and pension rights. Based on the Supreme Court''s judgment, what is the primary obstacle they face in achieving these benefits?', $JSON${"A": "They must first register their union with the government panel that was urged to be formed", "B": "They cannot legally marry and therefore cannot automatically be entitled to these specific legal rights", "C": "These rights are only available to same-sex couples where one partner is transgender", "D": "They can receive these benefits if they convert to a religion that recognizes same-sex unions"}$JSON$::jsonb, 'B', NULL, 1, 0.25);
 
 
   -- Q82
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 82, 'The new acronym that is evolved after LGBTQ+ is an acronym called LGBTQIA+. In this new acronym ''IA'' refers to:', $JSON$[{"label": "A", "text": "Intersex and Asexual"}, {"label": "B", "text": "Initialisms and Agender"}, {"label": "C", "text": "Intersex and Ally"}, {"label": "D", "text": "Intrasex and Androgynous"}]$JSON$::jsonb, 'A', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 82, 'The new acronym that is evolved after LGBTQ+ is an acronym called LGBTQIA+. In this new acronym ''IA'' refers to:', $JSON${"A": "Intersex and Asexual", "B": "Initialisms and Agender", "C": "Intersex and Ally", "D": "Intrasex and Androgynous"}$JSON$::jsonb, 'A', NULL, 1, 0.25);
 
 
   raise notice '✅ Legal Reasoning seeded';
@@ -616,32 +616,32 @@ begin
 
   -- Q83
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 83, 'Which letter will be exactly in the middle?', $JSON$[{"label": "A", "text": "L"}, {"label": "B", "text": "R"}, {"label": "C", "text": "D"}, {"label": "D", "text": "E"}]$JSON$::jsonb, 'D', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 83, 'Which letter will be exactly in the middle?', $JSON${"A": "L", "B": "R", "C": "D", "D": "E"}$JSON$::jsonb, 'D', NULL, 1, 0.25);
 
 
   -- Q84
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 84, 'How many vowels will be to the left of the middle letter?', $JSON$[{"label": "A", "text": "2"}, {"label": "B", "text": "1"}, {"label": "C", "text": "4"}, {"label": "D", "text": "3"}]$JSON$::jsonb, 'D', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 84, 'How many vowels will be to the left of the middle letter?', $JSON${"A": "2", "B": "1", "C": "4", "D": "3"}$JSON$::jsonb, 'D', NULL, 1, 0.25);
 
 
   -- Q85
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 85, 'Which of the two vowels will be adjoining each other?', $JSON$[{"label": "A", "text": "IE"}, {"label": "B", "text": "IO"}, {"label": "C", "text": "AE"}, {"label": "D", "text": "AO"}]$JSON$::jsonb, 'B', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 85, 'Which of the two vowels will be adjoining each other?', $JSON${"A": "IE", "B": "IO", "C": "AE", "D": "AO"}$JSON$::jsonb, 'B', NULL, 1, 0.25);
 
 
   -- Q86
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 86, 'Which vowel will have a consonant to the left but a vowel to the right of it?', $JSON$[{"label": "A", "text": "I"}, {"label": "B", "text": "O"}, {"label": "C", "text": "A"}, {"label": "D", "text": "E"}]$JSON$::jsonb, 'A', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 86, 'Which vowel will have a consonant to the left but a vowel to the right of it?', $JSON${"A": "I", "B": "O", "C": "A", "D": "E"}$JSON$::jsonb, 'A', NULL, 1, 0.25);
 
 
   -- Q87
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 87, 'Name the letter sandwiched between two vowels?', $JSON$[{"label": "A", "text": "R and T"}, {"label": "B", "text": "C and L"}, {"label": "C", "text": "R and L"}, {"label": "D", "text": "D and R"}]$JSON$::jsonb, 'B', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 87, 'Name the letter sandwiched between two vowels?', $JSON${"A": "R and T", "B": "C and L", "C": "R and L", "D": "D and R"}$JSON$::jsonb, 'B', NULL, 1, 0.25);
 
 
   -- Q88
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 88, 'Which letter is prefixed to the word after the first half is reversed?', $JSON$[{"label": "A", "text": "G"}, {"label": "B", "text": "P"}, {"label": "C", "text": "H"}, {"label": "D", "text": "S"}]$JSON$::jsonb, 'B', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 88, 'Which letter is prefixed to the word after the first half is reversed?', $JSON${"A": "G", "B": "P", "C": "H", "D": "S"}$JSON$::jsonb, 'B', NULL, 1, 0.25);
 
 
   -- Passage XVII
@@ -652,37 +652,37 @@ begin
 
   -- Q89
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 89, 'Identifying the Most Likely Suspect: Based only on the fact that the five-digit code was used to open the display case, who is the only plausible suspect among the three?', $JSON$[{"label": "A", "text": "Anjali"}, {"label": "B", "text": "Bharat"}, {"label": "C", "text": "Chitra"}, {"label": "D", "text": "Both Anjali and Chitra"}]$JSON$::jsonb, 'A', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 89, 'Identifying the Most Likely Suspect: Based only on the fact that the five-digit code was used to open the display case, who is the only plausible suspect among the three?', $JSON${"A": "Anjali", "B": "Bharat", "C": "Chitra", "D": "Both Anjali and Chitra"}$JSON$::jsonb, 'A', NULL, 1, 0.25);
 
 
   -- Q90
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 90, 'Evaluating Alibis and Time Constraints: The theft occurred between 10:00 PM and 1:00 AM, but the night guard saw the medallion at 10:30 PM. Given Chitra''s alibi, what is the earliest time she could have reached the museum?', $JSON$[{"label": "A", "text": "11:45 PM"}, {"label": "B", "text": "12:05 AM"}, {"label": "C", "text": "12:45 AM"}, {"label": "D", "text": "10:50 PM"}]$JSON$::jsonb, 'B', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 90, 'Evaluating Alibis and Time Constraints: The theft occurred between 10:00 PM and 1:00 AM, but the night guard saw the medallion at 10:30 PM. Given Chitra''s alibi, what is the earliest time she could have reached the museum?', $JSON${"A": "11:45 PM", "B": "12:05 AM", "C": "12:45 AM", "D": "10:50 PM"}$JSON$::jsonb, 'B', NULL, 1, 0.25);
 
 
   -- Q91
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 91, 'Deduction and Contradictory Evidence: If the theft was committed by Bharat, which established fact must be incorrect, based on the provided information?', $JSON$[{"label": "A", "text": "The medallion was present at 10:30 PM"}, {"label": "B", "text": "The security logs indicating the code was used"}, {"label": "C", "text": "The museum closing time of 10:00 PM"}, {"label": "D", "text": "The time frame of his alibi (8:00 PM to 1:30 AM)"}]$JSON$::jsonb, 'D', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 91, 'Deduction and Contradictory Evidence: If the theft was committed by Bharat, which established fact must be incorrect, based on the provided information?', $JSON${"A": "The medallion was present at 10:30 PM", "B": "The security logs indicating the code was used", "C": "The museum closing time of 10:00 PM", "D": "The time frame of his alibi (8:00 PM to 1:30 AM)"}$JSON$::jsonb, 'D', NULL, 1, 0.25);
 
 
   -- Q92
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 92, 'Analyzing Accessory Evidence: The discovery of the silver button near the display case is the most incriminating evidence against which suspect, and why?', $JSON$[{"label": "A", "text": "Bharat, because he had the technical expertise to get close to the case"}, {"label": "B", "text": "Chitra, because she was near the museum late that night"}, {"label": "C", "text": "Anjali, because she is known to wear a coat with similar buttons"}, {"label": "D", "text": "Mr. Hemant, as he was the last person to check the area"}]$JSON$::jsonb, 'C', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 92, 'Analyzing Accessory Evidence: The discovery of the silver button near the display case is the most incriminating evidence against which suspect, and why?', $JSON${"A": "Bharat, because he had the technical expertise to get close to the case", "B": "Chitra, because she was near the museum late that night", "C": "Anjali, because she is known to wear a coat with similar buttons", "D": "Mr. Hemant, as he was the last person to check the area"}$JSON$::jsonb, 'C', NULL, 1, 0.25);
 
 
   -- Q93
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 93, 'Identifying the Logical Flaw in the Argument: A detective argues: "Since Bharat has a confirmed, continuous alibi covering the entire time window of the theft (10:30 PM to 1:00 AM), he cannot be the thief." What principle of logic supports this detective''s conclusion?', $JSON$[{"label": "A", "text": "Correlation does not imply causation"}, {"label": "B", "text": "If an event requires presence, confirmed absence proves innocence"}, {"label": "C", "text": "The rule of double jeopardy"}, {"label": "D", "text": "The burden of proof lies with the accuser"}]$JSON$::jsonb, 'B', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 93, 'Identifying the Logical Flaw in the Argument: A detective argues: "Since Bharat has a confirmed, continuous alibi covering the entire time window of the theft (10:30 PM to 1:00 AM), he cannot be the thief." What principle of logic supports this detective''s conclusion?', $JSON${"A": "Correlation does not imply causation", "B": "If an event requires presence, confirmed absence proves innocence", "C": "The rule of double jeopardy", "D": "The burden of proof lies with the accuser"}$JSON$::jsonb, 'B', NULL, 1, 0.25);
 
 
   -- Q94
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 94, 'Drawing a Strongest Conclusion: Considering all the facts (the code being used, the silver button, and the confirmed alibis), which is the most reasonable inference?', $JSON$[{"label": "A", "text": "Bharat must have had an accomplice who knew the code"}, {"label": "B", "text": "Chitra's alibi is false because she had enough time to commit the crime after leaving the studio"}, {"label": "C", "text": "Anjali is the most likely suspect because the code was used and she has a direct link to the physical evidence (the button)"}, {"label": "D", "text": "Mr. Hemant is secretly the thief and is trying to frame the former employees"}]$JSON$::jsonb, 'C', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 94, 'Drawing a Strongest Conclusion: Considering all the facts (the code being used, the silver button, and the confirmed alibis), which is the most reasonable inference?', $JSON${"A": "Bharat must have had an accomplice who knew the code", "B": "Chitra's alibi is false because she had enough time to commit the crime after leaving the studio", "C": "Anjali is the most likely suspect because the code was used and she has a direct link to the physical evidence (the button)", "D": "Mr. Hemant is secretly the thief and is trying to frame the former employees"}$JSON$::jsonb, 'C', NULL, 1, 0.25);
 
 
   -- Q95
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 95, 'Assessing Necessary Conditions: What condition is necessary for Chitra to have stolen the medallion?', $JSON$[{"label": "A", "text": "She must know the five digit code"}, {"label": "B", "text": "She must have left the graphic design studio before 11.45 pm"}, {"label": "C", "text": "The theft must have occurred after she left the studio and before 1 am"}, {"label": "D", "text": "She must have worked with Anjali to disable the locks"}]$JSON$::jsonb, 'C', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 95, 'Assessing Necessary Conditions: What condition is necessary for Chitra to have stolen the medallion?', $JSON${"A": "She must know the five digit code", "B": "She must have left the graphic design studio before 11.45 pm", "C": "The theft must have occurred after she left the studio and before 1 am", "D": "She must have worked with Anjali to disable the locks"}$JSON$::jsonb, 'C', NULL, 1, 0.25);
 
 
   -- Passage XVIII
@@ -693,32 +693,32 @@ begin
 
   -- Q96
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 96, 'If P + Q - R / T, how is T related to P?', $JSON$[{"label": "A", "text": "Aunt"}, {"label": "B", "text": "Father"}, {"label": "C", "text": "Grandmother"}, {"label": "D", "text": "None of these"}]$JSON$::jsonb, 'D', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 96, 'If P + Q - R / T, how is T related to P?', $JSON${"A": "Aunt", "B": "Father", "C": "Grandmother", "D": "None of these"}$JSON$::jsonb, 'D', NULL, 1, 0.25);
 
 
   -- Q97
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 97, 'Which of the following means that R is wife of P?', $JSON$[{"label": "A", "text": "P x R - Q - T"}, {"label": "B", "text": "P / T + R - Q"}, {"label": "C", "text": "P / R - Q + T"}, {"label": "D", "text": "P x T - Q + R"}]$JSON$::jsonb, 'D', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 97, 'Which of the following means that R is wife of P?', $JSON${"A": "P x R - Q - T", "B": "P / T + R - Q", "C": "P / R - Q + T", "D": "P x T - Q + R"}$JSON$::jsonb, 'D', NULL, 1, 0.25);
 
 
   -- Q98
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 98, 'If P x T / Q + R, how is R related to P?', $JSON$[{"label": "A", "text": "Daughter"}, {"label": "B", "text": "Husband"}, {"label": "C", "text": "Son-in-law"}, {"label": "D", "text": "None of these"}]$JSON$::jsonb, 'C', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 98, 'If P x T / Q + R, how is R related to P?', $JSON${"A": "Daughter", "B": "Husband", "C": "Son-in-law", "D": "None of these"}$JSON$::jsonb, 'C', NULL, 1, 0.25);
 
 
   -- Q99
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 99, 'If P / R - Q x T, how is P related to T?', $JSON$[{"label": "A", "text": "Grandmother"}, {"label": "B", "text": "Mother-in-law"}, {"label": "C", "text": "Sister"}, {"label": "D", "text": "Grandfather"}]$JSON$::jsonb, 'A', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 99, 'If P / R - Q x T, how is P related to T?', $JSON${"A": "Grandmother", "B": "Mother-in-law", "C": "Sister", "D": "Grandfather"}$JSON$::jsonb, 'A', NULL, 1, 0.25);
 
 
   -- Q100
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 100, 'If R / Q + R x T, how is T related to Q?', $JSON$[{"label": "A", "text": "Aunt"}, {"label": "B", "text": "Sister"}, {"label": "C", "text": "Brother"}, {"label": "D", "text": "Grandson"}]$JSON$::jsonb, 'Withdrawn', 'Question withdrawn from scoring.', 1, 0.25);
+  values (v_section_id, v_passage_id, 100, 'If R / Q + R x T, how is T related to Q?', $JSON${"A": "Aunt", "B": "Sister", "C": "Brother", "D": "Grandson"}$JSON$::jsonb, 'Withdrawn', 'Question withdrawn from scoring.', 1, 0.25);
 
 
   -- Q101
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 101, 'If R - P / J x Q, how is J related to R?', $JSON$[{"label": "A", "text": "Son"}, {"label": "B", "text": "Nephew"}, {"label": "C", "text": "Niece"}, {"label": "D", "text": "Grandson"}]$JSON$::jsonb, 'B', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 101, 'If R - P / J x Q, how is J related to R?', $JSON${"A": "Son", "B": "Nephew", "C": "Niece", "D": "Grandson"}$JSON$::jsonb, 'B', NULL, 1, 0.25);
 
 
   -- Passage XIX
@@ -729,37 +729,37 @@ begin
 
   -- Q102
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 102, 'Determining the Green Team''s Schedule: Considering Rules 1 and 2, which of the following pairs of rounds contains the Green team''s two matches?', $JSON$[{"label": "A", "text": "Round A and Round D"}, {"label": "B", "text": "Round B and Round C"}, {"label": "C", "text": "Round C and Round D"}, {"label": "D", "text": "Round A and Round B"}]$JSON$::jsonb, 'B', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 102, 'Determining the Green Team''s Schedule: Considering Rules 1 and 2, which of the following pairs of rounds contains the Green team''s two matches?', $JSON${"A": "Round A and Round D", "B": "Round B and Round C", "C": "Round C and Round D", "D": "Round A and Round B"}$JSON$::jsonb, 'B', NULL, 1, 0.25);
 
 
   -- Q103
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 103, 'Applying the Positional Constraint: Based on all the rules, particularly Rule 3, which of the following matches must be scheduled for Round A?', $JSON$[{"label": "A", "text": "Red vs. Green"}, {"label": "B", "text": "Red vs. Yellow"}, {"label": "C", "text": "Red vs. Blue"}, {"label": "D", "text": "Blue vs. Yellow"}]$JSON$::jsonb, 'C', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 103, 'Applying the Positional Constraint: Based on all the rules, particularly Rule 3, which of the following matches must be scheduled for Round A?', $JSON${"A": "Red vs. Green", "B": "Red vs. Yellow", "C": "Red vs. Blue", "D": "Blue vs. Yellow"}$JSON$::jsonb, 'C', NULL, 1, 0.25);
 
 
   -- Q104
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 104, 'Identifying the Blue Team''s First Opponent: Who is the Blue team''s first opponent in the tournament?', $JSON$[{"label": "A", "text": "Green"}, {"label": "B", "text": "Red"}, {"label": "C", "text": "Yellow"}, {"label": "D", "text": "The opponent cannot be determined"}]$JSON$::jsonb, 'B', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 104, 'Identifying the Blue Team''s First Opponent: Who is the Blue team''s first opponent in the tournament?', $JSON${"A": "Green", "B": "Red", "C": "Yellow", "D": "The opponent cannot be determined"}$JSON$::jsonb, 'B', NULL, 1, 0.25);
 
 
   -- Q105
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 105, 'Finding the Match in Round C: What is the match scheduled for Round C?', $JSON$[{"label": "A", "text": "Red vs. Green"}, {"label": "B", "text": "Green vs. Blue"}, {"label": "C", "text": "Blue vs. Yellow"}, {"label": "D", "text": "Red vs. Yellow"}]$JSON$::jsonb, 'B', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 105, 'Finding the Match in Round C: What is the match scheduled for Round C?', $JSON${"A": "Red vs. Green", "B": "Green vs. Blue", "C": "Blue vs. Yellow", "D": "Red vs. Yellow"}$JSON$::jsonb, 'B', NULL, 1, 0.25);
 
 
   -- Q106
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 106, 'Identifying the Teams Excluded from a Round: Which pair of rounds contains matches where the Yellow team does not participate?', $JSON$[{"label": "A", "text": "Round A and Round C"}, {"label": "B", "text": "Round A and Round D"}, {"label": "C", "text": "Round B and Round C"}, {"label": "D", "text": "Round C and Round D"}]$JSON$::jsonb, 'A', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 106, 'Identifying the Teams Excluded from a Round: Which pair of rounds contains matches where the Yellow team does not participate?', $JSON${"A": "Round A and Round C", "B": "Round A and Round D", "C": "Round B and Round C", "D": "Round C and Round D"}$JSON$::jsonb, 'A', NULL, 1, 0.25);
 
 
   -- Q107
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 107, 'Team Opponent Check: Which team does the Yellow team NOT play against over the course of the four rounds?', $JSON$[{"label": "A", "text": "Red"}, {"label": "B", "text": "Blue"}, {"label": "C", "text": "Green"}, {"label": "D", "text": "The Yellow team plays against all other teams"}]$JSON$::jsonb, 'B', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 107, 'Team Opponent Check: Which team does the Yellow team NOT play against over the course of the four rounds?', $JSON${"A": "Red", "B": "Blue", "C": "Green", "D": "The Yellow team plays against all other teams"}$JSON$::jsonb, 'B', NULL, 1, 0.25);
 
 
   -- Q108
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 108, 'Assessing a Rule Violation: If the match in Round D was (Blue vs. Yellow), which of the original rules would be violated by this schedule change?', $JSON$[{"label": "A", "text": "Rule 1 (Consecutive Play)"}, {"label": "B", "text": "Rule 3 (Positional Constraint)"}, {"label": "C", "text": "Rule 4 (Timing)"}, {"label": "D", "text": "Rule 5 (Opponent Link)"}]$JSON$::jsonb, 'D', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 108, 'Assessing a Rule Violation: If the match in Round D was (Blue vs. Yellow), which of the original rules would be violated by this schedule change?', $JSON${"A": "Rule 1 (Consecutive Play)", "B": "Rule 3 (Positional Constraint)", "C": "Rule 4 (Timing)", "D": "Rule 5 (Opponent Link)"}$JSON$::jsonb, 'D', NULL, 1, 0.25);
 
 
   raise notice '✅ Logical Reasoning seeded';
@@ -791,32 +791,32 @@ begin
 
   -- Q109
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 109, 'The ratio of insured adults in Urban: Rural is:', $JSON$[{"label": "A", "text": "82:65"}, {"label": "B", "text": "748:477"}, {"label": "C", "text": "65:82"}, {"label": "D", "text": "477:748"}]$JSON$::jsonb, 'B', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 109, 'The ratio of insured adults in Urban: Rural is:', $JSON${"A": "82:65", "B": "748:477", "C": "65:82", "D": "477:748"}$JSON$::jsonb, 'B', NULL, 1, 0.25);
 
 
   -- Q110
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 110, 'By what percentage is the number of Uninsured in Rural higher than Uninsured in Urban?', $JSON$[{"label": "A", "text": "18.75%"}, {"label": "B", "text": "20.17%"}, {"label": "C", "text": "22.50%"}, {"label": "D", "text": "25.00%"}]$JSON$::jsonb, 'B', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 110, 'By what percentage is the number of Uninsured in Rural higher than Uninsured in Urban?', $JSON${"A": "18.75%", "B": "20.17%", "C": "22.50%", "D": "25.00%"}$JSON$::jsonb, 'B', NULL, 1, 0.25);
 
 
   -- Q111
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 111, 'If the total population grows by 5% next year and all percentage shares remain the same (including the Urban-Rural split), how many additional privately insured people will there be (vs. this year)?', $JSON$[{"label": "A", "text": "1,494"}, {"label": "B", "text": "1,560"}, {"label": "C", "text": "1,620"}, {"label": "D", "text": "1,650"}]$JSON$::jsonb, 'A', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 111, 'If the total population grows by 5% next year and all percentage shares remain the same (including the Urban-Rural split), how many additional privately insured people will there be (vs. this year)?', $JSON${"A": "1,494", "B": "1,560", "C": "1,620", "D": "1,650"}$JSON$::jsonb, 'A', NULL, 1, 0.25);
 
 
   -- Q112
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 112, 'The total number of Employer-covered adults is:', $JSON$[{"label": "A", "text": "22,800"}, {"label": "B", "text": "23,100"}, {"label": "C", "text": "24,300"}, {"label": "D", "text": "25,200"}]$JSON$::jsonb, 'C', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 112, 'The total number of Employer-covered adults is:', $JSON${"A": "22,800", "B": "23,100", "C": "24,300", "D": "25,200"}$JSON$::jsonb, 'C', NULL, 1, 0.25);
 
 
   -- Q113
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 113, 'What percentage of all insured adults are Publicly insured?', $JSON$[{"label": "A", "text": "48.50%"}, {"label": "B", "text": "49.75%"}, {"label": "C", "text": "50.86%"}, {"label": "D", "text": "52.00%"}]$JSON$::jsonb, 'C', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 113, 'What percentage of all insured adults are Publicly insured?', $JSON${"A": "48.50%", "B": "49.75%", "C": "50.86%", "D": "52.00%"}$JSON$::jsonb, 'C', NULL, 1, 0.25);
 
 
   -- Q114
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 114, 'What percentage of the total surveyed population was insured?', $JSON$[{"label": "A", "text": "52.15%"}, {"label": "B", "text": "56.25%"}, {"label": "C", "text": "61.25%"}, {"label": "D", "text": "64%"}]$JSON$::jsonb, 'C', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 114, 'What percentage of the total surveyed population was insured?', $JSON${"A": "52.15%", "B": "56.25%", "C": "61.25%", "D": "64%"}$JSON$::jsonb, 'C', NULL, 1, 0.25);
 
 
   -- Passage XXI
@@ -827,32 +827,32 @@ begin
 
   -- Q115
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 115, 'The total annual generation (GWh) is:', $JSON$[{"label": "A", "text": "20,500"}, {"label": "B", "text": "21,500"}, {"label": "C", "text": "22,000"}, {"label": "D", "text": "22,500"}]$JSON$::jsonb, 'C', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 115, 'The total annual generation (GWh) is:', $JSON${"A": "20,500", "B": "21,500", "C": "22,000", "D": "22,500"}$JSON$::jsonb, 'C', NULL, 1, 0.25);
 
 
   -- Q116
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 116, 'The overall renewable share (as % of annual generation) is closest to:', $JSON$[{"label": "A", "text": "42.5%"}, {"label": "B", "text": "43.8%"}, {"label": "C", "text": "44.3%"}, {"label": "D", "text": "45.0%"}]$JSON$::jsonb, 'C', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 116, 'The overall renewable share (as % of annual generation) is closest to:', $JSON${"A": "42.5%", "B": "43.8%", "C": "44.3%", "D": "45.0%"}$JSON$::jsonb, 'C', NULL, 1, 0.25);
 
 
   -- Q117
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 117, 'The quarter with the highest renewable percentage share is:', $JSON$[{"label": "A", "text": "Q1"}, {"label": "B", "text": "Q2"}, {"label": "C", "text": "Q3"}, {"label": "D", "text": "Q4"}]$JSON$::jsonb, 'D', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 117, 'The quarter with the highest renewable percentage share is:', $JSON${"A": "Q1", "B": "Q2", "C": "Q3", "D": "Q4"}$JSON$::jsonb, 'D', NULL, 1, 0.25);
 
 
   -- Q118
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 118, 'A carbon policy reduces Q4 Coal by 10% and shifts the entire reduction equally to Solar and Wind. The new Q4 Solar (GWh) is:', $JSON$[{"label": "A", "text": "975"}, {"label": "B", "text": "1,000"}, {"label": "C", "text": "1,015"}, {"label": "D", "text": "1,030"}]$JSON$::jsonb, 'C', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 118, 'A carbon policy reduces Q4 Coal by 10% and shifts the entire reduction equally to Solar and Wind. The new Q4 Solar (GWh) is:', $JSON${"A": "975", "B": "1,000", "C": "1,015", "D": "1,030"}$JSON$::jsonb, 'C', NULL, 1, 0.25);
 
 
   -- Q119
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 119, 'The annual Gas: Hydro generation ratio is:', $JSON$[{"label": "A", "text": "13:15"}, {"label": "B", "text": "65:76"}, {"label": "C", "text": "5:6"}, {"label": "D", "text": "26:31"}]$JSON$::jsonb, 'B', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 119, 'The annual Gas: Hydro generation ratio is:', $JSON${"A": "13:15", "B": "65:76", "C": "5:6", "D": "26:31"}$JSON$::jsonb, 'B', NULL, 1, 0.25);
 
 
   -- Q120
   insert into public.original_questions (section_id, passage_id, question_number, question_text, options, correct_option, explanation, marks, negative_marks)
-  values (v_section_id, v_passage_id, 120, 'The quarter with the lowest renewable percentage share is:', $JSON$[{"label": "A", "text": "Q1"}, {"label": "B", "text": "Q2"}, {"label": "C", "text": "Q3"}, {"label": "D", "text": "Q4"}]$JSON$::jsonb, 'A', NULL, 1, 0.25);
+  values (v_section_id, v_passage_id, 120, 'The quarter with the lowest renewable percentage share is:', $JSON${"A": "Q1", "B": "Q2", "C": "Q3", "D": "Q4"}$JSON$::jsonb, 'A', NULL, 1, 0.25);
 
 
   raise notice '✅ Quantitative Techniques seeded';
