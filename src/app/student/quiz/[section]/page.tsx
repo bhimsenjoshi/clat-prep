@@ -24,7 +24,7 @@ interface QuestionData {
 interface AnswerResult {
   is_correct: boolean;
   correct_option: string;
-  explanation: string;
+  explanation: string | Record<string, any>;
   your_answer: string;
 }
 
@@ -486,12 +486,41 @@ export default function QuizPage() {
             </div>
 
             {/* Explanation */}
-            {result.explanation && (
-              <div className="bg-card rounded-xl p-5 border border-theme">
-                <p className="text-xs font-semibold text-muted uppercase tracking-wider mb-2">Explanation</p>
-                <p className="text-sm text-secondary leading-relaxed">{result.explanation}</p>
-              </div>
-            )}
+            {result.explanation && (() => {
+              const exp = result.explanation;
+              if (typeof exp === 'string') {
+                return (
+                  <div className="bg-card rounded-xl p-5 border border-theme">
+                    <p className="text-xs font-semibold text-muted uppercase tracking-wider mb-2">Explanation</p>
+                    <p className="text-sm text-secondary leading-relaxed whitespace-pre-wrap">{exp}</p>
+                  </div>
+                );
+              }
+              return (
+                <div className="space-y-3">
+                  <div className="bg-success/20 border border-success/50 rounded-xl p-4">
+                    <p className="text-[11px] font-semibold text-success uppercase tracking-wider mb-1">✅ Why this is correct</p>
+                    <p className="text-sm text-secondary leading-relaxed">{exp.correct_answer_rationale || ''}</p>
+                  </div>
+                  {exp.incorrect_option_analysis && (
+                    <div className="bg-danger/20 border border-danger/50 rounded-xl p-4">
+                      <p className="text-[11px] font-semibold text-danger uppercase tracking-wider mb-2">❌ Why others are wrong</p>
+                      {Object.entries(exp.incorrect_option_analysis as Record<string, string>).map(([opt, reason]) => (
+                        <p key={opt} className="text-sm text-secondary leading-relaxed mb-1.5 last:mb-0">
+                          <span className="font-mono font-bold text-secondary">{opt}:</span> {reason}
+                        </p>
+                      ))}
+                    </div>
+                  )}
+                  {!result.is_correct && exp.wrong_answer_guidance && (
+                    <div className="bg-amber-900/30 border border-warning/50 rounded-xl p-4">
+                      <p className="text-[11px] font-semibold text-warning uppercase tracking-wider mb-1">💡 Pointer</p>
+                      <p className="text-sm text-secondary leading-relaxed">{exp.wrong_answer_guidance}</p>
+                    </div>
+                  )}
+                </div>
+              );
+            })()}
 
             {/* Next button */}
             <button

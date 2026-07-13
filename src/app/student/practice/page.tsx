@@ -30,7 +30,7 @@ interface Question {
 interface AnswerResult {
   is_correct: boolean;
   correct_option: string;
-  explanation: string;
+  explanation: string | Record<string, any>;
   your_answer: string;
   time_taken_seconds?: number;
 }
@@ -66,6 +66,9 @@ export default function PracticeQuiz() {
   const timerRef = useRef<number>(Date.now());
   const pauseAccumulatedRef = useRef<number>(0);
   const prevPassageIdRef = useRef<string | null>(null);
+  const nextQuestionRef = useRef<Question | null>(null);  // holds next Q securely until user clicks "Next"
+  const nextCorrectOptionRef = useRef<string | null>(null); // correct_option for the next question
+  const currentCorrectOptionRef = useRef<string | null>(null); // correct_option for instant client-side check
   const supabase = createClient();
 
   // Auth check + auto-start from dashboard card click
@@ -168,9 +171,11 @@ export default function PracticeQuiz() {
       }
 
       setSessionId(data.session_id);
-      setQuestion(data.question);
+      const { correct_option: co, ...safeQuestion } = data.question;
+      currentCorrectOptionRef.current = co || null;
+      setQuestion(safeQuestion);
       setQuestionIds(data.question_ids || []);
-      setRemainingIds((data.question_ids || []).filter((id: string) => id !== data.question?.id));
+      setRemainingIds((data.question_ids || []).filter((id: string) => id !== safeQuestion.id));
       setDailyRemaining(data.daily_remaining);
       setStarted(true);
     } catch (err) {
@@ -187,10 +192,10 @@ export default function PracticeQuiz() {
     const timeTaken = Math.round((Date.now() - timerRef.current) / 1000);
 
     // ── Instant client-side check ──
-    const isCorrectLocally = option === question.correct_option;
+    const isCorrectLocally = option === currentCorrectOptionRef.current;
     const localResult: AnswerResult = {
       is_correct: isCorrectLocally,
-      correct_option: question.correct_option ?? '?',
+      correct_option: currentCorrectOptionRef.current ?? '?',
       explanation: question.explanation ?? '',
       your_answer: option,
       time_taken_seconds: timeTaken,
@@ -218,7 +223,9 @@ export default function PracticeQuiz() {
       if (!res.ok) throw new Error(data.error || 'Failed to submit answer');
 
       if (data.next_question) {
-        setQuestion(data.next_question);
+        const { correct_option: nco, ...safeNext } = data.next_question;
+        nextQuestionRef.current = safeNext;
+        nextCorrectOptionRef.current = nco || null;
         setRemainingIds(data.remaining_ids);
       } else {
         setSessionComplete(true);
@@ -229,6 +236,12 @@ export default function PracticeQuiz() {
   };
 
   const nextQuestion = () => {
+    if (nextQuestionRef.current) {
+      setQuestion(nextQuestionRef.current);
+      currentCorrectOptionRef.current = nextCorrectOptionRef.current;
+      nextQuestionRef.current = null;
+      nextCorrectOptionRef.current = null;
+    }
     setResult(null);
     setSelectedOption(null);
     setTimerPaused(false);
@@ -265,6 +278,9 @@ export default function PracticeQuiz() {
     setTimerPaused(false);
     pauseAccumulatedRef.current = 0;
     setElapsedSeconds(0);
+    nextQuestionRef.current = null;
+    nextCorrectOptionRef.current = null;
+    currentCorrectOptionRef.current = null;
   };
 
   const goBackReview = () => {
@@ -372,9 +388,43 @@ export default function PracticeQuiz() {
         })()}
         </div>
         {response.explanation && (
-          <div className="mt-3 p-3 bg-info/20 border border-info/50 rounded-lg">
-            <p className="text-[10px] font-medium text-info uppercase tracking-wider mb-1">Explanation</p>
-            <p className="text-xs text-secondary leading-relaxed">{response.explanation}</p>
+          <div className="mt-3 space-y-3">
+            {(() => {
+              const exp = response.explanation;
+              // Handle both old string format and new structured object format
+              if (typeof exp === 'string') {
+                return (
+                  <div className="p-3 bg-info/20 border border-info/50 rounded-lg">
+                    <p className="text-[10px] font-medium text-info uppercase tracking-wider mb-1">Explanation</p>
+                    <p className="text-xs text-secondary leading-relaxed">{exp}</p>
+                  </div>
+                );
+              }
+              return (
+                <>
+                  <div className="p-3 bg-success/20 border border-success/50 rounded-lg">
+                    <p className="text-[10px] font-medium text-success uppercase tracking-wider mb-1">✅ Why this is correct</p>
+                    <p className="text-xs text-secondary leading-relaxed">{exp.correct_answer_rationale || ''}</p>
+                  </div>
+                  {exp.incorrect_option_analysis && (
+                    <div className="p-3 bg-danger/20 border border-danger/50 rounded-lg">
+                      <p className="text-[10px] font-medium text-danger uppercase tracking-wider mb-2">❌ Why others are wrong</p>
+                      {Object.entries(exp.incorrect_option_analysis as Record<string, string>).map(([opt, reason]) => (
+                        <p key={opt} className="text-xs text-secondary leading-relaxed mb-1.5 last:mb-0">
+                          <span className="font-mono font-bold text-secondary">{opt}:</span> {reason}
+                        </p>
+                      ))}
+                    </div>
+                  )}
+                  {!response.is_correct && exp.wrong_answer_guidance && (
+                    <div className="p-3 bg-amber-900/30 border border-warning/50 rounded-lg">
+                      <p className="text-[10px] font-medium text-warning uppercase tracking-wider mb-1">💡 Pointer</p>
+                      <p className="text-xs text-secondary leading-relaxed">{exp.wrong_answer_guidance}</p>
+                    </div>
+                  )}
+                </>
+              );
+            })()}
           </div>
         )}
       </>
