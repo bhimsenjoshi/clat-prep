@@ -162,13 +162,24 @@ function normalise(q, passageId, questionNumber) {
     parsedOptions = obj;
   }
 
+  // If correct_answer is a value (not a label), convert to label
+  let resolvedAnswer = String(correct_answer);
+  if (parsedOptions && typeof parsedOptions === 'object' && !['A','B','C','D','E','F'].includes(resolvedAnswer)) {
+    for (const [label, value] of Object.entries(parsedOptions)) {
+      if (String(value).trim() === resolvedAnswer.trim()) {
+        resolvedAnswer = label;
+        break;
+      }
+    }
+  }
+
   const passage = q.passage || null;
 
   return {
     question_text,
     passage: passageId ? null : passage,
     options: typeof parsedOptions === 'object' ? parsedOptions : {},
-    correct_option: String(correct_answer),
+    correct_option: resolvedAnswer,
     explanation: q.explanation || null,
     difficulty: (q.difficulty || 'medium').toLowerCase(),
     source: 'daily',
