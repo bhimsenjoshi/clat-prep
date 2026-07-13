@@ -1,5 +1,5 @@
 # CLAT Prep — Test Suite Report
-## Generated: July 13, 2026 | Section Name Migration + Passage-Based Questions
+## Generated: July 13, 2026 | v2 — 6 Q per passage + quality improvements
 
 ### Test Suite Overview
 
@@ -42,13 +42,13 @@
 | Rejects invalid slugs | `english`, `current-affairs` not in map |
 | Is bijective — slug → section → slug | Roundtrip preserves value |
 
-### 3. Practice Question Metadata (9 tests)
+### 3. Practice Question Metadata (11 tests)
 | Test | Description |
 |---|---|
 | Default marks are 1 | `marks: 1` |
 | Default negative marks are 0.25 | `negative_marks: 0.25` |
-| Question_number sequential when provided | `[1, 2, 3, 4, 5]` |
-| Passage_id links questions together | All 5 share same ID |
+| Question_number sequential when provided (6 questions) | `[1, 2, 3, 4, 5, 6]` |
+| Passage_id links questions together | All 6 share same ID |
 | Passage_id can be null for standalone | Null allowed |
 | Passage text stripped when passage_id set | No text duplication |
 | Accepts all official section names | All 5 valid |
@@ -60,11 +60,11 @@
 ### 4. Passage-Based Question Generation (5 tests)
 | Test | Description |
 |---|---|
-| 1 passage → 5 questions | Correct count |
+| 1 passage → 6 questions (matches CLAT 2025) | Correct count |
 | All questions share same passage_id | Single shared UUID |
 | Passage has required fields | section, content, difficulty all present |
-| Exactly 1 passage per section call | `passagesPerCall = 1` |
-| Passage + 5 questions = 6 DB rows | `1 + 5 = 6` |
+| Exactly 1 passage per section call | 5 sections, 1 each |
+| Passage + 6 questions = 7 DB rows | `1 + 6 = 7` |
 
 ### 5. Question Normalisation Logic (14 tests)
 | Test | Description |
@@ -80,7 +80,7 @@
 | Handles question_text vs question naming | Both `question_text` and `question` accepted |
 | Preserves custom marks/negative marks from AI | Override respected |
 | Defaults marks to 1 when not provided | Default |
-| Assigns sequential question numbers | `[1,2,3,4,5]` |
+| Assigns sequential question numbers (6) | `[1,2,3,4,5,6]` |
 
 ### 6. AI Prompt Building (4 tests)
 | Test | Description |
@@ -88,7 +88,7 @@
 | Correct prompt per section | Each mentions its section name |
 | Falls back to English Language | Unknown section → fallback |
 | All prompts mention "passage" | Passage-based generation |
-| All prompts mention 5 | `QS_PER_PASSAGE = 5` |
+| All prompts have right number (6) | `QS_PER_PASSAGE = 6` |
 
 ### 7. DB Schema Validation (8 tests)
 | Test | Description |
@@ -118,31 +118,37 @@
 
 ---
 
-## `exam-flow.test.ts` — 32 Tests (no changes from previous)
+## `exam-flow.test.ts` — 32 Tests (no changes from v1)
 
-## `timer-countdown.test.ts` — 10 Tests (no changes from previous)
+## `timer-countdown.test.ts` — 10 Tests (no changes from v1)
 
 ---
 
-## Migration: What Changed
+## Quality Improvements (v2)
 
-### DB Schema
-- `practice_questions.section` CHECK: old names → official CLAT 2025 names
-- `quiz_sessions.section` CHECK: old names → official CLAT 2025 names
-- `sections.name` CHECK: old names → official CLAT 2025 names
-- `practice_questions` new columns: `marks` (int, default 1), `negative_marks` (numeric, default 0.25), `passage_id` (uuid, FK), `question_number` (int)
-- New table: `practice_passages` (id UUID PK, section, title, source, content, difficulty, created_at)
-- `profiles` new columns: `daily_practice_passage_ids` (uuid[]), `last_passage_section` (text)
+| Change | Before | After |
+|---|---|---|
+| Questions per passage | 5 | **6** (matches CLAT 2025) |
+| English Language prompt | Allowed recall questions | **Banned** "According to the passage...", requires inference/author-intent/tone/vocab-in-context |
+| Current Affairs prompt | Allowed trivia + news-report passages | **Banned** trivia (dates/launch sites/names), uses editorial/analysis style |
+| Legal Reasoning | Good | Added requirement for hypothetical variations |
+| Logical Reasoning | Good | Added strengthen/weaken/parallel-reasoning requirements |
+| Labels array for normalise | A,B,C,D,E | A,B,C,D,E,F (supports 6 options) |
 
-### Code Changes
-- `src/types/index.ts` — `SectionName` type updated
-- `src/app/student/quiz/page.tsx` — SECTIONS array updated
-- `src/app/student/quiz/[section]/page.tsx` — SECTION_MAP + SECTION_ICONS updated
-- `src/app/student/practice/page.tsx` — SECTIONS array updated
-- `src/app/api/quiz/start/route.ts` — validSections updated
-- `scripts/daily-questions-cron.mjs` — Complete rewrite: passage-based generation, metadata, practice_passages table
-- `src/lib/db/practice_quiz.sql` — CHECK constraints updated
-- `src/lib/db/schema.sql` — sections CHECK updated
-- `src/lib/db/seed.sql` — section names updated
-- `src/lib/db/seed_practice_questions.sql` — section names updated
-- `supabase/migrations/20260713_official_section_names.sql` — Full migration script
+### Post-improvement sample: English Language
+All 6 questions are inference/attitude/meaning-in-context:
+1. "The author would most likely agree with..." ✅ (inference)
+2. "The author's attitude toward 'dogma'..." ✅ (tone)
+3. "The word 'sterile' most nearly means..." ✅ (vocab in context)
+4. "It can be inferred that..." ✅ (inference)
+5. "Primary purpose in mentioning X is to..." ✅ (author's intent)
+6. "Which statement is most consistent..." ✅ (thematic consistency)
+
+### Post-improvement sample: Current Affairs
+No trivia questions — all test understanding:
+1. "Central theme of the passage" ✅
+2. "Negative consequence of overly strict regulation" ✅
+3. "Author implies India's approach should be..." ✅
+4. "What does 'wait-and-watch' refer to?" ✅
+5. "What can be inferred about AI deepfakes?" ✅
+6. "Passage suggests ideal regulation should be..." ✅

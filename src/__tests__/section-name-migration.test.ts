@@ -139,10 +139,10 @@ describe('Practice Question Metadata', () => {
   });
 
   it('question_number is optional and sequential when provided', () => {
-    const questions = [1, 2, 3, 4, 5].map(n =>
+    const questions = [1, 2, 3, 4, 5, 6].map(n =>
       createDefaultQuestion({ question_number: n, question_text: `Q${n}` })
     );
-    expect(questions.map(q => q.question_number)).toEqual([1, 2, 3, 4, 5]);
+    expect(questions.map(q => q.question_number)).toEqual([1, 2, 3, 4, 5, 6]);
   });
 
   it('passage_id links questions to a passage when set', () => {
@@ -215,7 +215,7 @@ interface PracticePassage {
 }
 
 describe('Passage-Based Question Generation', () => {
-  it('1 passage generates 5 questions', () => {
+  it('1 passage generates 6 questions', () => {
     const passage: PracticePassage = {
       section: 'English Language',
       title: 'Test Passage',
@@ -224,7 +224,7 @@ describe('Passage-Based Question Generation', () => {
       difficulty: 'medium',
     };
 
-    const expectedQuestions = 5;
+    const expectedQuestions = 6;
     const questions = Array.from({ length: expectedQuestions }, (_, i) =>
       createDefaultQuestion({
         section: passage.section,
@@ -246,7 +246,7 @@ describe('Passage-Based Question Generation', () => {
 
   it('all questions in a passage share the same passage_id', () => {
     const passageId = 'unique-passage-uuid';
-    const questions = Array.from({ length: 5 }, (_, i) =>
+    const questions = Array.from({ length: 6 }, (_, i) =>
       createDefaultQuestion({ passage_id: passageId, question_number: i + 1 })
     );
     questions.forEach(q => expect(q.passage_id).toBe(passageId));
@@ -275,10 +275,10 @@ describe('Passage-Based Question Generation', () => {
     expect(sectionCalls).toBe(5);
   });
 
-  it('passage + 5 questions = 6 DB rows per section', () => {
+  it('passage + 6 questions = 7 DB rows per section', () => {
     const passageRows = 1; // 1 practice_passages row
-    const questionRows = 5; // 5 practice_questions rows
-    expect(passageRows + questionRows).toBe(6);
+    const questionRows = 6; // 6 practice_questions rows
+    expect(passageRows + questionRows).toBe(7);
   });
 });
 
@@ -477,21 +477,21 @@ describe('Question Normalisation Logic', () => {
   });
 
   it('assigns sequential question numbers', () => {
-    const questions = [1, 2, 3, 4, 5].map(n =>
+    const questions = [1, 2, 3, 4, 5, 6].map(n =>
       normalise(
         { question_text: `Q${n}`, options: { A: '1', B: '2', C: '3', D: '4' }, correct_answer: 'A' },
         'passage-x',
         n
       )
     );
-    expect(questions.map(q => q!.question_number)).toEqual([1, 2, 3, 4, 5]);
+    expect(questions.map(q => q!.question_number)).toEqual([1, 2, 3, 4, 5, 6]);
   });
 });
 
 // ─── AI Prompt Building Logic ───
 
 function buildPassagePrompt(section: string): string {
-  const QS_PER_PASSAGE = 5;
+  const QS_PER_PASSAGE = 6;
   const prompts: Record<string, string> = {
     'English Language': `You are a CLAT English Language expert. Generate exactly 1 reading comprehension passage followed by exactly ${QS_PER_PASSAGE} questions`,
     'Current Affairs Including General Knowledge': `You are a CLAT Current Affairs & GK expert. Generate exactly 1 current affairs passage followed by exactly ${QS_PER_PASSAGE} questions`,
@@ -523,10 +523,11 @@ describe('AI Prompt Building', () => {
     }
   });
 
-  it('all prompts mention 5 questions', () => {
+  it('all prompts have the right number of questions', () => {
+    const QS = 6;
     for (const section of OFFICIAL_SECTION_NAMES) {
       const prompt = buildPassagePrompt(section);
-      expect(prompt).toMatch(/5/);
+      expect(prompt).toContain(String(QS));
     }
   });
 });

@@ -3,9 +3,16 @@
  * Daily Question Generator — Zero-dependency Cron Executable
  *
  * Generates CLAT-realistic passage-based questions matching the official CLAT 2025 format.
- * Each section: 1 passage → 5 questions (mirrors real exam structure).
+ * Each section: 1 passage → 6 questions (matches real CLAT exactly).
  * Questions linked to passages via practice_passages table with metadata
  * (marks=1, negative_marks=0.25, question_number).
+ *
+ * Quality standards enforced via prompts:
+ * - English Language: inference/interpretation/tone questions only — NO direct recall
+ * - Current Affairs: editorial/analysis passages — NO trivia questions
+ * - Legal Reasoning: principle application, fact-pattern analysis
+ * - Logical Reasoning: strengthen/weaken/assumption/inference
+ * - Quantitative Techniques: data interpretation with clean numbers
  *
  * Uses Node 18+ built-in fetch for both DeepSeek API and Supabase REST API.
  * No npm install needed.
@@ -44,7 +51,7 @@ for (const envPath of envPaths) {
 }
 
 const SECTIONS = ['English Language', 'Current Affairs Including General Knowledge', 'Legal Reasoning', 'Logical Reasoning', 'Quantitative Techniques'];
-const QS_PER_PASSAGE = 5;
+const QS_PER_PASSAGE = 6;
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
@@ -101,8 +108,6 @@ async function callDeepSeek(systemPrompt, userPrompt) {
     }
   }
 
-  // New response format: { passage: {...}, questions: [...] }
-  // OR legacy: { questions: [...] } with embedded passages
   return {
     passageData: parsed.passage || null,
     questions: parsed.questions || (Array.isArray(parsed) ? parsed : [parsed]),
@@ -139,7 +144,6 @@ function normalise(q, passageId, questionNumber) {
   const correct_answer = q.correct_option || q.correct_answer || q.correctAnswer || q.answer;
   let options = q.options;
 
-  // Some AI responses embed the question in passage; use passage as fallback
   if (!question_text && q.passage) {
     const sentences = q.passage.match(/[^.!?]+[.!?]/g);
     question_text = (sentences && sentences[0]) ? sentences[0].trim() : q.passage.substring(0, 150);
@@ -151,21 +155,18 @@ function normalise(q, passageId, questionNumber) {
   if (typeof parsedOptions === 'string') {
     try { parsedOptions = JSON.parse(parsedOptions); } catch { return null; }
   }
-  // Convert array options to A/B/C/D object
   if (Array.isArray(parsedOptions)) {
-    const labels = ['A', 'B', 'C', 'D', 'E'];
+    const labels = ['A', 'B', 'C', 'D', 'E', 'F'];
     const obj = {};
     parsedOptions.forEach((opt, i) => { if (i < labels.length) obj[labels[i]] = String(opt); });
     parsedOptions = obj;
   }
 
-  // Use passage from the AI response only if no passage_id is provided
-  // (if we generated a passage separately, the question's passage field is redundant)
   const passage = q.passage || null;
 
   return {
     question_text,
-    passage: passageId ? null : passage, // Don't duplicate passage text if linked via ID
+    passage: passageId ? null : passage,
     options: typeof parsedOptions === 'object' ? parsedOptions : {},
     correct_option: String(correct_answer),
     explanation: q.explanation || null,
@@ -183,25 +184,57 @@ function normalise(q, passageId, questionNumber) {
 
 function buildPassagePrompt(section) {
   const prompts = {
-    'English Language': `You are a CLAT English Language expert. Generate exactly 1 reading comprehension passage (250-400 words) followed by exactly ${QS_PER_PASSAGE} questions based on that passage. Return JSON with:
+    'English Language': `You are a CLAT English Language expert. Generate a reading comprehension passage (300-450 words) — use a well-written excerpt on a topic like philosophy, literature, science, or society (not a news article). The passage must be substantial enough for deep analysis.
+
+Follow exactly with ${QS_PER_PASSAGE} questions. CRITICAL RULES for the questions:
+- NO "According to the passage, what did X say/do?" — these are banned
+- NO "what is X according to the passage" — banned
+- Questions must test: inference, author's tone/attitude, word meaning IN CONTEXT, implied meaning, the author would most likely agree/disagree with, purpose of a reference, what can be inferred, logical extension of the argument
+- At least 2 questions should involve the author's opinion, attitude, or intent
+- Include 1 vocabulary-in-context question
+- Options must be nuanced — not trivially right/wrong
+
+Return JSON with:
   - "passage": { "title": "Short title", "content": "The passage text", "source": "Source or 'Original for CLATly'", "difficulty": "easy|medium|hard" }
   - "questions": array of ${QS_PER_PASSAGE} objects, each with:
-    - "question_text": string
+    - "question_text": string (must NOT start with "According to the passage")
     - "options": object with keys A,B,C,D and string values
     - "correct_answer": "A"
     - "explanation": string
     - "difficulty": "easy|medium|hard"
     - "tags": array of topic strings`,
-    'Current Affairs Including General Knowledge': `You are a CLAT Current Affairs & GK expert. Generate exactly 1 current affairs passage (200-350 words) based on real recent news/events (2025-2026) followed by exactly ${QS_PER_PASSAGE} questions. Return JSON with:
-  - "passage": { "title": "Short title", "content": "The passage text", "source": "Source or 'Original for CLATly'", "difficulty": "easy|medium|hard" }
+
+    'Current Affairs Including General Knowledge': `You are a CLAT Current Affairs & GK expert. Generate a current affairs passage (250-400 words) in the style of an editorial or analytical opinion piece — NOT a news report. The passage should present an analysis of a significant recent issue (economy, policy, international relations, technology, environment — 2025-2026).
+
+Follow exactly with ${QS_PER_PASSAGE} questions. CRITICAL RULES:
+- NO trivia questions (dates, launch sites, names of schemes, abbreviations) — these are BANNED
+- NO "Where was X launched" / "When did X happen" / "Who is the head of X"
+- Questions must test: understanding of the issue, implications, cause-effect, the author's argument, what can be inferred from the analysis, which statement best reflects the passage's central theme
+- Every question should be answerable by reading and understanding the passage — NOT by prior knowledge
+
+Return JSON with:
+  - "passage": { "title": "Short title", "content": "The passage text (editorial/analysis style)", "source": "Source or 'Original for CLATly'", "difficulty": "easy|medium|hard" }
   - "questions": array of ${QS_PER_PASSAGE} objects (same format as above)`,
-    'Legal Reasoning': `You are a CLAT Legal Reasoning expert. Generate exactly 1 legal scenario passage (200-400 words) presenting a legal principle and fact pattern, followed by exactly ${QS_PER_PASSAGE} questions testing application of legal principles. Return JSON with:
+
+    'Legal Reasoning': `You are a CLAT Legal Reasoning expert. Generate exactly 1 legal scenario passage (250-450 words) presenting a legal principle (from contract, tort, criminal law, constitution) followed by a fact pattern. Follow exactly with ${QS_PER_PASSAGE} questions.
+
+Questions must test: application of the legal principle to variations of the fact pattern, distinctions between similar legal concepts, exceptions to the rule, which party wins and why. At least 3 questions should present hypothetical variations ("what if...") that require applying the principle to new facts.
+
+Return JSON with:
   - "passage": { "title": "Legal principle title", "content": "The passage text with legal principle and facts", "source": "Legal principle or 'Original for CLATly'", "difficulty": "easy|medium|hard" }
   - "questions": array of ${QS_PER_PASSAGE} objects (same format as above)`,
-    'Logical Reasoning': `You are a CLAT Logical Reasoning expert. Generate exactly 1 argument/critical reasoning passage (150-300 words) presenting an argument or reasoning scenario, followed by exactly ${QS_PER_PASSAGE} questions testing critical thinking, assumptions, inferences, and conclusions. Return JSON with:
+
+    'Logical Reasoning': `You are a CLAT Logical Reasoning expert. Generate exactly 1 argument/critical reasoning passage (150-300 words) presenting a structured argument with a clear conclusion and supporting premises. Follow exactly with ${QS_PER_PASSAGE} questions.
+
+Questions must include (distribute across the 6): main conclusion, inference, assumption (necessary/sufficient), strengthen, weaken, flaw in reasoning, parallel reasoning, or role of a statement. At least one strengthen and one weaken question required.
+
+Return JSON with:
   - "passage": { "title": "Short title", "content": "The passage text", "source": "Source or 'Original for CLATly'", "difficulty": "easy|medium|hard" }
   - "questions": array of ${QS_PER_PASSAGE} objects (same format as above)`,
-    'Quantitative Techniques': `You are a CLAT Quantitative Techniques expert. Generate exactly 1 data interpretation passage (a chart, table, or data set described in text) followed by exactly ${QS_PER_PASSAGE} questions requiring calculations, percentages, ratios, and data analysis. Return JSON with:
+
+    'Quantitative Techniques': `You are a CLAT Quantitative Techniques expert. Generate exactly 1 data interpretation passage (a chart, table, or data set described in text) followed by exactly ${QS_PER_PASSAGE} questions requiring calculations, percentages, ratios, and data analysis. Ensure data points are clean whole numbers and calculations are non-trivial (require actual computation, not just reading a value off the table). Include at least one percentage change and one ratio question.
+
+Return JSON with:
   - "passage": { "title": "Data set title", "content": "Description of the data including the data set/table", "source": "Source or 'Original for CLATly'", "difficulty": "easy|medium|hard" }
   - "questions": array of ${QS_PER_PASSAGE} objects (same format as above)`,
   };
@@ -268,7 +301,6 @@ async function main() {
       if (validQuestions.length === 0) {
         console.log(`    ⚠️ No valid questions after normalisation`);
         if (passageId) {
-          // Clean up orphaned passage
           const delUrl = `${SUPABASE_URL.replace(/\/$/, '')}/rest/v1/practice_passages?id=eq.${passageId}`;
           await fetch(delUrl, { method: 'DELETE', headers: SUPABASE_HEADERS });
         }
