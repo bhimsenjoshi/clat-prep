@@ -19,7 +19,11 @@ with open('/home/bhimsen_joshi/clat-prep/.env') as f:
             k, _, v = line.partition('=')
             env[k.strip()] = v.strip()
 
-SUPABASE_URL = env.get('NEXT_PUBLIC_SUPABASE_URL', 'https://qjhxokmhbhyrykuozwhc.supabase.co')
+SUPABASE_URL = env.get('NEXT_PUBLIC_SUPABASE_URL', '')
+
+if not SUPABASE_URL:
+    print("ERROR: NEXT_PUBLIC_SUPABASE_URL not found in .env")
+    sys.exit(1)
 SERVICE_KEY = env.get('SUPABASE_SERVICE_ROLE_KEY', '')
 
 if not SERVICE_KEY:

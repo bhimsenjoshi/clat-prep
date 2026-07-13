@@ -2,6 +2,7 @@
 """Export all practice questions in a format suitable for LLM review."""
 import json
 import os
+import sys
 import urllib.request
 
 # Read .env
@@ -13,8 +14,15 @@ with open('/home/bhimsen_joshi/clat-prep/.env') as f:
             k, _, v = line.partition('=')
             env[k.strip()] = v.strip()
 
-SUPABASE_URL = env.get('NEXT_PUBLIC_SUPABASE_URL', 'https://qjhxokmhbhyrykuozwhc.supabase.co')
+SUPABASE_URL = env.get('NEXT_PUBLIC_SUPABASE_URL', '')
 SERVICE_KEY = env.get('SUPABASE_SERVICE_ROLE_KEY', '')
+
+if not SUPABASE_URL:
+    print("ERROR: NEXT_PUBLIC_SUPABASE_URL not found in .env")
+    sys.exit(1)
+if not SERVICE_KEY:
+    print("ERROR: SUPABASE_SERVICE_ROLE_KEY not found in .env")
+    sys.exit(1)
 
 # Query all questions sorted by section
 url = f"{SUPABASE_URL}/rest/v1/practice_questions?select=id,section,topic,question_text,passage,options,correct_option,difficulty,explanation,tags&order=section.asc,id.asc"

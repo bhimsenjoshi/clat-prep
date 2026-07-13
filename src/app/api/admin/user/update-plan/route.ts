@@ -3,8 +3,28 @@ import { createClient } from '@supabase/supabase-js';
 import { sendEmail } from '@/lib/email';
 import { cookies } from 'next/headers';
 
+// ─── Simple in-memory rate limiter ───
+const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
+function checkRateLimit(key: string, maxRequests: number, windowMs: number): boolean {
+  const now = Date.now();
+  const entry = rateLimitMap.get(key);
+  if (!entry || now > entry.resetAt) {
+    rateLimitMap.set(key, { count: 1, resetAt: now + windowMs });
+    return true;
+  }
+  if (entry.count >= maxRequests) return false;
+  entry.count++;
+  return true;
+}
+
 export async function POST(req: NextRequest) {
   try {
+    // Rate limit: max 5 requests per minute per IP
+    const ip = req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || 'unknown';
+    if (!checkRateLimit(`admin-update-plan:${ip}`, 5, 60_000)) {
+      return NextResponse.json({ error: 'Rate limited. Try again in a minute.' }, { status: 429 });
+    }
+
     const { student_id, new_plan } = await req.json() as {
       student_id: string;
       new_plan: 'free' | 'premium' | 'max';
