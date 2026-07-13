@@ -119,6 +119,20 @@ ALTER TABLE public.profiles
   ADD COLUMN IF NOT EXISTS last_passage_section text;
 
 -- ============================================================
+-- STEP 8: RLS policies for practice_passages
+-- ============================================================
+
+ALTER TABLE public.practice_passages ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY IF NOT EXISTS "Anyone can read practice passages"
+  ON public.practice_passages FOR SELECT
+  USING (true);
+
+CREATE POLICY IF NOT EXISTS "Admin/service can insert practice passages"
+  ON public.practice_passages FOR INSERT
+  WITH CHECK (true);
+
+-- ============================================================
 -- VERIFICATION
 -- ============================================================
 -- SELECT DISTINCT section FROM practice_questions ORDER BY section;
