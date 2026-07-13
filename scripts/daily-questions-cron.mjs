@@ -136,7 +136,7 @@ async function supabaseGet(url) {
 
 function normalise(q, passageId, questionNumber) {
   let question_text = q.question_text || q.question;
-  const correct_answer = q.correct_option || q.correct_answer || q.correctAnswer;
+  const correct_answer = q.correct_option || q.correct_answer || q.correctAnswer || q.answer;
   let options = q.options;
 
   // Some AI responses embed the question in passage; use passage as fallback
