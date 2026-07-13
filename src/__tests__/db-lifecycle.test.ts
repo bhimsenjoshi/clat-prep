@@ -244,4 +244,34 @@ describe('Attempt lifecycle scenario tests', () => {
     const freshMatch = fresh.match(/│\s*([a-f0-9-]{36})\s*│/);
     if (freshMatch) runSQL(`DELETE FROM attempts WHERE id = '${freshMatch[1]}'`);
   }, TIMEOUT);
+
+  it('Scenario: Retake INSERT must succeed (no unique constraint blocking)', () => {
+    // Step 1: Insert a submitted attempt (simulating completed exam)
+    const first = runSQL(
+      `INSERT INTO attempts (test_id, student_id, submitted_at) VALUES ('${TEST_ID}', '${USER_ID}', NOW()) RETURNING id;`
+    );
+    const firstMatch = first.match(/│\s*([a-f0-9-]{36})\s*│/);
+    expect(firstMatch).not.toBeNull();
+    const firstId = firstMatch![1];
+    console.log('Submitted attempt:', firstId);
+
+    // Step 2: Try to insert a NEW attempt for retake
+    // This MUST succeed — no unique constraint blocking
+    const retake = runSQL(
+      `INSERT INTO attempts (test_id, student_id) VALUES ('${TEST_ID}', '${USER_ID}') RETURNING id;`
+    );
+    const retakeMatch = retake.match(/│\s*([a-f0-9-]{36})\s*│/);
+    expect(retakeMatch).not.toBeNull();
+    const retakeId = retakeMatch![1];
+    console.log('Retake attempt created:', retakeId);
+
+    // Step 3: Verify the new attempt has no submitted_at
+    const check = runSQL(
+      `SELECT submitted_at IS NULL as is_unsubmitted FROM attempts WHERE id = '${retakeId}';`
+    );
+    expect(check).toContain('t'); // is_unsubmitted = true
+
+    // Clean up
+    runSQL(`DELETE FROM attempts WHERE id IN ('${firstId}', '${retakeId}')`);
+  }, TIMEOUT);
 });
