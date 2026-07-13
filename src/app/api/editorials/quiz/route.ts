@@ -10,8 +10,22 @@ interface QuizQuestion {
 
 export async function POST(req: NextRequest) {
   try {
-    const { user } = await getServerUser();
+    const { supabase, user } = await getServerUser();
     if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+    // ─── Subscription check: premium or max only ───
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('subscription_plan')
+      .eq('id', user.id)
+      .single();
+    const plan = profile?.subscription_plan || 'free';
+    if (plan !== 'premium' && plan !== 'max') {
+      return NextResponse.json({
+        error: 'Editorial quiz is available for premium and max users only.',
+        code: 'UPGRADE_REQUIRED',
+      }, { status: 403 });
+    }
 
     const { headline, source } = await req.json();
 

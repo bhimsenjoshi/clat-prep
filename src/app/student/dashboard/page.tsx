@@ -103,6 +103,7 @@ export default function StudentDashboard() {
   const [quizLoading, setQuizLoading] = useState(false);
   const [quizAnswers, setQuizAnswers] = useState<number[]>([]);
   const [quizSubmitted, setQuizSubmitted] = useState(false);
+  const [quizError, setQuizError] = useState<string | null>(null);
   const router = useRouter();
   const supabase = createClient();
 
@@ -728,19 +729,26 @@ export default function StudentDashboard() {
                                     setQuizQuestions([]);
                                     setQuizAnswers([]);
                                     setQuizSubmitted(false);
+                                    setQuizError(null);
                                     setQuizLoading(true);
                                     fetch('/api/editorials/quiz', {
                                       method: 'POST',
                                       headers: { 'Content-Type': 'application/json' },
                                       body: JSON.stringify({ headline: item.title, source: item.source }),
                                     })
-                                      .then(r => r.json())
-                                      .then(data => {
+                                      .then(async r => {
+                                        const data = await r.json();
+                                        if (!r.ok) {
+                                          throw new Error(data.error || 'Quiz generation failed');
+                                        }
                                         setQuizQuestions(data.questions || []);
                                         setQuizAnswers(new Array(data.questions?.length || 3).fill(-1));
                                         setQuizLoading(false);
                                       })
-                                      .catch(() => setQuizLoading(false));
+                                      .catch(err => {
+                                        setQuizError(err.message);
+                                        setQuizLoading(false);
+                                      });
                                   }}
                                   className="text-[11px] font-medium px-2.5 py-1 rounded-lg bg-elevated/50 text-secondary hover:bg-tint-purple hover:text-purple-200 transition flex items-center gap-1"
                                 >
@@ -792,7 +800,25 @@ export default function StudentDashboard() {
                   ⚠️ <strong className="text-primary">Practice only.</strong> These questions are AI-generated on topics similar to the editorial — they do <em>not</em> reproduce or summarize the original article's content. For accurate editorial analysis, read the full article.
                 </div>
 
-                {quizLoading ? (
+                {quizError && !quizLoading ? (
+                  <div className="text-center py-8 space-y-4">
+                    <p className="text-4xl">👑</p>
+                    <p className="text-sm text-secondary">{quizError}</p>
+                    <Link
+                      href="/student/profile"
+                      className="inline-flex px-6 py-2.5 rounded-xl font-medium bg-gradient-to-r from-amber-600 to-orange-600 text-white hover:from-amber-500 hover:to-orange-500 transition shadow-theme-sm"
+                    >
+                      Upgrade to Premium →
+                    </Link>
+                    <br />
+                    <button
+                      onClick={() => setQuizzingArticle(null)}
+                      className="text-xs text-muted hover:text-secondary mt-2"
+                    >
+                      Close
+                    </button>
+                  </div>
+                ) : quizLoading ? (
                   <div className="text-center py-8">
                     <div className="animate-spin w-8 h-8 border-2 border-purple-400 border-t-transparent rounded-full mx-auto mb-3" />
                     <p className="text-sm text-secondary">Generating quiz questions...</p>
