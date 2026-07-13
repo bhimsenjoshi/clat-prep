@@ -118,7 +118,16 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({
       session_id: sessionResult.data.id,
-      question: questionResult.data,
+      question: {
+        ...questionResult.data,
+        explanation: (() => {
+          const raw = questionResult.data?.explanation;
+          if (typeof raw === 'string') {
+            try { return JSON.parse(raw); } catch { return raw; }
+          }
+          return raw;
+        })(),
+      },
       question_ids: questionIds, // Client uses this for fast PK-based next-question lookup
       daily_remaining: profile.subscription_plan === 'free'
         ? (profile.daily_free_questions ?? 10)

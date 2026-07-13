@@ -115,7 +115,13 @@ export async function POST(req: NextRequest) {
       result: {
         is_correct,
         correct_option: questionRes.data.correct_option,
-        explanation: questionRes.data.explanation,
+        explanation: (() => {
+          const raw = questionRes.data.explanation;
+          if (typeof raw === 'string') {
+            try { return JSON.parse(raw); } catch { return raw; }
+          }
+          return raw;
+        })(),
         your_answer: selected_option,
         time_taken_seconds,
       },
