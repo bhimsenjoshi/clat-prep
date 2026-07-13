@@ -20,6 +20,7 @@ interface Question {
   topic: string;
   question_text: string;
   passage: string | null;
+  passage_id: string | null;
   options: Record<string, string>;
   difficulty: string;
   correct_option?: string;
@@ -60,8 +61,12 @@ export default function PracticeQuiz() {
   const [trackedResponses, setTrackedResponses] = useState<TrackedResponse[]>([]);
   const [timerPaused, setTimerPaused] = useState(false);
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
+  const [passageText, setPassageText] = useState<string | null>(null);
+  const [passageExpanded, setPassageExpanded] = useState(true);
   const timerRef = useRef<number>(Date.now());
   const pauseAccumulatedRef = useRef<number>(0);
+  const prevPassageIdRef = useRef<string | null>(null);
+  const supabase = createClient();
 
   // Auth check + auto-start from dashboard card click
   useEffect(() => {
@@ -88,6 +93,27 @@ export default function PracticeQuiz() {
     }, 250);
     return () => clearInterval(interval);
   }, [started, completed, result, timerPaused]);
+
+  // ── Fetch passage text from practice_passages ──
+  useEffect(() => {
+    if (!question?.passage_id) {
+      setPassageText(null);
+      prevPassageIdRef.current = null;
+      setPassageExpanded(true);
+      return;
+    }
+    if (question.passage_id === prevPassageIdRef.current && passageText) return;
+    prevPassageIdRef.current = question.passage_id;
+
+    supabase
+      .from('practice_passages')
+      .select('content')
+      .eq('id', question.passage_id)
+      .single()
+      .then(({ data }) => {
+        if (data?.content) setPassageText(data.content);
+      });
+  }, [question?.passage_id, supabase]);
 
   const togglePause = () => {
     if (timerPaused) {
@@ -209,6 +235,7 @@ export default function PracticeQuiz() {
     pauseAccumulatedRef.current = 0;
     setElapsedSeconds(0);
     timerRef.current = Date.now();
+    setPassageExpanded(true);
   };
 
   const endSession = async () => {
@@ -285,10 +312,26 @@ export default function PracticeQuiz() {
   function ResultBody({ response, question: q }: { response: AnswerResult; question: Question }) {
     return (
       <>
-        {q.passage && (
-          <div className="mb-3 p-3 bg-card-hover border border-theme/50 rounded-lg">
-            <p className="text-[10px] font-medium text-accent uppercase tracking-wider mb-1">Passage</p>
-            <p className="text-xs text-secondary leading-relaxed">{q.passage}</p>
+        {(passageText || q.passage) && (
+          <div className="mb-3 bg-card border border-theme rounded-xl overflow-hidden">
+            <button
+              onClick={() => setPassageExpanded(!passageExpanded)}
+              className="w-full flex items-center justify-between px-4 py-2.5 text-left hover:bg-card-hover transition"
+            >
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-medium text-accent uppercase tracking-wide">Passage</span>
+              </div>
+              <svg className={`w-3.5 h-3.5 text-secondary transition-transform ${passageExpanded ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            {passageExpanded && (
+              <div className="px-4 pb-4 max-h-48 overflow-y-auto">
+                <p className="text-xs text-secondary leading-relaxed whitespace-pre-wrap">
+                  {passageText || q.passage}
+                </p>
+              </div>
+            )}
           </div>
         )}
         <p className="text-sm font-medium mb-3 text-primary">{q.question_text}</p>
@@ -546,11 +589,27 @@ export default function PracticeQuiz() {
       </div>
 
       <div className="max-w-3xl mx-auto px-4 py-6">
-        {/* Passage — only show when NOT viewing a historic review */}
-        {question?.passage && !result && (
-          <div className="bg-card border border-theme rounded-xl p-5 mb-4">
-            <p className="text-xs text-accent uppercase tracking-wide font-medium mb-2">Passage</p>
-            <p className="text-sm text-secondary leading-relaxed">{question.passage}</p>
+        {/* Passage — collapsible (from practice_passages or inline) */}
+        {question && (passageText || question.passage) && !result && (
+          <div className="mb-4 bg-card border border-theme rounded-xl overflow-hidden">
+            <button
+              onClick={() => setPassageExpanded(!passageExpanded)}
+              className="w-full flex items-center justify-between px-5 py-3 text-left hover:bg-card-hover transition"
+            >
+              <div className="flex items-center gap-2">
+                <span className="font-medium text-xs text-accent uppercase tracking-wide">Passage</span>
+              </div>
+              <svg className={`w-4 h-4 text-secondary transition-transform ${passageExpanded ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            {passageExpanded && (
+              <div className="px-5 pb-5 max-h-60 overflow-y-auto">
+                <p className="text-sm text-secondary leading-relaxed whitespace-pre-wrap">
+                  {passageText || question.passage}
+                </p>
+              </div>
+            )}
           </div>
         )}
 
