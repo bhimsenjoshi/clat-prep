@@ -7,11 +7,11 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 const SECTIONS = [
-  { id: 'English Language', label: 'English Language', icon: '📖', color: 'indigo' },
-  { id: 'Current Affairs Including General Knowledge', label: 'Current Affairs Including General Knowledge', icon: '📰', color: 'emerald' },
-  { id: 'Legal Reasoning', label: 'Legal Reasoning', icon: '⚖️', color: 'amber' },
-  { id: 'Logical Reasoning', label: 'Logical Reasoning', icon: '🧠', color: 'purple' },
-  { id: 'Quantitative Techniques', label: 'Quantitative Techniques', icon: '📊', color: 'rose' },
+  { id: 'English Language', label: 'English Language', icon: '⚖️', color: 'indigo' },
+  { id: 'Current Affairs Including General Knowledge', label: 'Current Affairs Including General Knowledge', icon: '📜', color: 'emerald' },
+  { id: 'Legal Reasoning', label: 'Legal Reasoning', icon: '🔨', color: 'amber' },
+  { id: 'Logical Reasoning', label: 'Logical Reasoning', icon: '☸️', color: 'purple' },
+  { id: 'Quantitative Techniques', label: 'Quantitative Techniques', icon: '📂', color: 'rose' },
 ] as const;
 
 interface Question {
@@ -393,9 +393,9 @@ export default function PracticeQuiz() {
   if (!started) {
     return (
       <div className="min-h-screen bg-page text-primary">
-        <PageHeader title='Practice' navItems={[{href:'/student/dashboard',label:'Dashboard',icon:'📊'}]} />
+        <PageHeader title='Practice' navItems={[{href:'/student/dashboard',label:'Dashboard',icon:'🏛️'}]} />
         <div className="max-w-2xl mx-auto px-4 py-12">
-          <h1 className="text-2xl font-bold mb-2 text-heading">📝 Practice Quiz</h1>
+          <h1 className="text-2xl font-bold mb-2 text-heading">📋 Practice Questions</h1>
           <p className="text-secondary text-sm mb-8">
             Pick a section to practice. Instant feedback on every answer.
             {typeof dailyRemaining === 'number' && (
@@ -457,7 +457,7 @@ export default function PracticeQuiz() {
     if (showReview) {
       return (
         <div className="min-h-screen bg-page text-primary">
-          <PageHeader title='Practice' navItems={[{href:'/student/dashboard',label:'Dashboard',icon:'📊'}]} />
+          <PageHeader title='Practice' navItems={[{href:'/student/dashboard',label:'Dashboard',icon:'🏛️'}]} />
           <div className="border-b border-theme bg-card-hover backdrop-blur-sm sticky top-0 z-10">
             <div className="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
               <button onClick={() => setShowReview(false)} className="text-muted hover:text-primary transition text-sm">
@@ -508,7 +508,7 @@ export default function PracticeQuiz() {
 
     return (
       <div className="min-h-screen bg-page text-primary flex items-center justify-center">
-        <PageHeader title='Practice' navItems={[{href:'/student/dashboard',label:'Dashboard',icon:'📊'}]} />
+        <PageHeader title='Practice' navItems={[{href:'/student/dashboard',label:'Dashboard',icon:'🏛️'}]} />
         <div className="text-center max-w-md px-4">
           <p className="text-5xl mb-4">{icon}</p>
           <h2 className="text-2xl font-bold mb-2 text-heading">Session Complete!</h2>
@@ -562,7 +562,7 @@ export default function PracticeQuiz() {
   // ── Active Quiz ──
   return (
     <div className="min-h-screen bg-page text-primary">
-      <PageHeader title='Practice' navItems={[{href:'/student/dashboard',label:'Dashboard',icon:'📊'}]} />
+      <PageHeader title='Practice' navItems={[{href:'/student/dashboard',label:'Dashboard',icon:'🏛️'}]} />
       {/* Top bar */}
       <div className="border-b border-theme bg-card-hover backdrop-blur-sm sticky top-0 z-10">
         <div className="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">

@@ -56,7 +56,7 @@ export default function StudentTestsPage() {
     <div className="min-h-screen bg-page">
       <PageHeader
         title="Exams"
-        navItems={[{ href: '/student/dashboard', label: 'Dashboard', icon: '📊' }]}
+        navItems={[{ href: '/student/dashboard', label: 'Dashboard', icon: '🏛️' }]}
       />
 
       <div className="max-w-6xl mx-auto px-4 py-8">

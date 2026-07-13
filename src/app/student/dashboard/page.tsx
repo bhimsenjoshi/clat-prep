@@ -11,19 +11,19 @@ import SectionCard from '@/components/SectionCard';
 const CLAT_DATE = new Date('2026-12-06T09:00:00+05:30');
 
 const SECTION_ICONS: Record<string, string> = {
-  'English': '📖',
-  'Current Affairs': '📰',
-  'Legal Reasoning': '⚖️',
-  'Logical Reasoning': '🧠',
-  'Quantitative Techniques': '📐',
+  'English': '⚖️',
+  'Current Affairs': '📜',
+  'Legal Reasoning': '🔨',
+  'Logical Reasoning': '☸️',
+  'Quantitative Techniques': '📂',
 };
 
 const SECTIONS = [
   { id: 'English', label: 'English', icon: '📖', color: 'indigo', desc: 'Reading comprehension' },
-  { id: 'Current Affairs', label: 'Current Affairs', icon: '📰', color: 'emerald', desc: 'GK & news' },
-  { id: 'Legal Reasoning', label: 'Legal Reasoning', icon: '⚖️', color: 'amber', desc: 'Legal principles' },
-  { id: 'Logical Reasoning', label: 'Logical Reasoning', icon: '🧠', color: 'purple', desc: 'Critical thinking' },
-  { id: 'Quantitative Techniques', label: 'Quantitative Techniques', icon: '📊', color: 'rose', desc: 'Data & math' },
+  { id: 'Current Affairs', label: 'Current Affairs', icon: '📜', color: 'emerald', desc: 'GK & news' },
+  { id: 'Legal Reasoning', label: 'Legal Reasoning', icon: '🔨', color: 'amber', desc: 'Legal principles' },
+  { id: 'Logical Reasoning', label: 'Logical Reasoning', icon: '☸️', color: 'purple', desc: 'Critical thinking' },
+  { id: 'Quantitative Techniques', label: 'Quantitative Techniques', icon: '📂', color: 'rose', desc: 'Data & math' },
 ] as const;
 
 const LEGAL_MAXIMS = [
@@ -374,14 +374,14 @@ export default function StudentDashboard() {
                     ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:from-purple-500 hover:to-pink-500 shadow-sm'
                     : 'bg-gradient-to-r from-amber-500 to-orange-600 text-white hover:from-amber-600 hover:to-orange-700 shadow-sm'
                 }`}>
-                {profile?.subscription_plan === 'premium' ? '🚀 Go Max' : '⭐ Upgrade'}
+                {profile?.subscription_plan === 'premium' ? '👑 Go Max' : '⚜️ Upgrade'}
               </Link>
             )}
           </div>
 
           {/* Avatar — always visible (mobile + desktop) */}
           <Link href="/student/profile" className="shrink-0 hover:opacity-80 transition flex sm:hidden">
-            <div className="w-7 h-7 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-[10px] font-bold overflow-hidden">
+            <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#FF6B35] to-[#D4AF37] flex items-center justify-center text-white text-[10px] font-bold overflow-hidden">
               {(profile as any)?.avatar_url ? (
                 <img src={(profile as any).avatar_url} alt="" className="w-full h-full object-cover" />
               ) : (
@@ -394,11 +394,11 @@ export default function StudentDashboard() {
           <nav className="hidden md:flex items-center gap-2">
             <Link href="/student/practice"
               className="px-3 py-2 rounded-lg text-sm font-medium text-accent hover:bg-card-hover active:scale-[0.97] transition-all duration-150">
-              🎯 Practice
+              📋 Practice
             </Link>
             <Link href="/student/analytics"
               className="px-3 py-2 rounded-lg text-sm font-medium text-secondary hover:bg-card-hover hover:text-primary active:scale-[0.97] transition-all duration-150">
-              📊 Analytics
+              🏛️ Analytics
             </Link>
             <Link href="/student/leaderboard"
               className="px-3 py-2 rounded-lg text-sm font-medium text-secondary hover:bg-card-hover hover:text-primary active:scale-[0.97] transition-all duration-150">
@@ -406,13 +406,13 @@ export default function StudentDashboard() {
             </Link>
             <Link href="/student/exams"
               className="px-3 py-2 rounded-lg text-sm font-medium text-accent hover:bg-card-hover active:scale-[0.97] transition-all duration-150">
-              📝 Exams
+              🎓 Exams
             </Link>
             <ThemeToggle />
             {/* Avatar — clickable to profile */}
             <Link href="/student/profile"
               className="flex items-center gap-2 pl-2 ml-1 border-l border-theme hover:opacity-80 transition">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-xs font-bold shrink-0 overflow-hidden">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#FF6B35] to-[#D4AF37] flex items-center justify-center text-white text-xs font-bold shrink-0 overflow-hidden">
                 {(profile as any)?.avatar_url ? (
                   <img src={(profile as any).avatar_url} alt="" className="w-full h-full object-cover" />
                 ) : (
@@ -449,11 +449,11 @@ export default function StudentDashboard() {
           <div className="md:hidden border-t border-theme-light bg-page px-4 py-3 space-y-1">
             <Link href="/student/practice" onClick={() => setMobileMenuOpen(false)}
               className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium bg-gradient-to-r from-amber-900/50 to-orange-900/50 text-stat-amber">
-              🎯 Practice Questions
+              📋 Practice Questions
             </Link>
             <Link href="/student/analytics" onClick={() => setMobileMenuOpen(false)}
               className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-secondary hover:bg-card-hover">
-              📊 Performance Analytics
+              🏛️ Performance Analytics
             </Link>
             <Link href="/student/leaderboard" onClick={() => setMobileMenuOpen(false)}
               className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-secondary hover:bg-card-hover">
@@ -461,12 +461,12 @@ export default function StudentDashboard() {
             </Link>
             <Link href="/student/exams" onClick={() => setMobileMenuOpen(false)}
               className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-accent hover:bg-card-hover">
-              📝 Available Exams
+              🎓 Available Exams
             </Link>
             <hr className="my-1 border-theme-light" />
             <Link href="/student/profile" onClick={() => setMobileMenuOpen(false)}
               className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-secondary hover:bg-card-hover">
-              👤 My Profile
+              🤵 My Profile
             </Link>
             <div className="py-1"><ThemeToggle /></div>
             <button onClick={() => { setMobileMenuOpen(false); supabase.auth.signOut().then(() => router.push('/')); }}
@@ -484,7 +484,7 @@ export default function StudentDashboard() {
         {/* ════════════════════════════════════════════ */}
         <div className="bg-elevated border border-theme rounded-2xl p-6 md:p-8 text-center shadow-lg shadow-theme-sm">
           <div className="flex items-center justify-center gap-2 mb-1">
-            <span className="text-2xl">⏳</span>
+            <span className="text-2xl">⌛</span>
             <span className="text-xs font-semibold text-accent uppercase tracking-widest">CLAT 2026</span>
           </div>
           <p className="text-xl md:text-2xl font-bold text-primary mb-1">

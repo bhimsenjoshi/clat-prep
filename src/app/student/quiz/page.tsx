@@ -10,31 +10,31 @@ import PageHeader from '@/components/PageHeader';
 const SECTIONS: { name: SectionName; icon: string; desc: string; color: string }[] = [
   {
     name: 'English Language',
-    icon: '📖',
+    icon: '⚖️',
     desc: 'Reading comprehension, grammar, vocabulary',
     color: 'from-blue-500 to-blue-600',
   },
   {
     name: 'Current Affairs Including General Knowledge',
-    icon: '📰',
+    icon: '📜',
     desc: 'General knowledge, static GK, current events',
     color: 'from-emerald-500 to-emerald-600',
   },
   {
     name: 'Legal Reasoning',
-    icon: '⚖️',
+    icon: '🔨',
     desc: 'Legal principles, case laws, propositions',
     color: 'from-purple-500 to-purple-600',
   },
   {
     name: 'Logical Reasoning',
-    icon: '🧠',
+    icon: '☸️',
     desc: 'Critical thinking, syllogisms, puzzles',
     color: 'from-amber-500 to-amber-600',
   },
   {
     name: 'Quantitative Techniques',
-    icon: '📐',
+    icon: '📂',
     desc: 'Data interpretation, percentages, algebra',
     color: 'from-rose-500 to-rose-600',
   },

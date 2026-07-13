@@ -137,7 +137,7 @@ export default function ProfilePage() {
 
   return (
     <div className="min-h-screen bg-page">
-      <PageHeader title="My Profile" navItems={[{href:'/student/dashboard',label:'Dashboard',icon:'📊'},{href:'/student/practice',label:'Practice',icon:'🎯'}]} />
+      <PageHeader title="My Profile" navItems={[{href:'/student/dashboard',label:'Dashboard',icon:'🏛️'},{href:'/student/practice',label:'Practice',icon:'📋'}]} />
 
       <main className="max-w-4xl mx-auto px-4 py-6 space-y-6">
         {/* ─── Profile Card ─── */}

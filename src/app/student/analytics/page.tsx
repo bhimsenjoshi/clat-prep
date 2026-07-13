@@ -593,7 +593,7 @@ export default function AnalyticsPage() {
 
   return (
     <div className="min-h-screen bg-page">
-      <PageHeader title='Analytics' navItems={[{href:'/student/dashboard',label:'Dashboard',icon:'📊'}]} />
+      <PageHeader title='Analytics' navItems={[{href:'/student/dashboard',label:'Dashboard',icon:'🏛️'}]} />
 
       <main className="max-w-4xl mx-auto px-4 py-6 space-y-6">
         {/* Tabs */}
