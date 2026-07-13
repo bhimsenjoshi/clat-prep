@@ -2,80 +2,80 @@
 -- Run this in Supabase SQL Editor after the practice_quiz.sql migration
 -- 25 questions total (5 per section), CLAT-realistic
 
--- ─── ENGLISH (Reading Comprehension) ───
+-- ─── ENGLISH LANGUAGE (Reading Comprehension) ───
 
 INSERT INTO public.practice_questions (section, topic, question_text, passage, options, correct_option, explanation, difficulty, tags)
 VALUES
 (
-  'English', 'Reading Comprehension',
+  'English Language', 'Reading Comprehension',
   'According to the passage, what was the primary reason for the decline of the Indus Valley Civilization?',
   'The Indus Valley Civilization, one of the world''s oldest urban cultures, flourished around 2500 BCE in what is now Pakistan and northwest India. The civilization was known for its advanced city planning, sophisticated drainage systems, and extensive trade networks. However, by 1900 BCE, the civilization began to decline. Scholars have debated the causes for centuries. Some attribute it to climate change, as evidence suggests a weakening of the monsoon rains that sustained agriculture. Others point to the shifting course of the Indus River, which may have disrupted trade and agriculture. A third theory suggests that over-exploitation of resources led to environmental degradation. Recent archaeological findings indicate that a combination of factors, rather than a single cause, likely led to the civilization''s gradual decline.',
   '{"A": "Foreign invasion by Aryan tribes", "B": "A combination of climate change, river shifts, and resource depletion", "C": "A sudden catastrophic earthquake", "D": "The collapse of trade networks only"}',
   'B', 'The passage explicitly states: "Recent archaeological findings indicate that a combination of factors, rather than a single cause, likely led to the civilization''s gradual decline." It mentions climate change, river shifts, AND resource depletion—not any one cause alone.', 'medium', ARRAY['passage-based', 'history']
 ),
 (
-  'English', 'Reading Comprehension',
+  'English Language', 'Reading Comprehension',
   'The author''s tone in the passage can best be described as:',
   'The rapid proliferation of artificial intelligence in everyday life has been nothing short of remarkable. From virtual assistants that manage our schedules to algorithms that curate our news feeds, AI has become an invisible hand guiding modern existence. Yet, beneath the veneer of convenience lies a troubling reality. These systems, trained on vast datasets, often perpetuate and amplify existing societal biases. A hiring algorithm trained on a company''s historical data may learn to favor male candidates if the company traditionally hired more men. A facial recognition system trained primarily on light-skinned faces may perform poorly on darker skin tones. The consequences are not merely theoretical; they affect real people—denying job opportunities, triggering false arrests, and reinforcing systemic inequality. As we stand at this crossroads, the question is not whether AI will shape our future, but whether we will shape AI responsibly.',
   '{"A": "Optimistic and celebratory", "B": "Neutral and dispassionate", "C": "Critical but constructive", "D": "Pessimistic and alarmist"}',
   'C', 'The author acknowledges the benefits ("remarkable," "convenience") but also points out serious problems ("troubling reality," "affect real people"). The ending asks whether we will shape AI "responsibly" — critical of current issues but hopeful about the future. This is critical but constructive.', 'medium', ARRAY['passage-based', 'tone']
 ),
 (
-  'English', 'Vocabulary',
+  'English Language', 'Vocabulary',
   'Choose the word most similar in meaning to the underlined word in the sentence: The judge was known for her IMPARTIAL decisions.' ,
   NULL,
   '{"A": "Biased", "B": "Unbiased", "C": "Harsh", "D": "Lenient"}',
   'B', '"Impartial" means treating all rivals or disputants equally; fair and just. "Unbiased" is a direct synonym. "Biased" is the opposite, while "harsh" and "lenient" describe the nature of decisions, not fairness.', 'easy', ARRAY['vocabulary']
 ),
 (
-  'English', 'Grammar',
+  'English Language', 'Grammar',
   'Identify the sentence with the correct grammatical structure:',
   NULL,
   '{"A": "Neither the teacher nor the students was aware of the change.", "B": "Neither the teacher nor the students were aware of the change.", "C": "Neither the teacher nor the students are being aware of the change.", "D": "Neither the teacher nor the students is aware of the change."}',
   'B', 'When using "neither...nor" with a plural subject closest to the verb ("the students"), the verb should be plural ("were"). Option A incorrectly uses "was." Options C and D have tense/agreement errors.', 'medium', ARRAY['grammar', 'subject-verb-agreement']
 ),
 (
-  'English', 'Reading Comprehension',
+  'English Language', 'Reading Comprehension',
   'What does the author suggest is the main barrier to achieving gender equality in the workplace?',
   'Despite decades of legislation and social progress, gender equality in the workplace remains an elusive goal. The "glass ceiling" metaphor, coined in the 1980s, described the invisible barrier preventing women from reaching top leadership positions. Today, that ceiling has developed cracks—more women serve as CEOs and board members than ever before. However, a new challenge has emerged: the "broken rung." Studies show that women, particularly women of color, are significantly less likely than men to be promoted from entry-level positions to manager roles. This early-career gap means fewer women are in the pipeline for senior leadership. The problem is compounded by unconscious bias in performance evaluations, where women''s assertiveness is often perceived negatively while the same behavior in men is rewarded. Until organizations address these systemic issues at every level, true equality will remain aspirational.',
   '{"A": "Explicit discriminatory laws", "B": "The broken rung—lack of promotion from entry-level to manager", "C": "The glass ceiling at senior levels", "D": "Women choosing not to pursue leadership"}',
   'B', 'The passage explicitly contrasts the "glass ceiling" (senior level) with the "broken rung" (entry to manager level) and states the latter is the bigger current problem: "this early-career gap means fewer women are in the pipeline for senior leadership."', 'hard', ARRAY['passage-based', 'social-issues']
 );
 
--- ─── CURRENT AFFAIRS ───
+-- ─── CURRENT AFFAIRS INCLUDING GENERAL KNOWLEDGE ───
 
 INSERT INTO public.practice_questions (section, topic, question_text, passage, options, correct_option, explanation, difficulty, tags)
 VALUES
 (
-  'Current Affairs', 'Polity',
+  'Current Affairs Including General Knowledge', 'Polity',
   'The Finance Commission of India is constituted under which Article of the Constitution?',
   NULL,
   '{"A": "Article 280", "B": "Article 360", "C": "Article 112", "D": "Article 324"}',
   'A', 'Article 280 provides for the constitution of a Finance Commission every five years to recommend the distribution of tax revenues between the Union and States. Article 360 relates to financial emergency, Article 112 is the Annual Financial Statement (Budget), and Article 324 deals with the Election Commission.', 'medium', ARRAY['polity', 'constitution']
 ),
 (
-  'Current Affairs', 'International Relations',
+  'Current Affairs Including General Knowledge', 'International Relations',
   'India recently joined which major trade agreement in 2025?',
   NULL,
   '{"A": "RCEP (Regional Comprehensive Economic Partnership)", "B": "IPEF (Indo-Pacific Economic Framework)", "C": "CPTPP (Comprehensive and Progressive Agreement for Trans-Pacific Partnership)", "D": "SCO Free Trade Area"}',
   'B', 'India joined the Indo-Pacific Economic Framework (IPEF) in recent years as part of its strategic engagement with the Indo-Pacific region. India chose not to join RCEP in 2020. CPTPP membership has been discussed but not finalized. SCO is a security organization, not a trade agreement per se.', 'medium', ARRAY['international-relations', 'trade']
 ),
 (
-  'Current Affairs', 'Economy',
+  'Current Affairs Including General Knowledge', 'Economy',
   'What is the primary objective of the Production Linked Incentive (PLI) scheme?',
   NULL,
   '{"A": "To provide direct cash transfers to farmers", "B": "To boost domestic manufacturing and reduce import dependence", "C": "To subsidize exports of agricultural products", "D": "To provide free electricity to industrial zones"}',
   'B', 'The PLI scheme, launched in 2020 and expanded since, aims to boost domestic manufacturing by offering incentives to companies that meet production targets in 14 key sectors including electronics, automobiles, pharmaceuticals, and textiles. It is designed to reduce import dependence and make India a global manufacturing hub.', 'easy', ARRAY['economy', 'government-schemes']
 ),
 (
-  'Current Affairs', 'Science & Technology',
+  'Current Affairs Including General Knowledge', 'Science & Technology',
   'Which Indian space mission is designed to study the Sun?',
   NULL,
   '{"A": "Mangalyaan", "B": "Chandrayaan-3", "C": "Aditya-L1", "D": "Gaganyaan"}',
   'C', 'Aditya-L1 is ISRO''s first space-based mission to study the Sun, launched in 2023. It is placed at the Lagrange Point 1 (L1) about 1.5 million km from Earth. Mangalyaan is Mars, Chandrayaan-3 is the Moon, and Gaganyaan is India''s human spaceflight program.', 'easy', ARRAY['science', 'isro']
 ),
 (
-  'Current Affairs', 'Environment',
+  'Current Affairs Including General Knowledge', 'Environment',
   'The term "Carbon Border Adjustment Mechanism" (CBAM) recently in news refers to:',
   NULL,
   '{"A": "A UN treaty to ban carbon emissions", "B": "A European Union tariff on imports from countries with weaker climate policies", "C": "A carbon trading system within India", "D": "A World Bank fund for renewable energy"}',

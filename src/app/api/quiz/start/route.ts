@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
     };
 
     const validSections: SectionName[] = [
-      'English', 'Current Affairs', 'Legal Reasoning',
+      'English Language', 'Current Affairs Including General Knowledge', 'Legal Reasoning',
       'Logical Reasoning', 'Quantitative Techniques',
     ];
     if (!validSections.includes(section)) {

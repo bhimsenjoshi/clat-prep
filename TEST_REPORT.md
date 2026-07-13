@@ -1,86 +1,148 @@
-# CLAT Prep — Existing Test Suite Report
-## Generated: July 13, 2026
+# CLAT Prep — Test Suite Report
+## Generated: July 13, 2026 | Section Name Migration + Passage-Based Questions
 
 ### Test Suite Overview
 
-| Test File | Lines | Type | Purpose |
-|---|---|---|---|
-| `src/__tests__/exam-flow.test.ts` | 312 | Unit (pure functions) | Exam question grouping, scoring, section validation |
-| `src/__tests__/timer-countdown.test.ts` | 260 | Unit (React state sim) | Timer lifecycle: start, retake, exit, refresh |
-| `src/__tests__/db-lifecycle.test.ts` | 277 | Integration (Supabase) | Attempt CRUD, RLS policies, retake flow |
+| Test File | Lines | Tests | Type | Purpose |
+|---|---|---|---|---|
+| `src/__tests__/section-name-migration.test.ts` | 649 | 56 | Unit | Section rename, passage generation, question metadata, normalisation logic |
+| `src/__tests__/exam-flow.test.ts` | 312 | 32 | Unit (pure functions) | Exam question grouping, scoring, section validation |
+| `src/__tests__/timer-countdown.test.ts` | 260 | 10 | Unit (React state sim) | Timer lifecycle: start, retake, exit, refresh |
+| **Total** | **1,221** | **98** | — | **All passing** |
 
-### Config
-- **Runner**: Vitest 4.x with jsdom environment
-- **Alias**: `@` → `src/`
-- **Setup**: `src/__tests__/setup.ts`
-- **Pattern**: `src/__tests__/**/*.test.{ts,tsx}`
+### Test Results (2026-07-13)
 
----
-
-### 1. `exam-flow.test.ts` (312 lines)
-
-**Purpose**: Validates exam data processing functions
-
-| Test | Description |
-|---|---|
-| `groupByPassage` groups questions without passage together | 2 null-passage questions → 1 group |
-| `groupByPassage` groups questions with same passage | 2 questions with same passage → 1 group |
-| `groupByPassage` handles mixed passages | Mix of null + different passages → separate groups |
-| `groupByPassage` handles empty array | [] → [] |
-| `calcScore` returns 0 for no attempted questions | [] → 0 |
-| `calcScore` calculates correct +1, incorrect -0.25 | 4 correct, 1 wrong → 3.75 |
-| `calcScore` floors at 0 | All wrong → 0 (not negative) |
-| `getSectionsForTest` returns proper section structure | 5 sections with correct order/names |
-| `validateTestStructure` checks 120 total questions | Sum of section question counts = 120 |
-| `validateTestStructure` checks section count = 5 | Exactly 5 sections required |
-| `validateTestStructure` checks for empty sections | Empty section → invalid |
-
-### 2. `timer-countdown.test.ts` (260 lines)
-
-**Purpose**: Simulates React timer state transitions for exam lifecycle
-
-| Test | Description |
-|---|---|
-| Timer starts at 7200 on first render | Fresh mount → timeLeft = 7200 |
-| Timer counts down every second | 3 ticks → 7197 |
-| Timer stops when submitted=true | submitted flag stops interval |
-| Timer stops when loading=true | loading flag prevents interval |
-| Timer stops when no test/attemptId | Guards prevent interval without data |
-| Retake: timer resets to 7200 | After exit, new attempt → 7200 |
-| Exit: timer stops and resets | exit sets submitted=true, resets to 7200 |
-| Page refresh: timer restores from DB | Simulated DB restore (7200 - elapsed) |
-| Auto-submit at 0 | timer hits 0 → submitted=true |
-| Cleanup on unmount | interval cleared via return fn |
-
-### 3. `db-lifecycle.test.ts` (277 lines)
-
-**Purpose**: End-to-end Supabase integration tests
-
-| Test | Description |
-|---|---|
-| Inserts attempt row | CREATE attempt for test+user → row exists |
-| Deletes attempt row | DELETE attempt → row gone |
-| Delete cascades to responses | DELETE attempt → responses also deleted |
-| Full lifecycle: start→submit→retake | INSERT → UPDATE submitted_at → INSERT new |
-| RLS blocks other user's attempts | User A cannot SELECT user B's attempt |
-| Unique constraint prevents duplicate active attempts | 2nd INSERT for same (test,user) fails |
-| No orphan responses after attempt delete | DELETE attempt → 0 remaining responses |
-| No orphan quiz_sessions after student profile delete | CASCADE on profiles(id) |
-| Multiple attempts allowed after submit | Submitted attempt + new INSERT = 2 rows |
-| Student can DELETE own attempt | Auth user deletes own attempt |
-| Student can DELETE even after time passes | Old attempt deletable |
-| Same test can have attempt from different students | Student A + Student B → 2 rows |
-| Empty responses table after cleanup | After cascade, no orphan rows |
+```
+ ✓ src/__tests__/exam-flow.test.ts (32 tests)
+ ✓ src/__tests__/section-name-migration.test.ts (56 tests)
+ ✓ src/__tests__/timer-countdown.test.ts (10 tests)
+ Test Files  3 passed (3)
+      Tests  98 passed (98)
+```
 
 ---
 
-### Migration Checklist (Pre-Change Snapshot)
+## `section-name-migration.test.ts` — 56 Tests
 
-**Schema files before changes:**
-- `src/lib/db/practice_quiz.sql` — Section CHECK constraints, no passage metadata
-- `scripts/daily-questions-cron.mjs` — Uses `['English', 'Current Affairs', ...]` array
-- `src/types/index.ts` — `SectionName` type with old names
-- `src/app/student/quiz/page.tsx` — `SECTIONS` array with old names
-- `src/app/student/quiz/[section]/page.tsx` — `SECTION_MAP` with old names
-- `src/app/student/practice/page.tsx` — `SECTIONS` array with old names
-- `src/app/api/quiz/start/route.ts` — `validSections` array with old names
+### 1. Official CLAT Section Names (6 tests)
+| Test | Description |
+|---|---|
+| has exactly 5 sections matching CLAT 2025 | Array length = 5 |
+| includes English Language (not short "English") | New name present, old absent |
+| includes Current Affairs Including General Knowledge (not short) | New name present, old absent |
+| includes Legal Reasoning | As expected |
+| includes Logical Reasoning | As expected |
+| includes Quantitative Techniques | As expected |
+
+### 2. Section Slug Generation (4 tests)
+| Test | Description |
+|---|---|
+| Converts all to correct URL slugs | `english-language`, `current-affairs-including-general-knowledge`, etc. |
+| Resolves all slugs back to correct names | Bijection check |
+| Rejects invalid slugs | `english`, `current-affairs` not in map |
+| Is bijective — slug → section → slug | Roundtrip preserves value |
+
+### 3. Practice Question Metadata (9 tests)
+| Test | Description |
+|---|---|
+| Default marks are 1 | `marks: 1` |
+| Default negative marks are 0.25 | `negative_marks: 0.25` |
+| Question_number sequential when provided | `[1, 2, 3, 4, 5]` |
+| Passage_id links questions together | All 5 share same ID |
+| Passage_id can be null for standalone | Null allowed |
+| Passage text stripped when passage_id set | No text duplication |
+| Accepts all official section names | All 5 valid |
+| Rejects invalid section names | Old short names not valid |
+| Options always A/B/C/D format | 4 keys, no extras |
+| Difficulty is always easy/medium/hard | Constrained values |
+| Marks can be custom (non-negative) | Override `marks: 2` works |
+
+### 4. Passage-Based Question Generation (5 tests)
+| Test | Description |
+|---|---|
+| 1 passage → 5 questions | Correct count |
+| All questions share same passage_id | Single shared UUID |
+| Passage has required fields | section, content, difficulty all present |
+| Exactly 1 passage per section call | `passagesPerCall = 1` |
+| Passage + 5 questions = 6 DB rows | `1 + 5 = 6` |
+
+### 5. Question Normalisation Logic (14 tests)
+| Test | Description |
+|---|---|
+| Normalises standard question correctly | All fields preserved |
+| Strips passage text when passage_id set | No duplication |
+| Keeps passage text when passage_id null | Standalone mode |
+| Returns null for missing question text | Validation |
+| Returns null for missing options | Validation |
+| Returns null for missing correct answer | Validation |
+| Parses string options JSON | Serialized JSON → object |
+| Converts array options to A/B/C/D | `['First','Second']` → `{A:'First',B:'Second'}` |
+| Handles question_text vs question naming | Both `question_text` and `question` accepted |
+| Preserves custom marks/negative marks from AI | Override respected |
+| Defaults marks to 1 when not provided | Default |
+| Assigns sequential question numbers | `[1,2,3,4,5]` |
+
+### 6. AI Prompt Building (4 tests)
+| Test | Description |
+|---|---|
+| Correct prompt per section | Each mentions its section name |
+| Falls back to English Language | Unknown section → fallback |
+| All prompts mention "passage" | Passage-based generation |
+| All prompts mention 5 | `QS_PER_PASSAGE = 5` |
+
+### 7. DB Schema Validation (8 tests)
+| Test | Description |
+|---|---|
+| practice_passages has all expected columns | id, section, title, source, content, difficulty, created_at |
+| CHECK constraint on section | 5 valid names |
+| FK from practice_questions → practice_passages | Foreign key named `fk_practice_questions_passage` |
+| ON DELETE SET NULL | Deleting passage → questions keep passage_id as null |
+| marks column with default 1 | New column |
+| negative_marks column with default 0.25 | New column |
+| passage_id column (nullable UUID) | New column |
+| question_number column (nullable int) | New column |
+
+### 8. Section Icons (3 tests)
+| Test | Description |
+|---|---|
+| All 5 sections mapped to icons | Complete mapping |
+| Unique icons per section | No duplicates |
+| No old short-name keys exist | `English`, `Current Affairs` → undefined |
+
+### 9. API Route Validation (3 tests)
+| Test | Description |
+|---|---|
+| Accepts all official section names | Validated |
+| Rejects old short names | `English` rejected |
+| Rejects invalid names | Empty string rejected |
+
+---
+
+## `exam-flow.test.ts` — 32 Tests (no changes from previous)
+
+## `timer-countdown.test.ts` — 10 Tests (no changes from previous)
+
+---
+
+## Migration: What Changed
+
+### DB Schema
+- `practice_questions.section` CHECK: old names → official CLAT 2025 names
+- `quiz_sessions.section` CHECK: old names → official CLAT 2025 names
+- `sections.name` CHECK: old names → official CLAT 2025 names
+- `practice_questions` new columns: `marks` (int, default 1), `negative_marks` (numeric, default 0.25), `passage_id` (uuid, FK), `question_number` (int)
+- New table: `practice_passages` (id UUID PK, section, title, source, content, difficulty, created_at)
+- `profiles` new columns: `daily_practice_passage_ids` (uuid[]), `last_passage_section` (text)
+
+### Code Changes
+- `src/types/index.ts` — `SectionName` type updated
+- `src/app/student/quiz/page.tsx` — SECTIONS array updated
+- `src/app/student/quiz/[section]/page.tsx` — SECTION_MAP + SECTION_ICONS updated
+- `src/app/student/practice/page.tsx` — SECTIONS array updated
+- `src/app/api/quiz/start/route.ts` — validSections updated
+- `scripts/daily-questions-cron.mjs` — Complete rewrite: passage-based generation, metadata, practice_passages table
+- `src/lib/db/practice_quiz.sql` — CHECK constraints updated
+- `src/lib/db/schema.sql` — sections CHECK updated
+- `src/lib/db/seed.sql` — section names updated
+- `src/lib/db/seed_practice_questions.sql` — section names updated
+- `supabase/migrations/20260713_official_section_names.sql` — Full migration script

@@ -7,8 +7,8 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 const SECTIONS = [
-  { id: 'English', label: 'English', icon: '📖', color: 'indigo' },
-  { id: 'Current Affairs', label: 'Current Affairs', icon: '📰', color: 'emerald' },
+  { id: 'English Language', label: 'English Language', icon: '📖', color: 'indigo' },
+  { id: 'Current Affairs Including General Knowledge', label: 'Current Affairs Including General Knowledge', icon: '📰', color: 'emerald' },
   { id: 'Legal Reasoning', label: 'Legal Reasoning', icon: '⚖️', color: 'amber' },
   { id: 'Logical Reasoning', label: 'Logical Reasoning', icon: '🧠', color: 'purple' },
   { id: 'Quantitative Techniques', label: 'Quantitative Techniques', icon: '📊', color: 'rose' },

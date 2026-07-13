@@ -21,8 +21,8 @@ export interface Test {
 }
 
 export type SectionName =
-  | 'English'
-  | 'Current Affairs'
+  | 'English Language'
+  | 'Current Affairs Including General Knowledge'
   | 'Legal Reasoning'
   | 'Logical Reasoning'
   | 'Quantitative Techniques';

@@ -9,13 +9,13 @@ import PageHeader from '@/components/PageHeader';
 
 const SECTIONS: { name: SectionName; icon: string; desc: string; color: string }[] = [
   {
-    name: 'English',
+    name: 'English Language',
     icon: '📖',
     desc: 'Reading comprehension, grammar, vocabulary',
     color: 'from-blue-500 to-blue-600',
   },
   {
-    name: 'Current Affairs',
+    name: 'Current Affairs Including General Knowledge',
     icon: '📰',
     desc: 'General knowledge, static GK, current events',
     color: 'from-emerald-500 to-emerald-600',

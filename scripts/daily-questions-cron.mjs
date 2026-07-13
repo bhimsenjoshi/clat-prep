@@ -2,6 +2,11 @@
 /**
  * Daily Question Generator — Zero-dependency Cron Executable
  *
+ * Generates CLAT-realistic passage-based questions matching the official CLAT 2025 format.
+ * Each section: 1 passage → 5 questions (mirrors real exam structure).
+ * Questions linked to passages via practice_passages table with metadata
+ * (marks=1, negative_marks=0.25, question_number).
+ *
  * Uses Node 18+ built-in fetch for both DeepSeek API and Supabase REST API.
  * No npm install needed.
  *
@@ -38,13 +43,21 @@ for (const envPath of envPaths) {
   }
 }
 
-const SECTIONS = ['English', 'Current Affairs', 'Legal Reasoning', 'Logical Reasoning', 'Quantitative Techniques'];
-const QS_PER_SECTION = 5;
+const SECTIONS = ['English Language', 'Current Affairs Including General Knowledge', 'Legal Reasoning', 'Logical Reasoning', 'Quantitative Techniques'];
+const QS_PER_PASSAGE = 5;
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 const DEEPSEEK_KEY = process.env.DEEPSEEK_API_KEY || '';
+
+const SUPABASE_HEADERS = {
+  'Content-Type': 'application/json',
+  'apikey': ANON_KEY,
+  'Authorization': `Bearer ${SERVICE_KEY}`,
+};
+
+// ─── DeepSeek API ───
 
 async function callDeepSeek(systemPrompt, userPrompt) {
   const res = await fetch('https://api.deepseek.com/v1/chat/completions', {
@@ -74,12 +87,10 @@ async function callDeepSeek(systemPrompt, userPrompt) {
   const raw = data?.choices?.[0]?.message?.content;
   if (!raw) throw new Error('Empty DeepSeek response');
 
-  // Robust JSON parsing — try to extract valid JSON from the raw text
   let parsed;
   try {
     parsed = JSON.parse(raw);
   } catch {
-    // Attempt to find a valid JSON object/array in the response
     const jsonMatch = raw.match(/\{[\s\S]*\}/);
     if (jsonMatch) {
       try { parsed = JSON.parse(jsonMatch[0]); } catch {
@@ -90,19 +101,46 @@ async function callDeepSeek(systemPrompt, userPrompt) {
     }
   }
 
-  const questions = parsed.questions || (Array.isArray(parsed) ? parsed : [parsed]);
-  return questions.map(normalise).filter(Boolean);
+  // New response format: { passage: {...}, questions: [...] }
+  // OR legacy: { questions: [...] } with embedded passages
+  return {
+    passageData: parsed.passage || null,
+    questions: parsed.questions || (Array.isArray(parsed) ? parsed : [parsed]),
+  };
 }
 
-function normalise(q) {
-  // Accept both naming conventions from the AI
+// ─── Supabase REST helpers ───
+
+async function supabaseInsert(table, rows) {
+  if (!rows || rows.length === 0) return [];
+  const url = `${SUPABASE_URL.replace(/\/$/, '')}/rest/v1/${table}`;
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { ...SUPABASE_HEADERS, 'Prefer': 'return=representation' },
+    body: JSON.stringify(rows),
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Supabase error inserting ${table}: ${res.status}: ${text}`);
+  }
+  return await res.json();
+}
+
+async function supabaseGet(url) {
+  const res = await fetch(url, { headers: SUPABASE_HEADERS });
+  if (!res.ok) throw new Error(`Supabase error GET: ${res.status}: ${await res.text()}`);
+  return await res.json();
+}
+
+// ─── Normalise a question from AI response ───
+
+function normalise(q, passageId, questionNumber) {
   let question_text = q.question_text || q.question;
   const correct_answer = q.correct_option || q.correct_answer || q.correctAnswer;
   let options = q.options;
 
   // Some AI responses embed the question in passage; use passage as fallback
   if (!question_text && q.passage) {
-    // Take first sentence of passage as question text if separate question is missing
     const sentences = q.passage.match(/[^.!?]+[.!?]/g);
     question_text = (sentences && sentences[0]) ? sentences[0].trim() : q.passage.substring(0, 150);
   }
@@ -121,46 +159,56 @@ function normalise(q) {
     parsedOptions = obj;
   }
 
+  // Use passage from the AI response only if no passage_id is provided
+  // (if we generated a passage separately, the question's passage field is redundant)
+  const passage = q.passage || null;
+
   return {
     question_text,
-    passage: q.passage || null,
+    passage: passageId ? null : passage, // Don't duplicate passage text if linked via ID
     options: typeof parsedOptions === 'object' ? parsedOptions : {},
     correct_option: String(correct_answer),
     explanation: q.explanation || null,
     difficulty: (q.difficulty || 'medium').toLowerCase(),
     source: 'daily',
+    marks: q.marks ?? 1,
+    negative_marks: q.negative_marks ?? 0.25,
+    question_number: questionNumber,
+    passage_id: passageId || null,
+    tags: q.tags || [],
   };
 }
 
-function buildPrompt(section) {
-  const sectionPrompts = {
-    'English': `You are a CLAT English Language expert. Generate ${QS_PER_SECTION} passage-based reading comprehension questions. Each question must have a passage, 4 options (A-D), a correct answer, explanation, and difficulty level. Return JSON with a "questions" array.`,
-    'Current Affairs': `You are a CLAT Current Affairs & GK expert. Generate ${QS_PER_SECTION} questions based on recent news and events (2025-2026). Each question must have a passage, 4 options (A-D), a correct answer, explanation, and difficulty level. Return JSON with a "questions" array.`,
-    'Legal Reasoning': `You are a CLAT Legal Reasoning expert. Generate ${QS_PER_SECTION} questions based on legal principles and case laws. Each question must have a passage describing a legal scenario, 4 options (A-D), a correct answer, explanation, and difficulty level. Return JSON with a "questions" array.`,
-    'Logical Reasoning': `You are a CLAT Logical Reasoning expert. Generate ${QS_PER_SECTION} critical thinking questions testing arguments, assumptions, and inferences. Each question must have a passage, 4 options (A-D), a correct answer, explanation, and difficulty level. Return JSON with a "questions" array.`,
-    'Quantitative Techniques': `You are a CLAT Quantitative Techniques expert. Generate ${QS_PER_SECTION} data interpretation and math questions. Each question must include data/short passage, 4 options (A-D), a correct answer, explanation, and difficulty level. Return JSON with a "questions" array.`,
+// ─── Build AI prompts for passage-based generation ───
+
+function buildPassagePrompt(section) {
+  const prompts = {
+    'English Language': `You are a CLAT English Language expert. Generate exactly 1 reading comprehension passage (250-400 words) followed by exactly ${QS_PER_PASSAGE} questions based on that passage. Return JSON with:
+  - "passage": { "title": "Short title", "content": "The passage text", "source": "Source or 'Original for CLATly'", "difficulty": "easy|medium|hard" }
+  - "questions": array of ${QS_PER_PASSAGE} objects, each with:
+    - "question_text": string
+    - "options": object with keys A,B,C,D and string values
+    - "correct_answer": "A"
+    - "explanation": string
+    - "difficulty": "easy|medium|hard"
+    - "tags": array of topic strings`,
+    'Current Affairs Including General Knowledge': `You are a CLAT Current Affairs & GK expert. Generate exactly 1 current affairs passage (200-350 words) based on real recent news/events (2025-2026) followed by exactly ${QS_PER_PASSAGE} questions. Return JSON with:
+  - "passage": { "title": "Short title", "content": "The passage text", "source": "Source or 'Original for CLATly'", "difficulty": "easy|medium|hard" }
+  - "questions": array of ${QS_PER_PASSAGE} objects (same format as above)`,
+    'Legal Reasoning': `You are a CLAT Legal Reasoning expert. Generate exactly 1 legal scenario passage (200-400 words) presenting a legal principle and fact pattern, followed by exactly ${QS_PER_PASSAGE} questions testing application of legal principles. Return JSON with:
+  - "passage": { "title": "Legal principle title", "content": "The passage text with legal principle and facts", "source": "Legal principle or 'Original for CLATly'", "difficulty": "easy|medium|hard" }
+  - "questions": array of ${QS_PER_PASSAGE} objects (same format as above)`,
+    'Logical Reasoning': `You are a CLAT Logical Reasoning expert. Generate exactly 1 argument/critical reasoning passage (150-300 words) presenting an argument or reasoning scenario, followed by exactly ${QS_PER_PASSAGE} questions testing critical thinking, assumptions, inferences, and conclusions. Return JSON with:
+  - "passage": { "title": "Short title", "content": "The passage text", "source": "Source or 'Original for CLATly'", "difficulty": "easy|medium|hard" }
+  - "questions": array of ${QS_PER_PASSAGE} objects (same format as above)`,
+    'Quantitative Techniques': `You are a CLAT Quantitative Techniques expert. Generate exactly 1 data interpretation passage (a chart, table, or data set described in text) followed by exactly ${QS_PER_PASSAGE} questions requiring calculations, percentages, ratios, and data analysis. Return JSON with:
+  - "passage": { "title": "Data set title", "content": "Description of the data including the data set/table", "source": "Source or 'Original for CLATly'", "difficulty": "easy|medium|hard" }
+  - "questions": array of ${QS_PER_PASSAGE} objects (same format as above)`,
   };
-  return sectionPrompts[section] || sectionPrompts['English'];
+  return prompts[section] || prompts['English Language'];
 }
 
-async function supabaseInsert(rows) {
-  const url = `${SUPABASE_URL.replace(/\/$/, '')}/rest/v1/practice_questions`;
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'apikey': ANON_KEY,
-      'Authorization': `Bearer ${SERVICE_KEY}`,
-      'Prefer': 'return=minimal',
-    },
-    body: JSON.stringify(rows),
-  });
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(`Supabase error ${res.status}: ${text}`);
-  }
-  return true;
-}
+// ─── Main ───
 
 async function main() {
   if (!SUPABASE_URL || !SERVICE_KEY || !ANON_KEY) {
@@ -172,32 +220,72 @@ async function main() {
     process.exit(1);
   }
 
-  console.log(`📅 Generating ${QS_PER_SECTION} questions per section...`);
-  let totalInserted = 0;
+  console.log(`📅 Generating 1 passage + ${QS_PER_PASSAGE} questions per section...`);
+  let totalPassages = 0;
+  let totalQuestions = 0;
 
   for (const section of SECTIONS) {
     try {
       console.log(`  → ${section}...`);
-      const questions = await callDeepSeek(
-        buildPrompt(section),
-        `Generate ${QS_PER_SECTION} CLAT practice questions for the "${section}" section.`
+
+      // Step 1: Call AI for passage + questions together
+      const { passageData, questions: rawQuestions } = await callDeepSeek(
+        buildPassagePrompt(section),
+        `Generate 1 passage and ${QS_PER_PASSAGE} CLAT practice questions for the "${section}" section. The passage must be formatted as per CLAT 2025 standards.`
       );
 
-      if (questions.length === 0) {
+      if (!rawQuestions || rawQuestions.length === 0) {
         console.log(`    ⚠️ No questions generated`);
         continue;
       }
 
-      const rows = questions.map(q => ({ ...q, section }));
-      await supabaseInsert(rows);
-      console.log(`    ✅ ${rows.length} questions inserted`);
-      totalInserted += rows.length;
+      // Step 2: Insert passage into practice_passages table
+      let passageId = null;
+      if (passageData && passageData.content) {
+        const passageRows = await supabaseInsert('practice_passages', [{
+          section,
+          title: passageData.title || '',
+          source: passageData.source || 'AI-generated',
+          content: passageData.content,
+          difficulty: (passageData.difficulty || 'medium').toLowerCase(),
+        }]);
+        passageId = passageRows?.[0]?.id || null;
+        totalPassages++;
+        console.log(`    📄 Passage inserted: "${passageData.title || 'Untitled'}" (id: ${passageId ? passageId.substring(0, 8) + '...' : 'none'})`);
+      }
+
+      // Step 3: Normalise questions with passage link and metadata
+      const validQuestions = [];
+      for (let i = 0; i < rawQuestions.length; i++) {
+        const q = rawQuestions[i];
+        const normalised = normalise(q, passageId, i + 1);
+        if (normalised) {
+          normalised.section = section;
+          validQuestions.push(normalised);
+        }
+      }
+
+      if (validQuestions.length === 0) {
+        console.log(`    ⚠️ No valid questions after normalisation`);
+        if (passageId) {
+          // Clean up orphaned passage
+          const delUrl = `${SUPABASE_URL.replace(/\/$/, '')}/rest/v1/practice_passages?id=eq.${passageId}`;
+          await fetch(delUrl, { method: 'DELETE', headers: SUPABASE_HEADERS });
+        }
+        continue;
+      }
+
+      // Step 4: Insert all questions
+      await supabaseInsert('practice_questions', validQuestions);
+      console.log(`    ✅ ${validQuestions.length} questions inserted (${passageId ? 'passage-linked' : 'standalone'})`);
+      totalQuestions += validQuestions.length;
+
     } catch (err) {
       console.log(`    ❌ Error: ${err.message}`);
     }
   }
 
-  console.log(`\n✅ Done! ${totalInserted} new questions added today.`);
+  console.log(`\n✅ Done! ${totalPassages} passages + ${totalQuestions} new questions added today.`);
 }
 
 main().catch(err => {

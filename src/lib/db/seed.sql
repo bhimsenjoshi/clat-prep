@@ -14,8 +14,8 @@ limit 1;
 
 -- 2. Create 5 sections
 insert into public.sections (id, test_id, name, order_index) values
-  ('s-english',           '00000000-0000-0000-0000-000000000001', 'English',               0),
-  ('s-current-affairs',   '00000000-0000-0000-0000-000000000001', 'Current Affairs',        1),
+  ('s-english',           '00000000-0000-0000-0000-000000000001', 'English Language',               0),
+  ('s-current-affairs',   '00000000-0000-0000-0000-000000000001', 'Current Affairs Including General Knowledge',        1),
   ('s-legal-reasoning',   '00000000-0000-0000-0000-000000000001', 'Legal Reasoning',        2),
   ('s-logical-reasoning', '00000000-0000-0000-0000-000000000001', 'Logical Reasoning',      3),
   ('s-quantitative',      '00000000-0000-0000-0000-000000000001', 'Quantitative Techniques', 4);

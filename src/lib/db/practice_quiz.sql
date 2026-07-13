@@ -5,7 +5,7 @@
 create table public.practice_questions (
   id uuid primary key default gen_random_uuid(),
   section text not null check (section in (
-    'English', 'Current Affairs', 'Legal Reasoning',
+    'English Language', 'Current Affairs Including General Knowledge', 'Legal Reasoning',
     'Logical Reasoning', 'Quantitative Techniques'
   )),
   topic text not null default 'general',
@@ -25,7 +25,7 @@ create table public.quiz_sessions (
   id uuid primary key default gen_random_uuid(),
   student_id uuid not null references public.profiles(id) on delete cascade,
   section text not null check (section in (
-    'English', 'Current Affairs', 'Legal Reasoning',
+    'English Language', 'Current Affairs Including General Knowledge', 'Legal Reasoning',
     'Logical Reasoning', 'Quantitative Techniques'
   )),
   topic text not null default 'general',

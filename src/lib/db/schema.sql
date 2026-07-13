@@ -43,7 +43,7 @@ create table public.tests (
 create table public.sections (
   id uuid primary key default gen_random_uuid(),
   test_id uuid not null references public.tests(id) on delete cascade,
-  name text not null check (name in ('English', 'Current Affairs', 'Legal Reasoning', 'Logical Reasoning', 'Quantitative Techniques')),
+  name text not null check (name in ('English Language', 'Current Affairs Including General Knowledge', 'Legal Reasoning', 'Logical Reasoning', 'Quantitative Techniques')),
   order_index int not null,
   unique (test_id, name)
 );

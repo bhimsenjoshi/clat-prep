@@ -28,16 +28,16 @@ interface AnswerResult {
 }
 
 const SECTION_MAP: Record<string, SectionName> = {
-  'english': 'English',
-  'current-affairs': 'Current Affairs',
+  'english-language': 'English Language',
+  'current-affairs-including-general-knowledge': 'Current Affairs Including General Knowledge',
   'legal-reasoning': 'Legal Reasoning',
   'logical-reasoning': 'Logical Reasoning',
   'quantitative-techniques': 'Quantitative Techniques',
 };
 
 const SECTION_ICONS: Record<string, string> = {
-  'English': '📖',
-  'Current Affairs': '📰',
+  'English Language': '📖',
+  'Current Affairs Including General Knowledge': '📰',
   'Legal Reasoning': '⚖️',
   'Logical Reasoning': '🧠',
   'Quantitative Techniques': '📐',
