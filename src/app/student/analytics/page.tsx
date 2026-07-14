@@ -342,7 +342,7 @@ export default function AnalyticsPage() {
         <h2 className="font-semibold text-primary">📈 Practice by Section</h2>
       </div>
       {/* Header row */}
-      <div className="px-6 py-2 border-b border-theme-light flex items-center gap-4 text-[10px] text-muted font-semibold uppercase tracking-wider">
+      <div className="px-6 py-2.5 border-b border-theme flex items-center gap-4 text-[11px] text-secondary font-bold uppercase tracking-wider">
         <span className="w-[170px] shrink-0">Section</span>
         <span className="w-10 text-center shrink-0">Corr</span>
         <span className="w-10 text-center shrink-0">Wrong</span>
@@ -356,7 +356,6 @@ export default function AnalyticsPage() {
           const n = s.sessions;
           const accColor = s.medianAccuracy >= 70
             ? 'text-success' : s.medianAccuracy >= 40 ? 'text-warning' : 'text-danger';
-          const maxForScale = n > 1 ? Math.max(s.maxTime, 180) : 180;
           const fmt = (sec: number) => sec >= 60 ? `${Math.floor(sec / 60)}m${sec % 60}s` : `${sec}s`;
 
           // Abbreviated section names (fixed width)
@@ -387,7 +386,7 @@ export default function AnalyticsPage() {
               {/* Median time */}
               <span className="text-xs font-semibold text-blue-400 w-14 text-center shrink-0">{n > 0 ? fmt(s.medianTimeSeconds) : '—'}</span>
 
-              {/* SVG box plot — fixed scale 0–120s for all */}
+              {/* SVG box plot — fixed scale 0–180s for all */}
               <div className="flex-1 min-w-[100px] max-w-[180px]">
                 {n > 1 ? (
                   <svg viewBox="0 0 180 22" className="w-full h-5" preserveAspectRatio="none">
@@ -403,17 +402,27 @@ export default function AnalyticsPage() {
                       fill="rgba(59,130,246,0.2)"
                       stroke="#60a5fa"
                       strokeWidth="1"
-                    />
+                    >
+                      <title>Q₁: {fmt(s.q1Time)} · Q₃: {fmt(s.q3Time)} · Range: {fmt(s.minTime)}–{fmt(s.maxTime)}</title>
+                    </rect>
                     {/* Median line */}
-                    <line x1={Math.round((s.medianTimeSeconds / 180) * 180)} y1={3} x2={Math.round((s.medianTimeSeconds / 180) * 180)} y2={19} stroke="#60a5fa" strokeWidth="2"/>
+                    <line x1={Math.round((s.medianTimeSeconds / 180) * 180)} y1={3} x2={Math.round((s.medianTimeSeconds / 180) * 180)} y2={19} stroke="#60a5fa" strokeWidth="2">
+                      <title>Median: {fmt(s.medianTimeSeconds)}</title>
+                    </line>
                     {/* Min cap */}
-                    <line x1={Math.round((s.minTime / 180) * 180)} y1={7} x2={Math.round((s.minTime / 180) * 180)} y2={15} stroke="#475569" strokeWidth="1"/>
+                    <line x1={Math.round((s.minTime / 180) * 180)} y1={7} x2={Math.round((s.minTime / 180) * 180)} y2={15} stroke="#475569" strokeWidth="1">
+                      <title>Min: {fmt(s.minTime)}</title>
+                    </line>
                     {/* Max cap */}
-                    <line x1={Math.round((s.maxTime / 180) * 180)} y1={7} x2={Math.round((s.maxTime / 180) * 180)} y2={15} stroke="#475569" strokeWidth="1"/>
+                    <line x1={Math.round((s.maxTime / 180) * 180)} y1={7} x2={Math.round((s.maxTime / 180) * 180)} y2={15} stroke="#475569" strokeWidth="1">
+                      <title>Max: {fmt(s.maxTime)}</title>
+                    </line>
                   </svg>
                 ) : n === 1 ? (
                   <svg viewBox="0 0 180 22" className="w-full h-5" preserveAspectRatio="none">
-                    <circle cx={Math.round((s.medianTimeSeconds / 180) * 180)} cy={11} r="4" fill="rgba(59,130,246,0.3)" stroke="#60a5fa" strokeWidth="1"/>
+                    <circle cx={Math.round((s.medianTimeSeconds / 180) * 180)} cy={11} r="4" fill="rgba(59,130,246,0.3)" stroke="#60a5fa" strokeWidth="1">
+                      <title>Time: {fmt(s.medianTimeSeconds)}</title>
+                    </circle>
                   </svg>
                 ) : (
                   <span className="text-[10px] text-muted">—</span>
