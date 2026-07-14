@@ -509,7 +509,7 @@ export default function AnalyticsPage() {
     </div>
   );
 
-  const OverallSummaryContent = (
+  const PracticeSummaryContent = (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
       {/* Total Practice Questions */}
       <div className="bg-card border border-theme rounded-xl p-4 text-center shadow-theme-sm">
@@ -532,7 +532,11 @@ export default function AnalyticsPage() {
         <p className="text-4xl font-bold text-info mb-1">{avgPracticeTimePerQ}s</p>
         <p className="text-sm text-secondary">Avg Time/Q (Practice)</p>
       </div>
+    </div>
+  );
 
+  const TestSummaryContent = (
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
       {/* Total Tests Taken */}
       <div className="bg-card border border-theme rounded-xl p-4 text-center shadow-theme-sm">
         <p className="text-4xl font-bold text-accent mb-1">{completed.length}</p>
@@ -678,7 +682,7 @@ export default function AnalyticsPage() {
           <div className="space-y-6">
             <h2 className="text-xl font-bold text-primary">Practice Overview</h2>
             <LockedSection title="Practice Summary" icon="🎯" isPremium={isPremium}>
-              {OverallSummaryContent}
+              {PracticeSummaryContent}
             </LockedSection>
             {hasPracticeData ? (
               <>
@@ -707,7 +711,7 @@ export default function AnalyticsPage() {
           <div className="space-y-6">
             <h2 className="text-xl font-bold text-primary">Test Performance</h2>
             <LockedSection title="Test Summary" icon="📝" isPremium={isPremium}>
-              {OverallSummaryContent}
+              {TestSummaryContent}
             </LockedSection>
             {hasTestData ? (
               <>
