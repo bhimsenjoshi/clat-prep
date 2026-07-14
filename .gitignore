@@ -31,3 +31,4 @@ next-env.d.ts
 *.review.json
 questions_for_review.json
 reviewed_*.json
+.vercel
