@@ -745,9 +745,7 @@ export default function AnalyticsPage() {
                   Go to Dashboard →
                 </Link>
               </div>
-            ) : (
-              !editorialStatsLoading && editorialStats && EditorialActivityContent // Show content if loaded and exists
-            )}
+            ) : null}
           </div>
         )}
 
