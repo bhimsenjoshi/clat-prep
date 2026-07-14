@@ -44,6 +44,7 @@ interface PracticeSession {
   started_at: string;
   ended_at: string | null;
   avg_time_seconds: number;
+  question_times: number[];
 }
 
 interface SectionPracticeStats {
@@ -134,15 +135,16 @@ export default function AnalyticsPage() {
           .select('session_id, is_correct, time_taken_seconds')
           .in('session_id', sessionIds);
 
-        // Index responses by session
-        const respBySession: Record<string, { correct: number; total: number; totalTime: number }> = {};
+        // Index responses by session — with per-question times
+        const respBySession: Record<string, { correct: number; total: number; totalTime: number; questionTimes: number[] }> = {};
         for (const r of (responses ?? []) as any[]) {
           if (!respBySession[r.session_id]) {
-            respBySession[r.session_id] = { correct: 0, total: 0, totalTime: 0 };
+            respBySession[r.session_id] = { correct: 0, total: 0, totalTime: 0, questionTimes: [] };
           }
           respBySession[r.session_id].total++;
           if (r.is_correct) respBySession[r.session_id].correct++;
           respBySession[r.session_id].totalTime += (r.time_taken_seconds ?? 0);
+          respBySession[r.session_id].questionTimes.push(r.time_taken_seconds ?? 0);
         }
 
         const enriched: PracticeSession[] = sessions
@@ -160,6 +162,7 @@ export default function AnalyticsPage() {
             started_at: s.started_at,
             ended_at: s.ended_at,
             avg_time_seconds: rs.total > 0 ? Math.round(rs.totalTime / rs.total) : 0,
+            question_times: rs.questionTimes || [],
           };
         });
 
@@ -259,24 +262,24 @@ export default function AnalyticsPage() {
       .map(p => Math.round((p.correct_count / p.questions_answered) * 100))
       .sort((a, b) => a - b);
 
-    // Per-session median times (seconds per question)
-    const times = sSessions
-      .filter(p => p.avg_time_seconds > 0)
-      .map(p => p.avg_time_seconds)
+    // Per-question times (more granular than per-session averages)
+    const allTimes = sSessions
+      .flatMap(p => p.question_times || [])
+      .filter(t => t > 0)
       .sort((a, b) => a - b);
 
     const n = accs.length;
-    const tn = times.length;
+    const tn = allTimes.length;
 
     // Median: average of two middle values when even
     const medianAcc = n > 0
       ? (n % 2 === 1 ? accs[Math.floor(n / 2)] : Math.round((accs[n / 2 - 1] + accs[n / 2]) / 2))
       : 0;
     const medianTime = tn > 0
-      ? (tn % 2 === 1 ? times[Math.floor(tn / 2)] : Math.round((times[tn / 2 - 1] + times[tn / 2]) / 2))
+      ? (tn % 2 === 1 ? allTimes[Math.floor(tn / 2)] : Math.round((allTimes[tn / 2 - 1] + allTimes[tn / 2]) / 2))
       : 0;
-    const q1 = tn > 0 ? times[Math.floor(tn * 0.25)] : 0;
-    const q3 = tn > 0 ? times[Math.floor(tn * 0.75)] : 0;
+    const q1 = tn > 0 ? allTimes[Math.floor(tn * 0.25)] : 0;
+    const q3 = tn > 0 ? allTimes[Math.floor(tn * 0.75)] : 0;
     return {
       name,
       icon: SECTION_ICONS[name] || '📝',
@@ -287,8 +290,8 @@ export default function AnalyticsPage() {
       medianTimeSeconds: medianTime,
       q1Time: q1,
       q3Time: q3,
-      minTime: tn > 0 ? times[0] : 0,
-      maxTime: tn > 0 ? times[tn - 1] : 0,
+      minTime: tn > 0 ? allTimes[0] : 0,
+      maxTime: tn > 0 ? allTimes[tn - 1] : 0,
       medianAccuracy: medianAcc,
       sessions: sSessions.length,
     };
@@ -390,7 +393,7 @@ export default function AnalyticsPage() {
 
                 {/* Box plot — left-aligned, compact */}
                 <div className="w-[190px] shrink-0 flex items-center justify-start">
-                  {n > 1 ? (
+                  {s.totalQuestions >= 2 ? (
                     <svg viewBox="0 0 100 16" className="w-full h-4 max-w-[100px]" preserveAspectRatio="none">
                       {/* Whisker line */}
                       <line x1={0} y1={8} x2={100} y2={8} stroke="#334155" strokeWidth="1"/>
@@ -418,7 +421,7 @@ export default function AnalyticsPage() {
                         <title>Max: {fmt(s.maxTime)}</title>
                       </line>
                     </svg>
-                  ) : n === 1 ? (
+                  ) : s.totalQuestions === 1 ? (
                     <svg viewBox="0 0 16 16" className="w-4 h-4 shrink-0">
                       <circle cx={8} cy={8} r="4" fill="rgba(59,130,246,0.3)" stroke="#60a5fa" strokeWidth="1">
                         <title>Time: {fmt(s.medianTimeSeconds)}</title>
