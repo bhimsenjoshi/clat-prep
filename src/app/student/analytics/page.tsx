@@ -341,6 +341,16 @@ export default function AnalyticsPage() {
       <div className="px-6 py-4 border-b border-theme">
         <h2 className="font-semibold text-primary">📈 Practice by Section</h2>
       </div>
+      {/* Header row */}
+      <div className="px-6 py-2 border-b border-theme-light flex items-center gap-4 text-[10px] text-muted font-semibold uppercase tracking-wider">
+        <span className="w-[170px] shrink-0">Section</span>
+        <span className="w-10 text-center shrink-0">Corr</span>
+        <span className="w-10 text-center shrink-0">Wrong</span>
+        <span className="w-10 text-center shrink-0">Q</span>
+        <span className="w-10 text-center shrink-0">Acc</span>
+        <span className="w-14 text-center shrink-0">Med</span>
+        <span className="flex-1 min-w-[100px]">Time Distribution</span>
+      </div>
       <div className="divide-y divide-theme-light">
         {sectionPracticeStats.map(s => {
           const n = s.sessions;
@@ -348,71 +358,67 @@ export default function AnalyticsPage() {
             ? 'text-success' : s.medianAccuracy >= 40 ? 'text-warning' : 'text-danger';
           const maxForScale = n > 1 ? Math.max(s.maxTime, 120) : 120;
           const fmt = (sec: number) => sec >= 60 ? `${Math.floor(sec / 60)}m${sec % 60}s` : `${sec}s`;
-          const W = 120, H = 22;
+
+          // Abbreviated section names (fixed width)
+          const shortName: Record<string, string> = {
+            'English Language': 'English',
+            'Current Affairs Including General Knowledge': 'Current Affairs',
+            'Legal Reasoning': 'Legal',
+            'Logical Reasoning': 'Logical',
+            'Quantitative Techniques': 'Quant',
+          };
 
           return (
-            <div key={s.name} className="px-6 py-4 flex items-center gap-4 hover:bg-elevated transition">
-              {/* Icon + name */}
+            <div key={s.name} className="px-6 py-3.5 flex items-center gap-4 hover:bg-elevated transition">
+              {/* Icon + abbreviated name */}
               <span className="text-base shrink-0">{s.icon}</span>
-              <span className="text-sm font-medium text-primary min-w-[150px] truncate">{s.name}</span>
+              <span className="text-sm font-medium text-primary w-[150px] shrink-0 truncate">{shortName[s.name] || s.name}</span>
 
               {/* ✓ ✗ */}
-              <span className="text-xs text-success shrink-0 font-medium">{s.correct}✓</span>
-              <span className="text-xs text-danger shrink-0 font-medium">{s.incorrect}✗</span>
+              <span className="text-xs text-success shrink-0 w-10 text-center font-medium">{s.correct}</span>
+              <span className="text-xs text-danger shrink-0 w-10 text-center font-medium">{s.incorrect}</span>
 
               {/* Total Q */}
-              <span className="text-xs text-muted shrink-0 w-10 text-right">{s.totalQuestions} Q</span>
+              <span className="text-xs text-muted shrink-0 w-10 text-center">{s.totalQuestions}</span>
 
               {/* Accuracy */}
-              <span className={`text-sm font-bold w-10 text-right shrink-0 ${accColor}`}>{s.medianAccuracy}%</span>
+              <span className={`text-sm font-bold w-10 text-center shrink-0 ${accColor}`}>{s.medianAccuracy}%</span>
 
               {/* Median time */}
-              <span className="text-xs font-semibold text-blue-400 w-14 text-right shrink-0">{n > 0 ? fmt(s.medianTimeSeconds) : '—'}</span>
+              <span className="text-xs font-semibold text-blue-400 w-14 text-center shrink-0">{n > 0 ? fmt(s.medianTimeSeconds) : '—'}</span>
 
-              {/* SVG box plot — small inline */}
-              <div className="flex-1 min-w-[100px] max-w-[160px]">
+              {/* SVG box plot — fixed scale 0–120s for all */}
+              <div className="flex-1 min-w-[100px] max-w-[180px]">
                 {n > 1 ? (
-                  <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-5" preserveAspectRatio="none">
+                  <svg viewBox="0 0 120 22" className="w-full h-5" preserveAspectRatio="none">
                     {/* Whisker line */}
-                    <line x1={0} y1={H/2} x2={W} y2={H/2} stroke="#334155" strokeWidth="1"/>
+                    <line x1={0} y1={11} x2={120} y2={11} stroke="#334155" strokeWidth="1"/>
                     {/* IQR box */}
                     <rect
-                      x={(s.q1Time / maxForScale) * W}
+                      x={(s.q1Time / 120) * 120}
                       y={4}
-                      width={Math.max(((s.q3Time - s.q1Time) / maxForScale) * W, 3)}
-                      height={H - 8}
+                      width={Math.max(((s.q3Time - s.q1Time) / 120) * 120, 3)}
+                      height={14}
                       rx={1.5}
                       fill="rgba(59,130,246,0.2)"
                       stroke="#60a5fa"
                       strokeWidth="1"
                     />
                     {/* Median line */}
-                    <line
-                      x1={(s.medianTimeSeconds / maxForScale) * W}
-                      y1={3}
-                      x2={(s.medianTimeSeconds / maxForScale) * W}
-                      y2={H - 3}
-                      stroke="#60a5fa"
-                      strokeWidth="2"
-                    />
+                    <line x1={(s.medianTimeSeconds / 120) * 120} y1={3} x2={(s.medianTimeSeconds / 120) * 120} y2={19} stroke="#60a5fa" strokeWidth="2"/>
                     {/* Min cap */}
-                    <line x1={(s.minTime / maxForScale) * W} y1={7} x2={(s.minTime / maxForScale) * W} y2={H - 7} stroke="#475569" strokeWidth="1"/>
+                    <line x1={(s.minTime / 120) * 120} y1={7} x2={(s.minTime / 120) * 120} y2={15} stroke="#475569" strokeWidth="1"/>
                     {/* Max cap */}
-                    <line x1={(s.maxTime / maxForScale) * W} y1={7} x2={(s.maxTime / maxForScale) * W} y2={H - 7} stroke="#475569" strokeWidth="1"/>
+                    <line x1={(s.maxTime / 120) * 120} y1={7} x2={(s.maxTime / 120) * 120} y2={15} stroke="#475569" strokeWidth="1"/>
                   </svg>
                 ) : n === 1 ? (
-                  <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-5" preserveAspectRatio="none">
-                    <circle cx={(s.medianTimeSeconds / maxForScale) * W} cy={H/2} r="4" fill="rgba(59,130,246,0.3)" stroke="#60a5fa" strokeWidth="1"/>
+                  <svg viewBox="0 0 120 22" className="w-full h-5" preserveAspectRatio="none">
+                    <circle cx={(s.medianTimeSeconds / 120) * 120} cy={11} r="4" fill="rgba(59,130,246,0.3)" stroke="#60a5fa" strokeWidth="1"/>
                   </svg>
                 ) : (
                   <span className="text-[10px] text-muted">—</span>
                 )}
               </div>
-
-              {/* Range label */}
-              <span className="text-[10px] text-muted w-12 text-right shrink-0">
-                {n > 1 && s.minTime !== s.maxTime ? `${fmt(s.minTime)}–${fmt(s.maxTime)}` : ''}
-              </span>
             </div>
           );
         })}
