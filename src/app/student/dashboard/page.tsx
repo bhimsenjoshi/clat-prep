@@ -104,6 +104,9 @@ export default function StudentDashboard() {
   const [quizAnswers, setQuizAnswers] = useState<number[]>([]);
   const [quizSubmitted, setQuizSubmitted] = useState(false);
   const [quizError, setQuizError] = useState<string | null>(null);
+  const [editorialTodayRead, setEditorialTodayRead] = useState(0);
+  const [editorialQuizTodayCorrect, setEditorialQuizTodayCorrect] = useState(0);
+  const [editorialQuizTodayTotal, setEditorialQuizTodayTotal] = useState(0);
   const router = useRouter();
   const supabase = createClient();
 
@@ -302,13 +305,25 @@ export default function StudentDashboard() {
       .catch(() => setEditorialsLoading(false));
   }, []);
 
-  // ─── Fetch editorial activity (reads + quizzes) ───
+  // ─── Fetch editorial activity (reads + quizzes) + today's editorial stats ───
   useEffect(() => {
+    const today = new Date().toISOString().split('T')[0];
     fetch('/api/editorials/activity')
       .then(r => r.json())
       .then(data => {
         const read = new Set<string>((data.activities || []).map((a: any) => a.article_url));
         setReadArticles(read);
+
+        // Today's editorial stats
+        const todayActivities = (data.activities || []).filter((a: any) => {
+          const d = (a.read_at || a.created_at || '').split('T')[0];
+          return d === today;
+        });
+        setEditorialTodayRead(todayActivities.length);
+        const todayCorrect = todayActivities.reduce((s: number, a: any) => s + (a.quiz_correct || 0), 0);
+        const todayTotal = todayActivities.reduce((s: number, a: any) => s + (a.quiz_total || 0), 0);
+        setEditorialQuizTodayCorrect(todayCorrect);
+        setEditorialQuizTodayTotal(todayTotal);
       })
       .catch(() => {});
   }, []);
@@ -511,11 +526,12 @@ export default function StudentDashboard() {
         {/* #2 — STREAK + TODAY STATS                     */}
         {/* ════════════════════════════════════════════ */}
         <SectionCard title="Today's Stats" icon="📊" collapsible defaultExpanded={false}>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
           <div className="bg-card border border-theme rounded-xl p-4 text-center">
             <div className="text-2xl mb-1">{streak > 0 ? '🔥' : '❄️'}</div>
             <p className="text-2xl font-bold text-primary">{streak}</p>
-            <p className="text-[10px] text-secondary font-semibold uppercase tracking-wider">Day Streak</p>
+            <p className="text-[10px] text-secondary font-semibold uppercase tracking-wider">Practice Streak</p>
+            <p className="text-[8px] text-muted mt-0.5">Consecutive days practiced</p>
           </div>
           <div className="bg-card border border-theme rounded-xl p-4 text-center">
             <div className="text-2xl mb-1">📝</div>
@@ -523,16 +539,29 @@ export default function StudentDashboard() {
             <p className="text-[10px] text-secondary font-semibold uppercase tracking-wider">Questions Today</p>
           </div>
           <div className="bg-card border border-theme rounded-xl p-4 text-center">
+            <div className="text-2xl mb-1">📰</div>
+            <p className="text-2xl font-bold text-primary">{editorialTodayRead}</p>
+            <p className="text-[10px] text-secondary font-semibold uppercase tracking-wider">Editorials Read</p>
+          </div>
+          <div className="bg-card border border-theme rounded-xl p-4 text-center">
             <div className="text-2xl mb-1">📊</div>
             <p className="text-2xl font-bold text-primary">
               {totalPracticeQ > 0 ? `${practiceAccuracy}%` : '—'}
             </p>
-            <p className="text-[10px] text-secondary font-semibold uppercase tracking-wider">Accuracy</p>
+            <p className="text-[10px] text-secondary font-semibold uppercase tracking-wider">Practice Accuracy</p>
           </div>
           <div className="bg-card border border-theme rounded-xl p-4 text-center">
             <div className="text-2xl mb-1">📚</div>
             <p className="text-2xl font-bold text-primary">{totalPracticeQ}</p>
-            <p className="text-[10px] text-secondary font-semibold uppercase tracking-wider">Total Q</p>
+            <p className="text-[10px] text-secondary font-semibold uppercase tracking-wider">Total Practice Q</p>
+          </div>
+          <div className="bg-card border border-theme rounded-xl p-4 text-center">
+            <div className="text-2xl mb-1">🧠</div>
+            <p className="text-2xl font-bold text-primary">
+              {editorialQuizTodayTotal > 0 ? `${Math.round((editorialQuizTodayCorrect / editorialQuizTodayTotal) * 100)}%` : '—'}
+            </p>
+            <p className="text-[10px] text-secondary font-semibold uppercase tracking-wider">Quiz Accuracy</p>
+            <p className="text-[8px] text-muted mt-0.5">Editorial quizzes</p>
           </div>
         </div>
         </SectionCard>
