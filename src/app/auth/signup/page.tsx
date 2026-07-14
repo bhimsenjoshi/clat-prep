@@ -142,9 +142,9 @@ export default function SignupPage() {
               onChange={(e) => setClatYear(Number(e.target.value))}
               className="w-full bg-white text-gray-900 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
             >
-              <option value={2026}>2026</option>
               <option value={2027}>2027</option>
               <option value={2028}>2028</option>
+              <option value={2029}>2029</option>
             </select>
           </div>
           <div>
