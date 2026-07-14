@@ -338,96 +338,81 @@ export default function AnalyticsPage() {
 
   const PracticeBySectionContent = (
     <div className="bg-card border border-theme rounded-xl shadow-theme-sm">
-      <div className="px-6 py-4 border-b border-theme flex items-center justify-between">
+      <div className="px-6 py-4 border-b border-theme">
         <h2 className="font-semibold text-primary">📈 Practice by Section</h2>
-        <span className="text-xs text-muted">Accuracy · Time box plot · {formatTime(0)}–{formatTime(120)}</span>
       </div>
-      <div className="p-6 space-y-6">
+      <div className="divide-y divide-theme-light">
         {sectionPracticeStats.map(s => {
           const n = s.sessions;
           const accColor = s.medianAccuracy >= 70
             ? 'text-success' : s.medianAccuracy >= 40 ? 'text-warning' : 'text-danger';
-
-          // Box plot for TIME: find reasonable max for the axis
           const maxForScale = n > 1 ? Math.max(s.maxTime, 120) : 120;
-          const W = 200, H = 40, P = 20;
-          const plotW = W - P * 2;
-          const x = (v: number) => P + (v / maxForScale) * plotW;
           const fmt = (sec: number) => sec >= 60 ? `${Math.floor(sec / 60)}m${sec % 60}s` : `${sec}s`;
+          const W = 120, H = 22;
 
           return (
-            <div key={s.name}>
-              {/* Header row */}
-              <div className="flex items-center justify-between mb-1">
-                <div className="flex items-center gap-2 min-w-0">
-                  <span className="text-base shrink-0">{s.icon}</span>
-                  <span className="text-sm font-medium text-primary truncate">{s.name}</span>
-                  <span className="text-[10px] text-muted bg-elevated px-1.5 py-0.5 rounded-full shrink-0">
-                    {n} session{n !== 1 ? 's' : ''}
-                  </span>
-                </div>
-                <div className="flex items-center gap-3 text-xs shrink-0">
-                  <span className="font-semibold text-success">{s.correct}<span className="text-muted font-normal">✓</span></span>
-                  <span className="font-semibold text-danger">{s.incorrect}<span className="text-muted font-normal">✗</span></span>
-                  <span className="text-muted">· {s.totalQuestions}Q</span>
-                </div>
-              </div>
+            <div key={s.name} className="px-6 py-4 flex items-center gap-4 hover:bg-elevated transition">
+              {/* Icon + name */}
+              <span className="text-base shrink-0">{s.icon}</span>
+              <span className="text-sm font-medium text-primary min-w-[150px] truncate">{s.name}</span>
 
-              {/* Content row: big accuracy + time box plot */}
-              <div className="flex items-center gap-3">
-                {/* Accuracy — big number */}
-                <div className="shrink-0 w-10 text-center">
-                  <p className={`text-lg font-bold leading-tight ${accColor}`}>{s.medianAccuracy}</p>
-                  <p className="text-[8px] text-muted leading-tight">%</p>
-                </div>
+              {/* ✓ ✗ */}
+              <span className="text-xs text-success shrink-0 font-medium">{s.correct}✓</span>
+              <span className="text-xs text-danger shrink-0 font-medium">{s.incorrect}✗</span>
 
-                {/* SVG Box Plot — for TIME per question */}
-                <div className="flex-1 min-w-0">
-                  <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-10" preserveAspectRatio="none">
-                    {/* Background track */}
-                    <rect x={P} y={16} width={plotW} height={8} rx={4} fill="#1e293b"/>
+              {/* Total Q */}
+              <span className="text-xs text-muted shrink-0 w-10 text-right">{s.totalQuestions} Q</span>
 
-                    {n > 1 ? (
-                      <>
-                        {/* Whisker line */}
-                        <line x1={x(s.minTime)} y1={20} x2={x(s.maxTime)} y2={20} stroke="#334155" strokeWidth="1"/>
-                        {/* Whisker caps */}
-                        <line x1={x(s.minTime)} y1={16} x2={x(s.minTime)} y2={24} stroke="#475569" strokeWidth="1"/>
-                        <line x1={x(s.maxTime)} y1={16} x2={x(s.maxTime)} y2={24} stroke="#475569" strokeWidth="1"/>
-                        {/* IQR box */}
-                        <rect
-                          x={x(s.q1Time)}
-                          y={13}
-                          width={Math.max(x(s.q3Time) - x(s.q1Time), 4)}
-                          height={14} rx={2}
-                          fill="rgba(59,130,246,0.2)"
-                          stroke="#3b82f6"
-                          strokeWidth="1.5"
-                        />
-                        {/* Median line */}
-                        <line x1={x(s.medianTimeSeconds)} y1={11} x2={x(s.medianTimeSeconds)} y2={29} stroke="#3b82f6" strokeWidth="2.5"/>
-                      </>
-                    ) : n === 1 ? (
-                      <>
-                        <circle cx={x(s.medianTimeSeconds)} cy={20} r="6" fill="rgba(59,130,246,0.2)" stroke="#3b82f6" strokeWidth="1.5"/>
-                        <text x={x(s.medianTimeSeconds)} y={23} fill="#3b82f6" fontSize="7" textAnchor="middle" fontWeight="600">{fmt(s.medianTimeSeconds)}</text>
-                      </>
-                    ) : (
-                      <text x={W/2} y={24} fill="#475569" fontSize="9" textAnchor="middle">No sessions</text>
-                    )}
+              {/* Accuracy */}
+              <span className={`text-sm font-bold w-10 text-right shrink-0 ${accColor}`}>{s.medianAccuracy}%</span>
 
-                    {/* Axis labels */}
-                    <text x={P} y={H-2} fill="#475569" fontSize="7" textAnchor="middle">0</text>
-                    <text x={W-P} y={H-2} fill="#475569" fontSize="7" textAnchor="middle">{fmt(maxForScale)}</text>
+              {/* Median time */}
+              <span className="text-xs font-semibold text-blue-400 w-14 text-right shrink-0">{n > 0 ? fmt(s.medianTimeSeconds) : '—'}</span>
+
+              {/* SVG box plot — small inline */}
+              <div className="flex-1 min-w-[100px] max-w-[160px]">
+                {n > 1 ? (
+                  <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-5" preserveAspectRatio="none">
+                    {/* Whisker line */}
+                    <line x1={0} y1={H/2} x2={W} y2={H/2} stroke="#334155" strokeWidth="1"/>
+                    {/* IQR box */}
+                    <rect
+                      x={(s.q1Time / maxForScale) * W}
+                      y={4}
+                      width={Math.max(((s.q3Time - s.q1Time) / maxForScale) * W, 3)}
+                      height={H - 8}
+                      rx={1.5}
+                      fill="rgba(59,130,246,0.2)"
+                      stroke="#60a5fa"
+                      strokeWidth="1"
+                    />
+                    {/* Median line */}
+                    <line
+                      x1={(s.medianTimeSeconds / maxForScale) * W}
+                      y1={3}
+                      x2={(s.medianTimeSeconds / maxForScale) * W}
+                      y2={H - 3}
+                      stroke="#60a5fa"
+                      strokeWidth="2"
+                    />
+                    {/* Min cap */}
+                    <line x1={(s.minTime / maxForScale) * W} y1={7} x2={(s.minTime / maxForScale) * W} y2={H - 7} stroke="#475569" strokeWidth="1"/>
+                    {/* Max cap */}
+                    <line x1={(s.maxTime / maxForScale) * W} y1={7} x2={(s.maxTime / maxForScale) * W} y2={H - 7} stroke="#475569" strokeWidth="1"/>
                   </svg>
-                </div>
-
-                {/* Median time label */}
-                <div className="shrink-0 w-14 text-center">
-                  <p className="text-sm font-bold text-blue-400 leading-tight">{fmt(s.medianTimeSeconds)}</p>
-                  <p className="text-[8px] text-muted leading-tight">med</p>
-                </div>
+                ) : n === 1 ? (
+                  <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-5" preserveAspectRatio="none">
+                    <circle cx={(s.medianTimeSeconds / maxForScale) * W} cy={H/2} r="4" fill="rgba(59,130,246,0.3)" stroke="#60a5fa" strokeWidth="1"/>
+                  </svg>
+                ) : (
+                  <span className="text-[10px] text-muted">—</span>
+                )}
               </div>
+
+              {/* Range label */}
+              <span className="text-[10px] text-muted w-12 text-right shrink-0">
+                {n > 1 && s.minTime !== s.maxTime ? `${fmt(s.minTime)}–${fmt(s.maxTime)}` : ''}
+              </span>
             </div>
           );
         })}
