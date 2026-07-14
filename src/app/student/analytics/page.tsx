@@ -7,13 +7,13 @@ import Link from 'next/link';
 import PageHeader from '@/components/PageHeader';
 
 const SECTION_NAMES = [
-  'English', 'Current Affairs', 'Legal Reasoning',
+  'English Language', 'Current Affairs Including General Knowledge', 'Legal Reasoning',
   'Logical Reasoning', 'Quantitative Techniques',
 ] as const;
 
 const SECTION_ICONS: Record<string, string> = {
-  'English': '📖',
-  'Current Affairs': '📰',
+  'English Language': '📖',
+  'Current Affairs Including General Knowledge': '📰',
   'Legal Reasoning': '⚖️',
   'Logical Reasoning': '🧠',
   'Quantitative Techniques': '📐',

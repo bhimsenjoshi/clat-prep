@@ -11,16 +11,16 @@ import SectionCard from '@/components/SectionCard';
 const CLAT_DATE = new Date('2026-12-06T09:00:00+05:30');
 
 const SECTION_ICONS: Record<string, string> = {
-  'English': '⚖️',
-  'Current Affairs': '📜',
+  'English Language': '⚖️',
+  'Current Affairs Including General Knowledge': '📜',
   'Legal Reasoning': '🔨',
   'Logical Reasoning': '☸️',
   'Quantitative Techniques': '📂',
 };
 
 const SECTIONS = [
-  { id: 'English', label: 'English', icon: '📖', color: 'indigo', desc: 'Reading comprehension' },
-  { id: 'Current Affairs', label: 'Current Affairs', icon: '📜', color: 'emerald', desc: 'GK & news' },
+  { id: 'English Language', label: 'English Language', icon: '📖', color: 'indigo', desc: 'Reading comprehension' },
+  { id: 'Current Affairs Including General Knowledge', label: 'Current Affairs', icon: '📜', color: 'emerald', desc: 'GK & news' },
   { id: 'Legal Reasoning', label: 'Legal Reasoning', icon: '🔨', color: 'amber', desc: 'Legal principles' },
   { id: 'Logical Reasoning', label: 'Logical Reasoning', icon: '☸️', color: 'purple', desc: 'Critical thinking' },
   { id: 'Quantitative Techniques', label: 'Quantitative Techniques', icon: '📂', color: 'rose', desc: 'Data & math' },
