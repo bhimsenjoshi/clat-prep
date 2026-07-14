@@ -246,10 +246,10 @@ export default function ProfilePage() {
                       type="text"
                       value={editUsername}
                       onChange={(e) => {
-                        const cleaned = e.target.value.replace(/[^a-zA-Z0-9_]/g, '').toLowerCase();
-                        setEditUsername(cleaned);
-                        clearTimeout(debounceTimerRef.current);
-                        debounceTimerRef.current = setTimeout(() => checkUsername(cleaned), 300);
+                        const v = e.target.value.replace(/[^a-zA-Z0-9_]/g, '').toLowerCase();
+                        setEditUsername(v);
+                        if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
+                        debounceTimerRef.current = setTimeout(() => checkUsername(v), 300);
                       }}
                       className="flex-1 bg-elevated border border-theme text-primary rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-accent"
                       placeholder="cool_clater"
