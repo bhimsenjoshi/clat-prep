@@ -396,9 +396,9 @@ export default function AnalyticsPage() {
                       <line x1={0} y1={8} x2={100} y2={8} stroke="#334155" strokeWidth="1"/>
                       {/* IQR box */}
                       <rect
-                        x={Math.min(s.q1Time / 180 * 100, 96)}
+                        x={Math.min(s.q1Time / 240 * 100, 96)}
                         y={3}
-                        width={Math.max(Math.min((s.q3Time - s.q1Time) / 180 * 100, 96), 3)}
+                        width={Math.max(Math.min((s.q3Time - s.q1Time) / 240 * 100, 96), 3)}
                         height={10} rx={1.5}
                         fill="rgba(59,130,246,0.2)"
                         stroke="#60a5fa" strokeWidth="1"
@@ -406,15 +406,15 @@ export default function AnalyticsPage() {
                         <title>Q₁: {fmt(s.q1Time)} · Q₃: {fmt(s.q3Time)}</title>
                       </rect>
                       {/* Median line */}
-                      <line x1={Math.min(s.medianTimeSeconds / 180 * 100, 99)} y1={2} x2={Math.min(s.medianTimeSeconds / 180 * 100, 99)} y2={14} stroke="#60a5fa" strokeWidth="2">
+                      <line x1={Math.min(s.medianTimeSeconds / 240 * 100, 99)} y1={2} x2={Math.min(s.medianTimeSeconds / 240 * 100, 99)} y2={14} stroke="#60a5fa" strokeWidth="2">
                         <title>Median: {fmt(s.medianTimeSeconds)}</title>
                       </line>
                       {/* Min cap */}
-                      <line x1={Math.min(s.minTime / 180 * 100, 99)} y1={5} x2={Math.min(s.minTime / 180 * 100, 99)} y2={11} stroke="#475569" strokeWidth="1">
+                      <line x1={Math.min(s.minTime / 240 * 100, 99)} y1={5} x2={Math.min(s.minTime / 240 * 100, 99)} y2={11} stroke="#475569" strokeWidth="1">
                         <title>Min: {fmt(s.minTime)}</title>
                       </line>
                       {/* Max cap */}
-                      <line x1={Math.min(s.maxTime / 180 * 100, 99)} y1={5} x2={Math.min(s.maxTime / 180 * 100, 99)} y2={11} stroke="#475569" strokeWidth="1">
+                      <line x1={Math.min(s.maxTime / 240 * 100, 99)} y1={5} x2={Math.min(s.maxTime / 240 * 100, 99)} y2={11} stroke="#475569" strokeWidth="1">
                         <title>Max: {fmt(s.maxTime)}</title>
                       </line>
                     </svg>
