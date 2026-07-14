@@ -6,8 +6,8 @@ export async function updateSession(request: NextRequest) {
   const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
   const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 
-  // Read auth token from cookie (set by client after sign-in)
   const accessToken = request.cookies.get('clat-at')?.value;
+  const clientSv = request.cookies.get('clat-sv')?.value;
 
   let user = null;
   let role: string | null = 'student';
@@ -17,33 +17,42 @@ export async function updateSession(request: NextRequest) {
     const { data } = await supabase.auth.getUser(accessToken);
     user = data?.user ?? null;
 
-    // Check role via service_key (bypasses RLS)
     if (user && serviceKey) {
       const adminClient = createClient(supabaseUrl, serviceKey);
       const { data: profile } = await adminClient
         .from('profiles')
-        .select('role')
+        .select('role, session_version')
         .eq('id', user.id)
         .single();
+
       role = profile?.role ?? 'student';
+
+      // session_version check: allow up to 2 concurrent sessions (version 1 or 2)
+      // If no clat-sv cookie, or it doesn't match DB, kick to login
+      if (profile && clientSv) {
+        const dbSv = profile.session_version ?? 0;
+        if (Number(clientSv) !== dbSv) {
+          const res = NextResponse.redirect(new URL('/auth/login', request.url));
+          res.cookies.delete('clat-at');
+          res.cookies.delete('clat-sv');
+          return res;
+        }
+      }
     }
   }
 
   const { pathname } = request.nextUrl;
 
-  // Protected admin routes → redirect to login or student dash
   if (pathname.startsWith('/admin')) {
     if (!user) return NextResponse.redirect(new URL('/auth/login', request.url));
     if (role !== 'admin') return NextResponse.redirect(new URL('/student/dashboard', request.url));
   }
 
-  // Protected student routes → redirect to login or admin dash
   if (pathname.startsWith('/student')) {
     if (!user) return NextResponse.redirect(new URL('/auth/login', request.url));
     if (role === 'admin') return NextResponse.redirect(new URL('/admin/dashboard', request.url));
   }
 
-  // Auth pages → redirect logged-in users to their dashboard
   if (pathname.startsWith('/auth') && user) {
     return NextResponse.redirect(
       new URL(role === 'admin' ? '/admin/dashboard' : '/student/dashboard', request.url)

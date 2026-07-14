@@ -27,7 +27,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: error.message }, { status: 401 });
   }
 
-  // Query role with service_role key (bypass RLS)
+  // Query role + session count
   const adminSupabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!,
@@ -36,15 +36,32 @@ export async function POST(request: Request) {
 
   const { data: profile } = await adminSupabase
     .from('profiles')
-    .select('role')
+    .select('role, session_version')
     .eq('id', data.user.id)
     .single();
+
+  // Allow up to 2 concurrent sessions. session_version cycles 1→2→1→2...
+  // Each login picks the next slot, bumping the oldest session in that slot.
+  const currentVersion = profile?.session_version ?? 0;
+  const newVersion = currentVersion >= 2 ? 1 : currentVersion + 1;
+
+  await adminSupabase
+    .from('profiles')
+    .update({ session_version: newVersion })
+    .eq('id', data.user.id);
+
+  // Store session_version so middleware can check it
+  cookieStore.set('clat-sv', String(newVersion), {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'lax',
+    path: '/',
+    maxAge: 60 * 60 * 24 * 30,
+  });
 
   const role = profile?.role === 'admin' ? 'admin' : 'student';
   const redirectTo = role === 'admin' ? '/admin/dashboard' : '/student/dashboard';
 
-  // Return JSON so the client can do a full page load to the redirect URL
-  // The cookies are included in this response via Set-Cookie headers
   return NextResponse.json({
     success: true,
     redirectTo,
