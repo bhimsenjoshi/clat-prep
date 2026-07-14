@@ -102,6 +102,7 @@ export default function AnalyticsPage() {
   const [activeTab, setActiveTab] = useState<'practice' | 'tests' | 'editorials'>('practice');
   const [editorialStats, setEditorialStats] = useState<any>(null);
   const [editorialStatsLoading, setEditorialStatsLoading] = useState(true);
+  const [dailyReadData, setDailyReadData] = useState<{date: string; reads: number}[]>([]);
 
   useEffect(() => {
     const load = async () => {
@@ -221,6 +222,7 @@ export default function AnalyticsPage() {
       .then(r => r.json())
       .then(data => {
         setEditorialStats(data.stats || null);
+        setDailyReadData(data.dailyReadData || []);
         setEditorialStatsLoading(false);
       })
       .catch(() => setEditorialStatsLoading(false));
@@ -565,21 +567,69 @@ export default function AnalyticsPage() {
         <h2 className="font-semibold text-primary">📰 Editorial Quiz Activity</h2>
       </div>
       {!editorialStatsLoading && editorialStats ? (
-        <div className="p-6 space-y-4">
+        <><div className="p-6 space-y-4">
           <div className="flex items-center justify-between">
             <p className="text-sm text-primary">Total Editorials Read</p>
-            <p className="text-sm font-bold text-accent">{editorialStats.read}</p>
+            <p className="text-sm font-bold text-accent">{editorialStats.totalRead}</p>
           </div>
           <div className="flex items-center justify-between">
             <p className="text-sm text-primary">Quizzes Attempted</p>
-            <p className="text-sm font-bold text-accent">{editorialStats.quizzes}</p>
+            <p className="text-sm font-bold text-accent">{editorialStats.quizedArticles}</p>
           </div>
           <div className="flex items-center justify-between">
             <p className="text-sm text-primary">Average Score</p>
-            <p className="text-sm font-bold text-accent">{editorialStats.avg_score}%</p>
+            <p className="text-sm font-bold text-accent">{editorialStats.quizAccuracy}%</p>
+          </div>
+          <div className="flex items-center justify-between">
+            <p className="text-sm text-primary">Reading Streak</p>
+            <p className="text-sm font-bold text-success">{editorialStats.streak} day{editorialStats.streak !== 1 ? 's' : ''}</p>
           </div>
         </div>
-      ) : !editorialStatsLoading && !editorialStats ? (
+
+        <div className="border-t border-theme pt-4">
+          <p className="text-[11px] font-semibold text-secondary uppercase tracking-wider mb-3">📈 Daily Reads (30 days)</p>
+          <div className="relative h-28">
+            {/* SVG line chart */}
+            <svg viewBox="0 0 300 100" className="w-full h-full overflow-visible" preserveAspectRatio="none">
+              {(() => {
+                const data = dailyReadData;
+                if (data.length === 0) return null;
+                const maxReads = Math.max(...data.map(d => d.reads), 1);
+                const pts = data.map((d, i) => {
+                  const x = (i / (data.length - 1)) * 300;
+                  const y = 100 - (d.reads / maxReads) * 85 - 5;
+                  return `${x},${y}`;
+                });
+                const line = pts.join(' ');
+                const area = `0,100 ${line} 300,100`;
+                return (
+                  <>
+                    <defs>
+                      <linearGradient id="editorial-fill" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="rgb(99 102 241)" stopOpacity="0.3" />
+                        <stop offset="100%" stopColor="rgb(99 102 241)" stopOpacity="0.02" />
+                      </linearGradient>
+                    </defs>
+                    <path d={`M${line}`} fill="none" stroke="rgb(99 102 241)" strokeWidth="1.5" vectorEffect="non-scaling-stroke" />
+                    <path d={`M${area}`} fill="url(#editorial-fill)" />
+                  </>
+                );
+              })()}
+            </svg>
+            {/* Y-axis labels */}
+            <div className="absolute left-0 top-0 h-full flex flex-col justify-between text-[9px] text-muted pointer-events-none">
+              <span>{Math.max(...dailyReadData.map(d => d.reads), 1)}</span>
+              <span>0</span>
+            </div>
+          </div>
+          {/* X-axis: show every 5th day label */}
+          <div className="flex justify-between text-[8px] text-muted mt-1 px-0">
+            {dailyReadData.filter((_, i) => i % 5 === 0 || i === dailyReadData.length - 1).map(d => (
+              <span key={d.date}>{new Date(d.date + 'T00:00:00').toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</span>
+            ))}
+          </div>
+        </div>
+        </>) : !editorialStatsLoading && !editorialStats ? (
         <div className="p-6 text-center text-muted">
           No editorial activity yet. Start reading from the dashboard!
         </div>

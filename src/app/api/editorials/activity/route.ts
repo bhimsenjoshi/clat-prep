@@ -139,6 +139,22 @@ export async function GET() {
       }
     }
 
+    // Compute daily read counts for last 30 days (line chart data)
+    const dailyReadMap: Record<string, number> = {};
+    for (const a of activities) {
+      if (a.read_at) {
+        const day = new Date(a.read_at).toISOString().split('T')[0];
+        dailyReadMap[day] = (dailyReadMap[day] || 0) + 1;
+      }
+    }
+    const dailyReadData: { date: string; reads: number }[] = [];
+    for (let i = 29; i >= 0; i--) {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      const key = d.toISOString().split('T')[0];
+      dailyReadData.push({ date: key, reads: dailyReadMap[key] || 0 });
+    }
+
     return NextResponse.json({
       activities,
       stats: {
@@ -151,6 +167,7 @@ export async function GET() {
         streak,
         topics: [...topics],
       },
+      dailyReadData,
     });
   } catch (err: any) {
     console.error('Editorial activity GET error:', err);
