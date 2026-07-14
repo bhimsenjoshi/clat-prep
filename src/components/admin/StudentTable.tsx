@@ -13,6 +13,7 @@ interface Student {
   avgScore: number;
   bestScore: number;
   is_promo_user?: boolean;
+  created_at: string;
 }
 
 export default function StudentTable({ initialStudents }: { initialStudents: Student[] }) {
@@ -98,6 +99,7 @@ export default function StudentTable({ initialStudents }: { initialStudents: Stu
             <thead className="bg-elevated text-secondary">
               <tr>
                 <th className="text-left px-6 py-3 font-medium text-primary">Name / Email</th>
+                <th className="text-left px-6 py-3 font-medium text-primary">User ID</th>
                 <th className="text-center px-4 py-3 font-medium text-primary">Role</th>
                 <th className="text-center px-4 py-3 font-medium text-primary font-semibold">Tiers & Subscription</th>
                 <th className="text-center px-4 py-3 font-medium text-primary">Tests</th>
@@ -111,7 +113,12 @@ export default function StudentTable({ initialStudents }: { initialStudents: Stu
                 <tr key={s.id} className="hover:bg-elevated transition-colors">
                   <td className="px-6 py-3">
                     <div className="font-medium text-primary">{s.full_name || '—'}</div>
-                    <div className="text-xs text-muted mt-0.5">{s.email}</div>
+                    <div className="text-xs text-muted mt-0.5">
+                      {new Date(s.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                    </div>
+                  </td>
+                  <td className="px-6 py-3">
+                    <code className="text-[10px] text-muted font-mono">{s.id.slice(0, 8)}</code>
                   </td>
                   <td className="px-4 py-3 text-center">
                     <span
