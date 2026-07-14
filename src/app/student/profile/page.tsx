@@ -1,12 +1,13 @@
 'use client';
 
-import { useEffect, useState, useRef, useCallback } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import type { ExtendedProfile } from '@/types';
 import ChangePassword from '@/components/ChangePassword';
 import PageHeader from '@/components/PageHeader';
+import EditableFields from '@/components/EditableFields';
 
 const PLAN_BADGES: Record<string, { label: string; color: string; icon: string; features: string[] }> = {
   free: {
@@ -39,15 +40,6 @@ export default function ProfilePage() {
   const [uploading, setUploading] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  // ─── Editable fields ───
-  const [editUsername, setEditUsername] = useState('');
-  const [editSchool, setEditSchool] = useState('');
-  const [editClatYear, setEditClatYear] = useState(2027);
-  const [editing, setEditing] = useState<'username' | 'school' | null>(null);
-  const [savingEdit, setSavingEdit] = useState(false);
-  const [usernameStatus, setUsernameStatus] = useState<{ valid: boolean; available: boolean; error: string | null } | null>(null);
-  const [checkingUsername, setCheckingUsername] = useState(false);
-  const debounceTimerRef = useRef<NodeJS.Timeout>(undefined as any);
 
   useEffect(() => {
     const loadProfile = async () => {
@@ -62,9 +54,6 @@ export default function ProfilePage() {
 
       setProfile(prof as ExtendedProfile);
       setAvatarUrl((prof as any)?.avatar_url ?? null);
-      setEditUsername(((prof as any)?.username || '').replace('@', ''));
-      setEditSchool((prof as any)?.school || '');
-      setEditClatYear((prof as any)?.clat_year || 2027);
       setLoading(false);
     };
     loadProfile();
@@ -107,52 +96,6 @@ export default function ProfilePage() {
       setUpgradeMsg({ type: 'error', text: err.message || 'Upload failed' });
     }
     setUploading(false);
-  };
-
-  // ─── Username availability check ───
-  const checkUsername = useCallback(async (val: string) => {
-    if (val.length < 3) { setUsernameStatus(null); return; }
-    setCheckingUsername(true);
-    try {
-      const res = await fetch(`/api/username/check?username=${encodeURIComponent(val)}`);
-      const data = await res.json();
-      setUsernameStatus(data);
-    } catch {
-      setUsernameStatus({ valid: false, available: false, error: 'Check failed' });
-    } finally {
-      setCheckingUsername(false);
-    }
-  }, []);
-
-  const saveUsername = async () => {
-    if (!usernameStatus?.valid || !usernameStatus?.available) return;
-    setSavingEdit(true);
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) { setSavingEdit(false); return; }
-    const { error } = await supabase
-      .from('profiles')
-      .update({ username: '@' + editUsername } as any)
-      .eq('id', user.id);
-    if (!error) {
-      setEditing(null);
-      setUpgradeMsg({ type: 'success', text: '✅ Username updated!' });
-    }
-    setSavingEdit(false);
-  };
-
-  const saveSchoolYear = async () => {
-    setSavingEdit(true);
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) { setSavingEdit(false); return; }
-    const { error } = await supabase
-      .from('profiles')
-      .update({ school: editSchool, clat_year: editClatYear } as any)
-      .eq('id', user.id);
-    if (!error) {
-      setEditing(null);
-      setUpgradeMsg({ type: 'success', text: '✅ Profile updated!' });
-    }
-    setSavingEdit(false);
   };
 
   // Rest of the handlers
@@ -234,102 +177,12 @@ export default function ProfilePage() {
           </div>
 
           {/* Details grid */}
-          <div className="px-6 py-5 grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Username */}
-            <div>
-              <p className="text-xs font-medium text-muted uppercase tracking-wider mb-1">Username</p>
-              {editing === 'username' ? (
-                <div className="flex flex-col gap-1.5">
-                  <div className="flex items-center gap-1">
-                    <span className="text-sm text-muted shrink-0">@</span>
-                    <input
-                      type="text"
-                      value={editUsername}
-                      onChange={(e) => {
-                        const v = e.target.value.replace(/[^a-zA-Z0-9_]/g, '').toLowerCase();
-                        setEditUsername(v);
-                        if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
-                        debounceTimerRef.current = setTimeout(() => checkUsername(v), 300);
-                      }}
-                      className="flex-1 bg-elevated border border-theme text-primary rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-accent"
-                      placeholder="cool_clater"
-                      autoFocus
-                    />
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-[10px]">
-                      {checkingUsername ? <span className="text-muted">⏳</span>
-                        : usernameStatus?.available && usernameStatus?.valid
-                          ? <span className="text-green-400">✅</span>
-                          : usernameStatus && !usernameStatus?.available
-                            ? <span className="text-red-400">❌ {usernameStatus.error || 'Taken'}</span>
-                            : null}
-                    </span>
-                    <button onClick={saveUsername} disabled={!usernameStatus?.available || savingEdit}
-                      className="text-[11px] font-medium px-3 py-1 rounded-lg bg-accent text-white hover:bg-accent-hover disabled:opacity-40 transition">
-                      Save
-                    </button>
-                    <button onClick={() => { setEditing(null); setUsernameStatus(null); setEditUsername(((profile as any)?.username || '').replace('@', '')); }}
-                      className="text-[11px] text-muted hover:text-secondary transition">
-                      Cancel
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <div className="flex items-center gap-2 group cursor-pointer" onClick={() => setEditing('username')}>
-                  <p className="text-sm text-primary">{(profile as any)?.username || '—'}</p>
-                  <span className="text-[10px] text-accent/0 group-hover:text-accent transition-colors">✏️ Change</span>
-                </div>
-              )}
-            </div>
-            {/* School */}
-            <div>
-              <p className="text-xs font-medium text-muted uppercase tracking-wider mb-1">School / College</p>
-              {editing === 'school' ? (
-                <div className="flex flex-col gap-1.5">
-                  <input
-                    type="text"
-                    value={editSchool}
-                    onChange={(e) => setEditSchool(e.target.value)}
-                    className="bg-elevated border border-theme text-primary rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-accent"
-                    placeholder="Your school/college"
-                    autoFocus
-                  />
-                  <div className="flex gap-2">
-                    <button onClick={saveSchoolYear} disabled={savingEdit}
-                      className="text-[10px] font-medium px-2 py-1 rounded bg-accent text-white disabled:opacity-40">
-                      Save
-                    </button>
-                    <button onClick={() => { setEditing(null); setEditSchool((profile as any)?.school || ''); }}
-                      className="text-[10px] text-muted hover:text-secondary">
-                      Cancel
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <div className="flex items-center gap-2">
-                  <p className="text-sm text-primary">{(profile as any)?.school || '—'}</p>
-                  <button onClick={() => setEditing('school')} className="text-[10px] text-accent hover:text-accent/70">Edit</button>
-                </div>
-              )}
-            </div>
-            {/* CLAT Year */}
-            <div>
-              <p className="text-xs font-medium text-muted uppercase tracking-wider mb-1">CLAT Year</p>
-              {editing === 'school' ? (
-                <select
-                  value={editClatYear}
-                  onChange={(e) => setEditClatYear(Number(e.target.value))}
-                  className="bg-elevated border border-theme text-primary rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-accent"
-                >
-                  <option value={2027}>2027</option>
-                  <option value={2028}>2028</option>
-                  <option value={2029}>2029</option>
-                </select>
-              ) : (
-                <p className="text-sm text-primary">{(profile as any)?.clat_year || '—'}</p>
-              )}
-            </div>
+          <EditableFields
+            initialUsername={((profile as any)?.username || '').replace('@', '')}
+            initialSchool={(profile as any)?.school || ''}
+            initialClatYear={(profile as any)?.clat_year || 2027}
+          />
+          <div className="px-6 py-0 pb-5 grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <p className="text-xs font-medium text-muted uppercase tracking-wider mb-1">Email</p>
               <p className="text-sm text-primary">{profile.email || '—'}</p>
