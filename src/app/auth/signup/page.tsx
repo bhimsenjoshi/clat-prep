@@ -9,6 +9,9 @@ export default function SignupPage() {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [school, setSchool] = useState('');
+  const [clatYear, setClatYear] = useState(2027);
+  const [minorConsent, setMinorConsent] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [confirmed, setConfirmed] = useState(false);
@@ -24,7 +27,12 @@ export default function SignupPage() {
       email,
       password,
       options: {
-        data: { full_name: fullName },
+        data: {
+          full_name: fullName,
+          school,
+          clat_year: clatYear,
+          minor_consent: minorConsent,
+        },
         emailRedirectTo: `https://www.clatly.com/auth/callback`,
       },
     });
@@ -116,6 +124,30 @@ export default function SignupPage() {
             />
           </div>
           <div>
+            <label htmlFor="school" className="block text-sm font-medium mb-1">School / College</label>
+            <input
+              id="school"
+              type="text"
+              value={school}
+              onChange={(e) => setSchool(e.target.value)}
+              className="w-full bg-white text-gray-900 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              placeholder="e.g. Delhi Public School, R.K. Puram"
+            />
+          </div>
+          <div>
+            <label htmlFor="clatYear" className="block text-sm font-medium mb-1">CLAT Year</label>
+            <select
+              id="clatYear"
+              value={clatYear}
+              onChange={(e) => setClatYear(Number(e.target.value))}
+              className="w-full bg-white text-gray-900 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            >
+              <option value={2026}>2026</option>
+              <option value={2027}>2027</option>
+              <option value={2028}>2028</option>
+            </select>
+          </div>
+          <div>
             <label htmlFor="password" className="block text-sm font-medium mb-1">Password</label>
             <input
               id="password"
@@ -127,6 +159,19 @@ export default function SignupPage() {
               className="w-full bg-white text-gray-900 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
               placeholder="At least 6 characters"
             />
+          </div>
+
+          <div className="flex items-start gap-2">
+            <input
+              id="minorConsent"
+              type="checkbox"
+              checked={minorConsent}
+              onChange={(e) => setMinorConsent(e.target.checked)}
+              className="mt-0.5 h-4 w-4 shrink-0 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+            />
+            <label htmlFor="minorConsent" className="text-xs text-gray-500 leading-relaxed">
+              I confirm that I am 18 years or older, or have obtained parental/guardian consent to use this platform.
+            </label>
           </div>
 
           {error && <p className="text-red-600 text-sm">{error}</p>}

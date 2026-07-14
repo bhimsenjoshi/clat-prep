@@ -8,6 +8,11 @@ create extension if not exists "pgcrypto";
 create table public.profiles (
   id uuid primary key references auth.users(id) on delete cascade,
   full_name text not null default '',
+  username text unique,
+  school text not null default '',
+  clat_year int not null default 2027,
+  minor_consent boolean not null default false,
+  display_name text,
   role text not null check (role in ('student', 'admin')) default 'student',
   created_at timestamptz not null default now()
 );
@@ -19,8 +24,15 @@ language plpgsql
 security definer set search_path = public
 as $$
 begin
-  insert into public.profiles (id, full_name)
-  values (new.id, coalesce(new.raw_user_meta_data ->> 'full_name', ''));
+  insert into public.profiles (id, full_name, username, school, clat_year, minor_consent)
+  values (
+    new.id,
+    coalesce(new.raw_user_meta_data ->> 'full_name', ''),
+    '@user_' || substr(md5(random()::text || clock_timestamp()::text), 1, 6),
+    coalesce(new.raw_user_meta_data ->> 'school', ''),
+    coalesce((new.raw_user_meta_data ->> 'clat_year')::int, 2027),
+    coalesce((new.raw_user_meta_data ->> 'minor_consent')::boolean, false)
+  );
   return new;
 end;
 $$;
