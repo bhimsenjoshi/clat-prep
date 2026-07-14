@@ -53,7 +53,12 @@ interface SectionPracticeStats {
   correct: number;
   incorrect: number;
   accuracy: number;
-  avgTimeSeconds: number;
+  medianTimeSeconds: number;
+  q1Time: number;
+  q3Time: number;
+  minTime: number;
+  maxTime: number;
+  medianAccuracy: number;
   sessions: number;
 }
 
@@ -247,7 +252,31 @@ export default function AnalyticsPage() {
     const sSessions = practiceSessions.filter(p => p.section === name);
     const totalQ = sSessions.reduce((s, p) => s + p.questions_answered, 0);
     const correct = sSessions.reduce((s, p) => s + p.correct_count, 0);
-    const totalTime = sSessions.reduce((s, p) => s + (p.avg_time_seconds * p.questions_answered), 0);
+
+    // Per-session accuracies
+    const accs = sSessions
+      .filter(p => p.questions_answered > 0)
+      .map(p => Math.round((p.correct_count / p.questions_answered) * 100))
+      .sort((a, b) => a - b);
+
+    // Per-session median times (seconds per question)
+    const times = sSessions
+      .filter(p => p.avg_time_seconds > 0)
+      .map(p => p.avg_time_seconds)
+      .sort((a, b) => a - b);
+
+    const n = accs.length;
+    const tn = times.length;
+
+    // Median: average of two middle values when even
+    const medianAcc = n > 0
+      ? (n % 2 === 1 ? accs[Math.floor(n / 2)] : Math.round((accs[n / 2 - 1] + accs[n / 2]) / 2))
+      : 0;
+    const medianTime = tn > 0
+      ? (tn % 2 === 1 ? times[Math.floor(tn / 2)] : Math.round((times[tn / 2 - 1] + times[tn / 2]) / 2))
+      : 0;
+    const q1 = tn > 0 ? times[Math.floor(tn * 0.25)] : 0;
+    const q3 = tn > 0 ? times[Math.floor(tn * 0.75)] : 0;
     return {
       name,
       icon: SECTION_ICONS[name] || '📝',
@@ -255,7 +284,12 @@ export default function AnalyticsPage() {
       correct,
       incorrect: totalQ - correct,
       accuracy: totalQ > 0 ? Math.round((correct / totalQ) * 100) : 0,
-      avgTimeSeconds: totalQ > 0 ? Math.round(totalTime / totalQ) : 0,
+      medianTimeSeconds: medianTime,
+      q1Time: q1,
+      q3Time: q3,
+      minTime: tn > 0 ? times[0] : 0,
+      maxTime: tn > 0 ? times[tn - 1] : 0,
+      medianAccuracy: medianAcc,
       sessions: sSessions.length,
     };
   });
@@ -306,71 +340,93 @@ export default function AnalyticsPage() {
     <div className="bg-card border border-theme rounded-xl shadow-theme-sm">
       <div className="px-6 py-4 border-b border-theme flex items-center justify-between">
         <h2 className="font-semibold text-primary">📈 Practice by Section</h2>
-        <span className="text-xs text-muted">Session dots · Median</span>
+        <span className="text-xs text-muted">Accuracy · Time box plot · {formatTime(0)}–{formatTime(120)}</span>
       </div>
       <div className="p-6 space-y-6">
         {sectionPracticeStats.map(s => {
-          // Per-session accuracies for this section
-          const sessionAccs = practiceSessions
-            .filter(p => p.section === s.name && p.questions_answered > 0)
-            .map(p => Math.round((p.correct_count / p.questions_answered) * 100))
-            .sort((a, b) => a - b);
-          const n = sessionAccs.length;
-          const median = n > 0 ? sessionAccs[Math.floor(n / 2)] : 0;
-          const barW = 160;
-          const perDot = n > 1 ? Math.min(barW / (n - 1), 30) : 0;
+          const n = s.sessions;
+          const accColor = s.medianAccuracy >= 70
+            ? 'text-success' : s.medianAccuracy >= 40 ? 'text-warning' : 'text-danger';
+
+          // Box plot for TIME: find reasonable max for the axis
+          const maxForScale = n > 1 ? Math.max(s.maxTime, 120) : 120;
+          const W = 200, H = 40, P = 20;
+          const plotW = W - P * 2;
+          const x = (v: number) => P + (v / maxForScale) * plotW;
+          const fmt = (sec: number) => sec >= 60 ? `${Math.floor(sec / 60)}m${sec % 60}s` : `${sec}s`;
 
           return (
             <div key={s.name}>
-              <div className="flex items-center justify-between mb-1.5">
+              {/* Header row */}
+              <div className="flex items-center justify-between mb-1">
                 <div className="flex items-center gap-2 min-w-0">
                   <span className="text-base shrink-0">{s.icon}</span>
                   <span className="text-sm font-medium text-primary truncate">{s.name}</span>
                   <span className="text-[10px] text-muted bg-elevated px-1.5 py-0.5 rounded-full shrink-0">
-                    {s.sessions} session{s.sessions !== 1 ? 's' : ''}
+                    {n} session{n !== 1 ? 's' : ''}
                   </span>
                 </div>
                 <div className="flex items-center gap-3 text-xs shrink-0">
                   <span className="font-semibold text-success">{s.correct}<span className="text-muted font-normal">✓</span></span>
                   <span className="font-semibold text-danger">{s.incorrect}<span className="text-muted font-normal">✗</span></span>
-                  <span className={`font-bold text-sm ${
-                    median >= 70 ? 'text-success' : median >= 40 ? 'text-warning' : 'text-danger'
-                  }`}>
-                    {median}<span className="text-[10px] text-muted font-normal">%</span>
-                  </span>
-                  {s.avgTimeSeconds > 0 && <span className="text-muted">⏱{formatTime(s.avgTimeSeconds)}</span>}
+                  <span className="text-muted">· {s.totalQuestions}Q</span>
                 </div>
               </div>
 
-              {/* Session dots row */}
-              <div className="flex items-center gap-1.5 h-5">
-                <div className="flex-1 relative h-full">
-                  {/* Background track */}
-                  <div className="absolute inset-0 flex items-center">
-                    <div className="w-full h-2 bg-elevated rounded-full overflow-hidden">
-                      <div
-                        className={`h-full rounded-full transition-all ${
-                          median >= 70 ? 'bg-success/60' : median >= 40 ? 'bg-warning/60' : 'bg-danger/60'
-                        }`}
-                        style={{ width: `${Math.min(median, 100)}%` }}
-                      />
-                    </div>
-                  </div>
-                  {/* Session dots */}
-                  <div className="absolute inset-0 flex items-center" style={{ paddingLeft: '4px', paddingRight: '4px' }}>
-                    {sessionAccs.map((a, i) => (
-                      <div
-                        key={i}
-                        className={`w-2 h-2 rounded-full shrink-0 ${
-                          a >= 70 ? 'bg-success' : a >= 40 ? 'bg-warning' : 'bg-danger'
-                        } ${n > 1 ? 'ring-1 ring-black/20' : ''}`}
-                        style={n > 1 ? { marginLeft: i === 0 ? 0 : `${perDot}px` } : {}}
-                        title={`${a}%`}
-                      />
-                    ))}
-                  </div>
+              {/* Content row: big accuracy + time box plot */}
+              <div className="flex items-center gap-3">
+                {/* Accuracy — big number */}
+                <div className="shrink-0 w-10 text-center">
+                  <p className={`text-lg font-bold leading-tight ${accColor}`}>{s.medianAccuracy}</p>
+                  <p className="text-[8px] text-muted leading-tight">%</p>
                 </div>
-                <span className="text-[10px] text-muted w-10 text-right shrink-0">{s.totalQuestions} Q</span>
+
+                {/* SVG Box Plot — for TIME per question */}
+                <div className="flex-1 min-w-0">
+                  <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-10" preserveAspectRatio="none">
+                    {/* Background track */}
+                    <rect x={P} y={16} width={plotW} height={8} rx={4} fill="#1e293b"/>
+
+                    {n > 1 ? (
+                      <>
+                        {/* Whisker line */}
+                        <line x1={x(s.minTime)} y1={20} x2={x(s.maxTime)} y2={20} stroke="#334155" strokeWidth="1"/>
+                        {/* Whisker caps */}
+                        <line x1={x(s.minTime)} y1={16} x2={x(s.minTime)} y2={24} stroke="#475569" strokeWidth="1"/>
+                        <line x1={x(s.maxTime)} y1={16} x2={x(s.maxTime)} y2={24} stroke="#475569" strokeWidth="1"/>
+                        {/* IQR box */}
+                        <rect
+                          x={x(s.q1Time)}
+                          y={13}
+                          width={Math.max(x(s.q3Time) - x(s.q1Time), 4)}
+                          height={14} rx={2}
+                          fill="rgba(59,130,246,0.2)"
+                          stroke="#3b82f6"
+                          strokeWidth="1.5"
+                        />
+                        {/* Median line */}
+                        <line x1={x(s.medianTimeSeconds)} y1={11} x2={x(s.medianTimeSeconds)} y2={29} stroke="#3b82f6" strokeWidth="2.5"/>
+                      </>
+                    ) : n === 1 ? (
+                      <>
+                        <circle cx={x(s.medianTimeSeconds)} cy={20} r="6" fill="rgba(59,130,246,0.2)" stroke="#3b82f6" strokeWidth="1.5"/>
+                        <text x={x(s.medianTimeSeconds)} y={23} fill="#3b82f6" fontSize="7" textAnchor="middle" fontWeight="600">{fmt(s.medianTimeSeconds)}</text>
+                      </>
+                    ) : (
+                      <text x={W/2} y={24} fill="#475569" fontSize="9" textAnchor="middle">No sessions</text>
+                    )}
+
+                    {/* Axis labels */}
+                    <text x={P} y={H-2} fill="#475569" fontSize="7" textAnchor="middle">0</text>
+                    <text x={W-P} y={H-2} fill="#475569" fontSize="7" textAnchor="middle">{fmt(maxForScale)}</text>
+                  </svg>
+                </div>
+
+                {/* Median time label */}
+                <div className="shrink-0 w-14 text-center">
+                  <p className="text-sm font-bold text-blue-400 leading-tight">{fmt(s.medianTimeSeconds)}</p>
+                  <p className="text-[8px] text-muted leading-tight">med</p>
+                </div>
               </div>
             </div>
           );
