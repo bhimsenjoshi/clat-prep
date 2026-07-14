@@ -4,7 +4,7 @@
 ALTER TABLE public.profiles
   ADD COLUMN IF NOT EXISTS username text UNIQUE,
   ADD COLUMN IF NOT EXISTS school text NOT NULL DEFAULT '',
-  ADD COLUMN IF NOT EXISTS clat_year int NOT NULL DEFAULT 2026,
+  ADD COLUMN IF NOT EXISTS clat_year int NOT NULL DEFAULT 2027,
   ADD COLUMN IF NOT EXISTS minor_consent boolean NOT NULL DEFAULT false,
   ADD COLUMN IF NOT EXISTS display_name text;
 
@@ -18,12 +18,15 @@ LANGUAGE plpgsql
 SECURITY DEFINER SET search_path = public
 AS $$
 BEGIN
-  INSERT INTO public.profiles (id, full_name, username)
+  INSERT INTO public.profiles (id, full_name, username, school, clat_year, minor_consent)
   VALUES (
     new.id,
     COALESCE(new.raw_user_meta_data ->> 'full_name', ''),
-    '@user_' || substr(md5(random()::text || clock_timestamp()::text), 1, 6)
+    '@user_' || substr(md5(random()::text || clock_timestamp()::text), 1, 6),
+    COALESCE(new.raw_user_meta_data ->> 'school', ''),
+    COALESCE((new.raw_user_meta_data ->> 'clat_year')::int, 2027),
+    COALESCE((new.raw_user_meta_data ->> 'minor_consent')::boolean, false)
   );
   RETURN new;
 END;
-$$ LANGUAGE plpgsql;
+$$;

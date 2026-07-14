@@ -35,7 +35,7 @@ begin
   );
   return new;
 end;
-$$ language plpgsql;
+$$;
 
 create or replace trigger on_auth_user_created
   after insert on auth.users
