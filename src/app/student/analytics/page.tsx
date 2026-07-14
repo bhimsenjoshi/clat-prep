@@ -306,107 +306,71 @@ export default function AnalyticsPage() {
     <div className="bg-card border border-theme rounded-xl shadow-theme-sm">
       <div className="px-6 py-4 border-b border-theme flex items-center justify-between">
         <h2 className="font-semibold text-primary">📈 Practice by Section</h2>
-        <span className="text-xs text-muted">Box plot · Outliers · Avg Time</span>
+        <span className="text-xs text-muted">Session dots · Median</span>
       </div>
-      <div className="p-6 space-y-8">
+      <div className="p-6 space-y-6">
         {sectionPracticeStats.map(s => {
-          // Compute per-session accuracies for this section
+          // Per-session accuracies for this section
           const sessionAccs = practiceSessions
-            .filter(p => p.section === s.name)
-            .map(p => p.questions_answered > 0 ? Math.round((p.correct_count / p.questions_answered) * 100) : 0)
+            .filter(p => p.section === s.name && p.questions_answered > 0)
+            .map(p => Math.round((p.correct_count / p.questions_answered) * 100))
             .sort((a, b) => a - b);
           const n = sessionAccs.length;
-          const q1 = n > 0 ? sessionAccs[Math.floor(n * 0.25)] : 0;
-          const med = n > 0 ? sessionAccs[Math.floor(n * 0.5)] : 0;
-          const q3 = n > 0 ? sessionAccs[Math.floor(n * 0.75)] : 0;
-          const iqr = q3 - q1;
-          const lowerFence = q1 - 1.5 * iqr;
-          const upperFence = q3 + 1.5 * iqr;
-          const outliers = sessionAccs.filter(a => a < lowerFence || a > upperFence);
-          const innerMin = n > 0 ? Math.min(...sessionAccs.filter(a => a >= lowerFence && a <= upperFence)) : 0;
-          const innerMax = n > 0 ? Math.max(...sessionAccs.filter(a => a >= lowerFence && a <= upperFence)) : 0;
-          
-          // SVG box plot dimensions
-          const svgW = 220, svgH = 36, pad = 30;
-          const plotW = svgW - pad * 2;
-          const toX = (v: number) => pad + (v / 100) * plotW;
+          const median = n > 0 ? sessionAccs[Math.floor(n / 2)] : 0;
+          const barW = 160;
+          const perDot = n > 1 ? Math.min(barW / (n - 1), 30) : 0;
 
           return (
             <div key={s.name}>
-              {/* Header row */}
-              <div className="flex items-center justify-between mb-2">
-                <div className="flex items-center gap-2">
-                  <span className="text-lg">{s.icon}</span>
-                  <span className="text-sm font-medium text-primary">{s.name}</span>
-                  <span className="text-[10px] text-muted bg-elevated px-1.5 py-0.5 rounded-full">
+              <div className="flex items-center justify-between mb-1.5">
+                <div className="flex items-center gap-2 min-w-0">
+                  <span className="text-base shrink-0">{s.icon}</span>
+                  <span className="text-sm font-medium text-primary truncate">{s.name}</span>
+                  <span className="text-[10px] text-muted bg-elevated px-1.5 py-0.5 rounded-full shrink-0">
                     {s.sessions} session{s.sessions !== 1 ? 's' : ''}
                   </span>
                 </div>
-                <div className="flex items-center gap-4 text-xs text-secondary">
+                <div className="flex items-center gap-3 text-xs shrink-0">
                   <span className="font-semibold text-success">{s.correct}<span className="text-muted font-normal">✓</span></span>
                   <span className="font-semibold text-danger">{s.incorrect}<span className="text-muted font-normal">✗</span></span>
-                  <span className={`font-semibold ${
-                    s.accuracy >= 70 ? 'text-success' : s.accuracy >= 40 ? 'text-warning' : 'text-danger'
+                  <span className={`font-bold text-sm ${
+                    median >= 70 ? 'text-success' : median >= 40 ? 'text-warning' : 'text-danger'
                   }`}>
-                    {s.accuracy}%
+                    {median}<span className="text-[10px] text-muted font-normal">%</span>
                   </span>
-                  {s.avgTimeSeconds > 0 && <span>⏱ {formatTime(s.avgTimeSeconds)}</span>}
+                  {s.avgTimeSeconds > 0 && <span className="text-muted">⏱{formatTime(s.avgTimeSeconds)}</span>}
                 </div>
               </div>
 
-              {/* SVG Box Plot */}
-              <div className="flex items-center gap-3">
-                <div className="flex-1 min-w-0">
-                  <svg viewBox={`0 0 ${svgW} ${svgH}`} className="w-full h-9 overflow-visible" preserveAspectRatio="none">
-                    {/* Axis line */}
-                    <line x1={pad} y1={svgH - 4} x2={svgW - pad} y2={svgH - 4} stroke="#334155" strokeWidth="1"/>
-                    {/* Axis labels 0% and 100% */}
-                    <text x={pad} y={svgH - 1} fill="#64748b" fontSize="7" textAnchor="middle">0</text>
-                    <text x={svgW - pad} y={svgH - 1} fill="#64748b" fontSize="7" textAnchor="middle">100</text>
-
-                    {n > 1 ? (
-                      <>
-                        {/* Whisker line (min to max) */}
-                        <line x1={toX(innerMin)} y1={12} x2={toX(innerMax)} y2={12} stroke="#64748b" strokeWidth="1.5"/>
-                        {/* Left whisker cap */}
-                        <line x1={toX(innerMin)} y1={8} x2={toX(innerMin)} y2={16} stroke="#64748b" strokeWidth="1.5"/>
-                        {/* Right whisker cap */}
-                        <line x1={toX(innerMax)} y1={8} x2={toX(innerMax)} y2={16} stroke="#64748b" strokeWidth="1.5"/>
-                        {/* IQR box (Q1 to Q3) */}
-                        <rect x={toX(q1)} y={5} width={Math.max(toX(q3) - toX(q1), 6)} height={14}
-                          fill={s.accuracy >= 70 ? 'rgba(52,211,153,0.25)' : s.accuracy >= 40 ? 'rgba(251,191,36,0.25)' : 'rgba(248,113,113,0.25)'}
-                          stroke={s.accuracy >= 70 ? '#34d399' : s.accuracy >= 40 ? '#fbbf24' : '#f87171'} strokeWidth="1.5" rx="2"/>
-                        {/* Median line */}
-                        <line x1={toX(med)} y1={5} x2={toX(med)} y2={19} stroke={s.accuracy >= 70 ? '#34d399' : s.accuracy >= 40 ? '#fbbf24' : '#f87171'} strokeWidth="2.5"/>
-                        {/* Mean dot */}
-                        <circle cx={toX(s.accuracy)} cy={21} r="3" fill={s.accuracy >= 70 ? '#34d399' : s.accuracy >= 40 ? '#fbbf24' : '#f87171'} opacity="0.8"/>
-                      </>
-                    ) : n === 1 ? (
-                      <>
-                        {/* Single session — just a dot */}
-                        <circle cx={toX(sessionAccs[0])} cy={12} r="5" fill={s.accuracy >= 70 ? '#34d399' : s.accuracy >= 40 ? '#fbbf24' : '#f87171'}/>
-                        <text x={toX(sessionAccs[0]) + 8} y={15} fill={s.accuracy >= 70 ? '#34d399' : s.accuracy >= 40 ? '#fbbf24' : '#f87171'} fontSize="7">{sessionAccs[0]}%</text>
-                      </>
-                    ) : (
-                      <text x={svgW / 2} y={14} fill="#64748b" fontSize="8" textAnchor="middle">No data</text>
-                    )}
-
-                    {/* Outlier dots */}
-                    {outliers.map((o, oi) => (
-                      <circle key={oi} cx={toX(o)} cy={12} r="3" fill="#f87171" stroke="#fb7185" strokeWidth="1"/>
+              {/* Session dots row */}
+              <div className="flex items-center gap-1.5 h-5">
+                <div className="flex-1 relative h-full">
+                  {/* Background track */}
+                  <div className="absolute inset-0 flex items-center">
+                    <div className="w-full h-2 bg-elevated rounded-full overflow-hidden">
+                      <div
+                        className={`h-full rounded-full transition-all ${
+                          median >= 70 ? 'bg-success/60' : median >= 40 ? 'bg-warning/60' : 'bg-danger/60'
+                        }`}
+                        style={{ width: `${Math.min(median, 100)}%` }}
+                      />
+                    </div>
+                  </div>
+                  {/* Session dots */}
+                  <div className="absolute inset-0 flex items-center" style={{ paddingLeft: '4px', paddingRight: '4px' }}>
+                    {sessionAccs.map((a, i) => (
+                      <div
+                        key={i}
+                        className={`w-2 h-2 rounded-full shrink-0 ${
+                          a >= 70 ? 'bg-success' : a >= 40 ? 'bg-warning' : 'bg-danger'
+                        } ${n > 1 ? 'ring-1 ring-black/20' : ''}`}
+                        style={n > 1 ? { marginLeft: i === 0 ? 0 : `${perDot}px` } : {}}
+                        title={`${a}%`}
+                      />
                     ))}
-                  </svg>
+                  </div>
                 </div>
-                {/* Summary stats */}
-                <div className="shrink-0 text-[10px] text-muted text-right leading-relaxed">
-                  {n > 1 ? (
-                    <>{innerMin}% – {innerMax}%</>
-                  ) : n === 1 ? (
-                    <>{sessionAccs[0]}%</>
-                  ) : (
-                    <>—</>
-                  )}
-                </div>
+                <span className="text-[10px] text-muted w-10 text-right shrink-0">{s.totalQuestions} Q</span>
               </div>
             </div>
           );
