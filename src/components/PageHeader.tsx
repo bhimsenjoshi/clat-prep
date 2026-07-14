@@ -72,14 +72,14 @@ export default function PageHeader({ title, navItems, isAdmin, backHref }: PageH
             <Link
               key={item.href}
               href={item.href}
-              className="hidden sm:inline-block px-3 py-2 rounded-lg text-sm font-medium text-secondary hover:bg-card-hover active:scale-[0.97] transition-all duration-150"
+              className="px-2 py-1.5 rounded-lg text-xs font-medium text-secondary hover:bg-card-hover active:scale-[0.97] transition-all duration-150"
             >
               {item.icon && <span>{item.icon} </span>}{item.label}
             </Link>
           ))}
           {isAdmin && (
             <Link href="/admin/dashboard"
-              className="hidden sm:inline-block px-3 py-2 rounded-lg text-sm font-medium text-accent hover:bg-card-hover active:scale-[0.97] transition-all duration-150">
+              className="px-2 py-1.5 rounded-lg text-xs font-medium text-accent hover:bg-card-hover active:scale-[0.97] transition-all duration-150">
               ⚙️ Admin
             </Link>
           )}
