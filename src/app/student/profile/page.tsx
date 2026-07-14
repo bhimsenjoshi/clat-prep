@@ -252,7 +252,12 @@ export default function ProfilePage() {
                     <input
                       type="text"
                       value={editUsername}
-                      onChange={(e) => handleUsernameChange(e.target.value)}
+                      onChange={(e) => {
+                        const cleaned = e.target.value.replace(/[^a-zA-Z0-9_]/g, '').toLowerCase();
+                        setEditUsername(cleaned);
+                        clearTimeout(debounceTimer);
+                        debounceTimer = setTimeout(() => checkUsername(cleaned), 300);
+                      }}
                       className="flex-1 bg-elevated border border-theme text-primary rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-accent"
                       placeholder="cool_clater"
                       autoFocus
@@ -262,25 +267,25 @@ export default function ProfilePage() {
                     <span className="text-[10px]">
                       {checkingUsername ? <span className="text-muted">⏳</span>
                         : usernameStatus?.available && usernameStatus?.valid
-                          ? <span className="text-green-400">✅ Available</span>
+                          ? <span className="text-green-400">✅</span>
                           : usernameStatus && !usernameStatus?.available
                             ? <span className="text-red-400">❌ {usernameStatus.error || 'Taken'}</span>
                             : null}
                     </span>
                     <button onClick={saveUsername} disabled={!usernameStatus?.available || savingEdit}
-                      className="text-[10px] font-medium px-2 py-1 rounded bg-accent text-white disabled:opacity-40">
+                      className="text-[11px] font-medium px-3 py-1 rounded-lg bg-accent text-white hover:bg-accent-hover disabled:opacity-40 transition">
                       Save
                     </button>
                     <button onClick={() => { setEditing(null); setUsernameStatus(null); setEditUsername(((profile as any)?.username || '').replace('@', '')); }}
-                      className="text-[10px] text-muted hover:text-secondary">
+                      className="text-[11px] text-muted hover:text-secondary transition">
                       Cancel
                     </button>
                   </div>
                 </div>
               ) : (
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 group cursor-pointer" onClick={() => setEditing('username')}>
                   <p className="text-sm text-primary">{(profile as any)?.username || '—'}</p>
-                  <button onClick={() => setEditing('username')} className="text-[10px] text-accent hover:text-accent/70">Edit</button>
+                  <span className="text-[10px] text-accent/0 group-hover:text-accent transition-colors">✏️ Change</span>
                 </div>
               )}
             </div>

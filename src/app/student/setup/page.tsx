@@ -55,13 +55,6 @@ export default function SetupPage() {
   }, []);
 
   let debounceTimer: NodeJS.Timeout;
-  const handleUsernameChange = (val: string) => {
-    // Strip @ and spaces, keep only alphanumeric + underscore
-    const cleaned = val.replace(/[^a-zA-Z0-9_]/g, '').toLowerCase();
-    setUsername(cleaned);
-    clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(() => checkUsername(cleaned), 300);
-  };
 
   const handleSave = async () => {
     if (!availability?.valid || !availability?.available) return;
@@ -135,7 +128,12 @@ export default function SetupPage() {
               <input
                 type="text"
                 value={username}
-                onChange={(e) => handleUsernameChange(e.target.value)}
+                onChange={(e) => {
+                          const cleaned = e.target.value.replace(/[^a-zA-Z0-9_]/g, '').toLowerCase();
+                          setUsername(cleaned);
+                          clearTimeout(debounceTimer);
+                          debounceTimer = setTimeout(() => checkUsername(cleaned), 300);
+                        }}
                 className="w-full bg-elevated border border-theme text-primary rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
                 placeholder="cool_clater"
                 autoFocus
