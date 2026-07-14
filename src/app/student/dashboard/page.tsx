@@ -497,11 +497,11 @@ export default function StudentDashboard() {
 
         {/* ════════════════════════════════════════════ */}
         {/* #1 — CLAT 2026 COUNTDOWN                     */}
-        {/* ════════════════════════════════════════════ */}
+        {/* #1 — CLAT 2027 COUNTDOWN                     */}
         <div className="bg-elevated border border-theme rounded-2xl p-6 md:p-8 text-center shadow-lg shadow-theme-sm">
           <div className="flex items-center justify-center gap-2 mb-1">
             <span className="text-2xl">⌛</span>
-            <span className="text-xs font-semibold text-accent uppercase tracking-widest">CLAT 2026</span>
+            <span className="text-xs font-semibold text-accent uppercase tracking-widest">CLAT 2027</span>
           </div>
           <p className="text-xl md:text-2xl font-bold text-primary mb-1">
             {countdown.days > 0
