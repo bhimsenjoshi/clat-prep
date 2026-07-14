@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useCallback, useEffect } from 'react';
+import { useState, useRef, useCallback } from 'react';
 
 interface Props {
   initialUsername: string;
@@ -12,7 +12,7 @@ export default function EditableFields({ initialUsername, initialSchool, initial
   const [editUsername, setEditUsername] = useState(initialUsername);
   const [editSchool, setEditSchool] = useState(initialSchool);
   const [editClatYear, setEditClatYear] = useState(initialClatYear);
-  const [editing, setEditing] = useState<'username' | 'school' | null>(null);
+  const [editing, setEditing] = useState<'username' | 'school' | 'clatYear' | null>(null);
   const [savingEdit, setSavingEdit] = useState(false);
   const [usernameStatus, setUsernameStatus] = useState<{ valid: boolean; available: boolean; error: string | null } | null>(null);
   const [checkingUsername, setCheckingUsername] = useState(false);
@@ -134,18 +134,42 @@ export default function EditableFields({ initialUsername, initialSchool, initial
       {/* CLAT Year */}
       <div>
         <p className="text-xs font-medium text-muted uppercase tracking-wider mb-1">CLAT Year</p>
-        {editing === 'school' ? (
-          <select
-            value={editClatYear}
-            onChange={(e) => setEditClatYear(Number(e.target.value))}
-            className="bg-elevated border border-theme text-primary rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-accent"
-          >
-            <option value={2027}>2027</option>
-            <option value={2028}>2028</option>
-            <option value={2029}>2029</option>
-          </select>
+        {editing === 'clatYear' ? (
+          <div className="flex flex-col gap-1.5">
+            <select
+              value={editClatYear}
+              onChange={(e) => setEditClatYear(Number(e.target.value))}
+              className="bg-elevated border border-theme text-primary rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-accent"
+            >
+              <option value={2027}>2027</option>
+              <option value={2028}>2028</option>
+              <option value={2029}>2029</option>
+            </select>
+            <div className="flex gap-2">
+              <button onClick={async () => {
+                setSavingEdit(true);
+                const { createClient } = await import('@/lib/supabase/client');
+                const supabase = createClient();
+                const { data: { user } } = await supabase.auth.getUser();
+                if (!user) { setSavingEdit(false); return; }
+                await supabase.from('profiles').update({ clat_year: editClatYear } as any).eq('id', user.id);
+                setEditing(null);
+                setSavingEdit(false);
+              }} disabled={savingEdit}
+                className="text-[10px] font-medium px-2 py-1 rounded bg-accent text-white disabled:opacity-40">
+                Save
+              </button>
+              <button onClick={() => { setEditing(null); setEditClatYear(initialClatYear); }}
+                className="text-[10px] text-muted hover:text-secondary">
+                Cancel
+              </button>
+            </div>
+          </div>
         ) : (
-          <p className="text-sm text-primary">{editClatYear || '—'}</p>
+          <div className="flex items-center gap-2">
+            <p className="text-sm text-primary">{editClatYear || '—'}</p>
+            <button onClick={() => setEditing('clatYear')} className="text-[10px] text-accent hover:text-accent/70">Edit</button>
+          </div>
         )}
       </div>
     </div>
