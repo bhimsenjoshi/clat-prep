@@ -23,19 +23,25 @@ export default async function AuthRedirectPage() {
     redirect('/auth/login');
   }
 
-  // Check role with service_role key
+  // Fetch profile to check username
+  let needsSetup = false;
   if (serviceKey) {
     const adminClient = createClient(supabaseUrl, serviceKey);
     const { data: profile } = await adminClient
       .from('profiles')
-      .select('role')
+      .select('role, username')
       .eq('id', user.id)
       .single();
 
     if (profile?.role === 'admin') {
       redirect('/admin/dashboard');
     }
+
+    // Redirect to username setup if auto-generated
+    if (profile?.username && (profile.username as string).startsWith('@user_')) {
+      needsSetup = true;
+    }
   }
 
-  redirect('/student/dashboard');
+  redirect(needsSetup ? '/student/setup' : '/student/dashboard');
 }

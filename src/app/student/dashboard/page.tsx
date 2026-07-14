@@ -155,6 +155,12 @@ export default function StudentDashboard() {
         .single();
       setProfile(prof);
 
+      // ─── Redirect to username setup if auto-generated ───
+      if (prof && prof.username && prof.username.startsWith('@user_')) {
+        router.push('/student/setup');
+        return;
+      }
+
       // ─── Today's practice count ───
       const today = new Date().toISOString().split('T')[0];
       const { count: todayQCount } = await supabase
