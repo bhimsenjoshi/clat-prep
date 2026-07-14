@@ -346,13 +346,13 @@ export default function AnalyticsPage() {
         {/* Header row */}
         <div className="min-w-[580px] px-6 py-2.5 border-b border-theme flex items-center gap-0 text-[11px] text-secondary font-bold uppercase tracking-wider">
           <span className="w-[28px] shrink-0 text-center"></span>
-          <span className="w-[100px] shrink-0 text-left">Section</span>
+          <span className="w-[100px] shrink-0 text-center">Section</span>
           <span className="w-[52px] shrink-0 text-center">Corr</span>
           <span className="w-[52px] shrink-0 text-center">Wrong</span>
           <span className="w-[40px] shrink-0 text-center">Q</span>
           <span className="w-[46px] shrink-0 text-center">Acc</span>
           <span className="w-[52px] shrink-0 text-center">Med</span>
-          <span className="w-[130px] shrink-0 text-center">Time Dist.</span>
+          <span className="w-[130px] shrink-0 text-left">Time Dist.</span>
         </div>
         <div className="divide-y divide-theme-light">
           {sectionPracticeStats.map(s => {
@@ -375,7 +375,7 @@ export default function AnalyticsPage() {
                 {/* Icon */}
                 <span className="text-base shrink-0 w-[28px] text-center">{s.icon}</span>
                 {/* Section name */}
-                <span className="text-sm font-medium text-primary w-[100px] shrink-0 truncate">{shortName[s.name] || s.name}</span>
+                <span className="text-sm font-medium text-primary w-[100px] shrink-0 truncate text-center">{shortName[s.name] || s.name}</span>
 
                 {/* Corr */}
                 <span className="text-xs text-success shrink-0 w-[52px] text-center font-medium">{s.correct}</span>
@@ -388,8 +388,8 @@ export default function AnalyticsPage() {
                 {/* Med */}
                 <span className="text-xs font-semibold text-blue-400 shrink-0 w-[52px] text-center">{n > 0 ? fmt(s.medianTimeSeconds) : '—'}</span>
 
-                {/* Box plot — cute and short */}
-                <div className="w-[130px] shrink-0 flex items-center justify-center">
+                {/* Box plot — left-aligned, compact */}
+                <div className="w-[130px] shrink-0 flex items-center justify-start">
                   {n > 1 ? (
                     <svg viewBox="0 0 100 16" className="w-full h-4 max-w-[100px]" preserveAspectRatio="none">
                       {/* Whisker line */}
