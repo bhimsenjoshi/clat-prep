@@ -356,7 +356,7 @@ export default function AnalyticsPage() {
           const n = s.sessions;
           const accColor = s.medianAccuracy >= 70
             ? 'text-success' : s.medianAccuracy >= 40 ? 'text-warning' : 'text-danger';
-          const maxForScale = n > 1 ? Math.max(s.maxTime, 120) : 120;
+          const maxForScale = n > 1 ? Math.max(s.maxTime, 180) : 180;
           const fmt = (sec: number) => sec >= 60 ? `${Math.floor(sec / 60)}m${sec % 60}s` : `${sec}s`;
 
           // Abbreviated section names (fixed width)
@@ -390,14 +390,14 @@ export default function AnalyticsPage() {
               {/* SVG box plot — fixed scale 0–120s for all */}
               <div className="flex-1 min-w-[100px] max-w-[180px]">
                 {n > 1 ? (
-                  <svg viewBox="0 0 120 22" className="w-full h-5" preserveAspectRatio="none">
+                  <svg viewBox="0 0 180 22" className="w-full h-5" preserveAspectRatio="none">
                     {/* Whisker line */}
-                    <line x1={0} y1={11} x2={120} y2={11} stroke="#334155" strokeWidth="1"/>
+                    <line x1={0} y1={11} x2={180} y2={11} stroke="#334155" strokeWidth="1"/>
                     {/* IQR box */}
                     <rect
-                      x={(s.q1Time / 120) * 120}
+                      x={Math.round((s.q1Time / 180) * 180)}
                       y={4}
-                      width={Math.max(((s.q3Time - s.q1Time) / 120) * 120, 3)}
+                      width={Math.max(Math.round(((s.q3Time - s.q1Time) / 180) * 180), 3)}
                       height={14}
                       rx={1.5}
                       fill="rgba(59,130,246,0.2)"
@@ -405,15 +405,15 @@ export default function AnalyticsPage() {
                       strokeWidth="1"
                     />
                     {/* Median line */}
-                    <line x1={(s.medianTimeSeconds / 120) * 120} y1={3} x2={(s.medianTimeSeconds / 120) * 120} y2={19} stroke="#60a5fa" strokeWidth="2"/>
+                    <line x1={Math.round((s.medianTimeSeconds / 180) * 180)} y1={3} x2={Math.round((s.medianTimeSeconds / 180) * 180)} y2={19} stroke="#60a5fa" strokeWidth="2"/>
                     {/* Min cap */}
-                    <line x1={(s.minTime / 120) * 120} y1={7} x2={(s.minTime / 120) * 120} y2={15} stroke="#475569" strokeWidth="1"/>
+                    <line x1={Math.round((s.minTime / 180) * 180)} y1={7} x2={Math.round((s.minTime / 180) * 180)} y2={15} stroke="#475569" strokeWidth="1"/>
                     {/* Max cap */}
-                    <line x1={(s.maxTime / 120) * 120} y1={7} x2={(s.maxTime / 120) * 120} y2={15} stroke="#475569" strokeWidth="1"/>
+                    <line x1={Math.round((s.maxTime / 180) * 180)} y1={7} x2={Math.round((s.maxTime / 180) * 180)} y2={15} stroke="#475569" strokeWidth="1"/>
                   </svg>
                 ) : n === 1 ? (
-                  <svg viewBox="0 0 120 22" className="w-full h-5" preserveAspectRatio="none">
-                    <circle cx={(s.medianTimeSeconds / 120) * 120} cy={11} r="4" fill="rgba(59,130,246,0.3)" stroke="#60a5fa" strokeWidth="1"/>
+                  <svg viewBox="0 0 180 22" className="w-full h-5" preserveAspectRatio="none">
+                    <circle cx={Math.round((s.medianTimeSeconds / 180) * 180)} cy={11} r="4" fill="rgba(59,130,246,0.3)" stroke="#60a5fa" strokeWidth="1"/>
                   </svg>
                 ) : (
                   <span className="text-[10px] text-muted">—</span>
