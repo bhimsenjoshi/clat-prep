@@ -18,12 +18,6 @@ export default function EditableFields({ initialUsername, initialSchool, initial
   const [checkingUsername, setCheckingUsername] = useState(false);
   const debounceTimerRef = useRef<NodeJS.Timeout>(undefined as any);
 
-  useEffect(() => {
-    setEditUsername(initialUsername);
-    setEditSchool(initialSchool);
-    setEditClatYear(initialClatYear);
-  }, [initialUsername, initialSchool, initialClatYear]);
-
   const checkUsername = useCallback(async (val: string) => {
     if (val.length < 3) { setUsernameStatus(null); return; }
     setCheckingUsername(true);
