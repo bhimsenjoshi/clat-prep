@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -54,7 +54,7 @@ export default function SetupPage() {
     }
   }, []);
 
-  let debounceTimer: NodeJS.Timeout;
+  const debounceTimerRef = useRef<NodeJS.Timeout>(undefined as any);
 
   const handleSave = async () => {
     if (!availability?.valid || !availability?.available) return;
@@ -131,8 +131,8 @@ export default function SetupPage() {
                 onChange={(e) => {
                           const cleaned = e.target.value.replace(/[^a-zA-Z0-9_]/g, '').toLowerCase();
                           setUsername(cleaned);
-                          clearTimeout(debounceTimer);
-                          debounceTimer = setTimeout(() => checkUsername(cleaned), 300);
+                          clearTimeout(debounceTimerRef.current);
+                          debounceTimerRef.current = setTimeout(() => checkUsername(cleaned), 300);
                         }}
                 className="w-full bg-elevated border border-theme text-primary rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
                 placeholder="cool_clater"

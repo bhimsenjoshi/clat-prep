@@ -47,7 +47,7 @@ export default function ProfilePage() {
   const [savingEdit, setSavingEdit] = useState(false);
   const [usernameStatus, setUsernameStatus] = useState<{ valid: boolean; available: boolean; error: string | null } | null>(null);
   const [checkingUsername, setCheckingUsername] = useState(false);
-  let debounceTimer: NodeJS.Timeout;
+  const debounceTimerRef = useRef<NodeJS.Timeout>(undefined as any);
 
   useEffect(() => {
     const loadProfile = async () => {
@@ -123,13 +123,6 @@ export default function ProfilePage() {
       setCheckingUsername(false);
     }
   }, []);
-
-  const handleUsernameChange = (val: string) => {
-    const cleaned = val.replace(/[^a-zA-Z0-9_]/g, '').toLowerCase();
-    setEditUsername(cleaned);
-    clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(() => checkUsername(cleaned), 300);
-  };
 
   const saveUsername = async () => {
     if (!usernameStatus?.valid || !usernameStatus?.available) return;
@@ -255,8 +248,8 @@ export default function ProfilePage() {
                       onChange={(e) => {
                         const cleaned = e.target.value.replace(/[^a-zA-Z0-9_]/g, '').toLowerCase();
                         setEditUsername(cleaned);
-                        clearTimeout(debounceTimer);
-                        debounceTimer = setTimeout(() => checkUsername(cleaned), 300);
+                        clearTimeout(debounceTimerRef.current);
+                        debounceTimerRef.current = setTimeout(() => checkUsername(cleaned), 300);
                       }}
                       className="flex-1 bg-elevated border border-theme text-primary rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-accent"
                       placeholder="cool_clater"
