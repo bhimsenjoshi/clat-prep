@@ -264,7 +264,7 @@ function normaliseQuestion(q: any): GeneratedQuestion | null {
   }
   if (Object.keys(options).length < 2) return null;
 
-  // Correct option — handle A, 1, "a", etc.
+  // Correct option — handle A, 1, "a", full text, etc.
   let correct_option: string | null = null;
   let rawCorrect: any = q.correct_option !== undefined ? q.correct_option : q.answer;
   if (rawCorrect !== undefined && rawCorrect !== null) {
@@ -273,6 +273,16 @@ function normaliseQuestion(q: any): GeneratedQuestion | null {
       correct_option = str;
     } else if (/^[0-4]$/.test(str)) {
       correct_option = ['A', 'B', 'C', 'D'][parseInt(str, 10) - 1] || ['A', 'B', 'C', 'D'][parseInt(str, 10)] || 'A';
+    } else {
+      // Full text or other value — try to match against option texts
+      const normRaw = str.replace(/[^A-Z0-9]/g, '').toLowerCase();
+      for (const [key, val] of Object.entries(options)) {
+        const normVal = String(val).replace(/[^A-Z0-9]/g, '').toLowerCase();
+        if (normRaw === normVal || normRaw.includes(normVal) || normVal.includes(normRaw)) {
+          correct_option = key;
+          break;
+        }
+      }
     }
   }
   if (!correct_option && Object.keys(options).length > 0) {
