@@ -108,6 +108,19 @@ export interface QuizSession {
   ended_at: string | null;
   questions_answered: number;
   correct_count: number;
+  session_type: 'practice' | 'quick_fire';
+}
+
+export interface PracticeSession {
+  id: string;
+  section: string;
+  questions_answered: number;
+  correct_count: number;
+  started_at: string;
+  ended_at: string | null;
+  avg_time_seconds: number;
+  question_times: number[];
+  session_type?: 'practice' | 'quick_fire';
 }
 
 export interface QuizResponse {

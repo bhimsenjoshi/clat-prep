@@ -418,6 +418,10 @@ export default function StudentDashboard() {
               className="px-3 py-2 rounded-lg text-sm font-medium text-accent hover:bg-card-hover active:scale-[0.97] transition-all duration-150">
               📋 Practice
             </Link>
+            <Link href="/student/quick-fire"
+              className="px-3 py-2 rounded-lg text-sm font-medium text-accent hover:bg-card-hover active:scale-[0.97] transition-all duration-150">
+              ⚡ Quick Fire
+            </Link>
             <Link href="/student/analytics"
               className="px-3 py-2 rounded-lg text-sm font-medium text-secondary hover:bg-card-hover hover:text-primary active:scale-[0.97] transition-all duration-150">
               🏛️ Analytics
@@ -472,6 +476,10 @@ export default function StudentDashboard() {
             <Link href="/student/practice" onClick={() => setMobileMenuOpen(false)}
               className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium bg-gradient-to-r from-amber-900/50 to-orange-900/50 text-stat-amber">
               📋 Practice Questions
+            </Link>
+            <Link href="/student/quick-fire" onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-secondary hover:bg-card-hover">
+              ⚡ Quick Fire
             </Link>
             <Link href="/student/analytics" onClick={() => setMobileMenuOpen(false)}
               className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-secondary hover:bg-card-hover">
@@ -983,12 +991,11 @@ export default function StudentDashboard() {
             <span className="text-xs font-normal text-primary">{(profile.daily_free_questions ?? 10)} free questions remaining</span>
           ) : undefined}
         >
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-2.5">
+          <div className="grid grid-cols-2 md:grid-cols-6 gap-2.5">
             {SECTIONS.map(s => (
               <Link
                 key={s.id}
-                href={`/student/practice`}
-                onClick={() => sessionStorage.setItem('practiceSection', s.id)}
+                href={`/student/quick-fire/${s.id.toLowerCase().replace(/\s+/g, '-')}`}
                 className="bg-card border border-theme rounded-xl p-3.5 hover:border-accent bg-card-hover transition text-center group"
               >
                 <span className="text-xl block mb-1 group-hover:scale-110 transition-transform">{s.icon}</span>
@@ -996,6 +1003,15 @@ export default function StudentDashboard() {
                 <p className="text-[10px] text-muted truncate">{s.desc}</p>
               </Link>
             ))}
+            {/* Link to full practice */}
+            <Link
+              href="/student/practice"
+              className="bg-card border border-theme rounded-xl p-3.5 hover:border-accent bg-card-hover transition text-center group md:col-span-1"
+            >
+              <span className="text-xl block mb-1 group-hover:scale-110 transition-transform">📚</span>
+              <p className="text-xs font-semibold text-primary truncate">Passage Practice</p>
+              <p className="text-[10px] text-muted truncate">With passages</p>
+            </Link>
           </div>
         </SectionCard>
 

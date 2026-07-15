@@ -45,6 +45,7 @@ interface PracticeSession {
   ended_at: string | null;
   avg_time_seconds: number;
   question_times: number[];
+  session_type?: string;
 }
 
 interface SectionPracticeStats {
@@ -105,7 +106,7 @@ export default function AnalyticsPage() {
   const [attempts, setAttempts] = useState<AttemptWithScores[]>([]);
   const [practiceSessions, setPracticeSessions] = useState<PracticeSession[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'practice' | 'tests' | 'editorials'>('practice');
+  const [activeTab, setActiveTab] = useState<'practice' | 'quick_fire' | 'tests' | 'editorials'>('practice');
   const [editorialStats, setEditorialStats] = useState<any>(null);
   const [editorialStatsLoading, setEditorialStatsLoading] = useState(true);
   const [dailyReadData, setDailyReadData] = useState<{date: string; reads: number}[]>([]);
@@ -119,15 +120,15 @@ export default function AnalyticsPage() {
       setProfile(prof);
 
       // ─── Load Practice Quiz Data (quiz_sessions + quiz_responses) ───
-      const { data: sessions } = await supabase
+      const { data: allSessions } = await supabase
         .from('quiz_sessions')
         .select('*')
         .eq('student_id', user.id)
         .order('started_at', { ascending: false })
         .limit(100);
 
-      if (sessions && sessions.length > 0) {
-        const sessionIds = sessions.map((s: any) => s.id);
+      if (allSessions && allSessions.length > 0) {
+        const sessionIds = allSessions.map((s: any) => s.id);
 
         // Fetch responses for all sessions in one go
         const { data: responses } = await supabase
@@ -147,7 +148,7 @@ export default function AnalyticsPage() {
           respBySession[r.session_id].questionTimes.push(r.time_taken_seconds ?? 0);
         }
 
-        const enriched: PracticeSession[] = sessions
+        const enriched: PracticeSession[] = allSessions
           .filter((s: any) => {
             const rs = respBySession[s.id];
             return rs && rs.total > 0; // skip abandoned sessions
@@ -163,6 +164,7 @@ export default function AnalyticsPage() {
             ended_at: s.ended_at,
             avg_time_seconds: rs.total > 0 ? Math.round(rs.totalTime / rs.total) : 0,
             question_times: rs.questionTimes || [],
+            session_type: s.session_type || 'practice',
           };
         });
 
@@ -241,18 +243,21 @@ export default function AnalyticsPage() {
     || profile?.subscription_plan === 'max'
     || profile?.is_promo_user === true;
 
-  // ─── Compute Practice Analytics ───
-  const totalPracticeQuestions = practiceSessions.reduce((s, p) => s + p.questions_answered, 0);
-  const totalPracticeCorrect = practiceSessions.reduce((s, p) => s + p.correct_count, 0);
+  // ─── Compute Practice Analytics (filtered by session_type) ───
+  const filteredSessions = practiceSessions.filter(p =>
+    activeTab === 'quick_fire' ? p.session_type === 'quick_fire' : p.session_type !== 'quick_fire'
+  );
+  const totalPracticeQuestions = filteredSessions.reduce((s, p) => s + p.questions_answered, 0);
+  const totalPracticeCorrect = filteredSessions.reduce((s, p) => s + p.correct_count, 0);
   const practiceAccuracy = totalPracticeQuestions > 0
     ? Math.round((totalPracticeCorrect / totalPracticeQuestions) * 100) : 0;
-  const totalPracticeTime = practiceSessions.reduce((s, p) => s + (p.avg_time_seconds * p.questions_answered), 0);
+  const totalPracticeTime = filteredSessions.reduce((s, p) => s + (p.avg_time_seconds * p.questions_answered), 0);
   const avgPracticeTimePerQ = totalPracticeQuestions > 0
     ? Math.round(totalPracticeTime / totalPracticeQuestions) : 0;
 
   // Per-section practice stats
   const sectionPracticeStats: SectionPracticeStats[] = SECTION_NAMES.map(name => {
-    const sSessions = practiceSessions.filter(p => p.section === name);
+    const sSessions = filteredSessions.filter(p => p.section === name);
     const totalQ = sSessions.reduce((s, p) => s + p.questions_answered, 0);
     const correct = sSessions.reduce((s, p) => s + p.correct_count, 0);
 
@@ -334,7 +339,7 @@ export default function AnalyticsPage() {
     </div>
   );
 
-  const hasPracticeData = practiceSessions.length > 0;
+  const hasPracticeData = filteredSessions.length > 0;
   const hasTestData = completed.length > 0;
 
   // ─── Shared detailed content sections (used with LockedSection wrapper) ───
@@ -465,13 +470,13 @@ export default function AnalyticsPage() {
   const PracticeRecentContent = (
     <div className="bg-card border border-theme rounded-xl shadow-theme-sm">
       <div className="px-6 py-4 border-b border-theme flex items-center justify-between">
-        <h2 className="font-semibold text-primary">🔄 Recent Practice Sessions</h2>
-        <Link href="/student/practice" className="text-xs text-accent hover:text-accent/80 font-medium">
-          Practice Now →
+        <h2 className="font-semibold text-primary">🔄 Recent {activeTab === 'quick_fire' ? 'Quick Fire' : 'Practice'} Sessions</h2>
+        <Link href={activeTab === 'quick_fire' ? '/student/quick-fire' : '/student/practice'} className="text-xs text-accent hover:text-accent/80 font-medium">
+          {activeTab === 'quick_fire' ? 'Quick Fire →' : 'Practice Now →'}
         </Link>
       </div>
       <div className="divide-y divide-theme-light">
-        {practiceSessions.slice(0, 20).map(s => {
+        {filteredSessions.slice(0, 20).map(s => {
           const pct = s.questions_answered > 0
             ? Math.round((s.correct_count / s.questions_answered) * 100) : 0;
           return (
@@ -747,7 +752,15 @@ export default function AnalyticsPage() {
               activeTab === 'practice' ? 'border-accent text-accent' : 'border-transparent text-secondary hover:text-primary'
             }`}
           >
-            Practice
+            📚 Practice
+          </button>
+          <button
+            onClick={() => setActiveTab('quick_fire')}
+            className={`px-4 py-2 text-sm font-medium border-b-2 ${
+              activeTab === 'quick_fire' ? 'border-accent text-accent' : 'border-transparent text-secondary hover:text-primary'
+            }`}
+          >
+            ⚡ Quick Fire
           </button>
           <button
             onClick={() => setActiveTab('tests')}
@@ -769,7 +782,7 @@ export default function AnalyticsPage() {
 
         {activeTab === 'practice' && (
           <div className="space-y-6">
-            <h2 className="text-xl font-bold text-primary">Practice Overview</h2>
+            <h2 className="text-xl font-bold text-primary">📚 Practice Overview</h2>
             <LockedSection title="Practice Summary" icon="🎯" isPremium={isPremium}>
               {PracticeSummaryContent}
             </LockedSection>
@@ -790,6 +803,35 @@ export default function AnalyticsPage() {
                 <p>No practice data yet. Start a quiz to see your analytics!</p>
                 <Link href="/student/practice" className="mt-4 inline-flex px-6 py-3 rounded-xl font-medium bg-accent text-white hover:bg-accent-hover transition">
                   Start Practice →
+                </Link>
+              </div>
+            )}
+          </div>
+        )}
+
+        {activeTab === 'quick_fire' && (
+          <div className="space-y-6">
+            <h2 className="text-xl font-bold text-primary">⚡ Quick Fire Overview</h2>
+            <LockedSection title="Quick Fire Summary" icon="⚡" isPremium={isPremium}>
+              {PracticeSummaryContent}
+            </LockedSection>
+            {hasPracticeData ? (
+              <>
+                <LockedSection title="Quick Fire by Section" icon="📈" isPremium={isPremium}>
+                  {PracticeBySectionContent}
+                </LockedSection>
+                <LockedSection title="Strongest & Weakest" icon="💪" isPremium={isPremium}>
+                  {PracticeBestWeakContent}
+                </LockedSection>
+                <LockedSection title="Recent Sessions" icon="🔄" isPremium={isPremium}>
+                  {PracticeRecentContent}
+                </LockedSection>
+              </>
+            ) : (
+              <div className="bg-card border border-theme rounded-xl p-10 text-center text-muted">
+                <p>No Quick Fire data yet. Fire up a round to see your stats!</p>
+                <Link href="/student/quick-fire" className="mt-4 inline-flex px-6 py-3 rounded-xl font-medium bg-accent text-white hover:bg-accent-hover transition">
+                  Start Quick Fire ⚡
                 </Link>
               </div>
             )}
