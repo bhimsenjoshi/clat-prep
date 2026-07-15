@@ -374,24 +374,43 @@ async function main() {
       }
 
       // Step 2: Insert passage into practice_passages table
+      // CRITICAL: ALL questions must be passage-linked (CLAT format).
+      // If AI returns no passage, RETRY ONCE before skipping the section entirely.
       let passageId = null;
-      if (passageData && passageData.content) {
-        const passageRows = await supabaseInsert('practice_passages', [{
-          section,
-          title: passageData.title || '',
-          source: passageData.source || 'AI-generated',
-          content: passageData.content,
-          difficulty: (passageData.difficulty || 'medium').toLowerCase(),
-        }]);
-        passageId = passageRows?.[0]?.id || null;
-        totalPassages++;
-        console.log(`    📄 Passage inserted: "${passageData.title || 'Untitled'}" (id: ${passageId ? passageId.substring(0, 8) + '...' : 'none'})`);
+      let finalPassageData = passageData;
+      let finalQuestions = rawQuestions;
+      if (!finalPassageData || !finalPassageData.content) {
+        console.log(`    ⚠️ No passage returned by AI — retrying section "${section}" once...`);
+        const retry = await callDeepSeek(
+          buildPassagePrompt(section),
+          `Generate 1 passage and ${QS_PER_PASSAGE} CLAT practice questions for the "${section}" section. The passage must be formatted as per CLAT 2025 standards. CRITICAL: The response MUST include a valid "passage" object with a "content" field.`
+        );
+        if (retry.passageData && retry.passageData.content) {
+          finalPassageData = retry.passageData;
+          if (retry.questions && retry.questions.length > 0) {
+            finalQuestions = retry.questions;
+          }
+        }
       }
+      if (!finalPassageData || !finalPassageData.content) {
+        console.log(`    ❌ Retry failed — no passage returned. Skipping section "${section}" entirely (no orphan standalone questions).`);
+        continue;
+      }
+      const passageRows = await supabaseInsert('practice_passages', [{
+        section,
+        title: finalPassageData.title || '',
+        source: finalPassageData.source || 'AI-generated',
+        content: finalPassageData.content,
+        difficulty: (finalPassageData.difficulty || 'medium').toLowerCase(),
+      }]);
+      passageId = passageRows?.[0]?.id || null;
+      totalPassages++;
+      console.log(`    📄 Passage inserted: "${finalPassageData.title || 'Untitled'}" (id: ${passageId ? passageId.substring(0, 8) + '...' : 'none'})`);
 
       // Step 3: Normalise questions with passage link and metadata
       const validQuestions = [];
-      for (let i = 0; i < rawQuestions.length; i++) {
-        const q = rawQuestions[i];
+      for (let i = 0; i < finalQuestions.length; i++) {
+        const q = finalQuestions[i];
         const normalised = normalise(q, passageId, i + 1);
         if (normalised) {
           normalised.section = section;
