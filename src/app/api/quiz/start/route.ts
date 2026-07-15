@@ -31,8 +31,9 @@ export async function POST(req: NextRequest) {
         .single(),
       supabase
         .from('practice_questions')
-        .select('id')
-        .eq('section', section),
+        .select('id, created_at')
+        .eq('section', section)
+        .order('created_at', { ascending: false }),
       supabase
         .from('quiz_sessions')
         .select('id')
@@ -45,6 +46,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Profile not found' }, { status: 404 });
     }
 
+    // Keep IDs in created_at order (newest first) to prioritise today's questions
     let questionIds = (idsResult.data ?? []).map(q => q.id);
 
     // Filter out already-answered questions to avoid repeats
@@ -60,7 +62,7 @@ export async function POST(req: NextRequest) {
       if (freshIds.length > 0) {
         questionIds = freshIds;
       }
-      // If all exhausted, keep all IDs (start a fresh cycle)
+      // If all exhausted, keep all IDs (fresh cycle) — still newest-first
     }
 
     // Reset daily count if new day
@@ -89,8 +91,9 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // Pick a random first question
-    const firstId = questionIds[Math.floor(Math.random() * questionIds.length)];
+    // Pick the first question from the newest-first list
+    // prioritising latest generated questions (today's batch first)
+    const firstId = questionIds[0] || questionIds[Math.floor(Math.random() * questionIds.length)];
 
     // Fetch first question + create session in parallel
     const [questionResult, sessionResult] = await Promise.all([

@@ -32,7 +32,8 @@ export async function POST(req: NextRequest) {
         .from('practice_questions')
         .select('id, section, topic, question_text, passage, passage_id, options, correct_option, difficulty, explanation, tags')
         .eq('section', section)
-        .is('passage_id', null),
+        .is('passage_id', null)
+        .order('created_at', { ascending: false }),
     ]);
 
     const profile = profileRes.data;
@@ -83,9 +84,8 @@ export async function POST(req: NextRequest) {
       // If fewer than QS_PER_SESSION fresh questions remain, cycle back through all
     }
 
-    // Shuffle and pick QS_PER_SESSION questions
-    const shuffled = [...availableQuestions].sort(() => Math.random() - 0.5);
-    const batch = shuffled.slice(0, Math.min(QS_PER_SESSION, shuffled.length));
+    // Pick newest questions first (up to QS_PER_SESSION)
+    const batch = availableQuestions.slice(0, Math.min(QS_PER_SESSION, availableQuestions.length));
 
     if (batch.length === 0) {
       return NextResponse.json({

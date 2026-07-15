@@ -232,8 +232,9 @@ export default function QuizPage() {
 
       const { data: allQuestions } = await supabase
         .from('practice_questions')
-        .select('id, section, topic, question_text, passage, passage_id, options, difficulty, explanation, tags')
-        .eq('section', sectionName);
+        .select('id, section, topic, question_text, passage, passage_id, options, difficulty, explanation, tags, created_at')
+        .eq('section', sectionName)
+        .order('created_at', { ascending: false });
 
       if (!allQuestions || allQuestions.length === 0) return [];
 
@@ -251,16 +252,21 @@ export default function QuizPage() {
         }
       }
 
-      // Build queue: pick a random passage → all its questions → next passage → standalone
+      // Build queue: newest passages first → then standalone sorted by newest
       const passageIds = Object.keys(passageMap);
-      const shuffledPassages = passageIds.sort(() => Math.random() - 0.5);
-      const shuffledStandalone = standalone.sort(() => Math.random() - 0.5);
+      // Sort passages by their newest question's created_at (descending)
+      passageIds.sort((a, b) => {
+        const maxA = Math.max(...passageMap[a].map((q: any) => new Date(q.created_at).getTime()));
+        const maxB = Math.max(...passageMap[b].map((q: any) => new Date(q.created_at).getTime()));
+        return maxB - maxA;
+      });
+      const sortedStandalone = standalone.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
 
       const queue: any[] = [];
-      for (const pid of shuffledPassages) {
+      for (const pid of passageIds) {
         queue.push(...passageMap[pid]);
       }
-      queue.push(...shuffledStandalone);
+      queue.push(...sortedStandalone);
 
       return queue;
     } catch {
