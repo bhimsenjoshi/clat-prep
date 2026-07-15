@@ -50,7 +50,7 @@ for (const envPath of envPaths) {
   }
 }
 
-const SECTIONS = ['English Language', 'Current Affairs Including General Knowledge', 'Legal Reasoning', 'Logical Reasoning', 'Quantitative Techniques'];
+const SECTIONS = ['English Language', 'Current Affairs Including General Knowledge', 'Legal Reasoning', 'Logical Reasoning'];
 const QS_PER_PASSAGE = 6;
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
@@ -327,47 +327,6 @@ Return JSON with:
   - "passage": { "title": "Short title", "content": "The passage text", "source": "Source or 'Original for CLATly'", "difficulty": "easy|medium|hard" }
   - "questions": array of ${QS_PER_PASSAGE} objects (same format as above — with explanation as structured object)`,
 
-    'Quantitative Techniques': `You are a CLAT Quantitative Techniques expert. Generate exactly 1 CLAT-standard data interpretation passage containing a table of numerical data with 3-5 rows and 3-5 columns of clean whole numbers (no decimals), from ONE of these CLAT-standard topics ONLY:
-
-APPROVED TOPICS (pick one per passage):
-1. Sales/production/revenue data across years/categories
-2. Budget/expenditure allocation (household, government, company)
-3. Population/demographic statistics (towns, districts, age groups)
-4. Import/export or trade data across countries/commodities
-5. Marks/scores or performance data (students, employees)
-6. Crop yield/agriculture production across seasons
-7. Survey/opinion poll results with percentages
-
-CRITICAL RULES:
-|- Data MUST be clean whole numbers (no decimals) — e.g. 1200, 450, 88
-|- Every question MUST require actual computation (percentage change, ratio, average, difference, or combined calculation) — NOT reading a value directly off the table
-|- At least 1 percentage change question, 1 ratio question, and 1 average question
-|- CRITICAL: NEVER copy-paste a table row or data value as question_text. Every question_text must be a DISTINCT query that requires computation — not a "what is the value of X" direct read.
-
-EXPLANATION FORMAT — Each explanation MUST be structured as follows:
-  "explanation": {
-    "correct_answer_rationale": "Brief paragraph showing the calculation steps and why the answer is right. Include the formula/working.",
-    "incorrect_option_analysis": {
-      "A": "Why option A is wrong — identify the computational mistake or data misinterpretation.",
-      "B": "Why option B is wrong — identify the computational mistake or data misinterpretation.",
-      "C": "Why option C is wrong — identify the computational mistake or data misinterpretation.",
-      "D": "Why option D is wrong — identify the computational mistake or data misinterpretation."
-    },
-    "wrong_answer_guidance": "If the student answered incorrectly, a 1-2 sentence pointer showing the correct formula or which data to use from the table."
-  }
-
-Follow exactly with ${QS_PER_PASSAGE} questions matching CLAT 2025 style:
-- "What is the percentage increase/decrease in X from A to B?"
-- "What is the ratio of X to Y in year Z?"
-- "What is the average of X over the given period?"
-- "What is the difference between X and Y?"
-- "If X increases by Y% while Z decreases by W%, what is the new value of P?"
-- "Which of the following statements is correct?" (multi-check)
-- "X is what percentage of Y?"
-
-Return JSON with:
-  - "passage": { "title": "Data set title", "content": "Description of the data including the data table with numbers", "source": "Adapted from CLAT-style data set", "difficulty": "easy|medium|hard" }
-  - "questions": array of ${QS_PER_PASSAGE} objects (same format as above)`,
   };
   return prompts[section] || prompts['English Language'];
 }
@@ -384,7 +343,7 @@ async function main() {
     process.exit(1);
   }
 
-  console.log(`📅 Generating 1 passage + ${QS_PER_PASSAGE} questions per section...`);
+  console.log(`📅 Generating 1 passage + ${QS_PER_PASSAGE} questions per section (${SECTIONS.length} sections)...`);
   let totalPassages = 0;
   let totalQuestions = 0;
 
