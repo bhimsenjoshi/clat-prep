@@ -66,52 +66,68 @@ const SUPABASE_HEADERS = {
 
 // ─── DeepSeek API ───
 
-async function callDeepSeek(systemPrompt, userPrompt) {
-  const res = await fetch('https://api.deepseek.com/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${DEEPSEEK_KEY}`,
-    },
-    body: JSON.stringify({
-      model: 'deepseek-chat',
-      messages: [
-        { role: 'system', content: systemPrompt },
-        { role: 'user', content: userPrompt },
-      ],
-      temperature: 0.7,
-      max_tokens: 16384,
-      response_format: { type: 'json_object' },
-    }),
-  });
+async function callDeepSeek(systemPrompt, userPrompt, retries = 2) {
+  for (let attempt = 1; attempt <= retries; attempt++) {
+    try {
+      const res = await fetch('https://api.deepseek.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${DEEPSEEK_KEY}`,
+        },
+        body: JSON.stringify({
+          model: 'deepseek-chat',
+          messages: [
+            { role: 'system', content: systemPrompt },
+            { role: 'user', content: userPrompt },
+          ],
+          temperature: 0.7,
+          max_tokens: 16384,
+          response_format: { type: 'json_object' },
+        }),
+      });
 
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(`DeepSeek error ${res.status}: ${text}`);
-  }
-
-  const data = await res.json();
-  const raw = data?.choices?.[0]?.message?.content;
-  if (!raw) throw new Error('Empty DeepSeek response');
-
-  let parsed;
-  try {
-    parsed = JSON.parse(raw);
-  } catch {
-    const jsonMatch = raw.match(/\{[\s\S]*\}/);
-    if (jsonMatch) {
-      try { parsed = JSON.parse(jsonMatch[0]); } catch {
-        throw new Error('Failed to parse AI response as JSON');
+      if (!res.ok) {
+        const text = await res.text();
+        if (attempt < retries) {
+          console.log(`    ⚠️ DeepSeek error ${res.status} (attempt ${attempt}) — retrying...`);
+          await new Promise(r => setTimeout(r, 2000));
+          continue;
+        }
+        throw new Error(`DeepSeek error ${res.status}: ${text}`);
       }
-    } else {
-      throw new Error('Failed to parse AI response as JSON');
+
+      const data = await res.json();
+      const raw = data?.choices?.[0]?.message?.content;
+      if (!raw) throw new Error('Empty DeepSeek response');
+
+      let parsed;
+      try {
+        parsed = JSON.parse(raw);
+      } catch {
+        const jsonMatch = raw.match(/\{[\s\S]*\}/);
+        if (jsonMatch) {
+          try { parsed = JSON.parse(jsonMatch[0]); } catch {
+            throw new Error('Failed to parse AI response as JSON');
+          }
+        } else {
+          throw new Error('Failed to parse AI response as JSON');
+        }
+      }
+
+      return {
+        passageData: parsed.passage || null,
+        questions: parsed.questions || (Array.isArray(parsed) ? parsed : [parsed]),
+      };
+    } catch (err) {
+      if (attempt < retries) {
+        console.log(`    ⚠️ Attempt ${attempt} failed: ${err.message} — retrying...`);
+        await new Promise(r => setTimeout(r, 2000));
+        continue;
+      }
+      throw err;
     }
   }
-
-  return {
-    passageData: parsed.passage || null,
-    questions: parsed.questions || (Array.isArray(parsed) ? parsed : [parsed]),
-  };
 }
 
 // ─── Supabase REST helpers ───
