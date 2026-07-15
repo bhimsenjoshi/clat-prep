@@ -666,6 +666,17 @@ export default function AnalyticsPage() {
       </div>
       {!editorialStatsLoading && editorialStats ? (
         <><div className="p-6 space-y-4">
+          {/* Today & Yesterday read cards */}
+          <div className="grid grid-cols-2 gap-3 mb-4">
+            <div className="bg-tint-info border border-info/20 rounded-xl p-3 text-center">
+              <p className="text-2xl font-bold text-info">{dailyReadData.length >= 1 ? dailyReadData[dailyReadData.length - 1].reads : 0}</p>
+              <p className="text-[10px] text-info/70 font-medium uppercase tracking-wider">Today</p>
+            </div>
+            <div className="bg-tint-warning border border-warning/20 rounded-xl p-3 text-center">
+              <p className="text-2xl font-bold text-warning">{dailyReadData.length >= 2 ? dailyReadData[dailyReadData.length - 2].reads : 0}</p>
+              <p className="text-[10px] text-warning/70 font-medium uppercase tracking-wider">Yesterday</p>
+            </div>
+          </div>
           <div className="flex items-center justify-between">
             <p className="text-sm text-primary">Total Editorials Read</p>
             <p className="text-sm font-bold text-accent">{editorialStats.totalRead}</p>
