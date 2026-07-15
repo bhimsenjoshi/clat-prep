@@ -87,6 +87,15 @@ export async function POST(req: NextRequest) {
   }
 }
 
+// Helper: get IST date string from a UTC date value
+const toISTDate = (dateVal: string | null): string | null => {
+  if (!dateVal) return null;
+  const d = new Date(dateVal);
+  // IST is UTC+5:30
+  const istOffset = 5.5 * 60 * 60 * 1000;
+  return new Date(d.getTime() + istOffset).toISOString().split('T')[0];
+};
+
 export async function GET() {
   try {
     const { user, supabase } = await getServerUser();
@@ -111,14 +120,15 @@ export async function GET() {
     // Compute streak (consecutive days with read_at)
     const readDates = activities
       .filter(a => a.read_at)
-      .map(a => new Date(a.read_at).toISOString().split('T')[0])
+      .map(a => toISTDate(a.read_at)!)
       .filter((v, i, arr) => arr.indexOf(v) === i) // unique dates
       .sort()
       .reverse();
 
     let streak = 0;
-    const today = new Date().toISOString().split('T')[0];
-    if (readDates[0] === today || readDates[0] === new Date(Date.now() - 86400000).toISOString().split('T')[0]) {
+    const today = toISTDate(new Date().toISOString())!;
+    const yesterday = toISTDate(new Date(Date.now() - 86400000).toISOString())!;
+    if (readDates[0] === today || readDates[0] === yesterday) {
       streak = 1;
       for (let i = 1; i < readDates.length; i++) {
         const prev = new Date(readDates[i - 1]);
@@ -143,15 +153,17 @@ export async function GET() {
     const dailyReadMap: Record<string, number> = {};
     for (const a of activities) {
       if (a.read_at) {
-        const day = new Date(a.read_at).toISOString().split('T')[0];
-        dailyReadMap[day] = (dailyReadMap[day] || 0) + 1;
+        const day = toISTDate(a.read_at);
+        if (day) dailyReadMap[day] = (dailyReadMap[day] || 0) + 1;
       }
     }
     const dailyReadData: { date: string; reads: number }[] = [];
     for (let i = 29; i >= 0; i--) {
       const d = new Date();
-      d.setDate(d.getDate() - i);
-      const key = d.toISOString().split('T')[0];
+      // Use IST-based dates for the x-axis labels
+      const istNow = new Date(d.getTime() + 5.5 * 60 * 60 * 1000);
+      istNow.setDate(istNow.getDate() - i);
+      const key = istNow.toISOString().split('T')[0];
       dailyReadData.push({ date: key, reads: dailyReadMap[key] || 0 });
     }
 

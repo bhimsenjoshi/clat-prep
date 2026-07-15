@@ -365,8 +365,8 @@ export default function AnalyticsPage() {
         <div className="divide-y divide-theme-light">
           {sectionPracticeStats.map(s => {
             const n = s.sessions;
-            const accColor = s.medianAccuracy >= 70
-              ? 'text-success' : s.medianAccuracy >= 40 ? 'text-warning' : 'text-danger';
+            const accColor = s.accuracy >= 70
+              ? 'text-success' : s.accuracy >= 40 ? 'text-warning' : 'text-danger';
             const fmt = (sec: number) => sec >= 60 ? `${Math.floor(sec / 60)}m${sec % 60}s` : `${sec}s`;
 
             // Abbreviated section names (fixed width)
@@ -392,7 +392,7 @@ export default function AnalyticsPage() {
                 {/* Q */}
                 <span className="text-xs text-muted shrink-0 w-[60px] text-center">{s.totalQuestions}</span>
                 {/* Acc */}
-                <span className={`text-sm font-bold shrink-0 w-[80px] text-center ${accColor}`}>{s.medianAccuracy}%</span>
+                <span className={`text-sm font-bold shrink-0 w-[80px] text-center ${accColor}`}>{s.accuracy}%</span>
                 {/* Med */}
                 <span className="text-xs font-semibold text-blue-400 shrink-0 w-[80px] text-center">{n > 0 ? fmt(s.medianTimeSeconds) : '—'}</span>
 
