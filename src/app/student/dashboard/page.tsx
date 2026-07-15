@@ -313,7 +313,14 @@ export default function StudentDashboard() {
 
   // ─── Fetch editorial activity (reads + quizzes) + today's editorial stats ───
   useEffect(() => {
-    const today = new Date().toISOString().split('T')[0];
+    const toISTDate = (dateVal: string | null): string => {
+      if (!dateVal) return '';
+      const d = new Date(dateVal);
+      const istOffset = 5.5 * 60 * 60 * 1000;
+      return new Date(d.getTime() + istOffset).toISOString().split('T')[0];
+    };
+
+    const today = toISTDate(new Date().toISOString());
     fetch('/api/editorials/activity')
       .then(r => r.json())
       .then(data => {
@@ -322,7 +329,7 @@ export default function StudentDashboard() {
 
         // Today's editorial stats
         const todayActivities = (data.activities || []).filter((a: any) => {
-          const d = (a.read_at || a.created_at || '').split('T')[0];
+          const d = toISTDate(a.read_at || a.created_at);
           return d === today;
         });
         setEditorialTodayRead(todayActivities.length);
