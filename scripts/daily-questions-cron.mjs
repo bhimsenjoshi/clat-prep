@@ -327,37 +327,33 @@ Return JSON with:
   - "passage": { "title": "Short title", "content": "The passage text", "source": "Source or 'Original for CLATly'", "difficulty": "easy|medium|hard" }
   - "questions": array of ${QS_PER_PASSAGE} objects (same format as above — with explanation as structured object)`,
 
-    'Quantitative Techniques': `Role: Expert Psychometrician and CLAT Quantitative Techniques Content Creator.
+    'Quantitative Techniques': `You are a CLAT Quantitative Techniques expert. Generate exactly 1 CLAT-standard data interpretation passage containing a table of numerical data with 3-5 rows and 3-5 columns of clean whole numbers (no decimals), from ONE of these CLAT-standard topics ONLY:
 
-Core Generation Workflow (Strict Step-by-Step):
-1. DATA MATRIX GENERATION: Before drafting anything, create a raw JSON data matrix containing the foundational variables (e.g., Total Students = 1200, Ratio M/F = 7:5, Categorized into 3 streams). Choose from these CLAT-standard topics:
-   - Sales/production/revenue data across years/categories
-   - Budget/expenditure allocation (household, government, company)
-   - Population/demographic statistics (towns, districts, age groups)
-   - Import/export or trade data across countries/commodities
-   - Marks/scores or performance data (students, employees)
-   - Crop yield/agriculture production across seasons
-   - Survey/opinion poll results with percentages
-2. MATHEMATICAL VERIFICATION: Calculate all sub-totals, percentages, and ratios explicitly in a scratchpad step. Ensure all internal variables sum up perfectly with zero rounding contradictions. Data MUST be clean whole numbers (no decimals).
-3. PASSAGE DRAFTING: Convert the verified data matrix into a narrative text passage (~250-300 words). The text must present the data using complex sentence structures (e.g., "The number of males in Stream A exceeded the number of females in Stream B by 20%"). Do NOT simply dump a table — embed the data relationships in prose.
-4. QUESTION FORMULATION: Generate exactly ${QS_PER_PASSAGE} items testing these CLAT clusters:
-   - Percentage increases/decreases across categories
-   - Compound ratios (e.g., Ratio of males in Stream A to females in Stream C)
-   - Weighted averages across sub-groups
-   - Difference-based inference ("What is the difference between X and Y?")
-   - At least 1 percentage change question, 1 ratio question, and 1 average question required
-5. CRITICAL: NEVER copy-paste a data value directly as question_text. Every question_text must be a DISTINCT query requiring computation — not a "what is the value of X" direct read from the text.
+APPROVED TOPICS (pick one per passage):
+1. Sales/production/revenue data across years/categories
+2. Budget/expenditure allocation (household, government, company)
+3. Population/demographic statistics (towns, districts, age groups)
+4. Import/export or trade data across countries/commodities
+5. Marks/scores or performance data (students, employees)
+6. Crop yield/agriculture production across seasons
+7. Survey/opinion poll results with percentages
+
+CRITICAL RULES:
+|- Data MUST be clean whole numbers (no decimals) — e.g. 1200, 450, 88
+|- Every question MUST require actual computation (percentage change, ratio, average, difference, or combined calculation) — NOT reading a value directly off the table
+|- At least 1 percentage change question, 1 ratio question, and 1 average question
+|- CRITICAL: NEVER copy-paste a table row or data value as question_text. Every question_text must be a DISTINCT query that requires computation — not a "what is the value of X" direct read.
 
 EXPLANATION FORMAT — Each explanation MUST be structured as follows:
   "explanation": {
-    "correct_answer_rationale": "Show the exact algebraic calculation steps using the numbers in the text. Include the formula/working (e.g., (1200 - 900) / 900 * 100 = 33.33%).",
+    "correct_answer_rationale": "Brief paragraph showing the calculation steps and why the answer is right. Include the formula/working.",
     "incorrect_option_analysis": {
-      "A": "Why option A is wrong — identify the computational mistake or data misinterpretation (e.g., used wrong denominator, misread row/column).",
+      "A": "Why option A is wrong — identify the computational mistake or data misinterpretation.",
       "B": "Why option B is wrong — identify the computational mistake or data misinterpretation.",
       "C": "Why option C is wrong — identify the computational mistake or data misinterpretation.",
       "D": "Why option D is wrong — identify the computational mistake or data misinterpretation."
     },
-    "wrong_answer_guidance": "If the student answered incorrectly, a 1-2 sentence pointer showing the correct formula or which data to use from the passage."
+    "wrong_answer_guidance": "If the student answered incorrectly, a 1-2 sentence pointer showing the correct formula or which data to use from the table."
   }
 
 Follow exactly with ${QS_PER_PASSAGE} questions matching CLAT 2025 style:
