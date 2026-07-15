@@ -275,55 +275,73 @@ Return JSON with:
   - "passage": { "title": "Legal principle title", "content": "The passage text with legal principle and facts", "source": "Legal principle or 'Original for CLATly'", "difficulty": "easy|medium|hard" }
   - "questions": array of ${QS_PER_PASSAGE} objects (same format as above — with explanation as structured object)`,
 
-    'Logical Reasoning': `You are a CLAT Logical Reasoning expert. Generate exactly 1 argument/critical reasoning passage (150-300 words) presenting a structured argument with a clear conclusion and supporting premises. Follow exactly with ${QS_PER_PASSAGE} questions.
+    'Logical Reasoning': `Role: Senior Item Writer for GMAT/CLAT Critical Reasoning.
 
-Questions must include (distribute across the 6): main conclusion, inference, assumption (necessary/sufficient), strengthen, weaken, flaw in reasoning, parallel reasoning, or role of a statement. At least one strengthen and one weaken question required.
-
-CRITICAL: NEVER copy-paste a statement from the passage as question_text. Every question_text must be a DISTINCT query that tests reasoning about the argument — not quoting it.
+Core Generation Workflow:
+1. PASSAGE ANATOMY BREAKDOWN: Write a passage arguing a specific point of view on a policy, economic theory, or social trend. Before drafting questions, explicitly map out:
+   - The Central Conclusion: [State it in one sentence]
+   - Key Premises: [List the supporting evidence provided in the text]
+   - Unstated Assumptions: [Identify the logical leaps the author makes]
+2. QUESTION TYPES: Draft exactly ${QS_PER_PASSAGE} questions targeting these archetypes (distribute across all 6):
+   - Assumption Identification: Find the unstated link required for the conclusion to stand.
+   - Weaken the Argument: Introduce a new fact that attacks the unstated assumption.
+   - Strengthen the Argument: Introduce a fact that solidifies the assumption.
+   - Inference/Must be True: A conclusion that can be logically derived *solely* from the premises, without any external knowledge.
+   - Main Conclusion/Purpose: Identify the author's central claim or the role of a specific statement.
+   - Flaw in Reasoning: Spot the logical error in the argument structure.
+3. DISTRACTOR RULES — every incorrect option must fall into one of these categories:
+   - Out of Scope: Introduces realistic, true real-world ideas that are completely absent from the text.
+   - Direct Reversal: Does the exact opposite of what is requested (e.g. strengthens when asked to weaken).
+   - Extreme Language: Uses absolute words ("never", "always", "entirely") when the passage relies on qualified arguments.
+4. CRITICAL: NEVER copy-paste a statement from the passage as question_text. Every question_text must be a DISTINCT query that tests reasoning about the argument — not quoting it.
 
 EXPLANATION FORMAT — Each explanation MUST be structured as follows:
   "explanation": {
-    "correct_answer_rationale": "Brief paragraph explaining why the correct answer is right — reference the argument structure and logical reasoning.",
+    "correct_answer_rationale": "Explain why the correct answer is right — reference the Central Conclusion, Premises, or Unstated Assumptions identified in step 1.",
     "incorrect_option_analysis": {
-      "A": "Why option A is wrong — identify the logical error or misreading.",
-      "B": "Why option B is wrong — identify the logical error or misreading.",
-      "C": "Why option C is wrong — identify the logical error or misreading.",
-      "D": "Why option D is wrong — identify the logical error or misreading."
+      "A": "Why option A is wrong — identify which distractor rule it follows (Out of Scope / Direct Reversal / Extreme Language) and why it doesn't work.",
+      "B": "Why option B is wrong — identify which distractor rule it follows and why it doesn't work.",
+      "C": "Why option C is wrong — identify which distractor rule it follows and why it doesn't work.",
+      "D": "Why option D is wrong — identify which distractor rule it follows and why it doesn't work."
     },
-    "wrong_answer_guidance": "If the student answered incorrectly, a 1-2 sentence pointer guiding them to re-examine the argument's conclusion or premises."
+    "wrong_answer_guidance": "If the student answered incorrectly, a 1-2 sentence pointer guiding them to re-examine which part of the argument (conclusion, premise, or assumption) they missed."
   }
 
 Return JSON with:
   - "passage": { "title": "Short title", "content": "The passage text", "source": "Source or 'Original for CLATly'", "difficulty": "easy|medium|hard" }
   - "questions": array of ${QS_PER_PASSAGE} objects (same format as above — with explanation as structured object)`,
 
-    'Quantitative Techniques': `You are a CLAT Quantitative Techniques expert. Generate exactly 1 CLAT-standard data interpretation passage containing a table of numerical data with 3-5 rows and 3-5 columns of clean whole numbers (no decimals), from ONE of these CLAT-standard topics ONLY:
+    'Quantitative Techniques': `Role: Expert Psychometrician and CLAT Quantitative Techniques Content Creator.
 
-APPROVED TOPICS (pick one per passage):
-1. Sales/production/revenue data across years/categories
-2. Budget/expenditure allocation (household, government, company)
-3. Population/demographic statistics (towns, districts, age groups)
-4. Import/export or trade data across countries/commodities
-5. Marks/scores or performance data (students, employees)
-6. Crop yield/agriculture production across seasons
-7. Survey/opinion poll results with percentages
-
-CRITICAL RULES:
-|- Data MUST be clean whole numbers (no decimals) — e.g. 1200, 450, 88
-|- Every question MUST require actual computation (percentage change, ratio, average, difference, or combined calculation) — NOT reading a value directly off the table
-|- At least 1 percentage change question, 1 ratio question, and 1 average question
-|- CRITICAL: NEVER copy-paste a table row or data value as question_text. Every question_text must be a DISTINCT query that requires computation — not a "what is the value of X" direct read.
+Core Generation Workflow (Strict Step-by-Step):
+1. DATA MATRIX GENERATION: Before drafting anything, create a raw JSON data matrix containing the foundational variables (e.g., Total Students = 1200, Ratio M/F = 7:5, Categorized into 3 streams). Choose from these CLAT-standard topics:
+   - Sales/production/revenue data across years/categories
+   - Budget/expenditure allocation (household, government, company)
+   - Population/demographic statistics (towns, districts, age groups)
+   - Import/export or trade data across countries/commodities
+   - Marks/scores or performance data (students, employees)
+   - Crop yield/agriculture production across seasons
+   - Survey/opinion poll results with percentages
+2. MATHEMATICAL VERIFICATION: Calculate all sub-totals, percentages, and ratios explicitly in a scratchpad step. Ensure all internal variables sum up perfectly with zero rounding contradictions. Data MUST be clean whole numbers (no decimals).
+3. PASSAGE DRAFTING: Convert the verified data matrix into a narrative text passage (~250-300 words). The text must present the data using complex sentence structures (e.g., "The number of males in Stream A exceeded the number of females in Stream B by 20%"). Do NOT simply dump a table — embed the data relationships in prose.
+4. QUESTION FORMULATION: Generate exactly ${QS_PER_PASSAGE} items testing these CLAT clusters:
+   - Percentage increases/decreases across categories
+   - Compound ratios (e.g., Ratio of males in Stream A to females in Stream C)
+   - Weighted averages across sub-groups
+   - Difference-based inference ("What is the difference between X and Y?")
+   - At least 1 percentage change question, 1 ratio question, and 1 average question required
+5. CRITICAL: NEVER copy-paste a data value directly as question_text. Every question_text must be a DISTINCT query requiring computation — not a "what is the value of X" direct read from the text.
 
 EXPLANATION FORMAT — Each explanation MUST be structured as follows:
   "explanation": {
-    "correct_answer_rationale": "Brief paragraph showing the calculation steps and why the answer is right. Include the formula/working.",
+    "correct_answer_rationale": "Show the exact algebraic calculation steps using the numbers in the text. Include the formula/working (e.g., (1200 - 900) / 900 * 100 = 33.33%).",
     "incorrect_option_analysis": {
-      "A": "Why option A is wrong — identify the computational mistake or data misinterpretation.",
+      "A": "Why option A is wrong — identify the computational mistake or data misinterpretation (e.g., used wrong denominator, misread row/column).",
       "B": "Why option B is wrong — identify the computational mistake or data misinterpretation.",
       "C": "Why option C is wrong — identify the computational mistake or data misinterpretation.",
       "D": "Why option D is wrong — identify the computational mistake or data misinterpretation."
     },
-    "wrong_answer_guidance": "If the student answered incorrectly, a 1-2 sentence pointer showing the correct formula or which data to use from the table."
+    "wrong_answer_guidance": "If the student answered incorrectly, a 1-2 sentence pointer showing the correct formula or which data to use from the passage."
   }
 
 Follow exactly with ${QS_PER_PASSAGE} questions matching CLAT 2025 style:
