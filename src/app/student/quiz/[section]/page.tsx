@@ -67,6 +67,8 @@ export default function QuizPage() {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [passageText, setPassageText] = useState<string | null>(null);
   const [passageExpanded, setPassageExpanded] = useState(true);
+  const [questionQueue, setQuestionQueue] = useState<QuestionData[]>([]);
+  const [queuePosition, setQueuePosition] = useState(0);
   const prevPassageIdRef = useRef<string | null>(null);
 
   const questionStartTime = useRef<number>(Date.now());
@@ -142,6 +144,13 @@ export default function QuizPage() {
       setDailyRemaining(data.daily_remaining);
       questionStartTime.current = Date.now();
 
+      // Build passage-grouped question queue for subsequent questions
+      const queue = await buildPassageQueue();
+      if (queue && queue.length > 0) {
+        setQuestionQueue(queue);
+        setQueuePosition(0);
+      }
+
       // Get user id from session
       const { data: { user } } = await supabase.auth.getUser();
       if (user) setUserId(user.id);
@@ -191,47 +200,68 @@ export default function QuizPage() {
     setAnswering(false);
   };
 
-  const nextQuestion = () => {
-    setSelected(null);
-    setResult(null);
-    setShowExplanation(false);
-    questionStartTime.current = Date.now();
+  // Serve next question from the passage-grouped queue
+  const nextQuestion = useCallback(() => {
+    const nextPos = queuePosition + 1;
+    if (nextPos < questionQueue.length) {
+      setSelected(null);
+      setResult(null);
+      setShowExplanation(false);
+      questionStartTime.current = Date.now();
+      const { correct_option, ...safeQ } = questionQueue[nextPos] as any;
+      setQuestion(safeQ as QuestionData);
+      setQueuePosition(nextPos);
+    } else {
+      setSessionComplete(true);
+    }
+  }, [queuePosition, questionQueue]);
 
-    // We need to fetch a new question. The respond API returned the next one,
-    // but we don't have it stored. Let's get a fresh one.
-    fetchNextQuestion();
-  };
-
-  const fetchNextQuestion = useCallback(async () => {
-    if (!sessionId || !sectionName) return;
+  // Fetch all unasked questions for the section at start, grouped by passage
+  const buildPassageQueue = useCallback(async () => {
+    if (!sessionId || !sectionName) return null;
     try {
-      // Get a random unanswered question for this session
       const { data: answeredIds } = await supabase
         .from('quiz_responses')
         .select('question_id')
         .eq('session_id', sessionId);
 
-      const excludeIds = (answeredIds ?? []).map(r => r.question_id);
+      const excludeIds = new Set((answeredIds ?? []).map(r => r.question_id));
 
-      let query = supabase
+      const { data: allQuestions } = await supabase
         .from('practice_questions')
-        .select('*')
+        .select('id, section, topic, question_text, passage, passage_id, options, difficulty, explanation, tags')
         .eq('section', sectionName);
 
-      if (excludeIds.length > 0) {
-        query = query.not('id', 'in', `(${excludeIds.join(',')})`);
+      if (!allQuestions || allQuestions.length === 0) return [];
+
+      // Split into passage and standalone questions
+      const passageMap: Record<string, any[]> = {};
+      const standalone: any[] = [];
+
+      for (const q of allQuestions) {
+        if (excludeIds.has(q.id)) continue;
+        if (q.passage_id) {
+          if (!passageMap[q.passage_id]) passageMap[q.passage_id] = [];
+          passageMap[q.passage_id].push(q);
+        } else {
+          standalone.push(q);
+        }
       }
 
-      const { data: nextQ } = await query.limit(1).maybeSingle();
+      // Build queue: pick a random passage → all its questions → next passage → standalone
+      const passageIds = Object.keys(passageMap);
+      const shuffledPassages = passageIds.sort(() => Math.random() - 0.5);
+      const shuffledStandalone = standalone.sort(() => Math.random() - 0.5);
 
-      if (nextQ) {
-        const { correct_option, ...safeQ } = nextQ;
-        setQuestion(safeQ as QuestionData);
-      } else {
-        setSessionComplete(true);
+      const queue: any[] = [];
+      for (const pid of shuffledPassages) {
+        queue.push(...passageMap[pid]);
       }
-    } catch (err) {
-      console.error('Failed to fetch next question:', err);
+      queue.push(...shuffledStandalone);
+
+      return queue;
+    } catch {
+      return [];
     }
   }, [sessionId, sectionName, supabase]);
 
