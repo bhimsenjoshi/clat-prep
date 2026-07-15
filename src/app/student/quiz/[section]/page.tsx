@@ -145,7 +145,8 @@ export default function QuizPage() {
       questionStartTime.current = Date.now();
 
       // Build passage-grouped question queue for subsequent questions
-      const queue = await buildPassageQueue();
+      // Exclude the first question (already served by API) to avoid duplicates
+      const queue = await buildPassageQueue(data.question?.id ? [data.question.id] : []);
       if (queue && queue.length > 0) {
         setQuestionQueue(queue);
         setQueuePosition(0);
@@ -217,7 +218,7 @@ export default function QuizPage() {
   }, [queuePosition, questionQueue]);
 
   // Fetch all unasked questions for the section at start, grouped by passage
-  const buildPassageQueue = useCallback(async () => {
+  const buildPassageQueue = useCallback(async (extraExcludeIds: string[] = []) => {
     if (!sessionId || !sectionName) return null;
     try {
       const { data: answeredIds } = await supabase
@@ -226,6 +227,8 @@ export default function QuizPage() {
         .eq('session_id', sessionId);
 
       const excludeIds = new Set((answeredIds ?? []).map(r => r.question_id));
+      // Also exclude questions already served from a previous batch
+      for (const eid of extraExcludeIds) { if (eid) excludeIds.add(eid); }
 
       const { data: allQuestions } = await supabase
         .from('practice_questions')
