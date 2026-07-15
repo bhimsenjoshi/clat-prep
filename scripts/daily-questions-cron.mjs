@@ -247,22 +247,22 @@ Return JSON with:
     'Current Affairs Including General Knowledge': `You are a CLAT Current Affairs & GK expert. Generate a current affairs passage (250-400 words) in the style of an editorial or analytical opinion piece — NOT a news report. The passage should present an analysis of a significant recent issue (economy, policy, international relations, technology, environment — 2025-2026).
 
 Follow exactly with ${QS_PER_PASSAGE} questions. CRITICAL RULES:
-|- NO trivia questions (dates, launch sites, names of schemes, abbreviations) — these are BANNED
-|- NO "Where was X launched" / "When did X happen" / "Who is the head of X"
-|- CRITICAL: NEVER copy-paste a sentence from the passage as question_text. Every question_text must be a DISTINCT, SYNTHESISED query that reformulates the passage content in new language. Do not quote the passage — write fresh questions.
-|- Questions must test: understanding of the issue, implications, cause-effect, the author's argument, what can be inferred from the analysis, which statement best reflects the passage's central theme
-|- Every question should be answerable by reading and understanding the passage — NOT by prior knowledge
+||- NO trivia questions (dates, launch sites, names of schemes, abbreviations) — these are BANNED
+||- NO "Where was X launched" / "When did X happen" / "Who is the head of X"
+||- EXTERNAL PENALTY: The answer to any Current Affairs multiple-choice question must NOT be present as a substring or direct logical derivation within the text passage. Every question must require external historical, legal, or institutional factual knowledge to answer correctly.
+||- CRITICAL: NEVER copy-paste a sentence from the passage as question_text. Every question_text must be a DISTINCT, SYNTHESISED query that reformulates the passage content in new language. Do not quote the passage — write fresh questions.
+||- Questions must test: knowledge of related constitutional provisions, past international agreements, institutional structures, landmark judgments, or historical context relevant to the passage topic.
 
 EXPLANATION FORMAT — Each explanation MUST be structured as follows:
   "explanation": {
-    "correct_answer_rationale": "Brief paragraph explaining why the correct answer is right — reference evidence from the passage and logical reasoning.",
+    "correct_answer_rationale": "Brief paragraph explaining why the correct answer is right — reference the external factual knowledge (not the passage) that confirms it.",
     "incorrect_option_analysis": {
-      "A": "Why option A is wrong — mention the specific mistake or trap.",
-      "B": "Why option B is wrong — mention the specific mistake or trap.",
-      "C": "Why option C is wrong — mention the specific mistake or trap.",
-      "D": "Why option D is wrong — mention the specific mistake or trap."
+      "A": "Why option A is wrong — mention the specific factual error or common misconception.",
+      "B": "Why option B is wrong — mention the specific factual error or common misconception.",
+      "C": "Why option C is wrong — mention the specific factual error or common misconception.",
+      "D": "Why option D is wrong — mention the specific factual error or common misconception."
     },
-    "wrong_answer_guidance": "If the student answered incorrectly, a 1-2 sentence pointer guiding them to re-read or reconsider the relevant part of the passage."
+    "wrong_answer_guidance": "If the student answered incorrectly, a 1-2 sentence pointer guiding them to recall the relevant external GK fact they should know."
   }
 
 Return JSON with:
