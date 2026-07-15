@@ -984,14 +984,34 @@ export default function StudentDashboard() {
         )}
 
         {/* ════════════════════════════════════════════ */}
-        {/* #7 — QUICK PRACTICE SECTION CARDS             */}
+        {/* #7 — PASSAGE PRACTICE SECTION CARDS          */}
         {/* ════════════════════════════════════════════ */}
-        <SectionCard title="Quick Practice" icon="⚡" collapsible defaultExpanded={false}
+        <SectionCard title="📚 Practice (Passage-based)" icon="📚" collapsible defaultExpanded={true}>
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-2.5">
+            {SECTIONS.map(s => (
+              <Link
+                key={s.id}
+                href={`/student/practice`}
+                onClick={() => sessionStorage.setItem('practiceSection', s.id)}
+                className="bg-card border border-theme rounded-xl p-3.5 hover:border-accent bg-card-hover transition text-center group"
+              >
+                <span className="text-xl block mb-1 group-hover:scale-110 transition-transform">{s.icon}</span>
+                <p className="text-xs font-semibold text-primary truncate">{s.label}</p>
+                <p className="text-[10px] text-muted truncate">{s.desc}</p>
+              </Link>
+            ))}
+          </div>
+        </SectionCard>
+
+        {/* ════════════════════════════════════════════ */}
+        {/* #8 — QUICK FIRE SECTION CARDS                */}
+        {/* ════════════════════════════════════════════ */}
+        <SectionCard title="⚡ Quick Fire (No Passages)" icon="⚡" collapsible defaultExpanded={true}
           extra={profile?.subscription_plan === 'free' ? (
             <span className="text-xs font-normal text-primary">{(profile.daily_free_questions ?? 10)} free questions remaining</span>
           ) : undefined}
         >
-          <div className="grid grid-cols-2 md:grid-cols-6 gap-2.5">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-2.5">
             {SECTIONS.map(s => (
               <Link
                 key={s.id}
@@ -1000,19 +1020,11 @@ export default function StudentDashboard() {
               >
                 <span className="text-xl block mb-1 group-hover:scale-110 transition-transform">{s.icon}</span>
                 <p className="text-xs font-semibold text-primary truncate">{s.label}</p>
-                <p className="text-[10px] text-muted truncate">{s.desc}</p>
+                <p className="text-[10px] text-muted truncate">Quick Fire</p>
               </Link>
             ))}
-            {/* Link to full practice */}
-            <Link
-              href="/student/practice"
-              className="bg-card border border-theme rounded-xl p-3.5 hover:border-accent bg-card-hover transition text-center group md:col-span-1"
-            >
-              <span className="text-xl block mb-1 group-hover:scale-110 transition-transform">📚</span>
-              <p className="text-xs font-semibold text-primary truncate">Passage Practice</p>
-              <p className="text-[10px] text-muted truncate">With passages</p>
-            </Link>
           </div>
+          <p className="text-[10px] text-muted mt-2 text-center">Standalone questions — no passages, just pure knowledge recall</p>
         </SectionCard>
 
         {/* ════════════════════════════════════════════ */}
