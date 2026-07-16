@@ -26,58 +26,6 @@
     "difficulty": "easy"
   },
   {
-    "id": "c0bbaf07-92d6-4bcf-a5cf-a9d6be5c7996",
-    "section": "Current Affairs Including General Knowledge",
-    "question_text": "Which specialized institutional index, published annually by the World Intellectual Property Organization (WIPO), tracks the relative innovation capacity and metrics of global economies, ranking India within its top 40 parameters?",
-    "options": {
-      "A": "Global Innovation Index (GII)",
-      "B": "International Technology Progress Tracker",
-      "C": "Global Competitiveness Matrix",
-      "D": "Universal Patent Efficiency Report"
-    },
-    "correct_option": "(censored)",
-    "difficulty": "medium"
-  },
-  {
-    "id": "8ee3efa9-b439-4763-8691-00b33bd0a157",
-    "section": "Current Affairs Including General Knowledge",
-    "question_text": "The international financial transaction tracking regulatory network, SWIFT, provides secure message routing parameters globally. What does the acronym SWIFT stand for?",
-    "options": {
-      "A": "Society for Worldwide Interbank Financial Telecommunication",
-      "B": "System for Worldwide Institutional Financial Transactions",
-      "C": "Secured Worldwide Interbank Clearing Framework",
-      "D": "Standardized Wireless Institutional Funds Transfer"
-    },
-    "correct_option": "(censored)",
-    "difficulty": "medium"
-  },
-  {
-    "id": "4ca45037-839b-41d9-b579-3bbd1b46e3ba",
-    "section": "Current Affairs Including General Knowledge",
-    "question_text": "Which state assembly in independent India became the first to formally pass a legislative framework implementing a comprehensive Uniform Civil Code (UCC) code covering marriage, divorce, and inheritance rules?",
-    "options": {
-      "A": "Goa",
-      "B": "Uttarakhand",
-      "C": "Gujarat",
-      "D": "Assam"
-    },
-    "correct_option": "(censored)",
-    "difficulty": "easy"
-  },
-  {
-    "id": "2b3bcfed-fdd7-489d-87c8-0a897382981f",
-    "section": "Current Affairs Including General Knowledge",
-    "question_text": "The landmark United Nations High Seas Treaty, finalized to place 30% of the world's international oceans into protected areas by 2030, operates under the legal framework of which principal convention?",
-    "options": {
-      "A": "United Nations Convention on the Law of the Sea (UNCLOS)",
-      "B": "The absolute International Maritime Organization (IMO) Safety Accords",
-      "C": "The universal MARPOL Convention for Marine Pollution Prevention",
-      "D": "The Geneva Convention on Continental Shelf Boundaries"
-    },
-    "correct_option": "(censored)",
-    "difficulty": "medium"
-  },
-  {
     "id": "fe861796-2125-4680-87e3-cb581d3baa21",
     "section": "Current Affairs Including General Knowledge",
     "question_text": "The global biological preserve known as the Svalbard Global Seed Vault, built deep inside a mountain to secure the genetic preservation of agriculture against global crises, is physically located in which country?",
@@ -102,32 +50,6 @@
     },
     "correct_option": "(censored)",
     "difficulty": "easy"
-  },
-  {
-    "id": "eedbc8ca-1585-4349-b809-33173b2db383",
-    "section": "Current Affairs Including General Knowledge",
-    "question_text": "What is the official operational target of India's National Green Hydrogen Mission concerning annual production capacity to be achieved by the year 2030?",
-    "options": {
-      "A": "At least 1 Million Metric Tonnes (MMT)",
-      "B": "At least 5 Million Metric Tonnes (MMT)",
-      "C": "At least 10 Million Metric Tonnes (MMT)",
-      "D": "At least 20 Million Metric Tonnes (MMT)"
-    },
-    "correct_option": "(censored)",
-    "difficulty": "hard"
-  },
-  {
-    "id": "05f93954-1052-46cf-ab06-3687592defcf",
-    "section": "Current Affairs Including General Knowledge",
-    "question_text": "The international dispute regarding the sovereignty of the islands of Greater Tunb, Lesser Tunb, and Abu Musa remains a persistent point of diplomatic tension in the Persian Gulf between which two nations?",
-    "options": {
-      "A": "Saudi Arabia and Qatar",
-      "B": "Iran and the United Arab Emirates (UAE)",
-      "C": "Iraq and Kuwait",
-      "D": "Oman and Yemen"
-    },
-    "correct_option": "(censored)",
-    "difficulty": "hard"
   },
   {
     "id": "e7e59725-b082-459b-ac96-9534018dba0f",
@@ -195,30 +117,82 @@
     "difficulty": "hard"
   },
   {
-    "id": "020cff2c-42e4-4b14-9784-15d98535effe",
+    "id": "eedbc8ca-1585-4349-b809-33173b2db383",
     "section": "Current Affairs Including General Knowledge",
-    "question_text": "In early 2025, which specific ministry launched the comprehensive Cyber Suraksha Abhiyaan initiative to bolster cybersecurity infrastructure across critical public service sectors in India?",
+    "question_text": "What is the official operational target of India's National Green Hydrogen Mission concerning annual production capacity to be achieved by the year 2030?",
     "options": {
-      "A": "Ministry of Electronics and Information Technology",
-      "B": "Ministry of Home Affairs",
-      "C": "Ministry of Defence",
-      "D": "Ministry of External Affairs"
+      "A": "At least 1 Million Metric Tonnes (MMT)",
+      "B": "At least 5 Million Metric Tonnes (MMT)",
+      "C": "At least 10 Million Metric Tonnes (MMT)",
+      "D": "At least 20 Million Metric Tonnes (MMT)"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "hard"
+  },
+  {
+    "id": "4ca45037-839b-41d9-b579-3bbd1b46e3ba",
+    "section": "Current Affairs Including General Knowledge",
+    "question_text": "Which state assembly in independent India became the first to formally pass a legislative framework implementing a comprehensive Uniform Civil Code (UCC) code covering marriage, divorce, and inheritance rules?",
+    "options": {
+      "A": "Goa",
+      "B": "Uttarakhand",
+      "C": "Gujarat",
+      "D": "Assam"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "2b3bcfed-fdd7-489d-87c8-0a897382981f",
+    "section": "Current Affairs Including General Knowledge",
+    "question_text": "The landmark United Nations High Seas Treaty, finalized to place 30% of the world's international oceans into protected areas by 2030, operates under the legal framework of which principal convention?",
+    "options": {
+      "A": "United Nations Convention on the Law of the Sea (UNCLOS)",
+      "B": "The absolute International Maritime Organization (IMO) Safety Accords",
+      "C": "The universal MARPOL Convention for Marine Pollution Prevention",
+      "D": "The Geneva Convention on Continental Shelf Boundaries"
     },
     "correct_option": "(censored)",
     "difficulty": "medium"
   },
   {
-    "id": "3830ea6e-dbc5-4729-9a85-d6e55892897f",
+    "id": "8ee3efa9-b439-4763-8691-00b33bd0a157",
     "section": "Current Affairs Including General Knowledge",
-    "question_text": "The 2025 editions of key multilateral security summits focused heavily on the security challenges stemming from the ongoing geopolitical gridlock between which two primary global powers?",
+    "question_text": "The international financial transaction tracking regulatory network, SWIFT, provides secure message routing parameters globally. What does the acronym SWIFT stand for?",
     "options": {
-      "A": "China and Russia",
-      "B": "United States and China",
-      "C": "India and France",
-      "D": "United Kingdom and Germany"
+      "A": "Society for Worldwide Interbank Financial Telecommunication",
+      "B": "System for Worldwide Institutional Financial Transactions",
+      "C": "Secured Worldwide Interbank Clearing Framework",
+      "D": "Standardized Wireless Institutional Funds Transfer"
     },
     "correct_option": "(censored)",
     "difficulty": "medium"
+  },
+  {
+    "id": "c0bbaf07-92d6-4bcf-a5cf-a9d6be5c7996",
+    "section": "Current Affairs Including General Knowledge",
+    "question_text": "Which specialized institutional index, published annually by the World Intellectual Property Organization (WIPO), tracks the relative innovation capacity and metrics of global economies, ranking India within its top 40 parameters?",
+    "options": {
+      "A": "Global Innovation Index (GII)",
+      "B": "International Technology Progress Tracker",
+      "C": "Global Competitiveness Matrix",
+      "D": "Universal Patent Efficiency Report"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "05f93954-1052-46cf-ab06-3687592defcf",
+    "section": "Current Affairs Including General Knowledge",
+    "question_text": "The international dispute regarding the sovereignty of the islands of Greater Tunb, Lesser Tunb, and Abu Musa remains a persistent point of diplomatic tension in the Persian Gulf between which two nations?",
+    "options": {
+      "A": "Saudi Arabia and Qatar",
+      "B": "Iran and the United Arab Emirates (UAE)",
+      "C": "Iraq and Kuwait",
+      "D": "Oman and Yemen"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "hard"
   },
   {
     "id": "3525623d-82e3-430d-9c44-24557a57b2c6",
@@ -247,6 +221,19 @@
     "difficulty": "easy"
   },
   {
+    "id": "3830ea6e-dbc5-4729-9a85-d6e55892897f",
+    "section": "Current Affairs Including General Knowledge",
+    "question_text": "The 2025 editions of key multilateral security summits focused heavily on the security challenges stemming from the ongoing geopolitical gridlock between which two primary global powers?",
+    "options": {
+      "A": "China and Russia",
+      "B": "United States and China",
+      "C": "India and France",
+      "D": "United Kingdom and Germany"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
     "id": "696e5dad-21b1-47a2-8fb1-02d2037fd174",
     "section": "Current Affairs Including General Knowledge",
     "question_text": "In early 2025, the Indian Space Research Organisation (ISRO) successfully deployed the EOS-08 satellite. What is the primary operational objective of this specific orbital mission?",
@@ -260,30 +247,17 @@
     "difficulty": "easy"
   },
   {
-    "id": "5b29ef1b-729e-4058-a084-8de9ba8e240d",
+    "id": "020cff2c-42e4-4b14-9784-15d98535effe",
     "section": "Current Affairs Including General Knowledge",
-    "question_text": "Which principal primary launch facility is utilized by the Indian Space Research Organisation (ISRO) to execute its key orbital programs, including the Gaganyaan launches?",
+    "question_text": "In early 2025, which specific ministry launched the comprehensive Cyber Suraksha Abhiyaan initiative to bolster cybersecurity infrastructure across critical public service sectors in India?",
     "options": {
-      "A": "Vikram Sarabhai Space Centre",
-      "B": "Satish Dhawan Space Centre",
-      "C": "Abdul Kalam Island Range",
-      "D": "Thumba Equatorial Rocket Launching Station"
+      "A": "Ministry of Electronics and Information Technology",
+      "B": "Ministry of Home Affairs",
+      "C": "Ministry of Defence",
+      "D": "Ministry of External Affairs"
     },
     "correct_option": "(censored)",
     "difficulty": "medium"
-  },
-  {
-    "id": "b7dccf6e-c307-44af-8afc-0dc712cba6d1",
-    "section": "Current Affairs Including General Knowledge",
-    "question_text": "Which country was the respondent in the advisory proceedings before international tribunals regarding the legal consequences of the separation of the Chagos Archipelago?",
-    "options": {
-      "A": "United States",
-      "B": "United Kingdom",
-      "C": "France",
-      "D": "India"
-    },
-    "correct_option": "(censored)",
-    "difficulty": "easy"
   },
   {
     "id": "65ddae62-bcd2-421c-ae60-3624692ed327",
@@ -323,6 +297,45 @@
     },
     "correct_option": "(censored)",
     "difficulty": "medium"
+  },
+  {
+    "id": "b7dccf6e-c307-44af-8afc-0dc712cba6d1",
+    "section": "Current Affairs Including General Knowledge",
+    "question_text": "Which country was the respondent in the advisory proceedings before international tribunals regarding the legal consequences of the separation of the Chagos Archipelago?",
+    "options": {
+      "A": "United States",
+      "B": "United Kingdom",
+      "C": "France",
+      "D": "India"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "5b29ef1b-729e-4058-a084-8de9ba8e240d",
+    "section": "Current Affairs Including General Knowledge",
+    "question_text": "Which principal primary launch facility is utilized by the Indian Space Research Organisation (ISRO) to execute its key orbital programs, including the Gaganyaan launches?",
+    "options": {
+      "A": "Vikram Sarabhai Space Centre",
+      "B": "Satish Dhawan Space Centre",
+      "C": "Abdul Kalam Island Range",
+      "D": "Thumba Equatorial Rocket Launching Station"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "3fcbc060-d064-4f23-95cc-54ac5af2eae4",
+    "section": "Current Affairs Including General Knowledge",
+    "question_text": "What is a major structural characteristic of the simplified New Tax Regime promoted in recent Union Budgets to incentivize adoption?",
+    "options": {
+      "A": "Significantly higher tax slabs matched with a massive expansion of standard local deductions",
+      "B": "Lowered tax rates across calibrated slabs in lieu of removing most historical exemptions and deductions",
+      "C": "An absolute freeze keeping all personal and corporate income tax parameters identical to historical matrices",
+      "D": "The introduction of extreme punitive wealth taxes alongside standard savings incentives"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "easy"
   },
   {
     "id": "201bd240-4da7-45f8-a615-371deb905d2a",
@@ -375,19 +388,6 @@
     },
     "correct_option": "(censored)",
     "difficulty": "medium"
-  },
-  {
-    "id": "3fcbc060-d064-4f23-95cc-54ac5af2eae4",
-    "section": "Current Affairs Including General Knowledge",
-    "question_text": "What is a major structural characteristic of the simplified New Tax Regime promoted in recent Union Budgets to incentivize adoption?",
-    "options": {
-      "A": "Significantly higher tax slabs matched with a massive expansion of standard local deductions",
-      "B": "Lowered tax rates across calibrated slabs in lieu of removing most historical exemptions and deductions",
-      "C": "An absolute freeze keeping all personal and corporate income tax parameters identical to historical matrices",
-      "D": "The introduction of extreme punitive wealth taxes alongside standard savings incentives"
-    },
-    "correct_option": "(censored)",
-    "difficulty": "easy"
   },
   {
     "id": "7e733894-5a84-4700-bb91-77bd3080a218",
@@ -468,19 +468,6 @@
     "difficulty": "hard"
   },
   {
-    "id": "7f80614f-f39e-43ee-b85a-e80479d85f57",
-    "section": "Current Affairs Including General Knowledge",
-    "question_text": "What is the primary strategic milestone targeted by the uncrewed test flights of ISRO's Gaganyaan orbital vehicle development timeline?",
-    "options": {
-      "A": "To validate the precision parameters required to recover heavy infrastructure modules from deep lunar paths",
-      "B": "To rigorously test and validate crew module escape systems, environmental controls, and re-entry thermal dynamics safely",
-      "C": "To deploy commercial constellation assets directly into highly synchronized low-Earth orbits",
-      "D": "To benchmark the absolute payload lifting boundaries of heavy cryogenic engines under non-atmospheric constraints"
-    },
-    "correct_option": "(censored)",
-    "difficulty": "hard"
-  },
-  {
     "id": "dd76bcaa-2f53-4ff1-8baf-fa49e81f8683",
     "section": "Current Affairs Including General Knowledge",
     "question_text": "In its landmark verdict on same-sex marriage rights, how did the Supreme Court of India rule regarding the constitutional validity of expanding matrimonial legal recognition?",
@@ -489,6 +476,19 @@
       "B": "It declined to judicially expand the definition of marriage, holding that legal recognition of unions falls under the domain of parliamentary legislation",
       "C": "It granted same-sex unions an absolute exemption from all domestic tax and property registration regulations",
       "D": "It terminated the legislative authority of state assemblies regarding familial contract definitions"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "hard"
+  },
+  {
+    "id": "7f80614f-f39e-43ee-b85a-e80479d85f57",
+    "section": "Current Affairs Including General Knowledge",
+    "question_text": "What is the primary strategic milestone targeted by the uncrewed test flights of ISRO's Gaganyaan orbital vehicle development timeline?",
+    "options": {
+      "A": "To validate the precision parameters required to recover heavy infrastructure modules from deep lunar paths",
+      "B": "To rigorously test and validate crew module escape systems, environmental controls, and re-entry thermal dynamics safely",
+      "C": "To deploy commercial constellation assets directly into highly synchronized low-Earth orbits",
+      "D": "To benchmark the absolute payload lifting boundaries of heavy cryogenic engines under non-atmospheric constraints"
     },
     "correct_option": "(censored)",
     "difficulty": "hard"
@@ -505,6 +505,19 @@
     },
     "correct_option": "(censored)",
     "difficulty": "hard"
+  },
+  {
+    "id": "e58d10e4-8af0-45d8-878c-c549d4507c9a",
+    "section": "English Language",
+    "question_text": "Identify the option that corrects the grammatical error in the following fragmented sentence: 'Despite of his extensive corporate expertise, the consultant failed the financial compliance audit testing rules.'",
+    "options": {
+      "A": "In spite of his extensive corporate expertise, the consultant failed the financial compliance audit testing rules.",
+      "B": "Despite his extensive corporate expertise, the consultant failed the financial compliance audit testing rules.",
+      "C": "Despite for his extensive corporate expertise, the consultant failed the financial compliance audit testing rules.",
+      "D": "Both A and B are grammatically correct modifications that eliminate the structural error."
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
   },
   {
     "id": "eb525ddb-0452-47ca-957b-c460329abbab",
@@ -544,19 +557,6 @@
     },
     "correct_option": "(censored)",
     "difficulty": "easy"
-  },
-  {
-    "id": "e58d10e4-8af0-45d8-878c-c549d4507c9a",
-    "section": "English Language",
-    "question_text": "Identify the option that corrects the grammatical error in the following fragmented sentence: 'Despite of his extensive corporate expertise, the consultant failed the financial compliance audit testing rules.'",
-    "options": {
-      "A": "In spite of his extensive corporate expertise, the consultant failed the financial compliance audit testing rules.",
-      "B": "Despite his extensive corporate expertise, the consultant failed the financial compliance audit testing rules.",
-      "C": "Despite for his extensive corporate expertise, the consultant failed the financial compliance audit testing rules.",
-      "D": "Both A and B are grammatically correct modifications that eliminate the structural error."
-    },
-    "correct_option": "(censored)",
-    "difficulty": "medium"
   },
   {
     "id": "1ec977a4-a239-478a-a803-ea2d8e402595",
@@ -637,19 +637,6 @@
     "difficulty": "medium"
   },
   {
-    "id": "90832034-b84c-4193-8b41-1288eb8b66f6",
-    "section": "English Language",
-    "question_text": "Which statement best summarizes a balanced analytical view on the deployment of AI algorithms inside healthcare systems?",
-    "options": {
-      "A": "AI systems will completely replace human healthcare personnel by the end of the decade",
-      "B": "AI offers significant diagnostic potential but introduces complex ethical, data privacy, and accountability challenges that must be addressed",
-      "C": "The immediate commercial advantages of AI completely erase any ethical or tracking concerns",
-      "D": "AI should be entirely barred from clinical usage due to unresolvable privacy risks"
-    },
-    "correct_option": "(censored)",
-    "difficulty": "medium"
-  },
-  {
     "id": "4edad83b-62ab-458d-80f1-af5b9e4f8370",
     "section": "English Language",
     "question_text": "Which of the following elements is NOT historically recognized as an immediate consequence of the Industrial Revolution?",
@@ -661,6 +648,19 @@
     },
     "correct_option": "(censored)",
     "difficulty": "easy"
+  },
+  {
+    "id": "90832034-b84c-4193-8b41-1288eb8b66f6",
+    "section": "English Language",
+    "question_text": "Which statement best summarizes a balanced analytical view on the deployment of AI algorithms inside healthcare systems?",
+    "options": {
+      "A": "AI systems will completely replace human healthcare personnel by the end of the decade",
+      "B": "AI offers significant diagnostic potential but introduces complex ethical, data privacy, and accountability challenges that must be addressed",
+      "C": "The immediate commercial advantages of AI completely erase any ethical or tracking concerns",
+      "D": "AI should be entirely barred from clinical usage due to unresolvable privacy risks"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
   },
   {
     "id": "ddf3dcd8-bb29-4b3b-ac41-518417417ad4",
@@ -689,19 +689,6 @@
     "difficulty": "hard"
   },
   {
-    "id": "f1e89215-6299-4e48-a671-f8607984ff6e",
-    "section": "English Language",
-    "question_text": "Which choice best captures F. Scott Fitzgerald's critique of the 'American Dream' through the narrative outcome of 'The Great Gatsby'?",
-    "options": {
-      "A": "The uncritical pursuit of capital guarantees absolute internal fulfillment and marital stability",
-      "B": "The American Dream is easily realized by any individual who deploys baseline focus and hard labor",
-      "C": "Social class stratification remains rigid and insurmountable, exposing the idea of meritocracy as an illusion despite the acquisition of immense wealth",
-      "D": "The immediate superiority of aristocratic old-money families over modern constitutional legal bodies"
-    },
-    "correct_option": "(censored)",
-    "difficulty": "hard"
-  },
-  {
     "id": "06c65674-12ea-4fce-a477-8afd0d37df90",
     "section": "English Language",
     "question_text": "Which statement best reflects a comprehensive evaluation of the historical legacy of the Industrial Revolution?",
@@ -710,6 +697,19 @@
       "B": "It was entirely beneficial, systematically eliminating social stratification and environmental externalities",
       "C": "It represents a complex transformation that drove unprecedented economic and technological growth while simultaneously causing severe social and environmental harms",
       "D": "Its socioeconomic consequences were isolated entirely to Britain, failing to influence global developments"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "hard"
+  },
+  {
+    "id": "f1e89215-6299-4e48-a671-f8607984ff6e",
+    "section": "English Language",
+    "question_text": "Which choice best captures F. Scott Fitzgerald's critique of the 'American Dream' through the narrative outcome of 'The Great Gatsby'?",
+    "options": {
+      "A": "The uncritical pursuit of capital guarantees absolute internal fulfillment and marital stability",
+      "B": "The American Dream is easily realized by any individual who deploys baseline focus and hard labor",
+      "C": "Social class stratification remains rigid and insurmountable, exposing the idea of meritocracy as an illusion despite the acquisition of immense wealth",
+      "D": "The immediate superiority of aristocratic old-money families over modern constitutional legal bodies"
     },
     "correct_option": "(censored)",
     "difficulty": "hard"
@@ -741,19 +741,6 @@
     "difficulty": "hard"
   },
   {
-    "id": "62119b48-10c1-4fc0-a86a-0d85b3068b0c",
-    "section": "English Language",
-    "question_text": "Identify the sentence that conforms perfectly to standard English grammatical rules and subject-verb agreement principles:",
-    "options": {
-      "A": "Neither the teacher nor the students was aware of the structural change in the curriculum",
-      "B": "Neither the teacher nor the students were aware of the structural change in the curriculum",
-      "C": "Neither the teacher nor the students are being aware of the structural change in the curriculum",
-      "D": "Neither the teacher nor the students is aware of the structural change in the curriculum"
-    },
-    "correct_option": "(censored)",
-    "difficulty": "medium"
-  },
-  {
     "id": "8b3a61d9-282b-4ec2-9927-66a0fae4f41e",
     "section": "English Language",
     "question_text": "In the context of judicial proceedings, select the word that is most nearly identical in meaning to the capitalized word in the sentence: 'The appellate court noted that the judge was respected for her IMPARTIAL decisions.'",
@@ -767,17 +754,30 @@
     "difficulty": "medium"
   },
   {
-    "id": "35356d13-035f-4a72-a442-4ebbf434f411",
-    "section": "Legal Reasoning",
-    "question_text": "Legal Principle: The doctrine of promissory estoppel prevents a party from backing out of a clear promise made to another, if that other party has altered their position or incurred financial expenses in reliance on that promise. Fact Pattern: A educational trust promises a researcher a grant of ₹5 Lakhs to conduct a study. Relying on this, the researcher resigns from his job and rents laboratory equipment. The trust later cancels the grant, citing a change in funding priorities. The researcher sues the trust. Will he succeed?",
+    "id": "62119b48-10c1-4fc0-a86a-0d85b3068b0c",
+    "section": "English Language",
+    "question_text": "Identify the sentence that conforms perfectly to standard English grammatical rules and subject-verb agreement principles:",
     "options": {
-      "A": "Yes, because the researcher altered his economic position and incurred liabilities based on the clear promise made by the trust, invoking promissory estoppel",
-      "B": "No, because a promise to provide a grant does not constitute a formal commercial contract signed on stamp paper",
-      "C": "Yes, but the trust is obligated to pay only for the laboratory rental equipment costs, ignoring the salary loss",
-      "D": "No, because educational trusts enjoy complete sovereign immunity from estoppel claims parameters"
+      "A": "Neither the teacher nor the students was aware of the structural change in the curriculum",
+      "B": "Neither the teacher nor the students were aware of the structural change in the curriculum",
+      "C": "Neither the teacher nor the students are being aware of the structural change in the curriculum",
+      "D": "Neither the teacher nor the students is aware of the structural change in the curriculum"
     },
     "correct_option": "(censored)",
-    "difficulty": "hard"
+    "difficulty": "medium"
+  },
+  {
+    "id": "43283275-00a8-411e-a4c9-5ae3e28691db",
+    "section": "Legal Reasoning",
+    "question_text": "Legal Principle: A standard contract becomes void under the doctrine of supervening illegality if, after its formation, a new legislative or administrative law is enacted that completely outlaws the core performance of the agreement. Fact Pattern: A contracts to import and supply a specific batch of industrial chemical polymers to B. Two weeks later, before delivery, the Central Government issues an emergency environmental notification declaring the import and trade of those polymers an absolute criminal offense. B sues A for non-performance. What is the legal outcome?",
+    "options": {
+      "A": "The contract is void due to supervening illegality, discharging both parties from performance without breach liability",
+      "B": "A is liable for breach because the contract was signed prior to the enactment of the environmental ban",
+      "C": "A must pay immediate liquidated damages to B to offset the corporate purchasing loss",
+      "D": "The contract remains valid, and A must deliver the inventory clandestinely to fulfill the agreement parameters"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
   },
   {
     "id": "045b425a-0b09-4ad4-8afa-6eea44b263e0",
@@ -871,19 +871,6 @@
     "difficulty": "hard"
   },
   {
-    "id": "43283275-00a8-411e-a4c9-5ae3e28691db",
-    "section": "Legal Reasoning",
-    "question_text": "Legal Principle: A standard contract becomes void under the doctrine of supervening illegality if, after its formation, a new legislative or administrative law is enacted that completely outlaws the core performance of the agreement. Fact Pattern: A contracts to import and supply a specific batch of industrial chemical polymers to B. Two weeks later, before delivery, the Central Government issues an emergency environmental notification declaring the import and trade of those polymers an absolute criminal offense. B sues A for non-performance. What is the legal outcome?",
-    "options": {
-      "A": "The contract is void due to supervening illegality, discharging both parties from performance without breach liability",
-      "B": "A is liable for breach because the contract was signed prior to the enactment of the environmental ban",
-      "C": "A must pay immediate liquidated damages to B to offset the corporate purchasing loss",
-      "D": "The contract remains valid, and A must deliver the inventory clandestinely to fulfill the agreement parameters"
-    },
-    "correct_option": "(censored)",
-    "difficulty": "medium"
-  },
-  {
     "id": "c413cbbe-eda6-43b6-a388-70da4bd7ee82",
     "section": "Legal Reasoning",
     "question_text": "Legal Principle: In criminal jurisprudence, the right of private defense of property arises only against an active or imminent attempt to commit theft, robbery, mischief, or criminal trespass, and the force used must never exceed what is reasonably necessary. Fact Pattern: Sunil sees a teenager climbing his garden fence to retrieve a stray tennis ball. Sunil immediately sets his trained attack dogs on the teenager, causing severe lacerations. The teenager's family files a criminal complaint. Can Sunil claim private defense?",
@@ -921,6 +908,19 @@
     },
     "correct_option": "(censored)",
     "difficulty": "medium"
+  },
+  {
+    "id": "35356d13-035f-4a72-a442-4ebbf434f411",
+    "section": "Legal Reasoning",
+    "question_text": "Legal Principle: The doctrine of promissory estoppel prevents a party from backing out of a clear promise made to another, if that other party has altered their position or incurred financial expenses in reliance on that promise. Fact Pattern: A educational trust promises a researcher a grant of ₹5 Lakhs to conduct a study. Relying on this, the researcher resigns from his job and rents laboratory equipment. The trust later cancels the grant, citing a change in funding priorities. The researcher sues the trust. Will he succeed?",
+    "options": {
+      "A": "Yes, because the researcher altered his economic position and incurred liabilities based on the clear promise made by the trust, invoking promissory estoppel",
+      "B": "No, because a promise to provide a grant does not constitute a formal commercial contract signed on stamp paper",
+      "C": "Yes, but the trust is obligated to pay only for the laboratory rental equipment costs, ignoring the salary loss",
+      "D": "No, because educational trusts enjoy complete sovereign immunity from estoppel claims parameters"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "hard"
   },
   {
     "id": "9bed98ed-1989-4423-9f0a-f38911ef4536",
@@ -962,30 +962,17 @@
     "difficulty": "easy"
   },
   {
-    "id": "0e6fe849-3784-4230-b6bf-e9bba25dc610",
+    "id": "d04ca560-38f8-4c0d-a10f-25bdda855ae0",
     "section": "Legal Reasoning",
-    "question_text": "Legal Principle: A manufacturer of a product owes a duty of care to the ultimate consumer to ensure that the product is free from defects that could cause foreseeable harm, even in the absence of a direct contract between them. Fact Pattern: R, a commercial manufacturer, sells a defective carbonated beverage batch to a local distributor, who distributes it to a retail outlet. S buys a bottle from the retailer, consumes it, and suffers severe food poisoning due to deep chemical contamination within the factory line. S files a tort claim against R. Which option is correct?",
+    "question_text": "Legal Principle: A breach of contract occurs when a party fails to perform their contractually agreed obligation without a valid legal excuse, making them liable to compensate the non-breaching party. Fact Pattern: X and Y enter into a written agreement where X agrees to sell his car to Y for $10,000, with delivery scheduled for Tuesday. On Monday, X refuses to complete the transaction and sells the vehicle to Z instead. Y files a suit for breach. Which option is correct?",
     "options": {
-      "A": "R is liable for negligence because he owes an absolute legal duty of care to the ultimate consumer",
-      "B": "R is not liable because there is no privity of contract between R and the consumer S",
-      "C": "S holds the legal right to sue only the immediate storefront retailer who processed the transaction",
-      "D": "R can be held liable only if S can prove that R possessed prior subjective knowledge of the specific defect"
+      "A": "X is liable for breach of contract and must compensate Y for non-performance",
+      "B": "X is not liable because oral and unsigned preliminary allocations override written terms",
+      "C": "Y can only claim a return of any initial token deposit but cannot initiate a claim for breach",
+      "D": "X is completely absolved of liability because securing a higher open-market offer serves as an absolute commercial justification"
     },
     "correct_option": "(censored)",
-    "difficulty": "hard"
-  },
-  {
-    "id": "43aeed70-106f-43a6-8dad-4afaf363806d",
-    "section": "Legal Reasoning",
-    "question_text": "Legal Principle: In a civil action for defamation, the plaintiff must establish that the statement was defamatory, referred to the plaintiff, and was published to a third party. The defendant can escape liability by proving that the statement was true in substance and fact. Fact Pattern: P publishes a detailed column in a newspaper alleging that public official Q accepted financial bribes. Q sues for defamation. P fails to provide any bank ledger evidence, receipts, or factual tracking data to substantiate the bribery claim. Which option is correct?",
-    "options": {
-      "A": "P is liable for defamation because he published an unverified statement harming Q's reputation and failed to establish the defense of truth",
-      "B": "P is not liable because public officials cannot initiate civil claims for defamation under standard speech protections",
-      "C": "The suit will fail because the burden of proof rests entirely on Q to scientifically demonstrate that he never accepted a bribe",
-      "D": "P can be held liable only if Q can prove that the newspaper article caused him an immediate, measurable drop in personal salary"
-    },
-    "correct_option": "(censored)",
-    "difficulty": "medium"
+    "difficulty": "easy"
   },
   {
     "id": "36b507c6-7708-43ea-82e3-051e7c14b63b",
@@ -1001,6 +988,19 @@
     "difficulty": "easy"
   },
   {
+    "id": "0e6fe849-3784-4230-b6bf-e9bba25dc610",
+    "section": "Legal Reasoning",
+    "question_text": "Legal Principle: A manufacturer of a product owes a duty of care to the ultimate consumer to ensure that the product is free from defects that could cause foreseeable harm, even in the absence of a direct contract between them. Fact Pattern: R, a commercial manufacturer, sells a defective carbonated beverage batch to a local distributor, who distributes it to a retail outlet. S buys a bottle from the retailer, consumes it, and suffers severe food poisoning due to deep chemical contamination within the factory line. S files a tort claim against R. Which option is correct?",
+    "options": {
+      "A": "R is liable for negligence because he owes an absolute legal duty of care to the ultimate consumer",
+      "B": "R is not liable because there is no privity of contract between R and the consumer S",
+      "C": "S holds the legal right to sue only the immediate storefront retailer who processed the transaction",
+      "D": "R can be held liable only if S can prove that R possessed prior subjective knowledge of the specific defect"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "hard"
+  },
+  {
     "id": "1d9e30c5-d9a1-4fad-b788-b81077a983f9",
     "section": "Legal Reasoning",
     "question_text": "Legal Principle: False imprisonment is the total and unauthorized restraint of a person's liberty without legal justification. Law enforcement personnel have legal justification only if they possess a valid warrant or reasonable, corroborated suspicion of a cognizable offense. Fact Pattern: A, a police officer, arrests B at a transit hub without a warrant based purely on a brief, anonymous phone tip that lacked any physical description or details. An investigation reveals no crime was committed. B sues A for false imprisonment. Which option is correct?",
@@ -1014,17 +1014,17 @@
     "difficulty": "medium"
   },
   {
-    "id": "d04ca560-38f8-4c0d-a10f-25bdda855ae0",
+    "id": "43aeed70-106f-43a6-8dad-4afaf363806d",
     "section": "Legal Reasoning",
-    "question_text": "Legal Principle: A breach of contract occurs when a party fails to perform their contractually agreed obligation without a valid legal excuse, making them liable to compensate the non-breaching party. Fact Pattern: X and Y enter into a written agreement where X agrees to sell his car to Y for $10,000, with delivery scheduled for Tuesday. On Monday, X refuses to complete the transaction and sells the vehicle to Z instead. Y files a suit for breach. Which option is correct?",
+    "question_text": "Legal Principle: In a civil action for defamation, the plaintiff must establish that the statement was defamatory, referred to the plaintiff, and was published to a third party. The defendant can escape liability by proving that the statement was true in substance and fact. Fact Pattern: P publishes a detailed column in a newspaper alleging that public official Q accepted financial bribes. Q sues for defamation. P fails to provide any bank ledger evidence, receipts, or factual tracking data to substantiate the bribery claim. Which option is correct?",
     "options": {
-      "A": "X is liable for breach of contract and must compensate Y for non-performance",
-      "B": "X is not liable because oral and unsigned preliminary allocations override written terms",
-      "C": "Y can only claim a return of any initial token deposit but cannot initiate a claim for breach",
-      "D": "X is completely absolved of liability because securing a higher open-market offer serves as an absolute commercial justification"
+      "A": "P is liable for defamation because he published an unverified statement harming Q's reputation and failed to establish the defense of truth",
+      "B": "P is not liable because public officials cannot initiate civil claims for defamation under standard speech protections",
+      "C": "The suit will fail because the burden of proof rests entirely on Q to scientifically demonstrate that he never accepted a bribe",
+      "D": "P can be held liable only if Q can prove that the newspaper article caused him an immediate, measurable drop in personal salary"
     },
     "correct_option": "(censored)",
-    "difficulty": "easy"
+    "difficulty": "medium"
   },
   {
     "id": "4b11fafa-a001-4dd6-8e78-3070e0d1d0f6",
@@ -1038,6 +1038,32 @@
     },
     "correct_option": "(censored)",
     "difficulty": "easy"
+  },
+  {
+    "id": "5ba62f7a-5c70-4adb-8eab-bfd2b75f817e",
+    "section": "Legal Reasoning",
+    "question_text": "Legal Principle: Public officials are protected from civil liability for actions performed during the course of official duty, provided they act within the reasonable scope of authority and in good faith. Using excessive, unreasonable force is outside the scope of authority and negates this protection. Fact Pattern: A, a police officer, arrests B on a valid warrant for theft. While B is handcuffed and cooperating completely, A uses a baton to strike B, causing a severe fracture. B sues A for battery. Which option is correct?",
+    "options": {
+      "A": "A is liable for battery because the deployment of excessive and unreasonable force against a compliant person falls outside the scope of lawful authority",
+      "B": "A is not liable because the underlying warrant was valid, providing complete civil immunity for all associated physical acts",
+      "C": "A can be held liable only if B can prove that the officer had a personal, long-standing grudge against him",
+      "D": "A is immune because public safety personnel are completely exempt from civil claims during deployments"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "1aa8dba9-77bd-440a-81fe-ebd2e2584410",
+    "section": "Legal Reasoning",
+    "question_text": "Legal Principle: Under contract law, the doctrine of frustration discharges an agreement automatically if an extraordinary, unforeseeable supervening event occurs after formation that makes performance completely impossible or unlawful without the fault of either party. Fact Pattern: X agrees to deliver 100 bags of rice to Y on a specific date. Before that date, an unprecedented, record-breaking regional flash flood completely submerges and destroys X's entire warehouse infrastructure and stock. Y sues X for breach. Which option is correct?",
+    "options": {
+      "A": "X is liable because the contract did not explicitly include a force majeure clause text",
+      "B": "X is discharged from liability because the unforeseeable supervening flood rendered performance objectively impossible, frustrating the contract",
+      "C": "X is liable to source replacement stock from alternative international trade routes regardless of costs",
+      "D": "The contract remains fully active, and X must pay immediate damages for delayed delivery parameters"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
   },
   {
     "id": "22a16707-9dbd-48ce-9b3b-0a025758f282",
@@ -1066,27 +1092,14 @@
     "difficulty": "hard"
   },
   {
-    "id": "1aa8dba9-77bd-440a-81fe-ebd2e2584410",
+    "id": "8d45191f-0372-414b-8651-04e77b37e15b",
     "section": "Legal Reasoning",
-    "question_text": "Legal Principle: Under contract law, the doctrine of frustration discharges an agreement automatically if an extraordinary, unforeseeable supervening event occurs after formation that makes performance completely impossible or unlawful without the fault of either party. Fact Pattern: X agrees to deliver 100 bags of rice to Y on a specific date. Before that date, an unprecedented, record-breaking regional flash flood completely submerges and destroys X's entire warehouse infrastructure and stock. Y sues X for breach. Which option is correct?",
+    "question_text": "Legal Principle: A contract entered into by a minor is completely void from the beginning (*void ab initio*), meaning it creates zero legal obligations for either party. Fact Pattern: A, a 17-year-old minor, enters into a written agreement with a dealer to buy a car for ₹5,00,000, paying a small advance. The dealer delivers the vehicle, but A later refuses to pay the balance, pointing to his minority. The dealer sues for breach of contract. Which option is correct?",
     "options": {
-      "A": "X is liable because the contract did not explicitly include a force majeure clause text",
-      "B": "X is discharged from liability because the unforeseeable supervening flood rendered performance objectively impossible, frustrating the contract",
-      "C": "X is liable to source replacement stock from alternative international trade routes regardless of costs",
-      "D": "The contract remains fully active, and X must pay immediate damages for delayed delivery parameters"
-    },
-    "correct_option": "(censored)",
-    "difficulty": "medium"
-  },
-  {
-    "id": "5ba62f7a-5c70-4adb-8eab-bfd2b75f817e",
-    "section": "Legal Reasoning",
-    "question_text": "Legal Principle: Public officials are protected from civil liability for actions performed during the course of official duty, provided they act within the reasonable scope of authority and in good faith. Using excessive, unreasonable force is outside the scope of authority and negates this protection. Fact Pattern: A, a police officer, arrests B on a valid warrant for theft. While B is handcuffed and cooperating completely, A uses a baton to strike B, causing a severe fracture. B sues A for battery. Which option is correct?",
-    "options": {
-      "A": "A is liable for battery because the deployment of excessive and unreasonable force against a compliant person falls outside the scope of lawful authority",
-      "B": "A is not liable because the underlying warrant was valid, providing complete civil immunity for all associated physical acts",
-      "C": "A can be held liable only if B can prove that the officer had a personal, long-standing grudge against him",
-      "D": "A is immune because public safety personnel are completely exempt from civil claims during deployments"
+      "A": "A is fully liable for breach of contract because he accepted the delivery and paid a token advance",
+      "B": "A is not liable for breach because a contract with a minor is void from the beginning, imposing no contractual obligations",
+      "C": "The dealer can enforce the contract directly against A's legal guardians under standard agency codes",
+      "D": "The agreement is valid because expensive consumer durable transactions are exempt from minority rules"
     },
     "correct_option": "(censored)",
     "difficulty": "easy"
@@ -1118,32 +1131,6 @@
     "difficulty": "medium"
   },
   {
-    "id": "9091a9a6-68c9-4c7f-8b45-ce76347d0db9",
-    "section": "Legal Reasoning",
-    "question_text": "Legal Principle: Any intentional, unauthorized physical contact with a person’s body without their explicit consent constitutes the civil tort of battery, regardless of whether it causes physical harm or was intended to be therapeutic. Fact Pattern: A surgeon performs a complex medical procedure on a patient. While the patient is anesthetized, the surgeon notices and successful repairs a secondary non-emergency alignment issue without securing prior informed consent. The patient recovers completely but sues for battery. Which option is correct?",
-    "options": {
-      "A": "The surgeon is not liable because the procedure was medically beneficial and caused zero physical harm",
-      "B": "The surgeon is liable for battery because he performed physical contact on the patient's body without explicit consent",
-      "C": "The surgeon is liable only if the patient can establish that the corrective repair was performed negligently",
-      "D": "The doctor is immune from civil liability because emergency life-saving exceptions cover all non-consensual operations"
-    },
-    "correct_option": "(censored)",
-    "difficulty": "hard"
-  },
-  {
-    "id": "8d45191f-0372-414b-8651-04e77b37e15b",
-    "section": "Legal Reasoning",
-    "question_text": "Legal Principle: A contract entered into by a minor is completely void from the beginning (*void ab initio*), meaning it creates zero legal obligations for either party. Fact Pattern: A, a 17-year-old minor, enters into a written agreement with a dealer to buy a car for ₹5,00,000, paying a small advance. The dealer delivers the vehicle, but A later refuses to pay the balance, pointing to his minority. The dealer sues for breach of contract. Which option is correct?",
-    "options": {
-      "A": "A is fully liable for breach of contract because he accepted the delivery and paid a token advance",
-      "B": "A is not liable for breach because a contract with a minor is void from the beginning, imposing no contractual obligations",
-      "C": "The dealer can enforce the contract directly against A's legal guardians under standard agency codes",
-      "D": "The agreement is valid because expensive consumer durable transactions are exempt from minority rules"
-    },
-    "correct_option": "(censored)",
-    "difficulty": "easy"
-  },
-  {
     "id": "481dee29-fd82-4c9b-a718-862b33e77726",
     "section": "Legal Reasoning",
     "question_text": "Under the constitutional distribution of legislative powers outlined in the Seventh Schedule of the Constitution of India, which authority holds the exclusive power to legislate on and levy taxes on agricultural income?",
@@ -1155,6 +1142,19 @@
     },
     "correct_option": "(censored)",
     "difficulty": "medium"
+  },
+  {
+    "id": "9091a9a6-68c9-4c7f-8b45-ce76347d0db9",
+    "section": "Legal Reasoning",
+    "question_text": "Legal Principle: Any intentional, unauthorized physical contact with a person’s body without their explicit consent constitutes the civil tort of battery, regardless of whether it causes physical harm or was intended to be therapeutic. Fact Pattern: A surgeon performs a complex medical procedure on a patient. While the patient is anesthetized, the surgeon notices and successful repairs a secondary non-emergency alignment issue without securing prior informed consent. The patient recovers completely but sues for battery. Which option is correct?",
+    "options": {
+      "A": "The surgeon is not liable because the procedure was medically beneficial and caused zero physical harm",
+      "B": "The surgeon is liable for battery because he performed physical contact on the patient's body without explicit consent",
+      "C": "The surgeon is liable only if the patient can establish that the corrective repair was performed negligently",
+      "D": "The doctor is immune from civil liability because emergency life-saving exceptions cover all non-consensual operations"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "hard"
   },
   {
     "id": "884b9904-ac55-470e-a865-314bd7ccd54b",
@@ -1183,19 +1183,6 @@
     "difficulty": "hard"
   },
   {
-    "id": "aeb19207-51c9-4806-b37c-a5cc8e1ec7b7",
-    "section": "Legal Reasoning",
-    "question_text": "Legal Principle: A contract is discharged under the doctrine of frustration if an extraordinary, supervening event beyond the control of the parties renders performance physically impossible, absolving them of liability for non-performance. Fact Pattern: A, a famous singer, enters a contract with B to perform at a concert. Two days before the event, A contracts a severe vocal cord infection, making it physically impossible to sing. B sues A for breach. Which option is correct?",
-    "options": {
-      "A": "A is fully liable for breach and must pay all liquidated damages specified in the contract text",
-      "B": "A is not liable because the supervening illness rendered performance physically impossible, frustrating the contract and discharging it",
-      "C": "A must source a replacement singer of equal fame to perform at the concert venue",
-      "D": "The contract is voidable at B's option, meaning B can legally force A to perform at a later date without fresh consideration"
-    },
-    "correct_option": "(censored)",
-    "difficulty": "medium"
-  },
-  {
     "id": "48fb87de-0d8b-4a62-8870-d1f48165068b",
     "section": "Legal Reasoning",
     "question_text": "Legal Principle: Courts will award specific performance of a contract only when monetary compensation is an inadequate remedy for the breach, which is standard for unique immovable property assets. Fact Pattern: X signs a contract to sell his residential house to Y for ₹50 Lakhs. X later breaches the contract to keep the house. Y sues X, demanding specific performance. Which option is correct?",
@@ -1207,6 +1194,19 @@
     },
     "correct_option": "(censored)",
     "difficulty": "hard"
+  },
+  {
+    "id": "aeb19207-51c9-4806-b37c-a5cc8e1ec7b7",
+    "section": "Legal Reasoning",
+    "question_text": "Legal Principle: A contract is discharged under the doctrine of frustration if an extraordinary, supervening event beyond the control of the parties renders performance physically impossible, absolving them of liability for non-performance. Fact Pattern: A, a famous singer, enters a contract with B to perform at a concert. Two days before the event, A contracts a severe vocal cord infection, making it physically impossible to sing. B sues A for breach. Which option is correct?",
+    "options": {
+      "A": "A is fully liable for breach and must pay all liquidated damages specified in the contract text",
+      "B": "A is not liable because the supervening illness rendered performance physically impossible, frustrating the contract and discharging it",
+      "C": "A must source a replacement singer of equal fame to perform at the concert venue",
+      "D": "The contract is voidable at B's option, meaning B can legally force A to perform at a later date without fresh consideration"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
   },
   {
     "id": "2c151960-e6e2-44e7-933e-62a350d7e969",
@@ -1222,14 +1222,14 @@
     "difficulty": "medium"
   },
   {
-    "id": "10929e75-f75b-40e2-959d-e21b824c7288",
+    "id": "221f456a-d143-4110-aa1d-de7fcfa6ec34",
     "section": "Legal Reasoning",
-    "question_text": "Legal Principle: Common law tort principles do not impose a general duty of care to rescue or assist a stranger in peril unless a special relationship exists (such as doctor-patient) or the defendant's own actions created the dangerous situation. Fact Pattern: A, an expert swimmer, notices B, a stranger, drowning in a river. A looks on but refuses to assist B, despite having access to safety gear. B drowns, and his family sues A for negligence. Is A liable?",
+    "question_text": "Legal Principle: Statutory immunity shields public officers from civil liability for actions performed in good faith during the course of duty. Using excessive, unreasonable force against a compliant person is not a good-faith exercise of duty and negates immunity. Fact Pattern: A, a police officer, arrests B on suspicion of retail theft. While B is handcuffed and complying, A uses unnecessary force, breaking B's arm. B sues A for damages. A claims total immunity under the Police Protection Act. Is A protected?",
     "options": {
-      "A": "Yes, because A possessed superior swimming skills, creating a general moral and legal duty to preserve human life",
-      "B": "No, because tort principles do not impose a duty of care to rescue a stranger in peril in the absence of a special relationship or self-created danger",
-      "C": "Yes, because being a bystander at a public park automatically establishes an invitee-based duty of care",
-      "D": "No, but only if A can prove that entering the water posed an immediate threat to his own safety"
+      "A": "Yes, because any injury caused during a valid statutory arrest is automatically covered by sovereign protection",
+      "B": "No, because the use of excessive, unreasonable force against a compliant individual cannot be categorized as a good-faith exercise of duty, negating immunity",
+      "C": "Yes, because police immunity applies to all physical harm unless a prior warrant explicitly prohibited force",
+      "D": "No, because public law immunities were entirely abolished by consumer protection codes"
     },
     "correct_option": "(censored)",
     "difficulty": "hard"
@@ -1248,19 +1248,6 @@
     "difficulty": "hard"
   },
   {
-    "id": "221f456a-d143-4110-aa1d-de7fcfa6ec34",
-    "section": "Legal Reasoning",
-    "question_text": "Legal Principle: Statutory immunity shields public officers from civil liability for actions performed in good faith during the course of duty. Using excessive, unreasonable force against a compliant person is not a good-faith exercise of duty and negates immunity. Fact Pattern: A, a police officer, arrests B on suspicion of retail theft. While B is handcuffed and complying, A uses unnecessary force, breaking B's arm. B sues A for damages. A claims total immunity under the Police Protection Act. Is A protected?",
-    "options": {
-      "A": "Yes, because any injury caused during a valid statutory arrest is automatically covered by sovereign protection",
-      "B": "No, because the use of excessive, unreasonable force against a compliant individual cannot be categorized as a good-faith exercise of duty, negating immunity",
-      "C": "Yes, because police immunity applies to all physical harm unless a prior warrant explicitly prohibited force",
-      "D": "No, because public law immunities were entirely abolished by consumer protection codes"
-    },
-    "correct_option": "(censored)",
-    "difficulty": "hard"
-  },
-  {
     "id": "28434ca2-44d9-4824-bfb8-8d12c2f6b514",
     "section": "Legal Reasoning",
     "question_text": "Legal Principle: Factual truth serves as an absolute defense against civil liability for defamation. If a published statement is accurate in substance and fact, its negative impact on the plaintiff's public reputation is legally irrelevant. Fact Pattern: A newspaper editor, A, publishes an article showing that public official B accepted bribes to clear an industrial project. B sues A for defamation. A provides clear financial ledgers and bank statements proving the corruption allegations are entirely true. Will B's suit succeed?",
@@ -1274,53 +1261,14 @@
     "difficulty": "hard"
   },
   {
-    "id": "2ce09508-0a5a-43ee-a549-8b43ea197acb",
+    "id": "10929e75-f75b-40e2-959d-e21b824c7288",
     "section": "Legal Reasoning",
-    "question_text": "Legal Principle: Performing intentional, unauthorized physical contact on a person constitutes the tort of battery. While law enforcement officers are authorized to use reasonable force to execute duties, deploying excessive, unreasonable force removes this protection and makes them liable for tortious harm. Fact Pattern: A, a police officer, arrests B on suspicion of theft. During the arrest, A uses excessive force on a compliant B, breaking his arm. B sues A for battery. Is A liable?",
+    "question_text": "Legal Principle: Common law tort principles do not impose a general duty of care to rescue or assist a stranger in peril unless a special relationship exists (such as doctor-patient) or the defendant's own actions created the dangerous situation. Fact Pattern: A, an expert swimmer, notices B, a stranger, drowning in a river. A looks on but refuses to assist B, despite having access to safety gear. B drowns, and his family sues A for negligence. Is A liable?",
     "options": {
-      "A": "No, because the underlying legality of the arrest provides complete civil protection for all associated force",
-      "B": "Yes, because the deployment of excessive force falls outside the scope of lawful authority, removing protection and making A liable for battery",
-      "C": "No, because civil claims for battery are entirely barred against uniform service personnel",
-      "D": "Yes, but only if B can prove that the officer had a personal, long-standing grudge against him"
-    },
-    "correct_option": "(censored)",
-    "difficulty": "hard"
-  },
-  {
-    "id": "7144e37c-1ccc-42b2-b4a0-4a91bcacbd27",
-    "section": "Legal Reasoning",
-    "question_text": "Legal Principle: A co-owner of a property cannot transfer the absolute ownership title of the entire property to a third party without securing the explicit consent of all other co-owners. Any such unauthorized transfer of another's share is voidable at the instance of the non-consenting co-owner. Fact Pattern: A and B are equal co-owners of a residential house. Without securing B's consent, A signs a sale deed transferring the entire ownership of the house to C. B files a lawsuit to set aside the sale deed. Can B succeed?",
-    "options": {
-      "A": "No, because as a registered co-owner, A holds the absolute right to unilaterally liquidate the entire property asset",
-      "B": "Yes, because a co-owner cannot transfer the title belonging to other co-owners without explicit consent, making the unauthorized sale of the whole house voidable at B's instance",
-      "C": "No, but only if C can prove he was an innocent buyer who lacked knowledge of B's co-ownership status",
-      "D": "Yes, but B must pay A financial compensation equivalent to half the sale value to regain control"
-    },
-    "correct_option": "(censored)",
-    "difficulty": "hard"
-  },
-  {
-    "id": "2411c632-9f6a-4c08-820d-5097d08d95ae",
-    "section": "Legal Reasoning",
-    "question_text": "Legal Principle: Specific performance of a contract is granted at the discretion of the court when monetary compensation is inadequate to remedy the breach, which is standard for unique, irreplaceable items. Fact Pattern: X and Y sign a contract where X agrees to sell an extremely rare, historically significant collector's sports car to Y. Before delivery, X refuses to complete the sale and offers to return Y's advance with interest as compensation. Y rejects the money and sues X for specific performance. Can Y succeed?",
-    "options": {
-      "A": "No, because monetary compensation with interest is always considered an adequate remedy for any contract breach involving movable assets",
-      "B": "Yes, because the contract involves a unique, irreplaceable item where standard monetary damages are inadequate, making specific performance an appropriate remedy",
-      "C": "No, because specific performance is restricted by law to agreements involving immovable real estate",
-      "D": "Yes, but only if Y doubles his original financial offer to match market trends"
-    },
-    "correct_option": "(censored)",
-    "difficulty": "hard"
-  },
-  {
-    "id": "9bb66f2b-081f-493c-aff8-be571c526106",
-    "section": "Legal Reasoning",
-    "question_text": "Legal Principle: An agreement entered into by a minor is void *ab initio* (void from the beginning) and cannot be legally enforced by or against them. Fact Pattern: A, a minor, enters into a written agreement to purchase a customized vintage motorcycle from B, paying the full amount in advance. B accepts the funds but later refuses to deliver the bike, arguing that because A is a minor, the agreement has no legal standing. A sues B for specific performance. Will A succeed?",
-    "options": {
-      "A": "Yes, because B accepted the money and cannot use A's minority as a shield for bad faith",
-      "B": "No, because a contract with a minor is void *ab initio*; since the agreement lacks legal status from the start, a court cannot enforce specific performance under it",
-      "C": "Yes, because specific performance is always mandated for unique, non-substitutable goods",
-      "D": "No, because minors are entirely barred from initiating any civil litigation in courts"
+      "A": "Yes, because A possessed superior swimming skills, creating a general moral and legal duty to preserve human life",
+      "B": "No, because tort principles do not impose a duty of care to rescue a stranger in peril in the absence of a special relationship or self-created danger",
+      "C": "Yes, because being a bystander at a public park automatically establishes an invitee-based duty of care",
+      "D": "No, but only if A can prove that entering the water posed an immediate threat to his own safety"
     },
     "correct_option": "(censored)",
     "difficulty": "hard"
@@ -1339,6 +1287,58 @@
     "difficulty": "hard"
   },
   {
+    "id": "2411c632-9f6a-4c08-820d-5097d08d95ae",
+    "section": "Legal Reasoning",
+    "question_text": "Legal Principle: Specific performance of a contract is granted at the discretion of the court when monetary compensation is inadequate to remedy the breach, which is standard for unique, irreplaceable items. Fact Pattern: X and Y sign a contract where X agrees to sell an extremely rare, historically significant collector's sports car to Y. Before delivery, X refuses to complete the sale and offers to return Y's advance with interest as compensation. Y rejects the money and sues X for specific performance. Can Y succeed?",
+    "options": {
+      "A": "No, because monetary compensation with interest is always considered an adequate remedy for any contract breach involving movable assets",
+      "B": "Yes, because the contract involves a unique, irreplaceable item where standard monetary damages are inadequate, making specific performance an appropriate remedy",
+      "C": "No, because specific performance is restricted by law to agreements involving immovable real estate",
+      "D": "Yes, but only if Y doubles his original financial offer to match market trends"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "hard"
+  },
+  {
+    "id": "7144e37c-1ccc-42b2-b4a0-4a91bcacbd27",
+    "section": "Legal Reasoning",
+    "question_text": "Legal Principle: A co-owner of a property cannot transfer the absolute ownership title of the entire property to a third party without securing the explicit consent of all other co-owners. Any such unauthorized transfer of another's share is voidable at the instance of the non-consenting co-owner. Fact Pattern: A and B are equal co-owners of a residential house. Without securing B's consent, A signs a sale deed transferring the entire ownership of the house to C. B files a lawsuit to set aside the sale deed. Can B succeed?",
+    "options": {
+      "A": "No, because as a registered co-owner, A holds the absolute right to unilaterally liquidate the entire property asset",
+      "B": "Yes, because a co-owner cannot transfer the title belonging to other co-owners without explicit consent, making the unauthorized sale of the whole house voidable at B's instance",
+      "C": "No, but only if C can prove he was an innocent buyer who lacked knowledge of B's co-ownership status",
+      "D": "Yes, but B must pay A financial compensation equivalent to half the sale value to regain control"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "hard"
+  },
+  {
+    "id": "9bb66f2b-081f-493c-aff8-be571c526106",
+    "section": "Legal Reasoning",
+    "question_text": "Legal Principle: An agreement entered into by a minor is void *ab initio* (void from the beginning) and cannot be legally enforced by or against them. Fact Pattern: A, a minor, enters into a written agreement to purchase a customized vintage motorcycle from B, paying the full amount in advance. B accepts the funds but later refuses to deliver the bike, arguing that because A is a minor, the agreement has no legal standing. A sues B for specific performance. Will A succeed?",
+    "options": {
+      "A": "Yes, because B accepted the money and cannot use A's minority as a shield for bad faith",
+      "B": "No, because a contract with a minor is void *ab initio*; since the agreement lacks legal status from the start, a court cannot enforce specific performance under it",
+      "C": "Yes, because specific performance is always mandated for unique, non-substitutable goods",
+      "D": "No, because minors are entirely barred from initiating any civil litigation in courts"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "hard"
+  },
+  {
+    "id": "2ce09508-0a5a-43ee-a549-8b43ea197acb",
+    "section": "Legal Reasoning",
+    "question_text": "Legal Principle: Performing intentional, unauthorized physical contact on a person constitutes the tort of battery. While law enforcement officers are authorized to use reasonable force to execute duties, deploying excessive, unreasonable force removes this protection and makes them liable for tortious harm. Fact Pattern: A, a police officer, arrests B on suspicion of theft. During the arrest, A uses excessive force on a compliant B, breaking his arm. B sues A for battery. Is A liable?",
+    "options": {
+      "A": "No, because the underlying legality of the arrest provides complete civil protection for all associated force",
+      "B": "Yes, because the deployment of excessive force falls outside the scope of lawful authority, removing protection and making A liable for battery",
+      "C": "No, because civil claims for battery are entirely barred against uniform service personnel",
+      "D": "Yes, but only if B can prove that the officer had a personal, long-standing grudge against him"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "hard"
+  },
+  {
     "id": "c4707d42-0121-4246-8ee6-2039d70fb7e0",
     "section": "Legal Reasoning",
     "question_text": "Legal Principle: The fundamental right to practice any profession, or to carry on any occupation, trade, or business under Article 19(1)(g) of the Constitution of India is not absolute. The state can impose reasonable restrictions on this right in the interest of the general public under Article 19(6). Fact Pattern: A state government issues an order prohibiting the retail sale of alcohol within 500 meters of any educational institution. A licensed liquor shop owner challenges the order, claiming it violates Article 19(1)(g). Will the challenge succeed?",
@@ -1352,19 +1352,6 @@
     "difficulty": "hard"
   },
   {
-    "id": "7f224b2e-ac34-4024-bebc-f0a836993dc8",
-    "section": "Legal Reasoning",
-    "question_text": "Legal Principle: The doctrine of sovereign immunity protects the state and its officials from civil liability only when performing core sovereign functions in accordance with lawful authority. It does not protect individual officials who act outside their authority by deploying excessive, unreasonable force. Fact Pattern: A, a police officer, arrests B on suspicion of theft. During the arrest, A deploys excessive force, causing B to suffer a broken arm. B files a tort action for damages against A. Can A successfully claim sovereign immunity?",
-    "options": {
-      "A": "Yes, because the sovereign nature of police work provides absolute civil immunity for all internal operational acts",
-      "B": "No, because sovereign immunity does not protect individual public officials who act outside the scope of their lawful authority by using excessive, unreasonable force",
-      "C": "Yes, because the state assumes full responsibility for all physical harm caused by its employees during deployments",
-      "D": "No, because the doctrine of sovereign immunity applies exclusively to international trade disputes"
-    },
-    "correct_option": "(censored)",
-    "difficulty": "hard"
-  },
-  {
     "id": "2193393d-77e5-4ed7-b635-4132a72f1e0d",
     "section": "Legal Reasoning",
     "question_text": "Legal Principle: An agreement entered into by a minor is void *ab initio*, meaning it creates no legal contract, and any money or advance paid by the minor under such an agreement must be refunded under principles of restitution. Fact Pattern: Rashmi, a 16-year-old minor, purchases a laptop from an electronics store, paying a ₹10,000 down payment. After a week, she returns the device and demands her ₹10,000 back. The store refuses, pointing to a contractual non-refund clause. Rashmi files a suit claiming the contract is void. Is she entitled to a refund?",
@@ -1373,6 +1360,19 @@
       "B": "Yes, because the contract is void *ab initio* due to her minority; since no contract existed, the store has no legal basis to retain her down payment and must restore it",
       "C": "No, because a laptop automatically qualifies as an absolute necessity under Section 68, making the payment clause enforceable",
       "D": "Yes, but she must pay a 20% depreciation fee for using the device"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "hard"
+  },
+  {
+    "id": "7f224b2e-ac34-4024-bebc-f0a836993dc8",
+    "section": "Legal Reasoning",
+    "question_text": "Legal Principle: The doctrine of sovereign immunity protects the state and its officials from civil liability only when performing core sovereign functions in accordance with lawful authority. It does not protect individual officials who act outside their authority by deploying excessive, unreasonable force. Fact Pattern: A, a police officer, arrests B on suspicion of theft. During the arrest, A deploys excessive force, causing B to suffer a broken arm. B files a tort action for damages against A. Can A successfully claim sovereign immunity?",
+    "options": {
+      "A": "Yes, because the sovereign nature of police work provides absolute civil immunity for all internal operational acts",
+      "B": "No, because sovereign immunity does not protect individual public officials who act outside the scope of their lawful authority by using excessive, unreasonable force",
+      "C": "Yes, because the state assumes full responsibility for all physical harm caused by its employees during deployments",
+      "D": "No, because the doctrine of sovereign immunity applies exclusively to international trade disputes"
     },
     "correct_option": "(censored)",
     "difficulty": "hard"
@@ -1404,14 +1404,14 @@
     "difficulty": "hard"
   },
   {
-    "id": "ce98352b-273a-4ca0-939e-0088ef1cdeb8",
+    "id": "aa400664-8090-4ff2-b979-3a3ffa69b106",
     "section": "Legal Reasoning",
-    "question_text": "Legal Principle: A lease creates a right in rem (a right in the property itself) that runs with the land. Consequently, the transfer or sale of the leased property by the landlord to a subsequent purchaser does not terminate the lease; the new owner is bound by the existing terms until the lease expires. Fact Pattern: A tenant signs a formal lease to rent an apartment for a fixed term of one year from the landlord. Six months later, the landlord sells the building to a new owner. The new owner immediately issues an eviction notice, claiming the lease is not binding on him. Is the notice valid?",
+    "question_text": "Legal Principle: Under tort law, an intentional or reckless violation of a statutory safety by-law that directly causes foreseeable physical injury to a member of the protected class constitutes an actionable breach of the duty of care, establishing negligence. Fact Pattern: A woman is walking on a designated pedestrian sidewalk when a cyclist rides onto the sidewalk and collides with her, causing severe injuries. A municipal by-law explicitly prohibits cycling on public sidewalks to preserve pedestrian safety. The woman sues the cyclist for negligence. Is the cyclist liable?",
     "options": {
-      "A": "The tenant must vacate immediately because a lease is a personal contract that terminates upon the sale of the property",
-      "B": "The tenant has the legal right to remain until the end of the lease term because a valid lease runs with the land, binding any subsequent purchaser of the property",
-      "C": "The tenant must vacate but can sue the local municipal corporation for housing subsidies",
-      "D": "The tenant can stay only if he agrees to double his monthly rent payments to the new owner"
+      "A": "The cyclist is liable for negligence because his intentional violation of a statutory safety by-law serves as clear evidence of a breach of his duty of care",
+      "B": "The cyclist is not liable because pedestrians assume all physical risks when walking near city roads",
+      "C": "The cyclist is liable only if the plaintiff can prove he was traveling at a speed exceeding 40 kilometers per hour",
+      "D": "The cyclist is not liable because municipal by-laws have no relevance when determining civil tort liability"
     },
     "correct_option": "(censored)",
     "difficulty": "hard"
@@ -1425,19 +1425,6 @@
       "B": "No, because the driver acted under the defense of necessity, committing a lesser property wrong to prevent a greater, imminent harm—the loss of a child's life",
       "C": "Yes, because the driver should have deployed his emergency brakes instead of choosing to swerve",
       "D": "No, because civil tort liability for property damage is completely invalid inside suburban residential zones"
-    },
-    "correct_option": "(censored)",
-    "difficulty": "hard"
-  },
-  {
-    "id": "aa400664-8090-4ff2-b979-3a3ffa69b106",
-    "section": "Legal Reasoning",
-    "question_text": "Legal Principle: Under tort law, an intentional or reckless violation of a statutory safety by-law that directly causes foreseeable physical injury to a member of the protected class constitutes an actionable breach of the duty of care, establishing negligence. Fact Pattern: A woman is walking on a designated pedestrian sidewalk when a cyclist rides onto the sidewalk and collides with her, causing severe injuries. A municipal by-law explicitly prohibits cycling on public sidewalks to preserve pedestrian safety. The woman sues the cyclist for negligence. Is the cyclist liable?",
-    "options": {
-      "A": "The cyclist is liable for negligence because his intentional violation of a statutory safety by-law serves as clear evidence of a breach of his duty of care",
-      "B": "The cyclist is not liable because pedestrians assume all physical risks when walking near city roads",
-      "C": "The cyclist is liable only if the plaintiff can prove he was traveling at a speed exceeding 40 kilometers per hour",
-      "D": "The cyclist is not liable because municipal by-laws have no relevance when determining civil tort liability"
     },
     "correct_option": "(censored)",
     "difficulty": "hard"
@@ -1469,14 +1456,14 @@
     "difficulty": "hard"
   },
   {
-    "id": "e986aa11-7963-4be7-a25e-16b05550a810",
+    "id": "ce98352b-273a-4ca0-939e-0088ef1cdeb8",
     "section": "Legal Reasoning",
-    "question_text": "Legal Principle: A contract entered into by a minor is completely void *ab initio* and imposes no personal contractual obligations on them. The rule of estoppel does not apply to a minor, meaning an intentional misrepresentation of age by the minor does not make the contract enforceable against them. Fact Pattern: Meera, a 16-year-old student, purchases a smartphone on an installment plan by explicitly misrepresenting her age as 19 to the sales manager. She later refuses to pay the installments, returns the device, and demands a refund. The store sues to enforce the installments. Is Meera liable?",
+    "question_text": "Legal Principle: A lease creates a right in rem (a right in the property itself) that runs with the land. Consequently, the transfer or sale of the leased property by the landlord to a subsequent purchaser does not terminate the lease; the new owner is bound by the existing terms until the lease expires. Fact Pattern: A tenant signs a formal lease to rent an apartment for a fixed term of one year from the landlord. Six months later, the landlord sells the building to a new owner. The new owner immediately issues an eviction notice, claiming the lease is not binding on him. Is the notice valid?",
     "options": {
-      "A": "Yes, because her intentional misrepresentation of age estops her from pleading minority to escape liability",
-      "B": "No, because a minor's contract is void *ab initio*, meaning it is a complete nullity that imposes no personal contractual liability on her, regardless of her age misrepresentation",
-      "C": "Yes, because a smartphone is an educational utility that automatically qualifies as a necessity under Section 68",
-      "D": "Yes, but only if she pays a usage fee equivalent to half the phone's retail value"
+      "A": "The tenant must vacate immediately because a lease is a personal contract that terminates upon the sale of the property",
+      "B": "The tenant has the legal right to remain until the end of the lease term because a valid lease runs with the land, binding any subsequent purchaser of the property",
+      "C": "The tenant must vacate but can sue the local municipal corporation for housing subsidies",
+      "D": "The tenant can stay only if he agrees to double his monthly rent payments to the new owner"
     },
     "correct_option": "(censored)",
     "difficulty": "hard"
@@ -1508,6 +1495,19 @@
     "difficulty": "hard"
   },
   {
+    "id": "e986aa11-7963-4be7-a25e-16b05550a810",
+    "section": "Legal Reasoning",
+    "question_text": "Legal Principle: A contract entered into by a minor is completely void *ab initio* and imposes no personal contractual obligations on them. The rule of estoppel does not apply to a minor, meaning an intentional misrepresentation of age by the minor does not make the contract enforceable against them. Fact Pattern: Meera, a 16-year-old student, purchases a smartphone on an installment plan by explicitly misrepresenting her age as 19 to the sales manager. She later refuses to pay the installments, returns the device, and demands a refund. The store sues to enforce the installments. Is Meera liable?",
+    "options": {
+      "A": "Yes, because her intentional misrepresentation of age estops her from pleading minority to escape liability",
+      "B": "No, because a minor's contract is void *ab initio*, meaning it is a complete nullity that imposes no personal contractual liability on her, regardless of her age misrepresentation",
+      "C": "Yes, because a smartphone is an educational utility that automatically qualifies as a necessity under Section 68",
+      "D": "Yes, but only if she pays a usage fee equivalent to half the phone's retail value"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "hard"
+  },
+  {
     "id": "f136898e-48a0-4442-9584-078d1bfe3caa",
     "section": "Legal Reasoning",
     "question_text": "Legal Principle: An occupier or manager of a commercial establishment owes a duty of care to customers to maintain safe premises and provide adequate warning signs regarding temporary hazards. Fact Pattern: Rohan, a store manager, mops a busy central aisle during operating hours but completely fails to place a 'Wet Floor' warning sign. Priya, a customer, enters the aisle, slips on the wet floor, and fractures her ankle. Rohan denies liability, arguing that customers should look down while walking. Is Rohan liable?",
@@ -1521,14 +1521,14 @@
     "difficulty": "hard"
   },
   {
-    "id": "f8e6bcb6-19c1-463c-bde9-913e7d8a0bd0",
+    "id": "06262e5f-26d3-44e8-9858-b6a965a20c16",
     "section": "Logical Reasoning",
-    "question_text": "A university dean recommends an absolute ban on laptop usage inside lecture halls because a study showed that a group of students who took handwritten notes retained 20% more data. This recommendation relies on which underlying assumption?",
+    "question_text": "A medical board concludes that a new clinical drug causes a drop in blood pressure based on a trial of 500 hypertensive patients. Which of the following findings, if true, would most severely undermine this causal conclusion?",
     "options": {
-      "A": "The observed cognitive data retention benefits of handwriting can be generalized uniformly across the entire student population",
-      "B": "Laptops serve as the primary source of academic cheating inside higher education systems",
-      "C": "Students who prefer taking notes via laptops possess a lower baseline intelligence quotient",
-      "D": "Handwriting notes is a faster data capture method than digital keyboard typing parameters"
+      "A": "The 500 trial participants were simultaneously placed on a strict low-sodium dietary regimen and an optimized sleep tracking program during the trial window",
+      "B": "The trial was funded through an independent public research grant rather than a private corporation",
+      "C": "A portion of the trial participants reported mild headaches during the first week of administration",
+      "D": "The drug molecule shares a structural layout with existing cardiovascular medications"
     },
     "correct_option": "(censored)",
     "difficulty": "hard"
@@ -1547,32 +1547,6 @@
     "difficulty": "medium"
   },
   {
-    "id": "f64a9e11-6946-48c5-89ac-28d1938b5a20",
-    "section": "Logical Reasoning",
-    "question_text": "Analyze the structural relationship between the terms in the following analogy and select the pair that exhibits an identical conceptual link: APPELLATE COURT : JUDGMENT ::",
-    "options": {
-      "A": "Legislative Assembly : Statute",
-      "B": "Arbitrator : Compromise",
-      "C": "Barrister : Legal Brief",
-      "D": "Jury : Deliberation room"
-    },
-    "correct_option": "(censored)",
-    "difficulty": "medium"
-  },
-  {
-    "id": "06262e5f-26d3-44e8-9858-b6a965a20c16",
-    "section": "Logical Reasoning",
-    "question_text": "A medical board concludes that a new clinical drug causes a drop in blood pressure based on a trial of 500 hypertensive patients. Which of the following findings, if true, would most severely undermine this causal conclusion?",
-    "options": {
-      "A": "The 500 trial participants were simultaneously placed on a strict low-sodium dietary regimen and an optimized sleep tracking program during the trial window",
-      "B": "The trial was funded through an independent public research grant rather than a private corporation",
-      "C": "A portion of the trial participants reported mild headaches during the first week of administration",
-      "D": "The drug molecule shares a structural layout with existing cardiovascular medications"
-    },
-    "correct_option": "(censored)",
-    "difficulty": "hard"
-  },
-  {
     "id": "43c52132-c63a-411f-bda0-ad061d0cffc4",
     "section": "Logical Reasoning",
     "question_text": "Which of the following statements, if true, provides the missing logical parameter required to make the conclusion 'Therefore, all risk-mitigation portfolios are high-yielding funds' structurally valid from the premise 'All high-yielding funds are volatile assets'?",
@@ -1586,66 +1560,27 @@
     "difficulty": "hard"
   },
   {
-    "id": "a80f0239-0208-4edf-a594-44de2ebd7dc1",
+    "id": "f8e6bcb6-19c1-463c-bde9-913e7d8a0bd0",
     "section": "Logical Reasoning",
-    "question_text": "A tech analyst argues: 'If a smartphone application incorporates end-to-end encryption, it completely protects consumer communication privacy from unauthorized network leaks.' If a specific application is discovered to contain security leaks, what can be logically deduced with absolute certainty?",
+    "question_text": "A university dean recommends an absolute ban on laptop usage inside lecture halls because a study showed that a group of students who took handwritten notes retained 20% more data. This recommendation relies on which underlying assumption?",
     "options": {
-      "A": "The application does not incorporate end-to-end encryption under the modus tollens rule",
-      "B": "The application incorporates end-to-end encryption but suffers minor software configuration errors",
-      "C": "The software engineer committed an error, confirming that correlation implies causation",
-      "D": "No logical conclusion is supported because encryption parameters are non-deductive"
-    },
-    "correct_option": "(censored)",
-    "difficulty": "medium"
-  },
-  {
-    "id": "6ab8e101-8830-44e4-8d26-a10ff3be878f",
-    "section": "Logical Reasoning",
-    "question_text": "An academic study tracked 1,000 corporate managers and found that those who drank black coffee reported significantly higher productivity levels. The authors concluded that black coffee enhances productivity. This reasoning is flawed because it ignores which possibility?",
-    "options": {
-      "A": "The productivity gains could be driven by reverse causation—highly motivated, productive managers might naturally seek higher caffeine intake",
-      "B": "Black coffee contains zero nutritional value, making any metabolic correlation invalid",
-      "C": "The study should have tracked tea drinkers across identical parameters to remain sound",
-      "D": "The productivity metrics are a necessary condition for entrepreneurship success"
+      "A": "The observed cognitive data retention benefits of handwriting can be generalized uniformly across the entire student population",
+      "B": "Laptops serve as the primary source of academic cheating inside higher education systems",
+      "C": "Students who prefer taking notes via laptops possess a lower baseline intelligence quotient",
+      "D": "Handwriting notes is a faster data capture method than digital keyboard typing parameters"
     },
     "correct_option": "(censored)",
     "difficulty": "hard"
   },
   {
-    "id": "da26bc3d-63bf-446a-88da-2907972c84a4",
+    "id": "f64a9e11-6946-48c5-89ac-28d1938b5a20",
     "section": "Logical Reasoning",
-    "question_text": "Premises: All constitutional democracies possess an independent judiciary. Country M possesses an independent judiciary. Concluding from this that Country M is a constitutional democracy commits which formal logical error?",
+    "question_text": "Analyze the structural relationship between the terms in the following analogy and select the pair that exhibits an identical conceptual link: APPELLATE COURT : JUDGMENT ::",
     "options": {
-      "A": "The formal fallacy of affirming the consequent",
-      "B": "The formal fallacy of denying the antecedent",
-      "C": "The fallacy of a negative conclusion derived from affirmative inputs",
-      "D": "The semantic fallacy of composition across structural states"
-    },
-    "correct_option": "(censored)",
-    "difficulty": "medium"
-  },
-  {
-    "id": "35a87608-7697-4d87-aab3-9cd438c8d38e",
-    "section": "Logical Reasoning",
-    "question_text": "In a consumer survey, 90% of vehicle owners using Optima Engine Oil reported superior mileage. Based on this, the brand claimed that Optima causes engine efficiency. Which of the following elements highlights the core logical weakness of this claim?",
-    "options": {
-      "A": "Without a matching control group using standard or baseline oil under identical conditions, the mileage variation cannot be isolated from driving habits or vehicle model differences",
-      "B": "The survey pool is invalid because 90% represents an unquantifiable percentage metric",
-      "C": "The brand should have offered a financial refund to the remaining 10% to ensure statistical validity",
-      "D": "Engine oil metrics are a sufficient condition for vehicle manufacturing clearances"
-    },
-    "correct_option": "(censored)",
-    "difficulty": "hard"
-  },
-  {
-    "id": "d1395ccc-6c68-4424-b4cf-5761ab92da4a",
-    "section": "Logical Reasoning",
-    "question_text": "Premises: Some landmark judgments alter corporate tax codes. All corporate tax code alterations require parliamentary notifications. Which of the following statements can be deduced with absolute logical certainty?",
-    "options": {
-      "A": "Some landmark judgments require parliamentary notifications",
-      "B": "All landmark judgments require parliamentary notifications",
-      "C": "No landmark judgments require parliamentary notifications",
-      "D": "Some parliamentary notifications alter constitutional structures"
+      "A": "Legislative Assembly : Statute",
+      "B": "Arbitrator : Compromise",
+      "C": "Barrister : Legal Brief",
+      "D": "Jury : Deliberation room"
     },
     "correct_option": "(censored)",
     "difficulty": "medium"
@@ -1677,6 +1612,58 @@
     "difficulty": "hard"
   },
   {
+    "id": "35a87608-7697-4d87-aab3-9cd438c8d38e",
+    "section": "Logical Reasoning",
+    "question_text": "In a consumer survey, 90% of vehicle owners using Optima Engine Oil reported superior mileage. Based on this, the brand claimed that Optima causes engine efficiency. Which of the following elements highlights the core logical weakness of this claim?",
+    "options": {
+      "A": "Without a matching control group using standard or baseline oil under identical conditions, the mileage variation cannot be isolated from driving habits or vehicle model differences",
+      "B": "The survey pool is invalid because 90% represents an unquantifiable percentage metric",
+      "C": "The brand should have offered a financial refund to the remaining 10% to ensure statistical validity",
+      "D": "Engine oil metrics are a sufficient condition for vehicle manufacturing clearances"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "hard"
+  },
+  {
+    "id": "6ab8e101-8830-44e4-8d26-a10ff3be878f",
+    "section": "Logical Reasoning",
+    "question_text": "An academic study tracked 1,000 corporate managers and found that those who drank black coffee reported significantly higher productivity levels. The authors concluded that black coffee enhances productivity. This reasoning is flawed because it ignores which possibility?",
+    "options": {
+      "A": "The productivity gains could be driven by reverse causation—highly motivated, productive managers might naturally seek higher caffeine intake",
+      "B": "Black coffee contains zero nutritional value, making any metabolic correlation invalid",
+      "C": "The study should have tracked tea drinkers across identical parameters to remain sound",
+      "D": "The productivity metrics are a necessary condition for entrepreneurship success"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "hard"
+  },
+  {
+    "id": "da26bc3d-63bf-446a-88da-2907972c84a4",
+    "section": "Logical Reasoning",
+    "question_text": "Premises: All constitutional democracies possess an independent judiciary. Country M possesses an independent judiciary. Concluding from this that Country M is a constitutional democracy commits which formal logical error?",
+    "options": {
+      "A": "The formal fallacy of affirming the consequent",
+      "B": "The formal fallacy of denying the antecedent",
+      "C": "The fallacy of a negative conclusion derived from affirmative inputs",
+      "D": "The semantic fallacy of composition across structural states"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "aa722397-d1bc-42b9-be7d-8351835e891a",
+    "section": "Logical Reasoning",
+    "question_text": "Premises: All elite litigation defense counsels are members of the Bar Council. No untrained legal interns are members of the Bar Council. Concluding from this that no untrained legal interns are elite litigation defense counsels is:",
+    "options": {
+      "A": "Logically valid because it follows a valid negative categorical syllogistic structure",
+      "B": "Invalid because it commits the formal fallacy of an undistributed middle term",
+      "C": "Invalid because the major term is illicitly distributed within the parameters",
+      "D": "Valid but unsound due to semantic variances in legal titles"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
     "id": "fb665130-e18e-4c1a-a275-ffb7034f0699",
     "section": "Logical Reasoning",
     "question_text": "Six corporate partners are sitting in a straight row for a board alignment check. P is sitting to the immediate left of Q, but is positioned to the right of R. S is situated to the right of T, but is located to the left of R. If U is sitting to the immediate right of Q, who is sitting exactly in the third position from the left?",
@@ -1703,14 +1690,27 @@
     "difficulty": "hard"
   },
   {
-    "id": "aa722397-d1bc-42b9-be7d-8351835e891a",
+    "id": "a80f0239-0208-4edf-a594-44de2ebd7dc1",
     "section": "Logical Reasoning",
-    "question_text": "Premises: All elite litigation defense counsels are members of the Bar Council. No untrained legal interns are members of the Bar Council. Concluding from this that no untrained legal interns are elite litigation defense counsels is:",
+    "question_text": "A tech analyst argues: 'If a smartphone application incorporates end-to-end encryption, it completely protects consumer communication privacy from unauthorized network leaks.' If a specific application is discovered to contain security leaks, what can be logically deduced with absolute certainty?",
     "options": {
-      "A": "Logically valid because it follows a valid negative categorical syllogistic structure",
-      "B": "Invalid because it commits the formal fallacy of an undistributed middle term",
-      "C": "Invalid because the major term is illicitly distributed within the parameters",
-      "D": "Valid but unsound due to semantic variances in legal titles"
+      "A": "The application does not incorporate end-to-end encryption under the modus tollens rule",
+      "B": "The application incorporates end-to-end encryption but suffers minor software configuration errors",
+      "C": "The software engineer committed an error, confirming that correlation implies causation",
+      "D": "No logical conclusion is supported because encryption parameters are non-deductive"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "d1395ccc-6c68-4424-b4cf-5761ab92da4a",
+    "section": "Logical Reasoning",
+    "question_text": "Premises: Some landmark judgments alter corporate tax codes. All corporate tax code alterations require parliamentary notifications. Which of the following statements can be deduced with absolute logical certainty?",
+    "options": {
+      "A": "Some landmark judgments require parliamentary notifications",
+      "B": "All landmark judgments require parliamentary notifications",
+      "C": "No landmark judgments require parliamentary notifications",
+      "D": "Some parliamentary notifications alter constitutional structures"
     },
     "correct_option": "(censored)",
     "difficulty": "medium"
@@ -1742,19 +1742,6 @@
     "difficulty": "medium"
   },
   {
-    "id": "ad66b6e3-a485-45a8-8aa8-295862516627",
-    "section": "Logical Reasoning",
-    "question_text": "In a comparative educational study, students who voluntarily took an intensive preparatory course scored higher on the entrance exam than those who did not. The researchers concluded that the preparatory course was the direct cause of the higher scores. Which of the following points highlights a primary logical vulnerability in this conclusion?",
-    "options": {
-      "A": "The students who voluntarily enrolled in the optional course might have possessed higher initial academic motivation or aptitude",
-      "B": "The entrance exam contents, layout, and duration parameter rules were identical for all students",
-      "C": "The study completely omitted an evaluation of the students' separate physical education records",
-      "D": "The intensive preparatory course was taught by highly experienced and vetted instructors"
-    },
-    "correct_option": "(censored)",
-    "difficulty": "easy"
-  },
-  {
     "id": "e9258d98-d062-4d29-8c8d-d56fbfd74786",
     "section": "Logical Reasoning",
     "question_text": "Premises: All successful entrepreneurs are risk-takers. Some risk-takers are individuals who accumulate immense wealth. Concluding from this that some successful entrepreneurs accumulate immense wealth is logically vulnerable because:",
@@ -1781,6 +1768,19 @@
     "difficulty": "easy"
   },
   {
+    "id": "ad66b6e3-a485-45a8-8aa8-295862516627",
+    "section": "Logical Reasoning",
+    "question_text": "In a comparative educational study, students who voluntarily took an intensive preparatory course scored higher on the entrance exam than those who did not. The researchers concluded that the preparatory course was the direct cause of the higher scores. Which of the following points highlights a primary logical vulnerability in this conclusion?",
+    "options": {
+      "A": "The students who voluntarily enrolled in the optional course might have possessed higher initial academic motivation or aptitude",
+      "B": "The entrance exam contents, layout, and duration parameter rules were identical for all students",
+      "C": "The study completely omitted an evaluation of the students' separate physical education records",
+      "D": "The intensive preparatory course was taught by highly experienced and vetted instructors"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "easy"
+  },
+  {
     "id": "06dcdd59-a9f2-47bc-ab8c-012fe87f8fde",
     "section": "Logical Reasoning",
     "question_text": "Premises: All mammals are warm-blooded creatures. All whales are mammals. Which of the following statements represents the logically valid deductive conclusion that follows from these premises?",
@@ -1789,6 +1789,32 @@
       "B": "The argument is invalid because the middle term 'mammals' is not distributed",
       "C": "The deductive layout commits the formal fallacy of introducing four distinct terms",
       "D": "No definitive categorical conclusion can be supported due to distribution errors"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "8c81d38d-830c-4ba0-bf79-3b85bfeb6a76",
+    "section": "Logical Reasoning",
+    "question_text": "A consumer states: 'Every single time I have eaten peanuts over the last three months, I have developed a minor skin rash within an hour.' Concluding from these three specific instances that he is universally allergic to all nuts commits which type of logical reasoning error?",
+    "options": {
+      "A": "A valid and structurally sound deductive categorical conclusion",
+      "B": "An error based on an unweighted false analogy mapping across domains",
+      "C": "The logical fallacy of making a hasty inductive generalization based on a limited sample size",
+      "D": "A flawless application of the formal *modus tollens* conditional rule"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "0fde986d-8557-4095-ac34-6fae9dd1b46d",
+    "section": "Logical Reasoning",
+    "question_text": "Premises: All successful entrepreneurs are risk-takers. John is a risk-taker. Concluding from this that John is a successful entrepreneur commits which formal categorical syllogism flaw?",
+    "options": {
+      "A": "The fallacy of an illicit major term distribution",
+      "B": "The fallacy of the undistributed middle term, as 'risk-taker' is not distributed in either premise",
+      "C": "The formal fallacy of drawing a conclusion from two negative premises",
+      "D": "The fallacy of an illicit minor term assignment"
     },
     "correct_option": "(censored)",
     "difficulty": "medium"
@@ -1807,19 +1833,6 @@
     "difficulty": "easy"
   },
   {
-    "id": "0fde986d-8557-4095-ac34-6fae9dd1b46d",
-    "section": "Logical Reasoning",
-    "question_text": "Premises: All successful entrepreneurs are risk-takers. John is a risk-taker. Concluding from this that John is a successful entrepreneur commits which formal categorical syllogism flaw?",
-    "options": {
-      "A": "The fallacy of an illicit major term distribution",
-      "B": "The fallacy of the undistributed middle term, as 'risk-taker' is not distributed in either premise",
-      "C": "The formal fallacy of drawing a conclusion from two negative premises",
-      "D": "The fallacy of an illicit minor term assignment"
-    },
-    "correct_option": "(censored)",
-    "difficulty": "medium"
-  },
-  {
     "id": "4c55f5b3-edca-4f23-ab5b-5a68dc2cc585",
     "section": "Logical Reasoning",
     "question_text": "A health study tracking 1,000 adults found that individuals who drink green tea regularly have a 30% lower statistical risk of heart disease. The authors concluded that drinking green tea directly prevents heart disease. What is the primary logical error in this reasoning?",
@@ -1833,19 +1846,6 @@
     "difficulty": "easy"
   },
   {
-    "id": "8c81d38d-830c-4ba0-bf79-3b85bfeb6a76",
-    "section": "Logical Reasoning",
-    "question_text": "A consumer states: 'Every single time I have eaten peanuts over the last three months, I have developed a minor skin rash within an hour.' Concluding from these three specific instances that he is universally allergic to all nuts commits which type of logical reasoning error?",
-    "options": {
-      "A": "A valid and structurally sound deductive categorical conclusion",
-      "B": "An error based on an unweighted false analogy mapping across domains",
-      "C": "The logical fallacy of making a hasty inductive generalization based on a limited sample size",
-      "D": "A flawless application of the formal *modus tollens* conditional rule"
-    },
-    "correct_option": "(censored)",
-    "difficulty": "medium"
-  },
-  {
     "id": "7e332b91-3e84-4d1b-bca0-3f155cf15492",
     "section": "Logical Reasoning",
     "question_text": "Premises: All mammals are warm-blooded animals. All tigers are mammals. Evaluating the structural validity of the conclusion 'All tigers are warm-blooded animals' yields that the argument is:",
@@ -1854,45 +1854,6 @@
       "B": "Invalid because it commits the formal fallacy of four distinct terms",
       "C": "Invalid because the major term is illicitly distributed in the conclusion",
       "D": "Invalid because the minor term is undistributed within the premise space"
-    },
-    "correct_option": "(censored)",
-    "difficulty": "easy"
-  },
-  {
-    "id": "8a739efb-2a94-4a43-b03c-9020ac41291e",
-    "section": "Logical Reasoning",
-    "question_text": "A clinical study found that adults who drink coffee daily have a 20% lower statistical risk of type 2 diabetes. The authors concluded that coffee compounds protect against diabetes. Which of the following findings, if true, most seriously weakens this conclusion?",
-    "options": {
-      "A": "Coffee beans contain complex antioxidants that prevent systemic cell damage in laboratory trials",
-      "B": "Individuals who drink coffee daily also tend to engage in significantly higher rates of regular physical exercise",
-      "C": "The epidemiological tracking project was conducted over a comprehensive historical window of 10 years",
-      "D": "The study participants were randomly selected using census registration profiles across urban hubs"
-    },
-    "correct_option": "(censored)",
-    "difficulty": "medium"
-  },
-  {
-    "id": "53dd930f-a0c0-4d79-9cbf-64410bb5cca6",
-    "section": "Logical Reasoning",
-    "question_text": "A manufacturing brand claims that 80% of consumer test subjects who used Brand X shampoo reported a reduction in hair fall. Why is this claim considered weak or unconvincing from an analytical standpoint?",
-    "options": {
-      "A": "The metric is completely supported because a clear majority reported a positive direction",
-      "B": "The tracking data is structurally invalid because consumer surveys can never be parsed by data engines",
-      "C": "Without a comparative control group using a placebo shampoo, the reported reduction could be due to alternative factors",
-      "D": "The claim is supported because 80% represents an absolute statistical consensus baseline"
-    },
-    "correct_option": "(censored)",
-    "difficulty": "medium"
-  },
-  {
-    "id": "c9c32e24-6614-4f1b-9751-6af55d666f7d",
-    "section": "Logical Reasoning",
-    "question_text": "An advocate claims: 'If the government imposes an added tax on sugary drinks, the commercial consumption of these specific beverages will drop by 20%.' Which underlying assumption is required for this conditional claim to hold true?",
-    "options": {
-      "A": "The added cost from the tax will be passed to consumers, and demand is price-sensitive enough to reduce buying",
-      "B": "Imposing an added tax is the single exclusive legal mechanism available to modify public health behaviors",
-      "C": "Obesity metrics are driven entirely by the consumption of carbonated sugary drinks",
-      "D": "The state treasury intends to allocate the revenue exclusively to digital health registry systems"
     },
     "correct_option": "(censored)",
     "difficulty": "easy"
@@ -1911,6 +1872,45 @@
     "difficulty": "hard"
   },
   {
+    "id": "c9c32e24-6614-4f1b-9751-6af55d666f7d",
+    "section": "Logical Reasoning",
+    "question_text": "An advocate claims: 'If the government imposes an added tax on sugary drinks, the commercial consumption of these specific beverages will drop by 20%.' Which underlying assumption is required for this conditional claim to hold true?",
+    "options": {
+      "A": "The added cost from the tax will be passed to consumers, and demand is price-sensitive enough to reduce buying",
+      "B": "Imposing an added tax is the single exclusive legal mechanism available to modify public health behaviors",
+      "C": "Obesity metrics are driven entirely by the consumption of carbonated sugary drinks",
+      "D": "The state treasury intends to allocate the revenue exclusively to digital health registry systems"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "53dd930f-a0c0-4d79-9cbf-64410bb5cca6",
+    "section": "Logical Reasoning",
+    "question_text": "A manufacturing brand claims that 80% of consumer test subjects who used Brand X shampoo reported a reduction in hair fall. Why is this claim considered weak or unconvincing from an analytical standpoint?",
+    "options": {
+      "A": "The metric is completely supported because a clear majority reported a positive direction",
+      "B": "The tracking data is structurally invalid because consumer surveys can never be parsed by data engines",
+      "C": "Without a comparative control group using a placebo shampoo, the reported reduction could be due to alternative factors",
+      "D": "The claim is supported because 80% represents an absolute statistical consensus baseline"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "8a739efb-2a94-4a43-b03c-9020ac41291e",
+    "section": "Logical Reasoning",
+    "question_text": "A clinical study found that adults who drink coffee daily have a 20% lower statistical risk of type 2 diabetes. The authors concluded that coffee compounds protect against diabetes. Which of the following findings, if true, most seriously weakens this conclusion?",
+    "options": {
+      "A": "Coffee beans contain complex antioxidants that prevent systemic cell damage in laboratory trials",
+      "B": "Individuals who drink coffee daily also tend to engage in significantly higher rates of regular physical exercise",
+      "C": "The epidemiological tracking project was conducted over a comprehensive historical window of 10 years",
+      "D": "The study participants were randomly selected using census registration profiles across urban hubs"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
     "id": "9b810221-22fc-412a-9567-ee72d23d4f2a",
     "section": "Logical Reasoning",
     "question_text": "Conditional Rule: 'If the government increases corporate taxes, then market inflation will decrease.' Given that the government has officially increased corporate taxes, what conclusion follows with absolute logical validity?",
@@ -1919,6 +1919,45 @@
       "B": "The argument commits the formal fallacy of denying the antecedent",
       "C": "The argument commits the formal fallacy of affirming the consequent",
       "D": "No deduction is valid because macroeconomic variables are inherently non-deductive"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "e9984d03-2cd3-4926-af08-ede697fc37f8",
+    "section": "Logical Reasoning",
+    "question_text": "Conditional Rule: 'If a country has a high literacy rate, then it has a high standard of living.' If Country Z is discovered to have a high standard of living, concluding that Country Z must have a high literacy rate commits which logical error?",
+    "options": {
+      "A": "A valid application of the deductive *modus ponens* rule",
+      "B": "The formal logical fallacy of affirming the consequent",
+      "C": "The formal logical fallacy of denying the antecedent",
+      "D": "A valid application of the deductive *modus tollens* rule"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "fe5d9db6-c134-47b9-8c47-6fb07622fbe1",
+    "section": "Logical Reasoning",
+    "question_text": "Premises: All mammals are warm-blooded creatures. All dolphins are mammals. Assuming these premises are factually accurate, the deductive conclusion 'All dolphins are warm-blooded creatures' is:",
+    "options": {
+      "A": "Logically valid and structurally sound",
+      "B": "Structurally valid but factually unsound",
+      "C": "Logically invalid due to an undistributed middle term",
+      "D": "Structurally sound but logically invalid"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "453d8a14-d0d2-45b6-9077-b6a6070b8f93",
+    "section": "Logical Reasoning",
+    "question_text": "Premises: All successful entrepreneurs are risk-takers. Some risk-takers are individuals who fail multiple ventures. Concluding from this that some successful entrepreneurs are individuals who fail multiple ventures is invalid because:",
+    "options": {
+      "A": "The argument is valid because both categories share the middle term 'risk-takers'",
+      "B": "The setup commits the formal fallacy of an undistributed middle term since 'risk-takers' is undistributed in both premises",
+      "C": "The categorical breakdown commits the formal fallacy of an illicit major term process",
+      "D": "The conclusion does not necessarily follow because the premises do not force an overlap between entrepreneurs and those who fail ventures"
     },
     "correct_option": "(censored)",
     "difficulty": "medium"
@@ -1937,53 +1976,14 @@
     "difficulty": "medium"
   },
   {
-    "id": "453d8a14-d0d2-45b6-9077-b6a6070b8f93",
+    "id": "1b89625c-29a6-41ee-b663-2c65bbbe10d7",
     "section": "Logical Reasoning",
-    "question_text": "Premises: All successful entrepreneurs are risk-takers. Some risk-takers are individuals who fail multiple ventures. Concluding from this that some successful entrepreneurs are individuals who fail multiple ventures is invalid because:",
+    "question_text": "In a specific alphanumeric encoding system, the word 'PENCIL' is transformed and written as 'RGP EKN'. Following this identical operational shift rule where each letter shifts by 2 places forward, how would the word 'PAPER' be encoded?",
     "options": {
-      "A": "The argument is valid because both categories share the middle term 'risk-takers'",
-      "B": "The setup commits the formal fallacy of an undistributed middle term since 'risk-takers' is undistributed in both premises",
-      "C": "The categorical breakdown commits the formal fallacy of an illicit major term process",
-      "D": "The conclusion does not necessarily follow because the premises do not force an overlap between entrepreneurs and those who fail ventures"
-    },
-    "correct_option": "(censored)",
-    "difficulty": "medium"
-  },
-  {
-    "id": "fe5d9db6-c134-47b9-8c47-6fb07622fbe1",
-    "section": "Logical Reasoning",
-    "question_text": "Premises: All mammals are warm-blooded creatures. All dolphins are mammals. Assuming these premises are factually accurate, the deductive conclusion 'All dolphins are warm-blooded creatures' is:",
-    "options": {
-      "A": "Logically valid and structurally sound",
-      "B": "Structurally valid but factually unsound",
-      "C": "Logically invalid due to an undistributed middle term",
-      "D": "Structurally sound but logically invalid"
-    },
-    "correct_option": "(censored)",
-    "difficulty": "easy"
-  },
-  {
-    "id": "e9984d03-2cd3-4926-af08-ede697fc37f8",
-    "section": "Logical Reasoning",
-    "question_text": "Conditional Rule: 'If a country has a high literacy rate, then it has a high standard of living.' If Country Z is discovered to have a high standard of living, concluding that Country Z must have a high literacy rate commits which logical error?",
-    "options": {
-      "A": "A valid application of the deductive *modus ponens* rule",
-      "B": "The formal logical fallacy of affirming the consequent",
-      "C": "The formal logical fallacy of denying the antecedent",
-      "D": "A valid application of the deductive *modus tollens* rule"
-    },
-    "correct_option": "(censored)",
-    "difficulty": "easy"
-  },
-  {
-    "id": "058fcf20-0e70-4786-9456-0e923a64f477",
-    "section": "Logical Reasoning",
-    "question_text": "Five friends are sitting in a straight row. A is situated to the immediate left of B, but is positioned to the right of C. D is situated to the right of E, but is located to the left of C. Based on these spatial constraints, who is sitting exactly in the middle position?",
-    "options": {
-      "A": "A",
-      "B": "B",
-      "C": "C",
-      "D": "D"
+      "A": "RCR GT",
+      "B": "RCR HT",
+      "C": "RCR IT",
+      "D": "RCR JT"
     },
     "correct_option": "(censored)",
     "difficulty": "hard"
@@ -2002,14 +2002,14 @@
     "difficulty": "hard"
   },
   {
-    "id": "1b89625c-29a6-41ee-b663-2c65bbbe10d7",
+    "id": "d6fe6fb9-a34b-4c62-984a-4fed2e3f3504",
     "section": "Logical Reasoning",
-    "question_text": "In a specific alphanumeric encoding system, the word 'PENCIL' is transformed and written as 'RGP EKN'. Following this identical operational shift rule where each letter shifts by 2 places forward, how would the word 'PAPER' be encoded?",
+    "question_text": "Given the strict premises that 'all birds can fly' and 'penguins are birds,' evaluate the formal structural validity of the conclusion 'penguins can fly':",
     "options": {
-      "A": "RCR GT",
-      "B": "RCR HT",
-      "C": "RCR IT",
-      "D": "RCR JT"
+      "A": "The conclusion is invalid because real-world biological observation confirms that penguins are flightless birds",
+      "B": "The conclusion is structurally valid because it follows strictly from the provided premises, irrespective of real-world biological facts",
+      "C": "The conclusion is invalid because the premises contain an implicit semantic contradiction",
+      "D": "The conclusion is valid because all marine organisms can traverse aerial zones"
     },
     "correct_option": "(censored)",
     "difficulty": "hard"
@@ -2028,40 +2028,14 @@
     "difficulty": "easy"
   },
   {
-    "id": "d6fe6fb9-a34b-4c62-984a-4fed2e3f3504",
+    "id": "058fcf20-0e70-4786-9456-0e923a64f477",
     "section": "Logical Reasoning",
-    "question_text": "Given the strict premises that 'all birds can fly' and 'penguins are birds,' evaluate the formal structural validity of the conclusion 'penguins can fly':",
+    "question_text": "Five friends are sitting in a straight row. A is situated to the immediate left of B, but is positioned to the right of C. D is situated to the right of E, but is located to the left of C. Based on these spatial constraints, who is sitting exactly in the middle position?",
     "options": {
-      "A": "The conclusion is invalid because real-world biological observation confirms that penguins are flightless birds",
-      "B": "The conclusion is structurally valid because it follows strictly from the provided premises, irrespective of real-world biological facts",
-      "C": "The conclusion is invalid because the premises contain an implicit semantic contradiction",
-      "D": "The conclusion is valid because all marine organisms can traverse aerial zones"
-    },
-    "correct_option": "(censored)",
-    "difficulty": "hard"
-  },
-  {
-    "id": "6a25c6f6-d7f7-4030-849b-01fcf03cd496",
-    "section": "Logical Reasoning",
-    "question_text": "An argument claims that a national identity card policy is entirely justified because a recent opinion poll shows that 75% of the population supports it. This reasoning is vulnerable to criticism because it commits which logical error?",
-    "options": {
-      "A": "It assumes that popular support is sufficient to justify a policy that may impact rights, relying on an appeal to popularity rather than evaluating the merits of the arguments",
-      "B": "It fails to consider that the polling methodology might contain statistical sampling errors",
-      "C": "It ignores the possibility that national identity cards could be lost or counterfeited by criminal actors",
-      "D": "It treats a necessary condition for public safety as a sufficient condition for eliminating crime"
-    },
-    "correct_option": "(censored)",
-    "difficulty": "hard"
-  },
-  {
-    "id": "98f505d7-4367-488c-b0cd-92519778c1af",
-    "section": "Logical Reasoning",
-    "question_text": "John concludes that eating spicy food causes his heartburn because he experiences it every time he has a spicy meal. This causal conclusion depends on which underlying assumption?",
-    "options": {
-      "A": "John does not possess any known somatic allergies to standard culinary spices",
-      "B": "There is no alternative factor or underlying medical condition present when John eats that is the actual cause of his heartburn",
-      "C": "Spicy food is the single, exclusive trigger that can cause heartburn within John's digestive system",
-      "D": "John refuses to consume antacid medications following his evening meals"
+      "A": "A",
+      "B": "B",
+      "C": "C",
+      "D": "D"
     },
     "correct_option": "(censored)",
     "difficulty": "hard"
@@ -2080,14 +2054,27 @@
     "difficulty": "hard"
   },
   {
-    "id": "02ee98e4-8ed9-45cc-aa9e-8c6cc95a4458",
+    "id": "98f505d7-4367-488c-b0cd-92519778c1af",
     "section": "Logical Reasoning",
-    "question_text": "A city council concludes that expanding public transit directly causes increased commuter satisfaction based on a survey of transit riders. Which of the following findings, if true, would most severely undermine this causal conclusion?",
+    "question_text": "John concludes that eating spicy food causes his heartburn because he experiences it every time he has a spicy meal. This causal conclusion depends on which underlying assumption?",
     "options": {
-      "A": "Commuters who utilize public transit happen to live primarily in premium urban zones that boast superior transit infrastructure and shorter distances to commercial hubs",
-      "B": "The comprehensive survey data completely excluded individuals who rely heavily on ride-sharing services or motorized two-wheelers",
-      "C": "A substantial portion of single-occupant vehicle drivers state that they commute via personal cars due to a complete lack of transit options",
-      "D": "The survey respondents participated voluntarily, introducing a slight statistical variance compared to a randomized census study"
+      "A": "John does not possess any known somatic allergies to standard culinary spices",
+      "B": "There is no alternative factor or underlying medical condition present when John eats that is the actual cause of his heartburn",
+      "C": "Spicy food is the single, exclusive trigger that can cause heartburn within John's digestive system",
+      "D": "John refuses to consume antacid medications following his evening meals"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "hard"
+  },
+  {
+    "id": "6a25c6f6-d7f7-4030-849b-01fcf03cd496",
+    "section": "Logical Reasoning",
+    "question_text": "An argument claims that a national identity card policy is entirely justified because a recent opinion poll shows that 75% of the population supports it. This reasoning is vulnerable to criticism because it commits which logical error?",
+    "options": {
+      "A": "It assumes that popular support is sufficient to justify a policy that may impact rights, relying on an appeal to popularity rather than evaluating the merits of the arguments",
+      "B": "It fails to consider that the polling methodology might contain statistical sampling errors",
+      "C": "It ignores the possibility that national identity cards could be lost or counterfeited by criminal actors",
+      "D": "It treats a necessary condition for public safety as a sufficient condition for eliminating crime"
     },
     "correct_option": "(censored)",
     "difficulty": "hard"
@@ -2106,40 +2093,14 @@
     "difficulty": "hard"
   },
   {
-    "id": "08cf1742-c90e-4996-a224-3f00f9f3eec7",
+    "id": "02ee98e4-8ed9-45cc-aa9e-8c6cc95a4458",
     "section": "Logical Reasoning",
-    "question_text": "Based on a study showing improved attention spans in a specific group of students after meditation sessions, a school board recommends mandatory meditation for all schools. This recommendation relies on which underlying assumption?",
+    "question_text": "A city council concludes that expanding public transit directly causes increased commuter satisfaction based on a survey of transit riders. Which of the following findings, if true, would most severely undermine this causal conclusion?",
     "options": {
-      "A": "Meditation serves as the only method available to educators to enhance student engagement metrics",
-      "B": "The positive cognitive gains in attention and memory observed within the specific study cohort can be successfully generalized to the broader student population",
-      "C": "Students who choose to meditate possess a significantly higher baseline intelligence quotient prior to joining any study",
-      "D": "Mandatory structural sessions are less effective than entirely voluntary extracurricular routines"
-    },
-    "correct_option": "(censored)",
-    "difficulty": "hard"
-  },
-  {
-    "id": "d3e014d2-0e1f-4862-9a62-d90c5343b84f",
-    "section": "Logical Reasoning",
-    "question_text": "An analyst claims: 'All successful entrepreneurs are risk-takers.' Which of the following statements, if true, provides the missing logical link needed to make the conclusion 'Therefore, all risk-takers are successful entrepreneurs' structurally valid?",
-    "options": {
-      "A": "All individuals who are risk-takers are successful entrepreneurs",
-      "B": "No cautious person can ever successfully acquire immense wealth",
-      "C": "Some successful entrepreneurs choose to invest their wealth in volatile green assets",
-      "D": "All risk-takers are individuals who are cautious"
-    },
-    "correct_option": "(censored)",
-    "difficulty": "hard"
-  },
-  {
-    "id": "0fb0a4ec-fa68-4761-86ec-1a3f8445817b",
-    "section": "Logical Reasoning",
-    "question_text": "An argument claims that a new strict speeding law caused a drop in traffic accidents. Which of the following findings, if true, would most severely weaken this argument?",
-    "options": {
-      "A": "The total number of speeding citations issued by municipal police rose by 20% over the same period",
-      "B": "The city concurrently launched a massive public transportation campaign and expanded subway lines during the same period, causing a significant drop in total personal cars on the road",
-      "C": "The text of the traffic law was widely shared on digital platforms prior to official enforcement",
-      "D": "The drop in localized traffic accidents aligns perfectly with a broader national trend across cities without speed laws"
+      "A": "Commuters who utilize public transit happen to live primarily in premium urban zones that boast superior transit infrastructure and shorter distances to commercial hubs",
+      "B": "The comprehensive survey data completely excluded individuals who rely heavily on ride-sharing services or motorized two-wheelers",
+      "C": "A substantial portion of single-occupant vehicle drivers state that they commute via personal cars due to a complete lack of transit options",
+      "D": "The survey respondents participated voluntarily, introducing a slight statistical variance compared to a randomized census study"
     },
     "correct_option": "(censored)",
     "difficulty": "hard"
@@ -2158,6 +2119,19 @@
     "difficulty": "hard"
   },
   {
+    "id": "d3e014d2-0e1f-4862-9a62-d90c5343b84f",
+    "section": "Logical Reasoning",
+    "question_text": "An analyst claims: 'All successful entrepreneurs are risk-takers.' Which of the following statements, if true, provides the missing logical link needed to make the conclusion 'Therefore, all risk-takers are successful entrepreneurs' structurally valid?",
+    "options": {
+      "A": "All individuals who are risk-takers are successful entrepreneurs",
+      "B": "No cautious person can ever successfully acquire immense wealth",
+      "C": "Some successful entrepreneurs choose to invest their wealth in volatile green assets",
+      "D": "All risk-takers are individuals who are cautious"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "hard"
+  },
+  {
     "id": "465d8af2-8e44-40e9-817b-064182987be4",
     "section": "Logical Reasoning",
     "question_text": "Proponents argue that a tax on sugary drinks is justified because it improves public health by reducing consumption. Which of the following statements, if true, provides the strongest logical support for this argument?",
@@ -2166,6 +2140,32 @@
       "B": "Empirical data from other regions shows that a tax on sugary drinks directly leads to a significant decrease in long-term obesity and related health conditions",
       "C": "Sugary drinks are recognized by international health organizations as a major driver of obesity metrics",
       "D": "The implementation of the tax will reduce the total commercial consumption of carbonated soft drinks by 20%"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "hard"
+  },
+  {
+    "id": "0fb0a4ec-fa68-4761-86ec-1a3f8445817b",
+    "section": "Logical Reasoning",
+    "question_text": "An argument claims that a new strict speeding law caused a drop in traffic accidents. Which of the following findings, if true, would most severely weaken this argument?",
+    "options": {
+      "A": "The total number of speeding citations issued by municipal police rose by 20% over the same period",
+      "B": "The city concurrently launched a massive public transportation campaign and expanded subway lines during the same period, causing a significant drop in total personal cars on the road",
+      "C": "The text of the traffic law was widely shared on digital platforms prior to official enforcement",
+      "D": "The drop in localized traffic accidents aligns perfectly with a broader national trend across cities without speed laws"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "hard"
+  },
+  {
+    "id": "08cf1742-c90e-4996-a224-3f00f9f3eec7",
+    "section": "Logical Reasoning",
+    "question_text": "Based on a study showing improved attention spans in a specific group of students after meditation sessions, a school board recommends mandatory meditation for all schools. This recommendation relies on which underlying assumption?",
+    "options": {
+      "A": "Meditation serves as the only method available to educators to enhance student engagement metrics",
+      "B": "The positive cognitive gains in attention and memory observed within the specific study cohort can be successfully generalized to the broader student population",
+      "C": "Students who choose to meditate possess a significantly higher baseline intelligence quotient prior to joining any study",
+      "D": "Mandatory structural sessions are less effective than entirely voluntary extracurricular routines"
     },
     "correct_option": "(censored)",
     "difficulty": "hard"
@@ -2184,14 +2184,14 @@
     "difficulty": "hard"
   },
   {
-    "id": "180a1e4c-6d08-4bd4-8198-c18a3ec517b7",
+    "id": "4c06ccdb-c2f0-485b-bd4d-3cd2ca05305f",
     "section": "Logical Reasoning",
-    "question_text": "A city council concludes that expanding public transit directly causes increased commuter satisfaction based on a survey showing high satisfaction among transit riders. The core reasoning flaw in this conclusion stems from which logical vulnerability?",
+    "question_text": "Premises: All mammals have lungs. Whales are mammals. Therefore, whales have lungs. Which of the following choices evaluates the logical relationship between the premises and the final conclusion?",
     "options": {
-      "A": "It builds an argument entirely on an appeal to popularity rather than structural empirical facts",
-      "B": "It treats a statistical correlation between public transit usage and commuter satisfaction as definitive proof of a causal relationship, ignoring potential confounding variables",
-      "C": "It utilizes highly emotional language to obscure a basic mathematical error in its survey accounting",
-      "D": "It assumes that because public transit is beneficial for urban centers, it must be equally useful for interplanetary travel"
+      "A": "The argument is structurally valid and logically sound because its premises are factually accurate and follow a valid categorical structure",
+      "B": "The argument is valid but unsound because whales are biologically classified as cold-blooded fish",
+      "C": "The argument is invalid because it commits the formal fallacy of affirming the consequent",
+      "D": "The conclusion is invalid because it is possible for an animal to be a mammal without possessing lungs"
     },
     "correct_option": "(censored)",
     "difficulty": "hard"
@@ -2210,43 +2210,17 @@
     "difficulty": "hard"
   },
   {
-    "id": "4c06ccdb-c2f0-485b-bd4d-3cd2ca05305f",
+    "id": "180a1e4c-6d08-4bd4-8198-c18a3ec517b7",
     "section": "Logical Reasoning",
-    "question_text": "Premises: All mammals have lungs. Whales are mammals. Therefore, whales have lungs. Which of the following choices evaluates the logical relationship between the premises and the final conclusion?",
+    "question_text": "A city council concludes that expanding public transit directly causes increased commuter satisfaction based on a survey showing high satisfaction among transit riders. The core reasoning flaw in this conclusion stems from which logical vulnerability?",
     "options": {
-      "A": "The argument is structurally valid and logically sound because its premises are factually accurate and follow a valid categorical structure",
-      "B": "The argument is valid but unsound because whales are biologically classified as cold-blooded fish",
-      "C": "The argument is invalid because it commits the formal fallacy of affirming the consequent",
-      "D": "The conclusion is invalid because it is possible for an animal to be a mammal without possessing lungs"
+      "A": "It builds an argument entirely on an appeal to popularity rather than structural empirical facts",
+      "B": "It treats a statistical correlation between public transit usage and commuter satisfaction as definitive proof of a causal relationship, ignoring potential confounding variables",
+      "C": "It utilizes highly emotional language to obscure a basic mathematical error in its survey accounting",
+      "D": "It assumes that because public transit is beneficial for urban centers, it must be equally useful for interplanetary travel"
     },
     "correct_option": "(censored)",
     "difficulty": "hard"
-  },
-  {
-    "id": "91cb16b7-a809-4933-8b0a-07ac6f850563",
-    "section": "Logical Reasoning",
-    "question_text": "Family Constraints: Amit is the father of Bina. Bina is the sister of Chetan. Chetan is the husband of Deepa. Deepa is the daughter of Emily. Based on these constraints, how is Emily related to Amit?",
-    "options": {
-      "A": "Wife",
-      "B": "Mother-in-law",
-      "C": "Sister-in-law",
-      "D": "Emily is Chetan's mother-in-law, meaning she is the co-in-law of Amit (no standard single direct term)"
-    },
-    "correct_option": "(censored)",
-    "difficulty": "hard"
-  },
-  {
-    "id": "7a5614cb-d33c-41ff-987e-7742c23d45b0",
-    "section": "Logical Reasoning",
-    "question_text": "An argument states: 'Studies show that students who drink coffee before exams perform better than those who do not. Therefore, coffee directly improves exam performance.' Which of the following, if true, most seriously weakens this argument?",
-    "options": {
-      "A": "Coffee contains caffeine, a known neural stimulant",
-      "B": "Students who drink coffee before exams also tend to study significantly more hours than non-coffee drinkers",
-      "C": "Some students prefer tea over coffee for exam preparation",
-      "D": "Coffee consumption has increased globally over the last decade"
-    },
-    "correct_option": "(censored)",
-    "difficulty": "medium"
   },
   {
     "id": "073b9d4e-28a5-47e8-b4cc-52c71f378d82",
@@ -2275,6 +2249,32 @@
     "difficulty": "medium"
   },
   {
+    "id": "91cb16b7-a809-4933-8b0a-07ac6f850563",
+    "section": "Logical Reasoning",
+    "question_text": "Family Constraints: Amit is the father of Bina. Bina is the sister of Chetan. Chetan is the husband of Deepa. Deepa is the daughter of Emily. Based on these constraints, how is Emily related to Amit?",
+    "options": {
+      "A": "Wife",
+      "B": "Mother-in-law",
+      "C": "Sister-in-law",
+      "D": "Emily is Chetan's mother-in-law, meaning she is the co-in-law of Amit (no standard single direct term)"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "hard"
+  },
+  {
+    "id": "7a5614cb-d33c-41ff-987e-7742c23d45b0",
+    "section": "Logical Reasoning",
+    "question_text": "An argument states: 'Studies show that students who drink coffee before exams perform better than those who do not. Therefore, coffee directly improves exam performance.' Which of the following, if true, most seriously weakens this argument?",
+    "options": {
+      "A": "Coffee contains caffeine, a known neural stimulant",
+      "B": "Students who drink coffee before exams also tend to study significantly more hours than non-coffee drinkers",
+      "C": "Some students prefer tea over coffee for exam preparation",
+      "D": "Coffee consumption has increased globally over the last decade"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
     "id": "ffeb863f-c7f5-440c-86bd-ac1127568871",
     "section": "Logical Reasoning",
     "question_text": "Premises: All lawyers are graduates. Some graduates are judges. Therefore, some lawyers are judges. This argument is:",
@@ -2288,6 +2288,656 @@
     "difficulty": "easy"
   },
   {
+    "id": "d2e04086-2597-486c-8465-2ccf77bdcb53",
+    "section": "Quantitative Techniques",
+    "question_text": "A manufacturer mixes two qualities of tea leaf inputs costing Rs. 180 per kg and Rs. 240 per kg. In what ratio must he mix them to create a blend worth exactly Rs. 200 per kg?",
+    "options": {
+      "A": "2:1",
+      "B": "3:1",
+      "C": "1:2",
+      "D": "1:3"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "3022bb21-4c7c-461d-8c9a-91e28ba2eb00",
+    "section": "Quantitative Techniques",
+    "question_text": "A container contains a mixture of milk and water in the ratio 7:3. What percentage of the total mixture volume is composed of water?",
+    "options": {
+      "A": "25%",
+      "B": "30%",
+      "C": "35%",
+      "D": "40%"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "6ab6a535-4621-437d-93fd-ab501ce11bfd",
+    "section": "Quantitative Techniques",
+    "question_text": "A motorist cycles from destination point X to Y at a speed of 15 km/h and returns from Y to X at a speed of 10 km/h. If the complete round-trip loop takes exactly 5 hours to finish, what is the one-way distance between point X and Y?",
+    "options": {
+      "A": "25 km",
+      "B": "30 km",
+      "C": "35 km",
+      "D": "40 km"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "04bd9b43-73a6-45fe-9ab7-90471a85c40e",
+    "section": "Quantitative Techniques",
+    "question_text": "The value of a heavy mechanical generator depreciates at a uniform compound rate of 20% per annum. If the initial cost price of the generator is Rs. 25,000, what will be its valuation at the end of exactly 2 years?",
+    "options": {
+      "A": "Rs. 15,000",
+      "B": "Rs. 16,000",
+      "C": "Rs. 17,500",
+      "D": "Rs. 18,000"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "7f9e6375-f0b4-43f8-8068-739811638138",
+    "section": "Quantitative Techniques",
+    "question_text": "A shopkeeper cheats his wholesalers and retail consumers by using faulty weight scales. He buys 10% more mass than standard and sells 10% less mass than standard. What is his net gain percentage?",
+    "options": {
+      "A": "20%",
+      "B": "21%",
+      "C": "22.22%",
+      "D": "25%"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "hard"
+  },
+  {
+    "id": "952af99b-ca2b-47f1-bfd8-02f64598e850",
+    "section": "Quantitative Techniques",
+    "question_text": "A library contains 40% law text publications, 30% economics frameworks, and the remainder consists of historical archives. If the absolute number of historical archive books is exactly 900, what is the cumulative total number of books stored in the library?",
+    "options": {
+      "A": "2,400",
+      "B": "2,700",
+      "C": "3,000",
+      "D": "3,200"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "525ea3cf-0c62-4bb0-9154-7c9226fe8201",
+    "section": "Quantitative Techniques",
+    "question_text": "The ratio of liquid chemical solutions inside a processing vat is set at 7 parts chemical A to 5 parts chemical B. If the absolute volume of chemical A exceeds the volume of chemical B by exactly 12 litres, what is the total volume capacity of the liquid solution inside the vat?",
+    "options": {
+      "A": "60 litres",
+      "B": "72 litres",
+      "C": "84 litres",
+      "D": "96 litres"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "ac95a22c-57f3-40f5-abed-af2a46587423",
+    "section": "Quantitative Techniques",
+    "question_text": "An automated system router transmits digital data packages down an urban network path at 90 km/h and handles return tracking packets back along the path at 60 km/h. What is the system's average routing transit speed across the complete round-trip loop?",
+    "options": {
+      "A": "72 km/h",
+      "B": "75 km/h",
+      "C": "78 km/h",
+      "D": "80 km/h"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "f8c99440-2b7a-45ac-b441-8056d21d52dc",
+    "section": "Quantitative Techniques",
+    "question_text": "Legal practitioner A can review a litigation brief in 8 hours, whereas practitioner B requires 12 hours to review the identical brief. If they collaborate to finish the task, what fraction of the total brief remains unreviewed at the end of exactly 3 hours of joint work?",
+    "options": {
+      "A": "3/8",
+      "B": "1/4",
+      "C": "5/8",
+      "D": "1/2"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "54f0e885-7832-4781-9b50-f7fffc0496d6",
+    "section": "Quantitative Techniques",
+    "question_text": "A sum of money invested at a fixed interest rate doubles itself in exactly 5 years under a compound interest framework, compounded annually. In how many years will the same investment sum grow to eight times its initial value?",
+    "options": {
+      "A": "10 years",
+      "B": "12 years",
+      "C": "15 years",
+      "D": "20 years"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "497c81e1-cdac-473f-99c7-1490f3866d50",
+    "section": "Quantitative Techniques",
+    "question_text": "The average value of a set of 5 numbers is 20. If a new number is appended to the set, the updated average value across the 6 numbers becomes 22. What is the value of the appended number?",
+    "options": {
+      "A": "24",
+      "B": "30",
+      "C": "32",
+      "D": "34"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "4096fecf-8160-4588-b818-742516145bc8",
+    "section": "Quantitative Techniques",
+    "question_text": "A trader marks up his product inventory by exactly 40% above the cost price, and then offers a 10% discount at the final transaction counter. What is his net profit percentage?",
+    "options": {
+      "A": "24%",
+      "B": "26%",
+      "C": "28%",
+      "D": "30%"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "b151db1e-a12c-4c81-b5bf-adc05271726c",
+    "section": "Quantitative Techniques",
+    "question_text": "The salaries of three legal advisors are in a ratio of 2:3:5. If their individual salaries are updated with percentage increments of 15%, 10%, and 20% respectively, what is the new ratio of their salaries?",
+    "options": {
+      "A": "23:33:60",
+      "B": "21:31:59",
+      "C": "25:35:65",
+      "D": "22:32:62"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "hard"
+  },
+  {
+    "id": "f3eaef51-ae4f-4c10-b269-02a2096df754",
+    "section": "Quantitative Techniques",
+    "question_text": "An asset price of Rs. 5,000 undergoes two successive percentage updates: an immediate 20% value increase followed by a secondary 20% value contraction. What is the final selling value of the asset?",
+    "options": {
+      "A": "Rs. 4,600",
+      "B": "Rs. 4,800",
+      "C": "Rs. 5,000",
+      "D": "Rs. 5,200"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "c420ddb6-8988-45a1-92f4-fdb3460b7535",
+    "section": "Quantitative Techniques",
+    "question_text": "If 8 legal research engines can index a statutory database in 6 hours, how many hours will it take 12 research engines running identical scripts to index the same database?",
+    "options": {
+      "A": "3 hours",
+      "B": "4 hours",
+      "C": "5 hours",
+      "D": "5.5 hours"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "0d1e3d68-ac80-454d-8b06-bf1f70fd325d",
+    "section": "Quantitative Techniques",
+    "question_text": "A car travels at an initial speed of 54 km/h. If the driver accelerates, causing the vehicle speed to increase by exactly 25%, what distance in meters does the car transit in a single minute at the new speed?",
+    "options": {
+      "A": "900 meters",
+      "B": "1,025 meters",
+      "C": "1,125 meters",
+      "D": "1,250 meters"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "f15b9163-4a1e-438d-aeb5-c2741dfe6d65",
+    "section": "Quantitative Techniques",
+    "question_text": "The simple interest accumulated on a sum of money over 3 years at an annual interest rate of 5% is exactly Rs. 1,800. What is the principal sum of money?",
+    "options": {
+      "A": "Rs. 10,000",
+      "B": "Rs. 12,000",
+      "C": "Rs. 15,000",
+      "D": "Rs. 18,000"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "6adc8971-c1b7-4e40-b9f1-e5f24dbf832d",
+    "section": "Quantitative Techniques",
+    "question_text": "A vessel holds a fluid mixture of water and organic juice concentrate in a ratio of 2:5. If 5 litres of water are added to the vessel, the new ratio becomes 1:2. What was the initial volume of juice concentrate in the vessel?",
+    "options": {
+      "A": "25 litres",
+      "B": "35 litres",
+      "C": "50 litres",
+      "D": "60 litres"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "hard"
+  },
+  {
+    "id": "1c69a9b6-71ed-4ab4-9eac-93f3995876e2",
+    "section": "Quantitative Techniques",
+    "question_text": "A student must secure a minimum threshold score of 40% to clear a law examination. He secures 150 marks and fails the examination by exactly 10 marks. What are the maximum aggregate marks allocated to the examination?",
+    "options": {
+      "A": "360",
+      "B": "400",
+      "C": "420",
+      "D": "450"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "d39a42f4-6f54-42f8-8202-0f5eaaecf8e5",
+    "section": "Quantitative Techniques",
+    "question_text": "An analytical data entry unit registers 4,500 keystrokes per hour. If a data operation requires a cumulative run of 18,000 keystrokes, how many minutes will it take the entry unit to complete the operation?",
+    "options": {
+      "A": "120 minutes",
+      "B": "180 minutes",
+      "C": "240 minutes",
+      "D": "300 minutes"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "e0ad7a77-f8ce-4fff-93a7-d5f1231e0bca",
+    "section": "Quantitative Techniques",
+    "question_text": "By selling a commercial asset for Rs. 1,440, a trader experiences a financial loss of exactly 10%. At what price must he sell the asset to secure a profit margin of 10%?",
+    "options": {
+      "A": "Rs. 1,600",
+      "B": "Rs. 1,760",
+      "C": "Rs. 1,800",
+      "D": "Rs. 1,920"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "688bd5cc-eede-4f6e-9d06-ffa4cd0ecf30",
+    "section": "Quantitative Techniques",
+    "question_text": "A batsman scores exactly 92 runs in his 15th match innings, causing his career average score parameter to increase by exactly 3 runs. What is his new average score after this innings?",
+    "options": {
+      "A": "47",
+      "B": "50",
+      "C": "53",
+      "D": "56"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "hard"
+  },
+  {
+    "id": "20dcda4a-c807-4d20-bd5b-0e0709f1f551",
+    "section": "Quantitative Techniques",
+    "question_text": "A container contains 60 litres of pure organic milk. 6 litres of milk are extracted and replaced completely with water. What is the concentration ratio of milk to water inside the container now?",
+    "options": {
+      "A": "9:1",
+      "B": "10:1",
+      "C": "8:1",
+      "D": "7:2"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "b1a3a310-b5f1-48bd-b6cf-4dc3ab176441",
+    "section": "Quantitative Techniques",
+    "question_text": "If 12 industrial workers can construct a localized concrete canal wall infrastructure in 8 days, how many workers are needed to build an identical canal wall in exactly 6 days?",
+    "options": {
+      "A": "14",
+      "B": "15",
+      "C": "16",
+      "D": "18"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "35ee8a9c-5274-4db7-9b19-41d0828d729e",
+    "section": "Quantitative Techniques",
+    "question_text": "A principal sum of money triples itself in exactly 8 years under a simple interest framework. What is the annual rate of interest parameter?",
+    "options": {
+      "A": "12.5%",
+      "B": "15.0%",
+      "C": "20.0%",
+      "D": "25.0%"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "7adad82d-5e7b-471d-9a59-a0b4854d9c2d",
+    "section": "Quantitative Techniques",
+    "question_text": "An acid and water solution is mixed inside a laboratory flask in a strict volume ratio of 5:3. If the total volume of the liquid mixture is exactly 40 litres, what is the absolute quantity of water present in the flask?",
+    "options": {
+      "A": "15 litres",
+      "B": "20 litres",
+      "C": "25 litres",
+      "D": "12 litres"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "60f20ae1-0933-49b0-b733-de6a5c9e3ef6",
+    "section": "Quantitative Techniques",
+    "question_text": "Find the sum of the first 30 positive integers using standard arithmetic sequence summation rules.",
+    "options": {
+      "A": "435",
+      "B": "450",
+      "C": "465",
+      "D": "495"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "0435657f-34af-4412-bd68-3392f3abcdb7",
+    "section": "Quantitative Techniques",
+    "question_text": "An article is sold at a loss of exactly 15% on the cost price. If the cost price of the article is Rs. 1,200, what is its final selling price?",
+    "options": {
+      "A": "Rs. 980",
+      "B": "Rs. 1,020",
+      "C": "Rs. 1,050",
+      "D": "Rs. 1,110"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "bd42ece6-ad0f-4b57-8be0-32fd4489a5b3",
+    "section": "Quantitative Techniques",
+    "question_text": "A is currently exactly 15 years older than B. In 5 years, the ratio of their ages will be exactly 2:1. What is the current age of A?",
+    "options": {
+      "A": "20 years",
+      "B": "25 years",
+      "C": "30 years",
+      "D": "35 years"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "f6865408-f9a0-4a79-a305-c5bd1b724626",
+    "section": "Quantitative Techniques",
+    "question_text": "The mathematical average of a set of 8 numbers is exactly 24. If two numbers, whose individual values are 30 and 42, are removed from the dataset, what is the average of the remaining 6 numbers?",
+    "options": {
+      "A": "18",
+      "B": "20",
+      "C": "22",
+      "D": "23"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "653094cf-9ee0-467b-abb5-652f70147f85",
+    "section": "Quantitative Techniques",
+    "question_text": "Calculate the simple interest accumulated on a principal investment sum of Rs. 8,000 at a flat annual interest rate of 6% over a duration of 4 years.",
+    "options": {
+      "A": "Rs. 1,600",
+      "B": "Rs. 1,920",
+      "C": "Rs. 2,120",
+      "D": "Rs. 2,400"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "9f55fb26-4d6e-489f-9e13-c59d067dbefa",
+    "section": "Quantitative Techniques",
+    "question_text": "Calculate the absolute value that represents exactly 35% of a base parameter value of 600.",
+    "options": {
+      "A": "180",
+      "B": "200",
+      "C": "210",
+      "D": "240"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "b7af1abb-94bf-4ce7-afcb-eda53cb01dc9",
+    "section": "Quantitative Techniques",
+    "question_text": "Legal associate X can draft a contract stack in 12 days, while associate Y can draft the identical stack independently in 24 days. How many days will they require to complete the drafting if they work together simultaneously?",
+    "options": {
+      "A": "6 days",
+      "B": "8 days",
+      "C": "9 days",
+      "D": "10 days"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "1a980fe1-dfa7-4c88-912c-47cbe769ec6a",
+    "section": "Quantitative Techniques",
+    "question_text": "A high-speed train with a fixed structural length of 150 meters completely transits across a static bridge measuring 450 meters in length in exactly 20 seconds. What is the speed of the train in km/h?",
+    "options": {
+      "A": "90 km/h",
+      "B": "108 km/h",
+      "C": "120 km/h",
+      "D": "135 km/h"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "607b1c9d-ca71-46ad-9b6f-00dbfe757c60",
+    "section": "Quantitative Techniques",
+    "question_text": "The structural ratio of corporate law cases to criminal law cases handled by a firm is 4:3. If the total number of cases active in the firm's system is exactly 84, how many corporate law cases are active?",
+    "options": {
+      "A": "36",
+      "B": "42",
+      "C": "48",
+      "D": "56"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "83187e06-27e2-4577-bfe8-1bb7b58aa2fb",
+    "section": "Quantitative Techniques",
+    "question_text": "A student scores 60%, 75%, and 85% in three baseline law mock tests respectively. If all three tests hold equal maximum marks weight parameters, what is the student's aggregate mean score percentage?",
+    "options": {
+      "A": "71.33%",
+      "B": "73.33%",
+      "C": "75.00%",
+      "D": "77.50%"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "35aab9f6-336b-46bd-b853-6d37ccc7f6d0",
+    "section": "Quantitative Techniques",
+    "question_text": "Two numbers are in a strict ratio of 5:7. If the absolute difference between these two numbers is exactly 24, what is the value of the smaller number?",
+    "options": {
+      "A": "48",
+      "B": "60",
+      "C": "72",
+      "D": "84"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "5631d843-0988-4908-a598-a00403a1010a",
+    "section": "Quantitative Techniques",
+    "question_text": "A laptop is bought for Rs. 40,000 and depreciates uniformly by 10% after one year of use. What is its value at the end of the year?",
+    "options": {
+      "A": "Rs. 34,000",
+      "B": "Rs. 36,000",
+      "C": "Rs. 37,500",
+      "D": "Rs. 38,000"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "e4799ae1-fcef-49b7-835e-5f08a79e99c6",
+    "section": "Quantitative Techniques",
+    "question_text": "If a baseline parameter increases from an initial value of 800 to a final value of 1,000, what is the exact percentage increase evaluated over the initial base?",
+    "options": {
+      "A": "20%",
+      "B": "25%",
+      "C": "30%",
+      "D": "33.33%"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "a0d0c2c1-a1f7-4001-b06b-a45b9dbf4333",
+    "section": "Quantitative Techniques",
+    "question_text": "A vendor purchases oranges at a rate of 6 oranges for Rs. 20 and sells them at a rate of 4 oranges for Rs. 18. What is the final net profit percentage?",
+    "options": {
+      "A": "25%",
+      "B": "30%",
+      "C": "35%",
+      "D": "40%"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "a5c9744e-591e-4997-8899-7f4593faab5e",
+    "section": "Quantitative Techniques",
+    "question_text": "A principal sum of Rs. 10,000 is deposited at a compound interest rate of 10% per annum, compounded annually. What is the total compound interest earned at the end of exactly 2 years?",
+    "options": {
+      "A": "Rs. 2,000",
+      "B": "Rs. 2,100",
+      "C": "Rs. 2,200",
+      "D": "Rs. 2,500"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "6d740467-da51-4f04-ab51-e3a6a3a7876d",
+    "section": "Quantitative Techniques",
+    "question_text": "An engineering machine completes an manufacturing unit cycle in 45 minutes. If it operates continuously for 12 hours daily, how many complete units does it produce in a single operational day?",
+    "options": {
+      "A": "14 units",
+      "B": "15 units",
+      "C": "16 units",
+      "D": "18 units"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "855829fd-0220-4573-bca2-980d5dd90fee",
+    "section": "Quantitative Techniques",
+    "question_text": "Pipe A can fill an empty reservoir in 6 hours, while Pipe B can completely empty the same full reservoir in 9 hours due to a systemic leakage. If both pipes are opened simultaneously when the reservoir is empty, how many hours will it take to fill completely?",
+    "options": {
+      "A": "12 hours",
+      "B": "15 hours",
+      "C": "18 hours",
+      "D": "24 hours"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "5f81415f-7595-4920-b2c2-89fe1ec52664",
+    "section": "Quantitative Techniques",
+    "question_text": "A motorboat travels downstream along a river channel at a speed of 18 km/h and travels upstream along the same channel at 12 km/h. What is the speed of the river current?",
+    "options": {
+      "A": "2 km/h",
+      "B": "3 km/h",
+      "C": "4 km/h",
+      "D": "6 km/h"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "166ec7a9-2acf-4268-a00c-9c328f4c5d08",
+    "section": "Quantitative Techniques",
+    "question_text": "The price of a commercial product is first increased by 20%, and then subsequently reduced by 10%. What is the net effective percentage change on the original price parameter?",
+    "options": {
+      "A": "An increase of 8%",
+      "B": "An increase of 10%",
+      "C": "An increase of 12%",
+      "D": "A decrease of 2%"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "6c5386c6-8578-4a37-92b4-c6481a4e6d5a",
+    "section": "Quantitative Techniques",
+    "question_text": "The mathematical average weight of a class group of 15 students is exactly 40 kg. If a new student joins the group, the group average weight increases by exactly 1 kg. What is the weight of the new student?",
+    "options": {
+      "A": "41 kg",
+      "B": "55 kg",
+      "C": "56 kg",
+      "D": "60 kg"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "6e384fb1-92eb-47d7-b9fc-da94b5ce844e",
+    "section": "Quantitative Techniques",
+    "question_text": "The salaries of X and Y are in a strict ratio of 4:5. If each person receives a baseline raise of Rs. 2,000, the new ratio of their salaries becomes 11:13. What is the initial salary of X?",
+    "options": {
+      "A": "Rs. 12,000",
+      "B": "Rs. 16,000",
+      "C": "Rs. 18,000",
+      "D": "Rs. 20,000"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "hard"
+  },
+  {
+    "id": "dcff9b26-1196-4f47-a90a-edb9950ec7df",
+    "section": "Quantitative Techniques",
+    "question_text": "A commercial shopkeeper offers a dual consecutive discount scheme on an item, running at 10% followed by a secondary 20% discount. What is the equivalent single flat discount percentage?",
+    "options": {
+      "A": "26%",
+      "B": "28%",
+      "C": "30%",
+      "D": "32%"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "77dfddca-dd09-40c3-a67c-40e69e2e45e3",
+    "section": "Quantitative Techniques",
+    "question_text": "If exactly 15% of a variable number X is mathematically identical to 20% of another variable number Y, what is the ratio of X to Y?",
+    "options": {
+      "A": "3:4",
+      "B": "4:3",
+      "C": "3:5",
+      "D": "5:3"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "df2dfa14-d8ca-4f52-a04e-8cad1151ce4b",
+    "section": "Quantitative Techniques",
+    "question_text": "A person runs a distance loop of 120 km. He travels the first half of the distance loop at a speed of 60 km/h and the second half at a speed of 40 km/h. What is his average speed across the entire 120 km journey?",
+    "options": {
+      "A": "48 km/h",
+      "B": "50 km/h",
+      "C": "52 km/h",
+      "D": "54 km/h"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
     "id": "3527acd9-0865-4165-94d2-6234baeb9764",
     "section": "Quantitative Techniques",
     "question_text": "A is currently exactly 10 years older than B. In 10 years, the operational ratio of their ages will be exactly 3:2. What is the current age of A?",
@@ -2299,6 +2949,19 @@
     },
     "correct_option": "(censored)",
     "difficulty": "medium"
+  },
+  {
+    "id": "dda826e2-0a75-448a-ab7e-5a64a7e3e0ae",
+    "section": "Quantitative Techniques",
+    "question_text": "Find the sum of the first 20 natural numbers using standard arithmetic progression summation.",
+    "options": {
+      "A": "190",
+      "B": "200",
+      "C": "210",
+      "D": "220"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "easy"
   },
   {
     "id": "59b33b2d-301f-49e1-b8af-a7294738272c",
@@ -2400,19 +3063,6 @@
       "B": "Rs. 960",
       "C": "Rs. 1020",
       "D": "Rs. 1040"
-    },
-    "correct_option": "(censored)",
-    "difficulty": "easy"
-  },
-  {
-    "id": "dda826e2-0a75-448a-ab7e-5a64a7e3e0ae",
-    "section": "Quantitative Techniques",
-    "question_text": "Find the sum of the first 20 natural numbers using standard arithmetic progression summation.",
-    "options": {
-      "A": "190",
-      "B": "200",
-      "C": "210",
-      "D": "220"
     },
     "correct_option": "(censored)",
     "difficulty": "easy"
