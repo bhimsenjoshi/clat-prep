@@ -111,6 +111,15 @@ export default function AnalyticsPage() {
   const [editorialStatsLoading, setEditorialStatsLoading] = useState(true);
   const [dailyReadData, setDailyReadData] = useState<{date: string; reads: number}[]>([]);
 
+  // ─── Read ?tab= from URL on mount ───
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const tab = params.get('tab') as 'practice' | 'quick_fire' | 'tests' | 'editorials' | null;
+    if (tab && ['practice', 'quick_fire', 'tests', 'editorials'].includes(tab)) {
+      setActiveTab(tab);
+    }
+  }, []);
+
   useEffect(() => {
     const load = async () => {
       const { data: { user } } = await supabase.auth.getUser();

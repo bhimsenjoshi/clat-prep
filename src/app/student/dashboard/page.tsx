@@ -575,40 +575,40 @@ export default function StudentDashboard() {
         {/* ════════════════════════════════════════════ */}
         <SectionCard title="Today's Stats" icon="📊" collapsible defaultExpanded={false} href="/student/analytics">
           <div className="grid grid-cols-3 md:grid-cols-6 gap-2">
-          <div className="bg-card border border-theme rounded-lg p-2 text-center">
+          <a href="/student/analytics?tab=practice" className="bg-card border border-theme rounded-lg p-2 text-center hover:border-accent/50 transition block no-underline">
             <div className="text-lg mb-0.5">{streak > 0 ? '🔥' : '❄️'}</div>
             <p className="text-lg font-bold text-primary leading-tight">{streak}</p>
             <p className="text-[9px] text-secondary font-semibold uppercase tracking-wider leading-tight">Practice<br/>Streak</p>
-          </div>
-          <div className="bg-card border border-theme rounded-lg p-2 text-center">
+          </a>
+          <a href="/student/analytics?tab=practice" className="bg-card border border-theme rounded-lg p-2 text-center hover:border-accent/50 transition block no-underline">
             <div className="text-lg mb-0.5">📝</div>
             <p className="text-lg font-bold text-primary leading-tight">{todayCount}</p>
             <p className="text-[9px] text-secondary font-semibold uppercase tracking-wider leading-tight">Questions<br/>Today</p>
-          </div>
-          <div className="bg-card border border-theme rounded-lg p-2 text-center">
+          </a>
+          <a href="/student/analytics?tab=editorials" className="bg-card border border-theme rounded-lg p-2 text-center hover:border-accent/50 transition block no-underline">
             <div className="text-lg mb-0.5">📰</div>
             <p className="text-lg font-bold text-primary leading-tight">{editorialTodayRead}</p>
             <p className="text-[9px] text-secondary font-semibold uppercase tracking-wider leading-tight">Editorials<br/>Read</p>
-          </div>
-          <div className="bg-card border border-theme rounded-lg p-2 text-center">
+          </a>
+          <a href="/student/analytics?tab=practice" className="bg-card border border-theme rounded-lg p-2 text-center hover:border-accent/50 transition block no-underline">
             <div className="text-lg mb-0.5">📊</div>
             <p className="text-lg font-bold text-primary leading-tight">
               {totalPracticeQ > 0 ? `${practiceAccuracy}%` : '—'}
             </p>
             <p className="text-[9px] text-secondary font-semibold uppercase tracking-wider leading-tight">Practice<br/>Accuracy</p>
-          </div>
-          <div className="bg-card border border-theme rounded-lg p-2 text-center">
+          </a>
+          <a href="/student/analytics?tab=practice" className="bg-card border border-theme rounded-lg p-2 text-center hover:border-accent/50 transition block no-underline">
             <div className="text-lg mb-0.5">📚</div>
             <p className="text-lg font-bold text-primary leading-tight">{totalPracticeQ}</p>
             <p className="text-[9px] text-secondary font-semibold uppercase tracking-wider leading-tight">Total<br/>Practice Q</p>
-          </div>
-          <div className="bg-card border border-theme rounded-lg p-2 text-center">
+          </a>
+          <a href="/student/analytics?tab=editorials" className="bg-card border border-theme rounded-lg p-2 text-center hover:border-accent/50 transition block no-underline">
             <div className="text-lg mb-0.5">🧠</div>
             <p className="text-lg font-bold text-primary leading-tight">
               {editorialQuizTodayTotal > 0 ? `${Math.round((editorialQuizTodayCorrect / editorialQuizTodayTotal) * 100)}%` : '—'}
             </p>
             <p className="text-[9px] text-secondary font-semibold uppercase tracking-wider leading-tight">Quiz<br/>Accuracy</p>
-          </div>
+          </a>
         </div>
         </SectionCard>
 
