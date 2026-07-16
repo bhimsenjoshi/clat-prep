@@ -7,6 +7,7 @@ import Link from 'next/link';
 import type { ExtendedProfile } from '@/types';
 import ThemeToggle from '@/components/ThemeToggle';
 import SectionCard from '@/components/SectionCard';
+import ExplanationBlock from '@/components/ExplanationBlock';
 
 const CLAT_DATE = new Date('2026-12-06T09:00:00+05:30');
 
@@ -923,9 +924,8 @@ export default function StudentDashboard() {
                           })}
                         </div>
                         {quizSubmitted && q.explanation && (
-                          <div className="mt-2 p-3 bg-tint-blue border border-theme rounded-lg">
-                            <p className="text-[10px] text-info font-semibold uppercase tracking-wider mb-1">Explanation</p>
-                            <p className="text-xs text-secondary leading-relaxed">{q.explanation}</p>
+                          <div className="mt-2">
+                            <ExplanationBlock explanation={q.explanation} compact />
                           </div>
                         )}
                       </div>

@@ -28,10 +28,10 @@ export async function updateSession(request: NextRequest) {
       role = profile?.role ?? 'student';
 
       // session_version check: allow up to 2 concurrent sessions (version 1 or 2)
-      // If no clat-sv cookie, or it doesn't match DB, kick to login
-      if (profile && clientSv) {
+      // Missing clat-sv cookie is treated as mismatch (cleared/blocked → force login)
+      if (profile) {
         const dbSv = profile.session_version ?? 0;
-        if (Number(clientSv) !== dbSv) {
+        if (!clientSv || Number(clientSv) !== dbSv) {
           const res = NextResponse.redirect(new URL('/auth/login', request.url));
           res.cookies.delete('clat-at');
           res.cookies.delete('clat-sv');

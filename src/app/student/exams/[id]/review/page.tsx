@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/client';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import PageHeader from '@/components/PageHeader';
+import ExplanationBlock from '@/components/ExplanationBlock';
 import type { Section, Question } from '@/types';
 
 interface ReviewPageProps {
@@ -302,12 +303,9 @@ export default function ReviewPage({ params }: ReviewPageProps) {
                   </div>
 
                   {/* Explanation */}
-                  {r.explanation && (
-                    <div className="mt-3 p-3 bg-info/20 border border-info/50 rounded-lg">
-                      <p className="text-[10px] font-medium text-info uppercase tracking-wider mb-1">Explanation</p>
-                      <p className="text-xs text-secondary leading-relaxed">{r.explanation}</p>
-                    </div>
-                  )}
+                  <div className="mt-3">
+                    <ExplanationBlock explanation={r.explanation} compact />
+                  </div>
                 </div>
               </div>
             );

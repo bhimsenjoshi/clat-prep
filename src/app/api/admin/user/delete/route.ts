@@ -114,6 +114,28 @@ export async function POST(req: NextRequest) {
       .delete()
       .eq('student_id', student_id);
 
+    // 3c2. Delete WhatsApp data (these FKs lack on delete cascade)
+    const { data: waSessions } = await adminClient
+      .from('whatsapp_quiz_sessions')
+      .select('id')
+      .eq('user_id', student_id);
+    if (waSessions && waSessions.length > 0) {
+      const waIds = waSessions.map((s: any) => s.id);
+      // Delete responses first (FK to whatsapp_quiz_sessions)
+      await adminClient
+        .from('whatsapp_quiz_responses')
+        .delete()
+        .in('session_id', waIds);
+      await adminClient
+        .from('whatsapp_quiz_sessions')
+        .delete()
+        .in('id', waIds);
+    }
+    await adminClient
+      .from('whatsapp_log')
+      .delete()
+      .eq('user_id', student_id);
+
     // 3d. Now delete the profile
     const { error: profileDeleteError } = await adminClient
       .from('profiles')
