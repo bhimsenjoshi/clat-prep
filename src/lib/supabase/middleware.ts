@@ -27,11 +27,12 @@ export async function updateSession(request: NextRequest) {
 
       role = profile?.role ?? 'student';
 
-      // session_version check: allow up to 2 concurrent sessions (version 1 or 2)
-      // Missing clat-sv cookie is treated as mismatch (cleared/blocked → force login)
-      if (profile) {
+      // session_version check: if user has a clat-sv cookie, validate it against DB.
+      // If cookie is missing entirely (fresh login / new user), allow through — don't force re-login.
+      // Only force re-login when cookie exists but doesn't match DB (session invalidated).
+      if (profile && clientSv) {
         const dbSv = profile.session_version ?? 0;
-        if (!clientSv || Number(clientSv) !== dbSv) {
+        if (Number(clientSv) !== dbSv) {
           const res = NextResponse.redirect(new URL('/auth/login', request.url));
           res.cookies.delete('clat-at');
           res.cookies.delete('clat-sv');
