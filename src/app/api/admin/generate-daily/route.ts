@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { generateSection, type SectionName } from '@/lib/ai/generate';
+import { checkRateLimit } from '@/lib/rate-limit';
 import { cookies } from 'next/headers';
 
 const SECTIONS: SectionName[] = [
@@ -9,25 +10,11 @@ const SECTIONS: SectionName[] = [
 ];
 const QS_PER_SECTION = 5; // 25 total per run
 
-// ─── Simple in-memory rate limiter ───
-const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
-function checkRateLimit(key: string, maxRequests: number, windowMs: number): boolean {
-  const now = Date.now();
-  const entry = rateLimitMap.get(key);
-  if (!entry || now > entry.resetAt) {
-    rateLimitMap.set(key, { count: 1, resetAt: now + windowMs });
-    return true;
-  }
-  if (entry.count >= maxRequests) return false;
-  entry.count++;
-  return true;
-}
-
 export async function POST(request: NextRequest) {
   try {
     // Rate limit: max 1 request per minute per IP
     const ip = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
-    if (!checkRateLimit(`generate-daily:${ip}`, 1, 60_000)) {
+    if (!(await checkRateLimit(`generate-daily:${ip}`, 1, 60_000))) {
       return NextResponse.json({ error: 'Rate limited. Max 1 request per minute.' }, { status: 429 });
     }
 

@@ -364,10 +364,36 @@ export default function StudentDashboard() {
   const todayStr = new Date().toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
 
   if (loading) return (
-    <div className="min-h-screen flex items-center justify-center bg-page">
-      <div className="animate-pulse flex flex-col items-center gap-3">
-        <div className="w-8 h-8 border-4 border-indigo-400 border-t-transparent rounded-full animate-spin" />
-        <p className="text-muted text-sm">Loading your dashboard...</p>
+    <div className="min-h-screen bg-page">
+      {/* Skeleton header */}
+      <header className="bg-page border-b border-theme sticky top-0 z-20">
+        <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 bg-elevated rounded-full animate-pulse" />
+            <div className="space-y-2">
+              <div className="w-32 h-4 bg-elevated rounded animate-pulse" />
+              <div className="w-48 h-3 bg-elevated rounded animate-pulse" />
+            </div>
+          </div>
+          <div className="w-20 h-6 bg-elevated rounded-full animate-pulse" />
+        </div>
+      </header>
+      {/* Maxim skeleton */}
+      <div className="max-w-6xl mx-auto px-4 py-4">
+        <div className="w-full h-16 bg-elevated rounded-xl animate-pulse" />
+      </div>
+      {/* Stats row skeleton */}
+      <div className="max-w-6xl mx-auto px-4 pb-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          {[...Array(4)].map((_, i) => (
+            <div key={i} className="h-24 bg-elevated rounded-xl animate-pulse" />
+          ))}
+        </div>
+      </div>
+      {/* Content skeleton */}
+      <div className="max-w-6xl mx-auto px-4 pb-8 space-y-4">
+        <div className="h-48 bg-elevated rounded-xl animate-pulse" />
+        <div className="h-64 bg-elevated rounded-xl animate-pulse" />
       </div>
     </div>
   );
