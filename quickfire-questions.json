@@ -1,5 +1,200 @@
 [
   {
+    "id": "ac794eab-4779-4dc3-b33e-336e23a41835",
+    "section": "Current Affairs Including General Knowledge",
+    "question_text": "Under the dynamic expansion of India's digital public infrastructure, what is the official nomenclature of the open-source network protocol designed to democratize e-commerce by breaking corporate platform monopolies?",
+    "options": {
+      "A": "Open Network for Digital Commerce (ONDC)",
+      "B": "Unified Payments Interface (UPI 2.0)",
+      "C": "National Digital Commerce Grid (NDCG)",
+      "D": "Digital Bharat Open Marketplace (DBOM)"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "23fa8cab-d01b-4d69-ae50-c769093c40d3",
+    "section": "Current Affairs Including General Knowledge",
+    "question_text": "Which autonomous constitutional body in India is explicitly mandated under Article 324 of the Constitution to oversee, direct, and control the entire conduct of parliamentary and state legislative elections?",
+    "options": {
+      "A": "The Delimitation Commission of India",
+      "B": "The Election Commission of India",
+      "C": "The Union Public Service Commission",
+      "D": "The NITI Aayog National Governing Council"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "c0bbaf07-92d6-4bcf-a5cf-a9d6be5c7996",
+    "section": "Current Affairs Including General Knowledge",
+    "question_text": "Which specialized institutional index, published annually by the World Intellectual Property Organization (WIPO), tracks the relative innovation capacity and metrics of global economies, ranking India within its top 40 parameters?",
+    "options": {
+      "A": "Global Innovation Index (GII)",
+      "B": "International Technology Progress Tracker",
+      "C": "Global Competitiveness Matrix",
+      "D": "Universal Patent Efficiency Report"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "8ee3efa9-b439-4763-8691-00b33bd0a157",
+    "section": "Current Affairs Including General Knowledge",
+    "question_text": "The international financial transaction tracking regulatory network, SWIFT, provides secure message routing parameters globally. What does the acronym SWIFT stand for?",
+    "options": {
+      "A": "Society for Worldwide Interbank Financial Telecommunication",
+      "B": "System for Worldwide Institutional Financial Transactions",
+      "C": "Secured Worldwide Interbank Clearing Framework",
+      "D": "Standardized Wireless Institutional Funds Transfer"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "4ca45037-839b-41d9-b579-3bbd1b46e3ba",
+    "section": "Current Affairs Including General Knowledge",
+    "question_text": "Which state assembly in independent India became the first to formally pass a legislative framework implementing a comprehensive Uniform Civil Code (UCC) code covering marriage, divorce, and inheritance rules?",
+    "options": {
+      "A": "Goa",
+      "B": "Uttarakhand",
+      "C": "Gujarat",
+      "D": "Assam"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "2b3bcfed-fdd7-489d-87c8-0a897382981f",
+    "section": "Current Affairs Including General Knowledge",
+    "question_text": "The landmark United Nations High Seas Treaty, finalized to place 30% of the world's international oceans into protected areas by 2030, operates under the legal framework of which principal convention?",
+    "options": {
+      "A": "United Nations Convention on the Law of the Sea (UNCLOS)",
+      "B": "The absolute International Maritime Organization (IMO) Safety Accords",
+      "C": "The universal MARPOL Convention for Marine Pollution Prevention",
+      "D": "The Geneva Convention on Continental Shelf Boundaries"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "fe861796-2125-4680-87e3-cb581d3baa21",
+    "section": "Current Affairs Including General Knowledge",
+    "question_text": "The global biological preserve known as the Svalbard Global Seed Vault, built deep inside a mountain to secure the genetic preservation of agriculture against global crises, is physically located in which country?",
+    "options": {
+      "A": "Greenland",
+      "B": "Norway",
+      "C": "Iceland",
+      "D": "Finland"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "5fd94c99-6fe4-4a6e-a8e4-dcedb84191e0",
+    "section": "Current Affairs Including General Knowledge",
+    "question_text": "The African Union (AU) achieved a significant milestone in global governance by being formally admitted as a permanent, full member of which prominent international economic council?",
+    "options": {
+      "A": "The Group of Seven (G7)",
+      "B": "The Group of Twenty (G20)",
+      "C": "The World Economic Forum Executive Board",
+      "D": "The Organisation for Economic Co-operation and Development (OECD)"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "eedbc8ca-1585-4349-b809-33173b2db383",
+    "section": "Current Affairs Including General Knowledge",
+    "question_text": "What is the official operational target of India's National Green Hydrogen Mission concerning annual production capacity to be achieved by the year 2030?",
+    "options": {
+      "A": "At least 1 Million Metric Tonnes (MMT)",
+      "B": "At least 5 Million Metric Tonnes (MMT)",
+      "C": "At least 10 Million Metric Tonnes (MMT)",
+      "D": "At least 20 Million Metric Tonnes (MMT)"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "hard"
+  },
+  {
+    "id": "05f93954-1052-46cf-ab06-3687592defcf",
+    "section": "Current Affairs Including General Knowledge",
+    "question_text": "The international dispute regarding the sovereignty of the islands of Greater Tunb, Lesser Tunb, and Abu Musa remains a persistent point of diplomatic tension in the Persian Gulf between which two nations?",
+    "options": {
+      "A": "Saudi Arabia and Qatar",
+      "B": "Iran and the United Arab Emirates (UAE)",
+      "C": "Iraq and Kuwait",
+      "D": "Oman and Yemen"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "hard"
+  },
+  {
+    "id": "e7e59725-b082-459b-ac96-9534018dba0f",
+    "section": "Current Affairs Including General Knowledge",
+    "question_text": "Which specialized agency of the United Nations administers international aviation safety parameters, navigational codes, and cross-border flight routing treaties globally?",
+    "options": {
+      "A": "International Maritime Organization (IMO)",
+      "B": "International Civil Aviation Organization (ICAO)",
+      "C": "World Intellectual Property Organization (WIPO)",
+      "D": "International Telecommunication Union (ITU)"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dc4c09bb-bc2f-4a0f-9e09-571a8a70717d",
+    "section": "Current Affairs Including General Knowledge",
+    "question_text": "In Indian administrative systems, the official financial devolution baseline determining the percentage split of central tax revenues to state governments is recommended under which constitutional authority?",
+    "options": {
+      "A": "The Finance Commission under Article 280",
+      "B": "The GST Council under Article 279A",
+      "C": "The Comptroller and Auditor General under Article 148",
+      "D": "The National Development Council"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "be17bf06-f50b-46f1-8e8a-807d499b25b6",
+    "section": "Current Affairs Including General Knowledge",
+    "question_text": "The global standard for artificial intelligence regulatory baselines, known formally as the 'AI Act', which deploys a strict risk-based classification system for software tools, was passed into law by which body?",
+    "options": {
+      "A": "The United States Federal Trade Commission",
+      "B": "The European Parliament",
+      "C": "The United Nations General Assembly Strategic Cell",
+      "D": "The World Trade Organization E-Commerce Panel"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "f5aa5d91-1115-46cb-bd13-e2ccc2c3bac6",
+    "section": "Current Affairs Including General Knowledge",
+    "question_text": "Which multilateral grouping officially expanded its core membership by inducting Egypt, Ethiopia, Iran, and the United Arab Emirates (UAE) into its primary economic alliance block?",
+    "options": {
+      "A": "The Shanghai Cooperation Organisation (SCO)",
+      "B": "The G20 Global Sovereign Forum",
+      "C": "The BRICS Alliance",
+      "D": "The Association of Southeast Asian Nations (ASEAN)"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "d2eb3f76-f69f-4524-bfdd-244a43dbf10e",
+    "section": "Current Affairs Including General Knowledge",
+    "question_text": "The European Union's Carbon Border Adjustment Mechanism (CBAM) imposes an import levy on carbon-intensive goods entering the EU block. Which of the following resource sectors is NOT subject to this tariff tracking system?",
+    "options": {
+      "A": "Iron and Steel",
+      "B": "Chemical Fertilizers",
+      "C": "Commercial Agriculture and Organic Textiles",
+      "D": "Cement and Aluminum"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "hard"
+  },
+  {
     "id": "020cff2c-42e4-4b14-9784-15d98535effe",
     "section": "Current Affairs Including General Knowledge",
     "question_text": "In early 2025, which specific ministry launched the comprehensive Cyber Suraksha Abhiyaan initiative to bolster cybersecurity infrastructure across critical public service sectors in India?",
@@ -9,7 +204,7 @@
       "C": "Ministry of Defence",
       "D": "Ministry of External Affairs"
     },
-    "correct_option": "B",
+    "correct_option": "(censored)",
     "difficulty": "medium"
   },
   {
@@ -22,34 +217,8 @@
       "C": "India and France",
       "D": "United Kingdom and Germany"
     },
-    "correct_option": "B",
+    "correct_option": "(censored)",
     "difficulty": "medium"
-  },
-  {
-    "id": "696e5dad-21b1-47a2-8fb1-02d2037fd174",
-    "section": "Current Affairs Including General Knowledge",
-    "question_text": "In early 2025, the Indian Space Research Organisation (ISRO) successfully deployed the EOS-08 satellite. What is the primary operational objective of this specific orbital mission?",
-    "options": {
-      "A": "High-resolution radar imaging for military border surveillance",
-      "B": "Deep-space astronomical tracking of cosmic X-ray polarization sources",
-      "C": "Earth observation, environmental tracking, and monitoring thermal anomalies",
-      "D": "Indigenous satellite-based global internet broadband broadcasting"
-    },
-    "correct_option": "C",
-    "difficulty": "easy"
-  },
-  {
-    "id": "c3bc5107-bf85-451c-b8e3-edad6998fa06",
-    "section": "Current Affairs Including General Knowledge",
-    "question_text": "As of 2025, which Indian state holds the highest number of recognized UNESCO World Heritage Sites inside its geographic boundaries?",
-    "options": {
-      "A": "Maharashtra",
-      "B": "Tamil Nadu",
-      "C": "Uttar Pradesh",
-      "D": "Rajasthan"
-    },
-    "correct_option": "A",
-    "difficulty": "easy"
   },
   {
     "id": "3525623d-82e3-430d-9c44-24557a57b2c6",
@@ -61,21 +230,34 @@
       "C": "India",
       "D": "Thailand"
     },
-    "correct_option": "B",
+    "correct_option": "(censored)",
     "difficulty": "hard"
   },
   {
-    "id": "9494caad-c3c1-4d36-9af9-d384330e29a5",
+    "id": "c3bc5107-bf85-451c-b8e3-edad6998fa06",
     "section": "Current Affairs Including General Knowledge",
-    "question_text": "What is a central provision and source of major global debate in the draft pandemic treaty frameworks processed by the World Health Assembly?",
+    "question_text": "As of 2025, which Indian state holds the highest number of recognized UNESCO World Heritage Sites inside its geographic boundaries?",
     "options": {
-      "A": "Mandatory and equitable sharing of pathogen genetic sequences and diagnostic benefits",
-      "B": "The absolute legal creation of a global state vaccine manufacturing monopoly",
-      "C": "The complete and immediate elimination of all corporate medical patent protections",
-      "D": "A permanent mandate to restrict all international civil aviation during viral outbreaks"
+      "A": "Maharashtra",
+      "B": "Tamil Nadu",
+      "C": "Uttar Pradesh",
+      "D": "Rajasthan"
     },
-    "correct_option": "A",
-    "difficulty": "medium"
+    "correct_option": "(censored)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "696e5dad-21b1-47a2-8fb1-02d2037fd174",
+    "section": "Current Affairs Including General Knowledge",
+    "question_text": "In early 2025, the Indian Space Research Organisation (ISRO) successfully deployed the EOS-08 satellite. What is the primary operational objective of this specific orbital mission?",
+    "options": {
+      "A": "High-resolution radar imaging for military border surveillance",
+      "B": "Deep-space astronomical tracking of cosmic X-ray polarization sources",
+      "C": "Earth observation, environmental tracking, and monitoring thermal anomalies",
+      "D": "Indigenous satellite-based global internet broadband broadcasting"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "easy"
   },
   {
     "id": "5b29ef1b-729e-4058-a084-8de9ba8e240d",
@@ -87,7 +269,7 @@
       "C": "Abdul Kalam Island Range",
       "D": "Thumba Equatorial Rocket Launching Station"
     },
-    "correct_option": "B",
+    "correct_option": "(censored)",
     "difficulty": "medium"
   },
   {
@@ -100,7 +282,20 @@
       "C": "France",
       "D": "India"
     },
-    "correct_option": "B",
+    "correct_option": "(censored)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "65ddae62-bcd2-421c-ae60-3624692ed327",
+    "section": "Current Affairs Including General Knowledge",
+    "question_text": "What is the primary industrial milestone targeted by India's National Quantum Mission for its baseline technology timeline?",
+    "options": {
+      "A": "To build and deploy a 1000-qubit quantum computer platform by the end of the current cycle",
+      "B": "To develop intermediate-scale quantum computers with 50-100 physical qubits",
+      "C": "To establish a single centralized lab space and fully outlaw private quantum encryption research",
+      "D": "To focus exclusively on the deployment of standard fiber-optic terrestrial routing systems"
+    },
+    "correct_option": "(censored)",
     "difficulty": "easy"
   },
   {
@@ -113,21 +308,34 @@
       "C": "A flat, binding 50% decrease across all global petroleum extraction matrices by 2035",
       "D": "A total omission of fossil fuel frameworks to protect developing economies"
     },
-    "correct_option": "B",
+    "correct_option": "(censored)",
     "difficulty": "hard"
   },
   {
-    "id": "65ddae62-bcd2-421c-ae60-3624692ed327",
+    "id": "9494caad-c3c1-4d36-9af9-d384330e29a5",
     "section": "Current Affairs Including General Knowledge",
-    "question_text": "What is the primary industrial milestone targeted by India's National Quantum Mission for its baseline technology timeline?",
+    "question_text": "What is a central provision and source of major global debate in the draft pandemic treaty frameworks processed by the World Health Assembly?",
     "options": {
-      "A": "To build and deploy a 1000-qubit quantum computer platform by the end of the current cycle",
-      "B": "To develop intermediate-scale quantum computers with 50-100 physical qubits",
-      "C": "To establish a single centralized lab space and fully outlaw private quantum encryption research",
-      "D": "To focus exclusively on the deployment of standard fiber-optic terrestrial routing systems"
+      "A": "Mandatory and equitable sharing of pathogen genetic sequences and diagnostic benefits",
+      "B": "The absolute legal creation of a global state vaccine manufacturing monopoly",
+      "C": "The complete and immediate elimination of all corporate medical patent protections",
+      "D": "A permanent mandate to restrict all international civil aviation during viral outbreaks"
     },
-    "correct_option": "B",
-    "difficulty": "easy"
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "201bd240-4da7-45f8-a615-371deb905d2a",
+    "section": "Current Affairs Including General Knowledge",
+    "question_text": "In a series of major privacy disputes, high courts and the Supreme Court of India addressed digital erasure rules, clarifying the legal position of which emerging dynamic right?",
+    "options": {
+      "A": "The absolute right to unmonitored commercial cryptographic speech",
+      "B": "The right to be forgotten as an integral facet of personal privacy under Article 21",
+      "C": "The right to demand public-domain internet infrastructure access from private entities",
+      "D": "The right to absolute commercial ownership of metadata assets generated on corporate servers"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "hard"
   },
   {
     "id": "a2c7bb7f-c9f6-4d58-a108-82a26685a4d8",
@@ -139,21 +347,8 @@
       "C": "The direct state takeover and nationalization of all private medical corporations",
       "D": "To completely automate diagnostics via clinical software platforms without human supervision"
     },
-    "correct_option": "B",
+    "correct_option": "(censored)",
     "difficulty": "easy"
-  },
-  {
-    "id": "0e99d6fa-2d63-4990-9ff1-3079a32b78f7",
-    "section": "Current Affairs Including General Knowledge",
-    "question_text": "The international community finalized major climate milestones during the UN Climate Change Conference framework operations, identifying which city as the official host venue for COP31?",
-    "options": {
-      "A": "New Delhi",
-      "B": "Istanbul",
-      "C": "Paris",
-      "D": "Beijing"
-    },
-    "correct_option": "B",
-    "difficulty": "medium"
   },
   {
     "id": "d3de9827-b8e2-4ce2-84a4-564ffaa5fcf6",
@@ -165,7 +360,20 @@
       "C": "To study the polarization of bright astronomical X-ray sources using indigenous diagnostic sensors",
       "D": "To evaluate low-latency high-frequency communication links for deep-space planetary crafts"
     },
-    "correct_option": "C",
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "0e99d6fa-2d63-4990-9ff1-3079a32b78f7",
+    "section": "Current Affairs Including General Knowledge",
+    "question_text": "The international community finalized major climate milestones during the UN Climate Change Conference framework operations, identifying which city as the official host venue for COP31?",
+    "options": {
+      "A": "New Delhi",
+      "B": "Istanbul",
+      "C": "Paris",
+      "D": "Beijing"
+    },
+    "correct_option": "(censored)",
     "difficulty": "medium"
   },
   {
@@ -178,20 +386,20 @@
       "C": "An absolute freeze keeping all personal and corporate income tax parameters identical to historical matrices",
       "D": "The introduction of extreme punitive wealth taxes alongside standard savings incentives"
     },
-    "correct_option": "B",
+    "correct_option": "(censored)",
     "difficulty": "easy"
   },
   {
-    "id": "201bd240-4da7-45f8-a615-371deb905d2a",
+    "id": "7e733894-5a84-4700-bb91-77bd3080a218",
     "section": "Current Affairs Including General Knowledge",
-    "question_text": "In a series of major privacy disputes, high courts and the Supreme Court of India addressed digital erasure rules, clarifying the legal position of which emerging dynamic right?",
+    "question_text": "During India's rotating presidency windows at the United Nations Security Council (UNSC), which policy domain was NOT prioritized as a primary thematic pillar for open high-level debates?",
     "options": {
-      "A": "The absolute right to unmonitored commercial cryptographic speech",
-      "B": "The right to be forgotten as an integral facet of personal privacy under Article 21",
-      "C": "The right to demand public-domain internet infrastructure access from private entities",
-      "D": "The right to absolute commercial ownership of metadata assets generated on corporate servers"
+      "A": "Counter-terrorism operations and global legal tracking networks",
+      "B": "Accelerated climate change mitigation financial assistance delivery models",
+      "C": "Comprehensive updates to the structural membership and voting layout of the UN Security Council",
+      "D": "Maritime security frameworks and strengthening international cooperation across sea lanes"
     },
-    "correct_option": "B",
+    "correct_option": "(censored)",
     "difficulty": "hard"
   },
   {
@@ -204,20 +412,7 @@
       "C": "It eliminates gravitational pull entirely, allowing continuous tracking with zero fuel expenditure",
       "D": "It places the instruments in close physical proximity to deep-space exoplanet clusters"
     },
-    "correct_option": "B",
-    "difficulty": "hard"
-  },
-  {
-    "id": "7e733894-5a84-4700-bb91-77bd3080a218",
-    "section": "Current Affairs Including General Knowledge",
-    "question_text": "During India's rotating presidency windows at the United Nations Security Council (UNSC), which policy domain was NOT prioritized as a primary thematic pillar for open high-level debates?",
-    "options": {
-      "A": "Counter-terrorism operations and global legal tracking networks",
-      "B": "Accelerated climate change mitigation financial assistance delivery models",
-      "C": "Comprehensive updates to the structural membership and voting layout of the UN Security Council",
-      "D": "Maritime security frameworks and strengthening international cooperation across sea lanes"
-    },
-    "correct_option": "B",
+    "correct_option": "(censored)",
     "difficulty": "hard"
   },
   {
@@ -230,7 +425,7 @@
       "C": "The Global Digital Public Infrastructure Carbon Exchange Council",
       "D": "The International Nuclear Decommissioning Coalition Alliance"
     },
-    "correct_option": "A",
+    "correct_option": "(censored)",
     "difficulty": "hard"
   },
   {
@@ -243,7 +438,7 @@
       "C": "The data fiduciary is legally authorized to impose a financial penalty on the consumer for opt-out actions",
       "D": "The data fiduciary must automatically transfer the file to state security servers"
     },
-    "correct_option": "B",
+    "correct_option": "(censored)",
     "difficulty": "hard"
   },
   {
@@ -256,33 +451,7 @@
       "C": "Using a direct escape trajectory trajectory injection without wrapping around intermediate Earth orbits",
       "D": "Operating solar arrays inside complete shadow boundaries during a full 14-day lunar night window"
     },
-    "correct_option": "B",
-    "difficulty": "hard"
-  },
-  {
-    "id": "dd76bcaa-2f53-4ff1-8baf-fa49e81f8683",
-    "section": "Current Affairs Including General Knowledge",
-    "question_text": "In its landmark verdict on same-sex marriage rights, how did the Supreme Court of India rule regarding the constitutional validity of expanding matrimonial legal recognition?",
-    "options": {
-      "A": "It completely dismantled existing personal law systems, replacing them with a single uniform civil code",
-      "B": "It declined to judicially expand the definition of marriage, holding that legal recognition of unions falls under the domain of parliamentary legislation",
-      "C": "It granted same-sex unions an absolute exemption from all domestic tax and property registration regulations",
-      "D": "It terminated the legislative authority of state assemblies regarding familial contract definitions"
-    },
-    "correct_option": "B",
-    "difficulty": "hard"
-  },
-  {
-    "id": "7f80614f-f39e-43ee-b85a-e80479d85f57",
-    "section": "Current Affairs Including General Knowledge",
-    "question_text": "What is the primary strategic milestone targeted by the uncrewed test flights of ISRO's Gaganyaan orbital vehicle development timeline?",
-    "options": {
-      "A": "To validate the precision parameters required to recover heavy infrastructure modules from deep lunar paths",
-      "B": "To rigorously test and validate crew module escape systems, environmental controls, and re-entry thermal dynamics safely",
-      "C": "To deploy commercial constellation assets directly into highly synchronized low-Earth orbits",
-      "D": "To benchmark the absolute payload lifting boundaries of heavy cryogenic engines under non-atmospheric constraints"
-    },
-    "correct_option": "B",
+    "correct_option": "(censored)",
     "difficulty": "hard"
   },
   {
@@ -295,7 +464,33 @@
       "C": "The immediate implementation of an identical universal carbon taxation formula on all developing entities",
       "D": "A complete ban on all civil nuclear developments across non-Western nation blocks"
     },
-    "correct_option": "A",
+    "correct_option": "(censored)",
+    "difficulty": "hard"
+  },
+  {
+    "id": "7f80614f-f39e-43ee-b85a-e80479d85f57",
+    "section": "Current Affairs Including General Knowledge",
+    "question_text": "What is the primary strategic milestone targeted by the uncrewed test flights of ISRO's Gaganyaan orbital vehicle development timeline?",
+    "options": {
+      "A": "To validate the precision parameters required to recover heavy infrastructure modules from deep lunar paths",
+      "B": "To rigorously test and validate crew module escape systems, environmental controls, and re-entry thermal dynamics safely",
+      "C": "To deploy commercial constellation assets directly into highly synchronized low-Earth orbits",
+      "D": "To benchmark the absolute payload lifting boundaries of heavy cryogenic engines under non-atmospheric constraints"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "hard"
+  },
+  {
+    "id": "dd76bcaa-2f53-4ff1-8baf-fa49e81f8683",
+    "section": "Current Affairs Including General Knowledge",
+    "question_text": "In its landmark verdict on same-sex marriage rights, how did the Supreme Court of India rule regarding the constitutional validity of expanding matrimonial legal recognition?",
+    "options": {
+      "A": "It completely dismantled existing personal law systems, replacing them with a single uniform civil code",
+      "B": "It declined to judicially expand the definition of marriage, holding that legal recognition of unions falls under the domain of parliamentary legislation",
+      "C": "It granted same-sex unions an absolute exemption from all domestic tax and property registration regulations",
+      "D": "It terminated the legislative authority of state assemblies regarding familial contract definitions"
+    },
+    "correct_option": "(censored)",
     "difficulty": "hard"
   },
   {
@@ -308,8 +503,73 @@
       "C": "A direct insertion path into the atmosphere of Mars to trace methane gas spikes",
       "D": "A low-Earth orbit private network deployed to test high-altitude communication relays"
     },
-    "correct_option": "B",
+    "correct_option": "(censored)",
     "difficulty": "hard"
+  },
+  {
+    "id": "eb525ddb-0452-47ca-957b-c460329abbab",
+    "section": "English Language",
+    "question_text": "Identify the sentence that conforms perfectly to standard English grammatical rules and subject-verb agreement principles regarding plural configurations:",
+    "options": {
+      "A": "The judge, along with her senior bench clerks and research associates, is reviewing the case file parameters.",
+      "B": "The judge, along with her senior bench clerks and research associates, are reviewing the case file parameters.",
+      "C": "The judge, along with her senior bench clerks and research associates, were reviewing the case file parameters.",
+      "D": "The judge, along with her senior bench clerks and research associates, are being reviewing the case file parameters."
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "86d0f2f8-da22-48ea-994e-62bbf9e90981",
+    "section": "English Language",
+    "question_text": "Choose the word that most accurately fills the blank space in the legal sentence: 'The defense counsel argued that the forensic evidence submitted by the prosecution was entirely _______ to the specific charge of criminal trespass.'",
+    "options": {
+      "A": "irrelevant",
+      "B": "material",
+      "C": "germane",
+      "D": "pertinent"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "0876e961-701a-4f51-b9ca-ccb8f6588f4b",
+    "section": "English Language",
+    "question_text": "In standard editorial vocabulary usage, what does the idiom 'to read between the lines' most nearly mean?",
+    "options": {
+      "A": "To analyze the hidden, underlying meaning or intent behind the literal words written in a text",
+      "B": "To proofread a legal draft systematically to eliminate basic typographical errors",
+      "C": "To skip intermediate lines of text inside a lengthy document to save time",
+      "D": "To read text aloud during a formal judicial deposition proceeding"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "e58d10e4-8af0-45d8-878c-c549d4507c9a",
+    "section": "English Language",
+    "question_text": "Identify the option that corrects the grammatical error in the following fragmented sentence: 'Despite of his extensive corporate expertise, the consultant failed the financial compliance audit testing rules.'",
+    "options": {
+      "A": "In spite of his extensive corporate expertise, the consultant failed the financial compliance audit testing rules.",
+      "B": "Despite his extensive corporate expertise, the consultant failed the financial compliance audit testing rules.",
+      "C": "Despite for his extensive corporate expertise, the consultant failed the financial compliance audit testing rules.",
+      "D": "Both A and B are grammatically correct modifications that eliminate the structural error."
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "1ec977a4-a239-478a-a803-ea2d8e402595",
+    "section": "English Language",
+    "question_text": "In the context of statutory litigation analysis, select the word that is most nearly **opposite** in meaning to the capitalized word in the sentence: 'The High Court criticized the administrative tribunal for issuing an ARBITRARY order that completely lacked legal reasoning.'",
+    "options": {
+      "A": "Capricious",
+      "B": "Rational",
+      "C": "Erratic",
+      "D": "Summary"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
   },
   {
     "id": "c7ba8df0-2912-4d49-9724-d2f098c9b110",
@@ -321,20 +581,7 @@
       "C": "Increased exposure to diverse perspectives",
       "D": "Reinforcement of existing beliefs"
     },
-    "correct_option": "C",
-    "difficulty": "medium"
-  },
-  {
-    "id": "59b5094f-4079-41d5-99ab-fb271f53902b",
-    "section": "English Language",
-    "question_text": "What was the primary concern that led to the judicial establishment of the basic structure doctrine in Indian constitutional jurisprudence?",
-    "options": {
-      "A": "The need to simplify the procedural hurdles of the amendment process",
-      "B": "The fear that unlimited amending power could be used to erode or destroy core democratic features and fundamental rights",
-      "C": "The desire to establish absolute, unchecked parliamentary sovereignty over all matters",
-      "D": "The administrative need to systematically align domestic statutory text with international trade standards"
-    },
-    "correct_option": "B",
+    "correct_option": "(censored)",
     "difficulty": "medium"
   },
   {
@@ -347,20 +594,20 @@
       "C": "The mischief rule",
       "D": "The purposive approach"
     },
-    "correct_option": "C",
+    "correct_option": "(censored)",
     "difficulty": "medium"
   },
   {
-    "id": "4b333710-a554-4f7b-baa8-2e2867db3a72",
+    "id": "59b5094f-4079-41d5-99ab-fb271f53902b",
     "section": "English Language",
-    "question_text": "What does systemic analysis suggest regarding the workforce disruptions caused by modern Artificial Intelligence compared to historical shifts like the Industrial Revolution?",
+    "question_text": "What was the primary concern that led to the judicial establishment of the basic structure doctrine in Indian constitutional jurisprudence?",
     "options": {
-      "A": "Modern AI will cause significantly less operational disruption than historical manual mechanization shifts",
-      "B": "The Industrial Revolution resulted in a permanent, unrecoverable net drop in macro employment levels",
-      "C": "AI may drive labor market changes that are significantly harder to adapt to due to unprecedented speed and cognitive scale",
-      "D": "The transition dynamics of the Industrial Revolution required zero workforce retraining interventions"
+      "A": "The need to simplify the procedural hurdles of the amendment process",
+      "B": "The fear that unlimited amending power could be used to erode or destroy core democratic features and fundamental rights",
+      "C": "The desire to establish absolute, unchecked parliamentary sovereignty over all matters",
+      "D": "The administrative need to systematically align domestic statutory text with international trade standards"
     },
-    "correct_option": "C",
+    "correct_option": "(censored)",
     "difficulty": "medium"
   },
   {
@@ -373,7 +620,20 @@
       "C": "It applies with absolute precision only to human color perception fields",
       "D": "It is consistently supported by extensive neuro-imaging data matrices"
     },
-    "correct_option": "B",
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "4b333710-a554-4f7b-baa8-2e2867db3a72",
+    "section": "English Language",
+    "question_text": "What does systemic analysis suggest regarding the workforce disruptions caused by modern Artificial Intelligence compared to historical shifts like the Industrial Revolution?",
+    "options": {
+      "A": "Modern AI will cause significantly less operational disruption than historical manual mechanization shifts",
+      "B": "The Industrial Revolution resulted in a permanent, unrecoverable net drop in macro employment levels",
+      "C": "AI may drive labor market changes that are significantly harder to adapt to due to unprecedented speed and cognitive scale",
+      "D": "The transition dynamics of the Industrial Revolution required zero workforce retraining interventions"
+    },
+    "correct_option": "(censored)",
     "difficulty": "medium"
   },
   {
@@ -386,7 +646,7 @@
       "C": "The immediate commercial advantages of AI completely erase any ethical or tracking concerns",
       "D": "AI should be entirely barred from clinical usage due to unresolvable privacy risks"
     },
-    "correct_option": "B",
+    "correct_option": "(censored)",
     "difficulty": "medium"
   },
   {
@@ -399,7 +659,7 @@
       "C": "Immediate and systemic improvement in factory working conditions",
       "D": "Severe environmental pollution"
     },
-    "correct_option": "C",
+    "correct_option": "(censored)",
     "difficulty": "easy"
   },
   {
@@ -412,20 +672,7 @@
       "C": "The ongoing discourse raises highly complex questions regarding identity ownership, historic institutional power dynamics, and the ethics of borrowing",
       "D": "Critics and creators operate under an identical framework regarding the legal definitions of exploitation"
     },
-    "correct_option": "C",
-    "difficulty": "hard"
-  },
-  {
-    "id": "f1e89215-6299-4e48-a671-f8607984ff6e",
-    "section": "English Language",
-    "question_text": "Which choice best captures F. Scott Fitzgerald's critique of the 'American Dream' through the narrative outcome of 'The Great Gatsby'?",
-    "options": {
-      "A": "The uncritical pursuit of capital guarantees absolute internal fulfillment and marital stability",
-      "B": "The American Dream is easily realized by any individual who deploys baseline focus and hard labor",
-      "C": "Social class stratification remains rigid and insurmountable, exposing the idea of meritocracy as an illusion despite the acquisition of immense wealth",
-      "D": "The immediate superiority of aristocratic old-money families over modern constitutional legal bodies"
-    },
-    "correct_option": "C",
+    "correct_option": "(censored)",
     "difficulty": "hard"
   },
   {
@@ -438,7 +685,20 @@
       "C": "The physical action of holding a mobile device significantly accelerates resting heart rates",
       "D": "The digital interface blocks the neural capacity to achieve REM sleep states completely"
     },
-    "correct_option": "B",
+    "correct_option": "(censored)",
+    "difficulty": "hard"
+  },
+  {
+    "id": "f1e89215-6299-4e48-a671-f8607984ff6e",
+    "section": "English Language",
+    "question_text": "Which choice best captures F. Scott Fitzgerald's critique of the 'American Dream' through the narrative outcome of 'The Great Gatsby'?",
+    "options": {
+      "A": "The uncritical pursuit of capital guarantees absolute internal fulfillment and marital stability",
+      "B": "The American Dream is easily realized by any individual who deploys baseline focus and hard labor",
+      "C": "Social class stratification remains rigid and insurmountable, exposing the idea of meritocracy as an illusion despite the acquisition of immense wealth",
+      "D": "The immediate superiority of aristocratic old-money families over modern constitutional legal bodies"
+    },
+    "correct_option": "(censored)",
     "difficulty": "hard"
   },
   {
@@ -451,7 +711,7 @@
       "C": "It represents a complex transformation that drove unprecedented economic and technological growth while simultaneously causing severe social and environmental harms",
       "D": "Its socioeconomic consequences were isolated entirely to Britain, failing to influence global developments"
     },
-    "correct_option": "C",
+    "correct_option": "(censored)",
     "difficulty": "hard"
   },
   {
@@ -464,7 +724,7 @@
       "C": "A homeowner refusing an offer of ₹1 Crore for their house, despite previously valuing identical houses in the area at no more than ₹70 Lakhs",
       "D": "A shopper buying heavily discounted items that they do not require simply because of a perceived bargain"
     },
-    "correct_option": "C",
+    "correct_option": "(censored)",
     "difficulty": "hard"
   },
   {
@@ -477,7 +737,7 @@
       "C": "Robert Frost explicitly stated that the text was a literal, non-metaphorical guide detailing historical trail maps in New England",
       "D": "The poem serves strictly as a biographical documentation of 19th-century agricultural expansion"
     },
-    "correct_option": "B",
+    "correct_option": "(censored)",
     "difficulty": "hard"
   },
   {
@@ -490,7 +750,7 @@
       "C": "Neither the teacher nor the students are being aware of the structural change in the curriculum",
       "D": "Neither the teacher nor the students is aware of the structural change in the curriculum"
     },
-    "correct_option": "B",
+    "correct_option": "(censored)",
     "difficulty": "medium"
   },
   {
@@ -503,33 +763,202 @@
       "C": "Harsh",
       "D": "Lenient"
     },
-    "correct_option": "B",
+    "correct_option": "(censored)",
     "difficulty": "medium"
   },
   {
-    "id": "36b507c6-7708-43ea-82e3-051e7c14b63b",
+    "id": "35356d13-035f-4a72-a442-4ebbf434f411",
     "section": "Legal Reasoning",
-    "question_text": "Legal Principle: An agreement entered into by a minor is void *ab initio* (void from the very beginning) and cannot be enforced by or against them. Any money exchanged under a void agreement must be returned under principles of restitution. Fact Pattern: A, a 16-year-old minor, pays a ₹5,000 token advance deposit to B to purchase a motorcycle. B takes the cash but later refuses to deliver the vehicle. A demands the return of his advance deposit. Which option is correct?",
+    "question_text": "Legal Principle: The doctrine of promissory estoppel prevents a party from backing out of a clear promise made to another, if that other party has altered their position or incurred financial expenses in reliance on that promise. Fact Pattern: A educational trust promises a researcher a grant of ₹5 Lakhs to conduct a study. Relying on this, the researcher resigns from his job and rents laboratory equipment. The trust later cancels the grant, citing a change in funding priorities. The researcher sues the trust. Will he succeed?",
     "options": {
-      "A": "B is legally obligated to return the deposit because the agreement is void from the beginning due to A's minority",
-      "B": "B can rightfully forfeit the deposit because the minor voluntarily entered the commercial facility",
-      "C": "The agreement is fully valid, and B must deliver the motorcycle immediately",
-      "D": "B is entitled to claim additional damages from A's guardians for commercial inconvenience"
+      "A": "Yes, because the researcher altered his economic position and incurred liabilities based on the clear promise made by the trust, invoking promissory estoppel",
+      "B": "No, because a promise to provide a grant does not constitute a formal commercial contract signed on stamp paper",
+      "C": "Yes, but the trust is obligated to pay only for the laboratory rental equipment costs, ignoring the salary loss",
+      "D": "No, because educational trusts enjoy complete sovereign immunity from estoppel claims parameters"
     },
-    "correct_option": "A",
+    "correct_option": "(censored)",
+    "difficulty": "hard"
+  },
+  {
+    "id": "045b425a-0b09-4ad4-8afa-6eea44b263e0",
+    "section": "Legal Reasoning",
+    "question_text": "Legal Principle: Volenti non fit injuria is a complete defense in tort law providing that if a person explicitly and voluntarily consents to take a known physical risk with full knowledge of its nature, they cannot claim compensation for resulting harm. Fact Pattern: Vikram buys a ticket for a high-speed professional motorsport race. A car crashes on the track, throwing a metal shard over the safety fencing and injuring Vikram. Vikram sues the venue for damages. Is the defense of volenti non fit injuria applicable?",
+    "options": {
+      "A": "No, because while Vikram consented to the general excitement of watching the race, he did not consent to the specific risk of safety hardware failures or shards flying past safety fencing",
+      "B": "Yes, because buying a ticket for a dangerous sport constitutes absolute implied consent to all physical risks, including track safety failures",
+      "C": "No, because the defense of volenti non fit injuria was entirely abolished across sports venues by consumer protection acts",
+      "D": "Yes, but only if the venue can prove that Vikram was not wearing safety earplugs during the event"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "hard"
+  },
+  {
+    "id": "25cb0022-4bd5-420b-9062-f9a9e5fb9bb3",
+    "section": "Legal Reasoning",
+    "question_text": "Legal Principle: Under Section 73 of the Indian Contract Act, 1872, a non-breaching party is entitled to claim damages only for losses that naturally arose in the usual course of things from the breach, or which the parties knew to be likely to result when they made the contract. Fact Pattern: A contracts with B, a carrier, to transport a specialized broken gear to a mill for repair. B delays delivery negligently. Due to this delay, the mill loses a highly lucrative, secret government contract that B had zero knowledge of. A sues B for the complete loss of the government contract profits. Is B liable?",
+    "options": {
+      "A": "No, because the loss of a secret government contract is a remote, special consequence that did not arise naturally in the usual course of things, and B was not notified of it",
+      "B": "Yes, because a common carrier faces absolute, strict liability for all consecutive profits lost due to a delivery delay",
+      "C": "No, but only because B can prove that the short-term delivery delay was caused by weather anomalies",
+      "D": "Yes, because under Section 73, contract damages are punitive and designed to maximize financial penalties"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "hard"
+  },
+  {
+    "id": "48ddb8e9-c776-416b-a0b9-84f5e40617fd",
+    "section": "Legal Reasoning",
+    "question_text": "Legal Principle: The absolute liability rule provides that if an enterprise engages in a hazardous or inherently dangerous industrial activity and any escape of toxic materials causes harm, the enterprise is strictly liable to compensate all affected persons, with zero access to defenses like an 'Act of God'. Fact Pattern: A chemical factory stores highly lethal gas vectors. An unprecedented, historic earthquake splits the containment storage tank, escaping gas into a nearby residential area and causing respiratory injuries. The company claims immunity under the 'Act of God' defense. Is the company liable?",
+    "options": {
+      "A": "Yes, because under the rule of absolute liability, an enterprise engaging in hazardous activities is strictly liable for any escape, and no defenses or exceptions are permitted",
+      "B": "No, because a major seismic earthquake qualifies as a classic Act of God, which serves as an absolute defense against civil claims",
+      "C": "Yes, but only if the residential plaintiffs can prove the factory engineers committed structural maintenance negligence",
+      "D": "No, because public utilities are exempt from liability parameters under environmental protection acts"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "hard"
+  },
+  {
+    "id": "f0e69672-52e5-4f5c-94b7-2b1152059d43",
+    "section": "Legal Reasoning",
+    "question_text": "Legal Principle: A public nuisance is an unlawful act or omission that causes generalized annoyance, injury, or danger to the public or to the community at large in the exercise of common public rights. Fact Pattern: Ramesh blocks a busy main public highway by constructing a large brick wall to host a private family function, forcing thousands of daily commuters to take a 10-kilometer detour. The municipal officers file a case against Ramesh. What is the legal status of Ramesh's act?",
+    "options": {
+      "A": "Ramesh is liable for creating a public nuisance because blocking a public highway infringes on a common right of the entire community at large",
+      "B": "Ramesh is not liable because hosting a private family function on a roadway serves as a valid personal liberty exception",
+      "C": "Ramesh is liable only if the state can prove that his actions caused an automotive accident on the detour route",
+      "D": "Ramesh is not liable because roads are public property, meaning any citizen can alter their layout layout parameters"
+    },
+    "correct_option": "(censored)",
     "difficulty": "easy"
   },
   {
-    "id": "d04ca560-38f8-4c0d-a10f-25bdda855ae0",
+    "id": "a2286594-32ab-40e7-9835-e91bfd302e84",
     "section": "Legal Reasoning",
-    "question_text": "Legal Principle: A breach of contract occurs when a party fails to perform their contractually agreed obligation without a valid legal excuse, making them liable to compensate the non-breaching party. Fact Pattern: X and Y enter into a written agreement where X agrees to sell his car to Y for $10,000, with delivery scheduled for Tuesday. On Monday, X refuses to complete the transaction and sells the vehicle to Z instead. Y files a suit for breach. Which option is correct?",
+    "question_text": "Legal Principle: Under the law of torts, vicarious liability holds an employer liable for the wrongful or tortious acts committed by their employee, provided the act was committed during the explicit course of employment. Fact Pattern: A corporate driver, while transporting a delivery package for his company, deviates from his authorized route by 10 kilometers to buy personal groceries. During this deviation, he drives negligently and hits a pedestrian. The pedestrian sues the corporation. Is the employer liable?",
     "options": {
-      "A": "X is liable for breach of contract and must compensate Y for non-performance",
-      "B": "X is not liable because oral and unsigned preliminary allocations override written terms",
-      "C": "Y can only claim a return of any initial token deposit but cannot initiate a claim for breach",
-      "D": "X is completely absolved of liability because securing a higher open-market offer serves as an absolute commercial justification"
+      "A": "No, because the driver was on a complete personal detour or 'frolic of his own', acting outside the course of employment when the accident occurred",
+      "B": "Yes, because the vehicle belongs to the corporation, creating absolute vicarious liability for all movements",
+      "C": "No, but only if the corporation can prove that the driver possessed a clean personal driving record previously",
+      "D": "Yes, because transporting packages creates a permanent operational agency that cannot be broken by route choices"
     },
-    "correct_option": "A",
+    "correct_option": "(censored)",
+    "difficulty": "hard"
+  },
+  {
+    "id": "18487c69-cd09-49e7-ad67-4d696c8d450b",
+    "section": "Legal Reasoning",
+    "question_text": "Legal Principle: An agreement is completely void for lack of consideration under Section 25 of the Indian Contract Act, 1872, unless it is a registered expression of natural love and affection between parties standing in a near relation to each other. Fact Pattern: X promises in writing to pay his adult friend Y ₹50,000 out of goodwill, without receiving anything in return. The document is signed but not registered. X later refuses to pay. Y files a suit to enforce the promise. Will Y succeed?",
+    "options": {
+      "A": "No, because the agreement lacks consideration and does not qualify for the near relation exception, making it void and unenforceable",
+      "B": "Yes, because a written and signed promise is automatically enforceable under modern financial rules",
+      "C": "No, but only because ₹50,000 exceeds the statutory limit for friendly gift allocations",
+      "D": "Yes, because goodwill serves as a valid substitute for consideration under commercial contract codes"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "f46313cd-b830-4fc0-8b0e-402c660bdde9",
+    "section": "Legal Reasoning",
+    "question_text": "Legal Principle: In constitutional law, an administrative or legislative classification is valid under Article 14 (Right to Equality) only if it is based on an intelligible differentia that distinguishes grouped entities, and that differentia must share a rational nexus with the objective sought to be achieved. Fact Pattern: A state pass a law banning evening commercial operations exclusively for stores owned by individuals aged under 30, claiming it reduces neighborhood noise levels. A shop owner challenges the law. Is the law valid under Article 14?",
+    "options": {
+      "A": "No, because age tracking for store hours lacks any rational nexus or logical connection to the state's objective of reducing noise levels, making it discriminatory under Article 14",
+      "B": "Yes, because State Legislatures possess absolute, unreviewable police powers to modify trade hours dynamically",
+      "C": "No, because Article 14 protects absolute commercial operations from any form of state regulation",
+      "D": "Yes, because individuals under 30 represent a separate group classification under standard registry definitions"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "hard"
+  },
+  {
+    "id": "43283275-00a8-411e-a4c9-5ae3e28691db",
+    "section": "Legal Reasoning",
+    "question_text": "Legal Principle: A standard contract becomes void under the doctrine of supervening illegality if, after its formation, a new legislative or administrative law is enacted that completely outlaws the core performance of the agreement. Fact Pattern: A contracts to import and supply a specific batch of industrial chemical polymers to B. Two weeks later, before delivery, the Central Government issues an emergency environmental notification declaring the import and trade of those polymers an absolute criminal offense. B sues A for non-performance. What is the legal outcome?",
+    "options": {
+      "A": "The contract is void due to supervening illegality, discharging both parties from performance without breach liability",
+      "B": "A is liable for breach because the contract was signed prior to the enactment of the environmental ban",
+      "C": "A must pay immediate liquidated damages to B to offset the corporate purchasing loss",
+      "D": "The contract remains valid, and A must deliver the inventory clandestinely to fulfill the agreement parameters"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "c413cbbe-eda6-43b6-a388-70da4bd7ee82",
+    "section": "Legal Reasoning",
+    "question_text": "Legal Principle: In criminal jurisprudence, the right of private defense of property arises only against an active or imminent attempt to commit theft, robbery, mischief, or criminal trespass, and the force used must never exceed what is reasonably necessary. Fact Pattern: Sunil sees a teenager climbing his garden fence to retrieve a stray tennis ball. Sunil immediately sets his trained attack dogs on the teenager, causing severe lacerations. The teenager's family files a criminal complaint. Can Sunil claim private defense?",
+    "options": {
+      "A": "No, because releasing trained attack dogs on a non-violent teenager retrieving a ball represents an excessive, completely disproportionate use of force that far exceeds what was reasonably necessary",
+      "B": "Yes, because entering private property without written permission constitutes criminal trespass, permitting absolute lethal force",
+      "C": "No, but only if the teenager can prove he shouted an audio warning before climbing the fence structure",
+      "D": "Yes, because the right of private defense of property shields the owner from all personal criminal litigation parameters"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "hard"
+  },
+  {
+    "id": "8844e5b2-2350-48d2-948a-874ad905d707",
+    "section": "Legal Reasoning",
+    "question_text": "Legal Principle: The absolute tort rule of strict liability holds a land occupier liable for damage caused by the escape of any non-natural, dangerous substance brought onto their land, unless they can prove an exception like the plaintiff's own explicit fault or an Act of God. Fact Pattern: Industrialist K stores millions of liters of crude wastewater in a reservoir. Saboteurs completely bomb the reservoir wall, escaping the toxic water into neighbor L's farmland, destroying crops. L sues K under strict liability. Can K escape liability?",
+    "options": {
+      "A": "Yes, because the escape was caused entirely by the independent, malicious act of a third party (saboteurs), which serves as a recognized exception to strict liability",
+      "B": "No, because strict liability parameters hold the owner liable for all escapes, irrespective of third-party interventions or bombings",
+      "C": "Yes, but only if K can prove that his wastewater reservoir was registered with the regional green registry board",
+      "D": "No, because agricultural crop loss enjoys absolute priority protection over infrastructure assets"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "hard"
+  },
+  {
+    "id": "f5230418-cc42-44b8-818c-cf779c14adac",
+    "section": "Legal Reasoning",
+    "question_text": "Legal Principle: Under corporate and partnership law, all partners in a registered firm are jointly and severally liable for any financial debts or statutory liabilities incurred by the firm during its normal course of business operations. Fact Pattern: Partner A borrows ₹10 Lakhs from a commercial bank in the firm's name to purchase business inventory, but later mismanages the funds. The firm defaults. The bank files a recovery suit directly against Partner B, who had zero knowledge of the specific loan transaction. Is Partner B liable?",
+    "options": {
+      "A": "Yes, because as a partner, B faces joint and several liability for all business debts incurred during the firm's normal operational course",
+      "B": "No, because B was not a signing party to the specific bank loan agreement and lacked subjective knowledge",
+      "C": "Yes, but the bank can recover no more than 10% of B's personal liquid asset balance",
+      "D": "No, because liability for financial defaults rests exclusively with the partner who physically withdrew the funds"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "9bed98ed-1989-4423-9f0a-f38911ef4536",
+    "section": "Legal Reasoning",
+    "question_text": "Legal Principle: Defamation requires the publication of an unprivileged, false statement that damages the reputation of an identifiable living individual. Truth serves as an absolute defense in civil actions. Fact Pattern: An internal corporate board leaks a factually true, audited report showing that executive X committed financial fraud. Executive X sues the board for defamation, claiming the leak ruined his chances of securing employment elsewhere. Will X's suit succeed?",
+    "options": {
+      "A": "No, because the statement is factually true, which serves as an absolute defense against civil liability for defamation",
+      "B": "Yes, because leaking private corporate summaries that damage future employment capacity is an actionable civil wrong",
+      "C": "No, but only if the corporate board can prove the leak was executed by an anonymous system breach",
+      "D": "Yes, because defamation parameters prioritize the protection of livelihood over factual accuracy"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "f0721306-df32-405c-852f-add9c46ebb74",
+    "section": "Legal Reasoning",
+    "question_text": "Legal Principle: Under the law of torts, the defense of private defense authorizes a person to use a reasonable, proportionate degree of physical force to protect their own body or property from an imminent, unlawful physical assault. Fact Pattern: A hits B with a plastic ruler during an office dispute. B immediately draws a pocket knife and stabs A in the neck, causing severe injuries. B claims the defense of private defense during litigation. Will B's defense stand?",
+    "options": {
+      "A": "No, because stabbing someone in the neck with a knife in response to a minor strike with a plastic ruler represents a completely disproportionate use of excessive force",
+      "B": "Yes, because any physical strike authorizes the victim to deploy lethal hardware assets under private defense",
+      "C": "No, but only if A can prove he lacked criminal intent when wielding the plastic ruler instrument",
+      "D": "Yes, because private defense parameters completely shield a person from tort liability once an assault begins"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "56f657f4-e604-416b-83b0-0e8985d07782",
+    "section": "Legal Reasoning",
+    "question_text": "Legal Principle: A contract is voidable under Section 19 of the Indian Contract Act, 1872, if the consent of a party was obtained by coercion, which is defined as committing or threatening to commit any act forbidden by the Indian Penal Code. Fact Pattern: X threatens to physically burn down Y's industrial warehouse facility unless Y signs an agreement to sell his land plot to X at half its market value. Y signs the document out of fear. Y later challenges the contract. What is the status of the agreement?",
+    "options": {
+      "A": "The contract is voidable at the option of Y because his consent was obtained through coercion via unlawful threats",
+      "B": "The contract is completely valid and binding because Y signed the document in his own handwriting",
+      "C": "The contract is void *ab initio* from the start, meaning the land titles automatically revert to the state treasury",
+      "D": "The contract remains active unless Y pays a non-performance fee to X's bank clearing account"
+    },
+    "correct_option": "(censored)",
     "difficulty": "easy"
   },
   {
@@ -542,21 +971,8 @@
       "C": "S holds the legal right to sue only the immediate storefront retailer who processed the transaction",
       "D": "R can be held liable only if S can prove that R possessed prior subjective knowledge of the specific defect"
     },
-    "correct_option": "A",
+    "correct_option": "(censored)",
     "difficulty": "hard"
-  },
-  {
-    "id": "1d9e30c5-d9a1-4fad-b788-b81077a983f9",
-    "section": "Legal Reasoning",
-    "question_text": "Legal Principle: False imprisonment is the total and unauthorized restraint of a person's liberty without legal justification. Law enforcement personnel have legal justification only if they possess a valid warrant or reasonable, corroborated suspicion of a cognizable offense. Fact Pattern: A, a police officer, arrests B at a transit hub without a warrant based purely on a brief, anonymous phone tip that lacked any physical description or details. An investigation reveals no crime was committed. B sues A for false imprisonment. Which option is correct?",
-    "options": {
-      "A": "A is liable for false imprisonment because an uncorroborated, vague anonymous tip does not constitute reasonable suspicion to justify a warrantless restraint of liberty",
-      "B": "A is not liable because any action performed while wearing an official uniform constitutes absolute legal justification",
-      "C": "A is immune from civil liability because police personnel have total immunity for all public operational choices",
-      "D": "A can be held liable only if B can prove that the officer acted with explicit personal malice"
-    },
-    "correct_option": "A",
-    "difficulty": "medium"
   },
   {
     "id": "43aeed70-106f-43a6-8dad-4afaf363806d",
@@ -568,7 +984,98 @@
       "C": "The suit will fail because the burden of proof rests entirely on Q to scientifically demonstrate that he never accepted a bribe",
       "D": "P can be held liable only if Q can prove that the newspaper article caused him an immediate, measurable drop in personal salary"
     },
-    "correct_option": "A",
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "36b507c6-7708-43ea-82e3-051e7c14b63b",
+    "section": "Legal Reasoning",
+    "question_text": "Legal Principle: An agreement entered into by a minor is void *ab initio* (void from the very beginning) and cannot be enforced by or against them. Any money exchanged under a void agreement must be returned under principles of restitution. Fact Pattern: A, a 16-year-old minor, pays a ₹5,000 token advance deposit to B to purchase a motorcycle. B takes the cash but later refuses to deliver the vehicle. A demands the return of his advance deposit. Which option is correct?",
+    "options": {
+      "A": "B is legally obligated to return the deposit because the agreement is void from the beginning due to A's minority",
+      "B": "B can rightfully forfeit the deposit because the minor voluntarily entered the commercial facility",
+      "C": "The agreement is fully valid, and B must deliver the motorcycle immediately",
+      "D": "B is entitled to claim additional damages from A's guardians for commercial inconvenience"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "1d9e30c5-d9a1-4fad-b788-b81077a983f9",
+    "section": "Legal Reasoning",
+    "question_text": "Legal Principle: False imprisonment is the total and unauthorized restraint of a person's liberty without legal justification. Law enforcement personnel have legal justification only if they possess a valid warrant or reasonable, corroborated suspicion of a cognizable offense. Fact Pattern: A, a police officer, arrests B at a transit hub without a warrant based purely on a brief, anonymous phone tip that lacked any physical description or details. An investigation reveals no crime was committed. B sues A for false imprisonment. Which option is correct?",
+    "options": {
+      "A": "A is liable for false imprisonment because an uncorroborated, vague anonymous tip does not constitute reasonable suspicion to justify a warrantless restraint of liberty",
+      "B": "A is not liable because any action performed while wearing an official uniform constitutes absolute legal justification",
+      "C": "A is immune from civil liability because police personnel have total immunity for all public operational choices",
+      "D": "A can be held liable only if B can prove that the officer acted with explicit personal malice"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "d04ca560-38f8-4c0d-a10f-25bdda855ae0",
+    "section": "Legal Reasoning",
+    "question_text": "Legal Principle: A breach of contract occurs when a party fails to perform their contractually agreed obligation without a valid legal excuse, making them liable to compensate the non-breaching party. Fact Pattern: X and Y enter into a written agreement where X agrees to sell his car to Y for $10,000, with delivery scheduled for Tuesday. On Monday, X refuses to complete the transaction and sells the vehicle to Z instead. Y files a suit for breach. Which option is correct?",
+    "options": {
+      "A": "X is liable for breach of contract and must compensate Y for non-performance",
+      "B": "X is not liable because oral and unsigned preliminary allocations override written terms",
+      "C": "Y can only claim a return of any initial token deposit but cannot initiate a claim for breach",
+      "D": "X is completely absolved of liability because securing a higher open-market offer serves as an absolute commercial justification"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "4b11fafa-a001-4dd6-8e78-3070e0d1d0f6",
+    "section": "Legal Reasoning",
+    "question_text": "Legal Principle: In civil defamation actions under tort law, truth is an absolute and complete defense. If the statement made is factually correct, the motivation, intent, or presence of malice on the part of the publisher is legally irrelevant. Fact Pattern: P publishes a factually true and audited record detailing corporate tax evasion by Q. Q sues P for defamation, proving that P published the records with explicit personal malice due to a corporate rivalry. Which option is correct?",
+    "options": {
+      "A": "Truth is a complete defense; since the statement is factually accurate, P is not liable regardless of personal malice",
+      "B": "P is liable because publishing accurate corporate private records with malice negates the defense of truth",
+      "C": "P must prove that the publication was approved by a special public interest panel to escape liability",
+      "D": "P is liable because any statement that causes verifiable harm to corporate reputation is an actionable tort wrong"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "22a16707-9dbd-48ce-9b3b-0a025758f282",
+    "section": "Legal Reasoning",
+    "question_text": "Legal Principle: A contract entered into by a minor is void *ab initio*. However, if a minor deliberately misrepresents their age to induce another party into a contract, they cannot be forced to perform the contract, but they can be ordered to return any specific benefits or assets received that are still in their possession. Fact Pattern: A, a minor, misrepresents his age as 20 and buys a motorcycle from B on credit. A refuses to pay the installments. B sues to enforce the contract or get the motorcycle back, which is safely parked in A's garage. Which option is correct?",
+    "options": {
+      "A": "The contract is completely void, but A can be ordered to restore the motorcycle to B since the asset is still in his possession",
+      "B": "A can be legally forced to pay all remaining financial installments because of his fraudulent age misrepresentation",
+      "C": "The agreement is voidable at B's option, meaning B must pay a usage fee to A to recover the vehicle",
+      "D": "B holds no recourse and forfeits both the vehicle and the cash because a minor's action allows absolute retention of benefits"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "c983a552-e010-4da8-89bc-ad886d8b5e14",
+    "section": "Legal Reasoning",
+    "question_text": "In which landmark constitutional case did a nine-judge bench of the Supreme Court of India unanimously declare that the right to privacy is a fundamental right protected under Article 21 of the Constitution?",
+    "options": {
+      "A": "Kesavananda Bharati v. State of Kerala",
+      "B": "Maneka Gandhi v. Union of India",
+      "C": "Justice K.S. Puttaswamy (Retd.) v. Union of India",
+      "D": "A.K. Gopalan v. State of Madras"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "hard"
+  },
+  {
+    "id": "1aa8dba9-77bd-440a-81fe-ebd2e2584410",
+    "section": "Legal Reasoning",
+    "question_text": "Legal Principle: Under contract law, the doctrine of frustration discharges an agreement automatically if an extraordinary, unforeseeable supervening event occurs after formation that makes performance completely impossible or unlawful without the fault of either party. Fact Pattern: X agrees to deliver 100 bags of rice to Y on a specific date. Before that date, an unprecedented, record-breaking regional flash flood completely submerges and destroys X's entire warehouse infrastructure and stock. Y sues X for breach. Which option is correct?",
+    "options": {
+      "A": "X is liable because the contract did not explicitly include a force majeure clause text",
+      "B": "X is discharged from liability because the unforeseeable supervening flood rendered performance objectively impossible, frustrating the contract",
+      "C": "X is liable to source replacement stock from alternative international trade routes regardless of costs",
+      "D": "The contract remains fully active, and X must pay immediate damages for delayed delivery parameters"
+    },
+    "correct_option": "(censored)",
     "difficulty": "medium"
   },
   {
@@ -581,60 +1088,8 @@
       "C": "A can be held liable only if B can prove that the officer had a personal, long-standing grudge against him",
       "D": "A is immune because public safety personnel are completely exempt from civil claims during deployments"
     },
-    "correct_option": "A",
+    "correct_option": "(censored)",
     "difficulty": "easy"
-  },
-  {
-    "id": "1aa8dba9-77bd-440a-81fe-ebd2e2584410",
-    "section": "Legal Reasoning",
-    "question_text": "Legal Principle: Under contract law, the doctrine of frustration discharges an agreement automatically if an extraordinary, unforeseeable supervening event occurs after formation that makes performance completely impossible or unlawful without the fault of either party. Fact Pattern: X agrees to deliver 100 bags of rice to Y on a specific date. Before that date, an unprecedented, record-breaking regional flash flood completely submerges and destroys X's entire warehouse infrastructure and stock. Y sues X for breach. Which option is correct?",
-    "options": {
-      "A": "X is liable because the contract did not explicitly include a force majeure clause text",
-      "B": "X is discharged from liability because the unforeseeable supervening flood rendered performance objectively impossible, frustrating the contract",
-      "C": "X is liable to source replacement stock from alternative international trade routes regardless of costs",
-      "D": "The contract remains fully active, and X must pay immediate damages for delayed delivery parameters"
-    },
-    "correct_option": "B",
-    "difficulty": "medium"
-  },
-  {
-    "id": "4b11fafa-a001-4dd6-8e78-3070e0d1d0f6",
-    "section": "Legal Reasoning",
-    "question_text": "Legal Principle: In civil defamation actions under tort law, truth is an absolute and complete defense. If the statement made is factually correct, the motivation, intent, or presence of malice on the part of the publisher is legally irrelevant. Fact Pattern: P publishes a factually true and audited record detailing corporate tax evasion by Q. Q sues P for defamation, proving that P published the records with explicit personal malice due to a corporate rivalry. Which option is correct?",
-    "options": {
-      "A": "Truth is a complete defense; since the statement is factually accurate, P is not liable regardless of personal malice",
-      "B": "P is liable because publishing accurate corporate private records with malice negates the defense of truth",
-      "C": "P must prove that the publication was approved by a special public interest panel to escape liability",
-      "D": "P is liable because any statement that causes verifiable harm to corporate reputation is an actionable tort wrong"
-    },
-    "correct_option": "A",
-    "difficulty": "easy"
-  },
-  {
-    "id": "c983a552-e010-4da8-89bc-ad886d8b5e14",
-    "section": "Legal Reasoning",
-    "question_text": "In which landmark constitutional case did a nine-judge bench of the Supreme Court of India unanimously declare that the right to privacy is a fundamental right protected under Article 21 of the Constitution?",
-    "options": {
-      "A": "Kesavananda Bharati v. State of Kerala",
-      "B": "Maneka Gandhi v. Union of India",
-      "C": "Justice K.S. Puttaswamy (Retd.) v. Union of India",
-      "D": "A.K. Gopalan v. State of Madras"
-    },
-    "correct_option": "C",
-    "difficulty": "hard"
-  },
-  {
-    "id": "22a16707-9dbd-48ce-9b3b-0a025758f282",
-    "section": "Legal Reasoning",
-    "question_text": "Legal Principle: A contract entered into by a minor is void *ab initio*. However, if a minor deliberately misrepresents their age to induce another party into a contract, they cannot be forced to perform the contract, but they can be ordered to return any specific benefits or assets received that are still in their possession. Fact Pattern: A, a minor, misrepresents his age as 20 and buys a motorcycle from B on credit. A refuses to pay the installments. B sues to enforce the contract or get the motorcycle back, which is safely parked in A's garage. Which option is correct?",
-    "options": {
-      "A": "The contract is completely void, but A can be ordered to restore the motorcycle to B since the asset is still in his possession",
-      "B": "A can be legally forced to pay all remaining financial installments because of his fraudulent age misrepresentation",
-      "C": "The agreement is voidable at B's option, meaning B must pay a usage fee to A to recover the vehicle",
-      "D": "B holds no recourse and forfeits both the vehicle and the cash because a minor's action allows absolute retention of benefits"
-    },
-    "correct_option": "A",
-    "difficulty": "medium"
   },
   {
     "id": "12b232c0-c114-4314-a77d-b65479574a67",
@@ -646,47 +1101,8 @@
       "C": "The court will only award monetary damages since specific performance was abolished by modern commercial amendments",
       "D": "The contract automatically becomes void if alternative open-market buyers submit a higher evaluation"
     },
-    "correct_option": "B",
+    "correct_option": "(censored)",
     "difficulty": "hard"
-  },
-  {
-    "id": "9091a9a6-68c9-4c7f-8b45-ce76347d0db9",
-    "section": "Legal Reasoning",
-    "question_text": "Legal Principle: Any intentional, unauthorized physical contact with a person’s body without their explicit consent constitutes the civil tort of battery, regardless of whether it causes physical harm or was intended to be therapeutic. Fact Pattern: A surgeon performs a complex medical procedure on a patient. While the patient is anesthetized, the surgeon notices and successful repairs a secondary non-emergency alignment issue without securing prior informed consent. The patient recovers completely but sues for battery. Which option is correct?",
-    "options": {
-      "A": "The surgeon is not liable because the procedure was medically beneficial and caused zero physical harm",
-      "B": "The surgeon is liable for battery because he performed physical contact on the patient's body without explicit consent",
-      "C": "The surgeon is liable only if the patient can establish that the corrective repair was performed negligently",
-      "D": "The doctor is immune from civil liability because emergency life-saving exceptions cover all non-consensual operations"
-    },
-    "correct_option": "B",
-    "difficulty": "hard"
-  },
-  {
-    "id": "481dee29-fd82-4c9b-a718-862b33e77726",
-    "section": "Legal Reasoning",
-    "question_text": "Under the constitutional distribution of legislative powers outlined in the Seventh Schedule of the Constitution of India, which authority holds the exclusive power to legislate on and levy taxes on agricultural income?",
-    "options": {
-      "A": "The Parliament of India under the Union List residuary frameworks",
-      "B": "The respective State Legislatures under the State List entry parameters",
-      "C": "Both Parliament and State Legislatures concurrently under the Concurrent List",
-      "D": "The Union Ministry of Finance via direct executive notifications"
-    },
-    "correct_option": "B",
-    "difficulty": "medium"
-  },
-  {
-    "id": "8d45191f-0372-414b-8651-04e77b37e15b",
-    "section": "Legal Reasoning",
-    "question_text": "Legal Principle: A contract entered into by a minor is completely void from the beginning (*void ab initio*), meaning it creates zero legal obligations for either party. Fact Pattern: A, a 17-year-old minor, enters into a written agreement with a dealer to buy a car for ₹5,00,000, paying a small advance. The dealer delivers the vehicle, but A later refuses to pay the balance, pointing to his minority. The dealer sues for breach of contract. Which option is correct?",
-    "options": {
-      "A": "A is fully liable for breach of contract because he accepted the delivery and paid a token advance",
-      "B": "A is not liable for breach because a contract with a minor is void from the beginning, imposing no contractual obligations",
-      "C": "The dealer can enforce the contract directly against A's legal guardians under standard agency codes",
-      "D": "The agreement is valid because expensive consumer durable transactions are exempt from minority rules"
-    },
-    "correct_option": "B",
-    "difficulty": "easy"
   },
   {
     "id": "4a2e2b22-669b-4ad3-be0b-630675fd9345",
@@ -698,46 +1114,46 @@
       "C": "X is liable because publishing candidate financial balances violates statutory data protection rules",
       "D": "X is liable unless he can provide a signed waiver from Y's political campaign manager"
     },
-    "correct_option": "B",
+    "correct_option": "(censored)",
     "difficulty": "medium"
   },
   {
-    "id": "738dbe72-a3ef-40dc-8f2e-d4b872e84aba",
+    "id": "9091a9a6-68c9-4c7f-8b45-ce76347d0db9",
     "section": "Legal Reasoning",
-    "question_text": "Legal Principle: In civil law, establishing that a published allegation is completely true serves as an absolute defense against defamation, irrespective of the impact on the plaintiff's public reputation. Fact Pattern: A newspaper prints an investigative column showing that politician Mr. Z accepted unaccounted corporate cash payouts. Mr. Z files a suit for defamation. The newspaper submits matching audited ledgers confirming the payouts are factually true. Which option is correct?",
+    "question_text": "Legal Principle: Any intentional, unauthorized physical contact with a person’s body without their explicit consent constitutes the civil tort of battery, regardless of whether it causes physical harm or was intended to be therapeutic. Fact Pattern: A surgeon performs a complex medical procedure on a patient. While the patient is anesthetized, the surgeon notices and successful repairs a secondary non-emergency alignment issue without securing prior informed consent. The patient recovers completely but sues for battery. Which option is correct?",
     "options": {
-      "A": "The newspaper is liable because allegations regarding public officials require a prior legislative clearance warrant",
-      "B": "The newspaper is not liable because the factual truth of the statement serves as an absolute defense against defamation",
-      "C": "The newspaper is protected only if it can prove that Mr. Z signed a disclosure statement prior to printing",
-      "D": "The newspaper is liable because publishing financial data always overrides standard media speech protections"
+      "A": "The surgeon is not liable because the procedure was medically beneficial and caused zero physical harm",
+      "B": "The surgeon is liable for battery because he performed physical contact on the patient's body without explicit consent",
+      "C": "The surgeon is liable only if the patient can establish that the corrective repair was performed negligently",
+      "D": "The doctor is immune from civil liability because emergency life-saving exceptions cover all non-consensual operations"
     },
-    "correct_option": "B",
+    "correct_option": "(censored)",
     "difficulty": "hard"
   },
   {
-    "id": "2c151960-e6e2-44e7-933e-62a350d7e969",
+    "id": "8d45191f-0372-414b-8651-04e77b37e15b",
     "section": "Legal Reasoning",
-    "question_text": "Legal Principle: Agreements entered into by minors are void *ab initio*. However, under statutory restitution rules, if an agreement is declared void, any party who received a benefit under it must restore it to the person from whom it was received. Fact Pattern: Rohan, a 16-year-old minor, buys a motorcycle from a dealership for ₹1,00,000, paying the full amount. He rides the bike for a week, then seeks to return it, cancel the transaction due to his minority, and get his money back. Which option is correct?",
+    "question_text": "Legal Principle: A contract entered into by a minor is completely void from the beginning (*void ab initio*), meaning it creates zero legal obligations for either party. Fact Pattern: A, a 17-year-old minor, enters into a written agreement with a dealer to buy a car for ₹5,00,000, paying a small advance. The dealer delivers the vehicle, but A later refuses to pay the balance, pointing to his minority. The dealer sues for breach of contract. Which option is correct?",
     "options": {
-      "A": "Rohan cannot cancel the transaction because he already accepted the physical benefit of the vehicle for a week",
-      "B": "The agreement is void from the beginning; under restitution principles, Rohan is entitled to a refund of his money upon restoring the motorcycle to the dealer",
-      "C": "Rohan can keep the motorcycle and demand a full refund simultaneously under minority protection privileges",
-      "D": "The dealership can legally forfeit 50% of the cash as a standard commercial depreciation fee"
+      "A": "A is fully liable for breach of contract because he accepted the delivery and paid a token advance",
+      "B": "A is not liable for breach because a contract with a minor is void from the beginning, imposing no contractual obligations",
+      "C": "The dealer can enforce the contract directly against A's legal guardians under standard agency codes",
+      "D": "The agreement is valid because expensive consumer durable transactions are exempt from minority rules"
     },
-    "correct_option": "B",
-    "difficulty": "medium"
+    "correct_option": "(censored)",
+    "difficulty": "easy"
   },
   {
-    "id": "aeb19207-51c9-4806-b37c-a5cc8e1ec7b7",
+    "id": "481dee29-fd82-4c9b-a718-862b33e77726",
     "section": "Legal Reasoning",
-    "question_text": "Legal Principle: A contract is discharged under the doctrine of frustration if an extraordinary, supervening event beyond the control of the parties renders performance physically impossible, absolving them of liability for non-performance. Fact Pattern: A, a famous singer, enters a contract with B to perform at a concert. Two days before the event, A contracts a severe vocal cord infection, making it physically impossible to sing. B sues A for breach. Which option is correct?",
+    "question_text": "Under the constitutional distribution of legislative powers outlined in the Seventh Schedule of the Constitution of India, which authority holds the exclusive power to legislate on and levy taxes on agricultural income?",
     "options": {
-      "A": "A is fully liable for breach and must pay all liquidated damages specified in the contract text",
-      "B": "A is not liable because the supervening illness rendered performance physically impossible, frustrating the contract and discharging it",
-      "C": "A must source a replacement singer of equal fame to perform at the concert venue",
-      "D": "The contract is voidable at B's option, meaning B can legally force A to perform at a later date without fresh consideration"
+      "A": "The Parliament of India under the Union List residuary frameworks",
+      "B": "The respective State Legislatures under the State List entry parameters",
+      "C": "Both Parliament and State Legislatures concurrently under the Concurrent List",
+      "D": "The Union Ministry of Finance via direct executive notifications"
     },
-    "correct_option": "B",
+    "correct_option": "(censored)",
     "difficulty": "medium"
   },
   {
@@ -750,7 +1166,33 @@
       "C": "P must rebuild Q's roof under standard absolute insurance liability laws",
       "D": "Liability is split equally because accidental property damage requires shared neighborhood parameters"
     },
-    "correct_option": "B",
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "738dbe72-a3ef-40dc-8f2e-d4b872e84aba",
+    "section": "Legal Reasoning",
+    "question_text": "Legal Principle: In civil law, establishing that a published allegation is completely true serves as an absolute defense against defamation, irrespective of the impact on the plaintiff's public reputation. Fact Pattern: A newspaper prints an investigative column showing that politician Mr. Z accepted unaccounted corporate cash payouts. Mr. Z files a suit for defamation. The newspaper submits matching audited ledgers confirming the payouts are factually true. Which option is correct?",
+    "options": {
+      "A": "The newspaper is liable because allegations regarding public officials require a prior legislative clearance warrant",
+      "B": "The newspaper is not liable because the factual truth of the statement serves as an absolute defense against defamation",
+      "C": "The newspaper is protected only if it can prove that Mr. Z signed a disclosure statement prior to printing",
+      "D": "The newspaper is liable because publishing financial data always overrides standard media speech protections"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "hard"
+  },
+  {
+    "id": "aeb19207-51c9-4806-b37c-a5cc8e1ec7b7",
+    "section": "Legal Reasoning",
+    "question_text": "Legal Principle: A contract is discharged under the doctrine of frustration if an extraordinary, supervening event beyond the control of the parties renders performance physically impossible, absolving them of liability for non-performance. Fact Pattern: A, a famous singer, enters a contract with B to perform at a concert. Two days before the event, A contracts a severe vocal cord infection, making it physically impossible to sing. B sues A for breach. Which option is correct?",
+    "options": {
+      "A": "A is fully liable for breach and must pay all liquidated damages specified in the contract text",
+      "B": "A is not liable because the supervening illness rendered performance physically impossible, frustrating the contract and discharging it",
+      "C": "A must source a replacement singer of equal fame to perform at the concert venue",
+      "D": "The contract is voidable at B's option, meaning B can legally force A to perform at a later date without fresh consideration"
+    },
+    "correct_option": "(censored)",
     "difficulty": "medium"
   },
   {
@@ -763,7 +1205,33 @@
       "C": "The agreement is void because real estate transactions require a prior administrative clearance certificate",
       "D": "X can legally terminate the contract unilaterally by paying a flat 10% penalty fee to the local land registry"
     },
-    "correct_option": "B",
+    "correct_option": "(censored)",
+    "difficulty": "hard"
+  },
+  {
+    "id": "2c151960-e6e2-44e7-933e-62a350d7e969",
+    "section": "Legal Reasoning",
+    "question_text": "Legal Principle: Agreements entered into by minors are void *ab initio*. However, under statutory restitution rules, if an agreement is declared void, any party who received a benefit under it must restore it to the person from whom it was received. Fact Pattern: Rohan, a 16-year-old minor, buys a motorcycle from a dealership for ₹1,00,000, paying the full amount. He rides the bike for a week, then seeks to return it, cancel the transaction due to his minority, and get his money back. Which option is correct?",
+    "options": {
+      "A": "Rohan cannot cancel the transaction because he already accepted the physical benefit of the vehicle for a week",
+      "B": "The agreement is void from the beginning; under restitution principles, Rohan is entitled to a refund of his money upon restoring the motorcycle to the dealer",
+      "C": "Rohan can keep the motorcycle and demand a full refund simultaneously under minority protection privileges",
+      "D": "The dealership can legally forfeit 50% of the cash as a standard commercial depreciation fee"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "10929e75-f75b-40e2-959d-e21b824c7288",
+    "section": "Legal Reasoning",
+    "question_text": "Legal Principle: Common law tort principles do not impose a general duty of care to rescue or assist a stranger in peril unless a special relationship exists (such as doctor-patient) or the defendant's own actions created the dangerous situation. Fact Pattern: A, an expert swimmer, notices B, a stranger, drowning in a river. A looks on but refuses to assist B, despite having access to safety gear. B drowns, and his family sues A for negligence. Is A liable?",
+    "options": {
+      "A": "Yes, because A possessed superior swimming skills, creating a general moral and legal duty to preserve human life",
+      "B": "No, because tort principles do not impose a duty of care to rescue a stranger in peril in the absence of a special relationship or self-created danger",
+      "C": "Yes, because being a bystander at a public park automatically establishes an invitee-based duty of care",
+      "D": "No, but only if A can prove that entering the water posed an immediate threat to his own safety"
+    },
+    "correct_option": "(censored)",
     "difficulty": "hard"
   },
   {
@@ -776,20 +1244,7 @@
       "C": "Yes, because X is under a strict contractual obligation to source an identical replacement car from the open market",
       "D": "No, but only if X surrenders his home insurance payouts directly to Y"
     },
-    "correct_option": "B",
-    "difficulty": "hard"
-  },
-  {
-    "id": "28434ca2-44d9-4824-bfb8-8d12c2f6b514",
-    "section": "Legal Reasoning",
-    "question_text": "Legal Principle: Factual truth serves as an absolute defense against civil liability for defamation. If a published statement is accurate in substance and fact, its negative impact on the plaintiff's public reputation is legally irrelevant. Fact Pattern: A newspaper editor, A, publishes an article showing that public official B accepted bribes to clear an industrial project. B sues A for defamation. A provides clear financial ledgers and bank statements proving the corruption allegations are entirely true. Will B's suit succeed?",
-    "options": {
-      "A": "Yes, because the publication caused undeniable damage to B's public standing and reputation",
-      "B": "No, because truth serves as an absolute defense against civil liability for defamation; if a statement is accurate, its impact on reputation is legally irrelevant",
-      "C": "Yes, because publishing financial records without an official warrant is an absolute civil wrong",
-      "D": "No, but only if the newspaper issues a public apology to B's political party"
-    },
-    "correct_option": "B",
+    "correct_option": "(censored)",
     "difficulty": "hard"
   },
   {
@@ -802,59 +1257,20 @@
       "C": "Yes, because police immunity applies to all physical harm unless a prior warrant explicitly prohibited force",
       "D": "No, because public law immunities were entirely abolished by consumer protection codes"
     },
-    "correct_option": "B",
+    "correct_option": "(censored)",
     "difficulty": "hard"
   },
   {
-    "id": "10929e75-f75b-40e2-959d-e21b824c7288",
+    "id": "28434ca2-44d9-4824-bfb8-8d12c2f6b514",
     "section": "Legal Reasoning",
-    "question_text": "Legal Principle: Common law tort principles do not impose a general duty of care to rescue or assist a stranger in peril unless a special relationship exists (such as doctor-patient) or the defendant's own actions created the dangerous situation. Fact Pattern: A, an expert swimmer, notices B, a stranger, drowning in a river. A looks on but refuses to assist B, despite having access to safety gear. B drowns, and his family sues A for negligence. Is A liable?",
+    "question_text": "Legal Principle: Factual truth serves as an absolute defense against civil liability for defamation. If a published statement is accurate in substance and fact, its negative impact on the plaintiff's public reputation is legally irrelevant. Fact Pattern: A newspaper editor, A, publishes an article showing that public official B accepted bribes to clear an industrial project. B sues A for defamation. A provides clear financial ledgers and bank statements proving the corruption allegations are entirely true. Will B's suit succeed?",
     "options": {
-      "A": "Yes, because A possessed superior swimming skills, creating a general moral and legal duty to preserve human life",
-      "B": "No, because tort principles do not impose a duty of care to rescue a stranger in peril in the absence of a special relationship or self-created danger",
-      "C": "Yes, because being a bystander at a public park automatically establishes an invitee-based duty of care",
-      "D": "No, but only if A can prove that entering the water posed an immediate threat to his own safety"
+      "A": "Yes, because the publication caused undeniable damage to B's public standing and reputation",
+      "B": "No, because truth serves as an absolute defense against civil liability for defamation; if a statement is accurate, its impact on reputation is legally irrelevant",
+      "C": "Yes, because publishing financial records without an official warrant is an absolute civil wrong",
+      "D": "No, but only if the newspaper issues a public apology to B's political party"
     },
-    "correct_option": "B",
-    "difficulty": "hard"
-  },
-  {
-    "id": "9bb66f2b-081f-493c-aff8-be571c526106",
-    "section": "Legal Reasoning",
-    "question_text": "Legal Principle: An agreement entered into by a minor is void *ab initio* (void from the beginning) and cannot be legally enforced by or against them. Fact Pattern: A, a minor, enters into a written agreement to purchase a customized vintage motorcycle from B, paying the full amount in advance. B accepts the funds but later refuses to deliver the bike, arguing that because A is a minor, the agreement has no legal standing. A sues B for specific performance. Will A succeed?",
-    "options": {
-      "A": "Yes, because B accepted the money and cannot use A's minority as a shield for bad faith",
-      "B": "No, because a contract with a minor is void *ab initio*; since the agreement lacks legal status from the start, a court cannot enforce specific performance under it",
-      "C": "Yes, because specific performance is always mandated for unique, non-substitutable goods",
-      "D": "No, because minors are entirely barred from initiating any civil litigation in courts"
-    },
-    "correct_option": "B",
-    "difficulty": "hard"
-  },
-  {
-    "id": "2411c632-9f6a-4c08-820d-5097d08d95ae",
-    "section": "Legal Reasoning",
-    "question_text": "Legal Principle: Specific performance of a contract is granted at the discretion of the court when monetary compensation is inadequate to remedy the breach, which is standard for unique, irreplaceable items. Fact Pattern: X and Y sign a contract where X agrees to sell an extremely rare, historically significant collector's sports car to Y. Before delivery, X refuses to complete the sale and offers to return Y's advance with interest as compensation. Y rejects the money and sues X for specific performance. Can Y succeed?",
-    "options": {
-      "A": "No, because monetary compensation with interest is always considered an adequate remedy for any contract breach involving movable assets",
-      "B": "Yes, because the contract involves a unique, irreplaceable item where standard monetary damages are inadequate, making specific performance an appropriate remedy",
-      "C": "No, because specific performance is restricted by law to agreements involving immovable real estate",
-      "D": "Yes, but only if Y doubles his original financial offer to match market trends"
-    },
-    "correct_option": "B",
-    "difficulty": "hard"
-  },
-  {
-    "id": "edbc7c2a-7f0c-4217-9862-63685077c4f9",
-    "section": "Legal Reasoning",
-    "question_text": "Legal Principle: Actionable negligence requires the breach of a legal duty of care that directly causes foreseeable harm to the plaintiff. Fact Pattern: P, a pedestrian, is crossing a road inside a marked crosswalk. Q, a driver approaching the intersection, runs a red light and strikes P, causing severe fractures. P sues Q for negligence. Is Q liable?",
-    "options": {
-      "A": "No, because pedestrians bear primary responsibility for their own safety on public roads",
-      "B": "Yes, because Q owed a legal duty of care, breached it by running a red light, and directly caused P's foreseeable physical injuries",
-      "C": "No, because running a traffic signal is a regulatory traffic offense rather than a civil tort wrong",
-      "D": "Yes, but only if P can prove that Q intended to cause physical harm"
-    },
-    "correct_option": "B",
+    "correct_option": "(censored)",
     "difficulty": "hard"
   },
   {
@@ -867,7 +1283,7 @@
       "C": "No, because civil claims for battery are entirely barred against uniform service personnel",
       "D": "Yes, but only if B can prove that the officer had a personal, long-standing grudge against him"
     },
-    "correct_option": "B",
+    "correct_option": "(censored)",
     "difficulty": "hard"
   },
   {
@@ -880,33 +1296,46 @@
       "C": "No, but only if C can prove he was an innocent buyer who lacked knowledge of B's co-ownership status",
       "D": "Yes, but B must pay A financial compensation equivalent to half the sale value to regain control"
     },
-    "correct_option": "B",
+    "correct_option": "(censored)",
     "difficulty": "hard"
   },
   {
-    "id": "43007e84-d091-4de4-815f-71100d1c7a13",
+    "id": "2411c632-9f6a-4c08-820d-5097d08d95ae",
     "section": "Legal Reasoning",
-    "question_text": "Legal Principle: A contract is voidable at the option of the innocent party if their consent was obtained through misrepresentation or fraud regarding material facts essential to the agreement. Fact Pattern: X and Y sign a contract where X agrees to sell his car to Y. Before delivery, X discovers that Y intentionally provided completely false financial credit statements to secure the contract. X avoids the contract and refuses to deliver. Y sues X for breach and demands specific performance. Which option is correct?",
+    "question_text": "Legal Principle: Specific performance of a contract is granted at the discretion of the court when monetary compensation is inadequate to remedy the breach, which is standard for unique, irreplaceable items. Fact Pattern: X and Y sign a contract where X agrees to sell an extremely rare, historically significant collector's sports car to Y. Before delivery, X refuses to complete the sale and offers to return Y's advance with interest as compensation. Y rejects the money and sues X for specific performance. Can Y succeed?",
     "options": {
-      "A": "Y is entitled to specific performance because the contract was formally signed and an advance was paid",
-      "B": "X can legally avoid the contract because Y's intentional misrepresentation of material financial facts compromised X's free consent, making the agreement voidable at X's option",
-      "C": "The contract is void *ab initio* from the start, meaning X can retain Y's advance as a punitive measure",
-      "D": "X must deliver the car to Y because misrepresentations regarding financial capacity are legally irrelevant to auto sales"
+      "A": "No, because monetary compensation with interest is always considered an adequate remedy for any contract breach involving movable assets",
+      "B": "Yes, because the contract involves a unique, irreplaceable item where standard monetary damages are inadequate, making specific performance an appropriate remedy",
+      "C": "No, because specific performance is restricted by law to agreements involving immovable real estate",
+      "D": "Yes, but only if Y doubles his original financial offer to match market trends"
     },
-    "correct_option": "B",
+    "correct_option": "(censored)",
     "difficulty": "hard"
   },
   {
-    "id": "f396c442-d2ad-45e6-bbef-37601ef5190d",
+    "id": "9bb66f2b-081f-493c-aff8-be571c526106",
     "section": "Legal Reasoning",
-    "question_text": "Legal Principle: The state can impose reasonable regulations on the administration of private educational institutions under Article 19(6) of the Constitution to advance social welfare and public education objectives without violating the right to carry on an occupation under Article 19(1)(g). Fact Pattern: The Parliament passes a public welfare law requiring all private schools to reserve 25% of entry-level seats for children from economically weaker sections (EWS). A private school association challenges the law. What is the most likely outcome?",
+    "question_text": "Legal Principle: An agreement entered into by a minor is void *ab initio* (void from the beginning) and cannot be legally enforced by or against them. Fact Pattern: A, a minor, enters into a written agreement to purchase a customized vintage motorcycle from B, paying the full amount in advance. B accepts the funds but later refuses to deliver the bike, arguing that because A is a minor, the agreement has no legal standing. A sues B for specific performance. Will A succeed?",
     "options": {
-      "A": "The law is unconstitutional because private entities are completely exempt from any public welfare mandates",
-      "B": "The law is constitutionally valid because the state can impose reasonable regulations on private educational institutions under Article 19(6) to advance public education and social welfare",
-      "C": "The law is valid only for institutions that receive direct financial aid from the state treasury",
-      "D": "The law is unconstitutional because it violates the absolute commercial independence guaranteed to operations under Article 30"
+      "A": "Yes, because B accepted the money and cannot use A's minority as a shield for bad faith",
+      "B": "No, because a contract with a minor is void *ab initio*; since the agreement lacks legal status from the start, a court cannot enforce specific performance under it",
+      "C": "Yes, because specific performance is always mandated for unique, non-substitutable goods",
+      "D": "No, because minors are entirely barred from initiating any civil litigation in courts"
     },
-    "correct_option": "B",
+    "correct_option": "(censored)",
+    "difficulty": "hard"
+  },
+  {
+    "id": "edbc7c2a-7f0c-4217-9862-63685077c4f9",
+    "section": "Legal Reasoning",
+    "question_text": "Legal Principle: Actionable negligence requires the breach of a legal duty of care that directly causes foreseeable harm to the plaintiff. Fact Pattern: P, a pedestrian, is crossing a road inside a marked crosswalk. Q, a driver approaching the intersection, runs a red light and strikes P, causing severe fractures. P sues Q for negligence. Is Q liable?",
+    "options": {
+      "A": "No, because pedestrians bear primary responsibility for their own safety on public roads",
+      "B": "Yes, because Q owed a legal duty of care, breached it by running a red light, and directly caused P's foreseeable physical injuries",
+      "C": "No, because running a traffic signal is a regulatory traffic offense rather than a civil tort wrong",
+      "D": "Yes, but only if P can prove that Q intended to cause physical harm"
+    },
+    "correct_option": "(censored)",
     "difficulty": "hard"
   },
   {
@@ -919,7 +1348,7 @@
       "C": "Yes, because a 500-meter restriction is arbitrary and lacks any logical connection to public safety",
       "D": "No, because the state possesses absolute power to dismantle any private business without providing a rationale"
     },
-    "correct_option": "B",
+    "correct_option": "(censored)",
     "difficulty": "hard"
   },
   {
@@ -932,7 +1361,7 @@
       "C": "Yes, because the state assumes full responsibility for all physical harm caused by its employees during deployments",
       "D": "No, because the doctrine of sovereign immunity applies exclusively to international trade disputes"
     },
-    "correct_option": "B",
+    "correct_option": "(censored)",
     "difficulty": "hard"
   },
   {
@@ -945,46 +1374,33 @@
       "C": "No, because a laptop automatically qualifies as an absolute necessity under Section 68, making the payment clause enforceable",
       "D": "Yes, but she must pay a 20% depreciation fee for using the device"
     },
-    "correct_option": "B",
+    "correct_option": "(censored)",
     "difficulty": "hard"
   },
   {
-    "id": "bd3af467-581a-4691-ab0d-ad6ca17e134a",
+    "id": "43007e84-d091-4de4-815f-71100d1c7a13",
     "section": "Legal Reasoning",
-    "question_text": "Legal Principle: Under standard succession law, the subsequent entry into a marriage automatically revokes any prior will executed by a person, unless that will was explicitly made in contemplation of the specific marriage. Fact Pattern: A man executes a valid will leaving his entire estate exclusively to his daughter from his first marriage. Years later, he enters into a new marriage. Following his death, his new wife challenges the old will, claiming it was revoked by the marriage. The daughter argues the will remains valid. Is the will valid?",
+    "question_text": "Legal Principle: A contract is voidable at the option of the innocent party if their consent was obtained through misrepresentation or fraud regarding material facts essential to the agreement. Fact Pattern: X and Y sign a contract where X agrees to sell his car to Y. Before delivery, X discovers that Y intentionally provided completely false financial credit statements to secure the contract. X avoids the contract and refuses to deliver. Y sues X for breach and demands specific performance. Which option is correct?",
     "options": {
-      "A": "The will remains entirely valid because the daughter is named as the sole beneficiary",
-      "B": "The will is legally revoked because under succession law, entering into a marriage automatically revokes any prior will unless explicitly made in contemplation of that marriage",
-      "C": "The will is modified to split the estate equally between the daughter and the state treasury",
-      "D": "The will remains valid because the wife must prove she possessed an independent source of income"
+      "A": "Y is entitled to specific performance because the contract was formally signed and an advance was paid",
+      "B": "X can legally avoid the contract because Y's intentional misrepresentation of material financial facts compromised X's free consent, making the agreement voidable at X's option",
+      "C": "The contract is void *ab initio* from the start, meaning X can retain Y's advance as a punitive measure",
+      "D": "X must deliver the car to Y because misrepresentations regarding financial capacity are legally irrelevant to auto sales"
     },
-    "correct_option": "B",
+    "correct_option": "(censored)",
     "difficulty": "hard"
   },
   {
-    "id": "f9584cf2-e4a0-4526-8425-021a3a7b9594",
+    "id": "f396c442-d2ad-45e6-bbef-37601ef5190d",
     "section": "Legal Reasoning",
-    "question_text": "Legal Principle: A force majeure clause or doctrine excuses a party from performance or liability for delays if a completely unforeseeable, extraordinary supervening event occurs that is entirely beyond their control and directly prevents compliance. Fact Pattern: A manufacturing company enters a contract with a supplier to deliver raw materials by a specific date. The supplier fails to deliver on time due to a sudden, unannounced strike by its entire factory workforce, which was completely unforeseeable. The company sues for breach. Will the supplier be held liable?",
+    "question_text": "Legal Principle: The state can impose reasonable regulations on the administration of private educational institutions under Article 19(6) of the Constitution to advance social welfare and public education objectives without violating the right to carry on an occupation under Article 19(1)(g). Fact Pattern: The Parliament passes a public welfare law requiring all private schools to reserve 25% of entry-level seats for children from economically weaker sections (EWS). A private school association challenges the law. What is the most likely outcome?",
     "options": {
-      "A": "The supplier is fully liable because internal labor disputes never excuse contractual performance delay",
-      "B": "The supplier is not liable because an unforeseeable, unannounced labor strike that completely disrupts production acts as a valid supervening event beyond control, excusing performance delays during the disruption",
-      "C": "The supplier is liable only if the company can prove the strike was caused by the supplier's explicit operational negligence",
-      "D": "The supplier is automatically exempt from all future delivery duties under the contract"
+      "A": "The law is unconstitutional because private entities are completely exempt from any public welfare mandates",
+      "B": "The law is constitutionally valid because the state can impose reasonable regulations on private educational institutions under Article 19(6) to advance public education and social welfare",
+      "C": "The law is valid only for institutions that receive direct financial aid from the state treasury",
+      "D": "The law is unconstitutional because it violates the absolute commercial independence guaranteed to operations under Article 30"
     },
-    "correct_option": "B",
-    "difficulty": "hard"
-  },
-  {
-    "id": "aa400664-8090-4ff2-b979-3a3ffa69b106",
-    "section": "Legal Reasoning",
-    "question_text": "Legal Principle: Under tort law, an intentional or reckless violation of a statutory safety by-law that directly causes foreseeable physical injury to a member of the protected class constitutes an actionable breach of the duty of care, establishing negligence. Fact Pattern: A woman is walking on a designated pedestrian sidewalk when a cyclist rides onto the sidewalk and collides with her, causing severe injuries. A municipal by-law explicitly prohibits cycling on public sidewalks to preserve pedestrian safety. The woman sues the cyclist for negligence. Is the cyclist liable?",
-    "options": {
-      "A": "The cyclist is liable for negligence because his intentional violation of a statutory safety by-law serves as clear evidence of a breach of his duty of care",
-      "B": "The cyclist is not liable because pedestrians assume all physical risks when walking near city roads",
-      "C": "The cyclist is liable only if the plaintiff can prove he was traveling at a speed exceeding 40 kilometers per hour",
-      "D": "The cyclist is not liable because municipal by-laws have no relevance when determining civil tort liability"
-    },
-    "correct_option": "A",
+    "correct_option": "(censored)",
     "difficulty": "hard"
   },
   {
@@ -997,7 +1413,7 @@
       "C": "The tenant must vacate but can sue the local municipal corporation for housing subsidies",
       "D": "The tenant can stay only if he agrees to double his monthly rent payments to the new owner"
     },
-    "correct_option": "B",
+    "correct_option": "(censored)",
     "difficulty": "hard"
   },
   {
@@ -1010,7 +1426,46 @@
       "C": "Yes, because the driver should have deployed his emergency brakes instead of choosing to swerve",
       "D": "No, because civil tort liability for property damage is completely invalid inside suburban residential zones"
     },
-    "correct_option": "B",
+    "correct_option": "(censored)",
+    "difficulty": "hard"
+  },
+  {
+    "id": "aa400664-8090-4ff2-b979-3a3ffa69b106",
+    "section": "Legal Reasoning",
+    "question_text": "Legal Principle: Under tort law, an intentional or reckless violation of a statutory safety by-law that directly causes foreseeable physical injury to a member of the protected class constitutes an actionable breach of the duty of care, establishing negligence. Fact Pattern: A woman is walking on a designated pedestrian sidewalk when a cyclist rides onto the sidewalk and collides with her, causing severe injuries. A municipal by-law explicitly prohibits cycling on public sidewalks to preserve pedestrian safety. The woman sues the cyclist for negligence. Is the cyclist liable?",
+    "options": {
+      "A": "The cyclist is liable for negligence because his intentional violation of a statutory safety by-law serves as clear evidence of a breach of his duty of care",
+      "B": "The cyclist is not liable because pedestrians assume all physical risks when walking near city roads",
+      "C": "The cyclist is liable only if the plaintiff can prove he was traveling at a speed exceeding 40 kilometers per hour",
+      "D": "The cyclist is not liable because municipal by-laws have no relevance when determining civil tort liability"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "hard"
+  },
+  {
+    "id": "f9584cf2-e4a0-4526-8425-021a3a7b9594",
+    "section": "Legal Reasoning",
+    "question_text": "Legal Principle: A force majeure clause or doctrine excuses a party from performance or liability for delays if a completely unforeseeable, extraordinary supervening event occurs that is entirely beyond their control and directly prevents compliance. Fact Pattern: A manufacturing company enters a contract with a supplier to deliver raw materials by a specific date. The supplier fails to deliver on time due to a sudden, unannounced strike by its entire factory workforce, which was completely unforeseeable. The company sues for breach. Will the supplier be held liable?",
+    "options": {
+      "A": "The supplier is fully liable because internal labor disputes never excuse contractual performance delay",
+      "B": "The supplier is not liable because an unforeseeable, unannounced labor strike that completely disrupts production acts as a valid supervening event beyond control, excusing performance delays during the disruption",
+      "C": "The supplier is liable only if the company can prove the strike was caused by the supplier's explicit operational negligence",
+      "D": "The supplier is automatically exempt from all future delivery duties under the contract"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "hard"
+  },
+  {
+    "id": "bd3af467-581a-4691-ab0d-ad6ca17e134a",
+    "section": "Legal Reasoning",
+    "question_text": "Legal Principle: Under standard succession law, the subsequent entry into a marriage automatically revokes any prior will executed by a person, unless that will was explicitly made in contemplation of the specific marriage. Fact Pattern: A man executes a valid will leaving his entire estate exclusively to his daughter from his first marriage. Years later, he enters into a new marriage. Following his death, his new wife challenges the old will, claiming it was revoked by the marriage. The daughter argues the will remains valid. Is the will valid?",
+    "options": {
+      "A": "The will remains entirely valid because the daughter is named as the sole beneficiary",
+      "B": "The will is legally revoked because under succession law, entering into a marriage automatically revokes any prior will unless explicitly made in contemplation of that marriage",
+      "C": "The will is modified to split the estate equally between the daughter and the state treasury",
+      "D": "The will remains valid because the wife must prove she possessed an independent source of income"
+    },
+    "correct_option": "(censored)",
     "difficulty": "hard"
   },
   {
@@ -1023,33 +1478,7 @@
       "C": "Yes, because a smartphone is an educational utility that automatically qualifies as a necessity under Section 68",
       "D": "Yes, but only if she pays a usage fee equivalent to half the phone's retail value"
     },
-    "correct_option": "B",
-    "difficulty": "hard"
-  },
-  {
-    "id": "77148014-39ab-4aab-8fc7-55fb2ec5270a",
-    "section": "Legal Reasoning",
-    "question_text": "Legal Principle: Under the established legal maxim *ignorantia juris non excusat*, ignorance or lack of knowledge of a validly enacted law does not serve as a defense or excuse to avoid statutory liability or fines. Fact Pattern: Raj relocates to a new city and is unaware that the municipal corporation recently passed a public safety law prohibiting the feeding of stray dogs in public parks, carrying a fine. On his first morning, Raj feeds a stray dog in a park, is cited by enforcement officers, and is fined. Raj challenges the fine based on his ignorance of the new local rule. Is his challenge valid?",
-    "options": {
-      "A": "Yes, because a complete absence of intentional wrongdoing serves as an absolute defense against municipal violations",
-      "B": "No, because under the established legal maxim *ignorantia juris non excusat*, ignorance of a validly enacted law is not a defense, and individuals are legally presumed to know the law",
-      "C": "Yes, because municipal corporations are under a strict legal obligation to individually notify every new resident of local laws",
-      "D": "No, because feeding stray animals is universally categorized as an absolute international crime"
-    },
-    "correct_option": "B",
-    "difficulty": "hard"
-  },
-  {
-    "id": "f136898e-48a0-4442-9584-078d1bfe3caa",
-    "section": "Legal Reasoning",
-    "question_text": "Legal Principle: An occupier or manager of a commercial establishment owes a duty of care to customers to maintain safe premises and provide adequate warning signs regarding temporary hazards. Fact Pattern: Rohan, a store manager, mops a busy central aisle during operating hours but completely fails to place a 'Wet Floor' warning sign. Priya, a customer, enters the aisle, slips on the wet floor, and fractures her ankle. Rohan denies liability, arguing that customers should look down while walking. Is Rohan liable?",
-    "options": {
-      "A": "No, because mopping is a standard operational activity that does not generate an elevated duty of care",
-      "B": "No, because Priya's decision to carry an object that partially obstructed her line of vision serves as an independent intervening event",
-      "C": "Yes, because Rohan owed an occupier's duty of care to customers, breached it by failing to place a warning sign, and directly caused Priya's foreseeable physical injury",
-      "D": "Yes, because the mere occurrence of a slip inside a commercial business automatically creates absolute liability"
-    },
-    "correct_option": "C",
+    "correct_option": "(censored)",
     "difficulty": "hard"
   },
   {
@@ -1062,20 +1491,228 @@
       "C": "No, because Sameer was under a strict obligation to retreat from the scene or contact emergency services before defending himself",
       "D": "Yes, because holding a validly licensed firearm automatically confers absolute legal immunity for any shooting action"
     },
-    "correct_option": "B",
+    "correct_option": "(censored)",
     "difficulty": "hard"
   },
   {
-    "id": "00849b55-2431-46a0-86bd-47057e6910ba",
-    "section": "Logical Reasoning",
-    "question_text": "An economic analyst states: 'If a country has a high literacy rate, then it experiences a high standard of living.' If it is discovered that Country X has a high standard of living, concluding that Country X must therefore have a high literacy rate commits which formal logical fallacy?",
+    "id": "77148014-39ab-4aab-8fc7-55fb2ec5270a",
+    "section": "Legal Reasoning",
+    "question_text": "Legal Principle: Under the established legal maxim *ignorantia juris non excusat*, ignorance or lack of knowledge of a validly enacted law does not serve as a defense or excuse to avoid statutory liability or fines. Fact Pattern: Raj relocates to a new city and is unaware that the municipal corporation recently passed a public safety law prohibiting the feeding of stray dogs in public parks, carrying a fine. On his first morning, Raj feeds a stray dog in a park, is cited by enforcement officers, and is fined. Raj challenges the fine based on his ignorance of the new local rule. Is his challenge valid?",
     "options": {
-      "A": "The fallacy of affirming the consequent",
-      "B": "The fallacy of denying the antecedent",
-      "C": "The fallacy of circular reasoning by assuming the premise",
-      "D": "The fallacy of an undistributed middle term"
+      "A": "Yes, because a complete absence of intentional wrongdoing serves as an absolute defense against municipal violations",
+      "B": "No, because under the established legal maxim *ignorantia juris non excusat*, ignorance of a validly enacted law is not a defense, and individuals are legally presumed to know the law",
+      "C": "Yes, because municipal corporations are under a strict legal obligation to individually notify every new resident of local laws",
+      "D": "No, because feeding stray animals is universally categorized as an absolute international crime"
     },
-    "correct_option": "A",
+    "correct_option": "(censored)",
+    "difficulty": "hard"
+  },
+  {
+    "id": "f136898e-48a0-4442-9584-078d1bfe3caa",
+    "section": "Legal Reasoning",
+    "question_text": "Legal Principle: An occupier or manager of a commercial establishment owes a duty of care to customers to maintain safe premises and provide adequate warning signs regarding temporary hazards. Fact Pattern: Rohan, a store manager, mops a busy central aisle during operating hours but completely fails to place a 'Wet Floor' warning sign. Priya, a customer, enters the aisle, slips on the wet floor, and fractures her ankle. Rohan denies liability, arguing that customers should look down while walking. Is Rohan liable?",
+    "options": {
+      "A": "No, because mopping is a standard operational activity that does not generate an elevated duty of care",
+      "B": "No, because Priya's decision to carry an object that partially obstructed her line of vision serves as an independent intervening event",
+      "C": "Yes, because Rohan owed an occupier's duty of care to customers, breached it by failing to place a warning sign, and directly caused Priya's foreseeable physical injury",
+      "D": "Yes, because the mere occurrence of a slip inside a commercial business automatically creates absolute liability"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "hard"
+  },
+  {
+    "id": "f8e6bcb6-19c1-463c-bde9-913e7d8a0bd0",
+    "section": "Logical Reasoning",
+    "question_text": "A university dean recommends an absolute ban on laptop usage inside lecture halls because a study showed that a group of students who took handwritten notes retained 20% more data. This recommendation relies on which underlying assumption?",
+    "options": {
+      "A": "The observed cognitive data retention benefits of handwriting can be generalized uniformly across the entire student population",
+      "B": "Laptops serve as the primary source of academic cheating inside higher education systems",
+      "C": "Students who prefer taking notes via laptops possess a lower baseline intelligence quotient",
+      "D": "Handwriting notes is a faster data capture method than digital keyboard typing parameters"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "hard"
+  },
+  {
+    "id": "32539d90-c932-44e4-a4dd-b41f2f6fba17",
+    "section": "Logical Reasoning",
+    "question_text": "Premises: All valid statutory laws conform to human rights principles. Some ancient local customs do not conform to human rights principles. Based on these premises, which of the following conclusions can be logically deduced?",
+    "options": {
+      "A": "Some ancient local customs are not valid statutory laws",
+      "B": "All ancient local customs are valid statutory laws",
+      "C": "No valid statutory laws are ancient local customs",
+      "D": "Some human rights principles are ancient local customs"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "f64a9e11-6946-48c5-89ac-28d1938b5a20",
+    "section": "Logical Reasoning",
+    "question_text": "Analyze the structural relationship between the terms in the following analogy and select the pair that exhibits an identical conceptual link: APPELLATE COURT : JUDGMENT ::",
+    "options": {
+      "A": "Legislative Assembly : Statute",
+      "B": "Arbitrator : Compromise",
+      "C": "Barrister : Legal Brief",
+      "D": "Jury : Deliberation room"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "06262e5f-26d3-44e8-9858-b6a965a20c16",
+    "section": "Logical Reasoning",
+    "question_text": "A medical board concludes that a new clinical drug causes a drop in blood pressure based on a trial of 500 hypertensive patients. Which of the following findings, if true, would most severely undermine this causal conclusion?",
+    "options": {
+      "A": "The 500 trial participants were simultaneously placed on a strict low-sodium dietary regimen and an optimized sleep tracking program during the trial window",
+      "B": "The trial was funded through an independent public research grant rather than a private corporation",
+      "C": "A portion of the trial participants reported mild headaches during the first week of administration",
+      "D": "The drug molecule shares a structural layout with existing cardiovascular medications"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "hard"
+  },
+  {
+    "id": "43c52132-c63a-411f-bda0-ad061d0cffc4",
+    "section": "Logical Reasoning",
+    "question_text": "Which of the following statements, if true, provides the missing logical parameter required to make the conclusion 'Therefore, all risk-mitigation portfolios are high-yielding funds' structurally valid from the premise 'All high-yielding funds are volatile assets'?",
+    "options": {
+      "A": "All volatile assets are high-yielding funds, and all risk-mitigation portfolios are volatile assets",
+      "B": "Some volatile assets are risk-mitigation portfolios handled by institutional banks",
+      "C": "No risk-mitigation portfolios are volatile assets in the financial market",
+      "D": "All high-yielding funds are handled exclusively by risk-mitigation portfolios"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "hard"
+  },
+  {
+    "id": "a80f0239-0208-4edf-a594-44de2ebd7dc1",
+    "section": "Logical Reasoning",
+    "question_text": "A tech analyst argues: 'If a smartphone application incorporates end-to-end encryption, it completely protects consumer communication privacy from unauthorized network leaks.' If a specific application is discovered to contain security leaks, what can be logically deduced with absolute certainty?",
+    "options": {
+      "A": "The application does not incorporate end-to-end encryption under the modus tollens rule",
+      "B": "The application incorporates end-to-end encryption but suffers minor software configuration errors",
+      "C": "The software engineer committed an error, confirming that correlation implies causation",
+      "D": "No logical conclusion is supported because encryption parameters are non-deductive"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "6ab8e101-8830-44e4-8d26-a10ff3be878f",
+    "section": "Logical Reasoning",
+    "question_text": "An academic study tracked 1,000 corporate managers and found that those who drank black coffee reported significantly higher productivity levels. The authors concluded that black coffee enhances productivity. This reasoning is flawed because it ignores which possibility?",
+    "options": {
+      "A": "The productivity gains could be driven by reverse causation—highly motivated, productive managers might naturally seek higher caffeine intake",
+      "B": "Black coffee contains zero nutritional value, making any metabolic correlation invalid",
+      "C": "The study should have tracked tea drinkers across identical parameters to remain sound",
+      "D": "The productivity metrics are a necessary condition for entrepreneurship success"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "hard"
+  },
+  {
+    "id": "da26bc3d-63bf-446a-88da-2907972c84a4",
+    "section": "Logical Reasoning",
+    "question_text": "Premises: All constitutional democracies possess an independent judiciary. Country M possesses an independent judiciary. Concluding from this that Country M is a constitutional democracy commits which formal logical error?",
+    "options": {
+      "A": "The formal fallacy of affirming the consequent",
+      "B": "The formal fallacy of denying the antecedent",
+      "C": "The fallacy of a negative conclusion derived from affirmative inputs",
+      "D": "The semantic fallacy of composition across structural states"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "35a87608-7697-4d87-aab3-9cd438c8d38e",
+    "section": "Logical Reasoning",
+    "question_text": "In a consumer survey, 90% of vehicle owners using Optima Engine Oil reported superior mileage. Based on this, the brand claimed that Optima causes engine efficiency. Which of the following elements highlights the core logical weakness of this claim?",
+    "options": {
+      "A": "Without a matching control group using standard or baseline oil under identical conditions, the mileage variation cannot be isolated from driving habits or vehicle model differences",
+      "B": "The survey pool is invalid because 90% represents an unquantifiable percentage metric",
+      "C": "The brand should have offered a financial refund to the remaining 10% to ensure statistical validity",
+      "D": "Engine oil metrics are a sufficient condition for vehicle manufacturing clearances"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "hard"
+  },
+  {
+    "id": "d1395ccc-6c68-4424-b4cf-5761ab92da4a",
+    "section": "Logical Reasoning",
+    "question_text": "Premises: Some landmark judgments alter corporate tax codes. All corporate tax code alterations require parliamentary notifications. Which of the following statements can be deduced with absolute logical certainty?",
+    "options": {
+      "A": "Some landmark judgments require parliamentary notifications",
+      "B": "All landmark judgments require parliamentary notifications",
+      "C": "No landmark judgments require parliamentary notifications",
+      "D": "Some parliamentary notifications alter constitutional structures"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "4763524e-4a31-4b8c-ad85-e1dad3b6aac7",
+    "section": "Logical Reasoning",
+    "question_text": "A corporate consultant claims: 'Every single time a business downsizes its core operational workforce, its organizational profit margins spike within two quarters.' If a tech company downsized its workforce but its profit margins flatlined over the next year, what is the status of the consultant's claim?",
+    "options": {
+      "A": "The claim is proven false because a single empirical counterexample invalidates a universal conditional statement",
+      "B": "The claim remains universally true because the tech sector represents an out-of-scope exception",
+      "C": "The consultant's argument commits a formal fallacy of an undistributed middle term",
+      "D": "The company should have downsized its executive matrix to validate the logic parameters"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "hard"
+  },
+  {
+    "id": "32119965-4388-4bd8-99df-1dd622f22dba",
+    "section": "Logical Reasoning",
+    "question_text": "An urban planner states: 'If a city implements a congestion pricing tax on personal vehicles, central business district traffic congestion will drop by 15%.' Which underlying assumption is mandatory for this conditional forecast to remain sound?",
+    "options": {
+      "A": "The financial cost of the tax is high enough to alter driver behavior rather than being absorbed as a minor expense",
+      "B": "Congestion pricing is the single exclusive method available to modern municipalities to control traffic flows",
+      "C": "All metropolitan commuters naturally prefer using underground public transit infrastructure",
+      "D": "The tax revenues will be used exclusively to build suburban parking structures"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "hard"
+  },
+  {
+    "id": "fb665130-e18e-4c1a-a275-ffb7034f0699",
+    "section": "Logical Reasoning",
+    "question_text": "Six corporate partners are sitting in a straight row for a board alignment check. P is sitting to the immediate left of Q, but is positioned to the right of R. S is situated to the right of T, but is located to the left of R. If U is sitting to the immediate right of Q, who is sitting exactly in the third position from the left?",
+    "options": {
+      "A": "R",
+      "B": "P",
+      "C": "S",
+      "D": "T"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "hard"
+  },
+  {
+    "id": "68ecbccd-c6bf-4b47-bdc0-23429fd4e289",
+    "section": "Logical Reasoning",
+    "question_text": "In a secure corporate cryptographic encoding system, the word 'DEFENSE' is processed and written as 'FGHENUG'. Following this identical structural offset shift rule where alphabetical characters move exactly 2 places forward, how would the word 'VERDICT' be written?",
+    "options": {
+      "A": "XGTFKCV",
+      "B": "XGTFKDV",
+      "C": "XGSFKCV",
+      "D": "XHTFKCV"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "hard"
+  },
+  {
+    "id": "aa722397-d1bc-42b9-be7d-8351835e891a",
+    "section": "Logical Reasoning",
+    "question_text": "Premises: All elite litigation defense counsels are members of the Bar Council. No untrained legal interns are members of the Bar Council. Concluding from this that no untrained legal interns are elite litigation defense counsels is:",
+    "options": {
+      "A": "Logically valid because it follows a valid negative categorical syllogistic structure",
+      "B": "Invalid because it commits the formal fallacy of an undistributed middle term",
+      "C": "Invalid because the major term is illicitly distributed within the parameters",
+      "D": "Valid but unsound due to semantic variances in legal titles"
+    },
+    "correct_option": "(censored)",
     "difficulty": "medium"
   },
   {
@@ -1088,20 +1725,20 @@
       "C": "A matching control group of similar participants using a placebo toothpaste to isolate alternative factors",
       "D": "A secondary follow-up survey evaluating the regular flossing habits of the respondents"
     },
-    "correct_option": "C",
+    "correct_option": "(censored)",
     "difficulty": "easy"
   },
   {
-    "id": "e9258d98-d062-4d29-8c8d-d56fbfd74786",
+    "id": "00849b55-2431-46a0-86bd-47057e6910ba",
     "section": "Logical Reasoning",
-    "question_text": "Premises: All successful entrepreneurs are risk-takers. Some risk-takers are individuals who accumulate immense wealth. Concluding from this that some successful entrepreneurs accumulate immense wealth is logically vulnerable because:",
+    "question_text": "An economic analyst states: 'If a country has a high literacy rate, then it experiences a high standard of living.' If it is discovered that Country X has a high standard of living, concluding that Country X must therefore have a high literacy rate commits which formal logical fallacy?",
     "options": {
-      "A": "The premises do not guarantee an overlap or intersection between successful entrepreneurs and those risk-takers who accumulate wealth",
-      "B": "The argument is fully valid because all entrepreneurs are structurally risk-takers",
-      "C": "The conclusion is true because some risk-takers do not accumulate significant wealth",
-      "D": "The categorical layout commits a formal fallacy by utilizing four distinct middle terms"
+      "A": "The fallacy of affirming the consequent",
+      "B": "The fallacy of denying the antecedent",
+      "C": "The fallacy of circular reasoning by assuming the premise",
+      "D": "The fallacy of an undistributed middle term"
     },
-    "correct_option": "A",
+    "correct_option": "(censored)",
     "difficulty": "medium"
   },
   {
@@ -1114,8 +1751,21 @@
       "C": "The study completely omitted an evaluation of the students' separate physical education records",
       "D": "The intensive preparatory course was taught by highly experienced and vetted instructors"
     },
-    "correct_option": "A",
+    "correct_option": "(censored)",
     "difficulty": "easy"
+  },
+  {
+    "id": "e9258d98-d062-4d29-8c8d-d56fbfd74786",
+    "section": "Logical Reasoning",
+    "question_text": "Premises: All successful entrepreneurs are risk-takers. Some risk-takers are individuals who accumulate immense wealth. Concluding from this that some successful entrepreneurs accumulate immense wealth is logically vulnerable because:",
+    "options": {
+      "A": "The premises do not guarantee an overlap or intersection between successful entrepreneurs and those risk-takers who accumulate wealth",
+      "B": "The argument is fully valid because all entrepreneurs are structurally risk-takers",
+      "C": "The conclusion is true because some risk-takers do not accumulate significant wealth",
+      "D": "The categorical layout commits a formal fallacy by utilizing four distinct middle terms"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
   },
   {
     "id": "59ab2191-952f-40a0-a1bf-98cb2727db49",
@@ -1127,59 +1777,7 @@
       "C": "The premise itself is factually incorrect because rain never wets asphalt",
       "D": "The deduction serves as a perfect structural example of the *modus ponens* logical rule"
     },
-    "correct_option": "B",
-    "difficulty": "easy"
-  },
-  {
-    "id": "6044658c-aa4f-41a0-adc2-827a4e61039b",
-    "section": "Logical Reasoning",
-    "question_text": "Economic Rule: 'If a country has a high GDP, then its citizens enjoy a high standard of living.' Given that Country Y has a high GDP, what can be deduced with absolute logical certainty under the *modus ponens* rule?",
-    "options": {
-      "A": "Its citizens enjoy a high standard of living",
-      "B": "Country Y must also possess a high literacy rate parameter",
-      "C": "The economy commits the formal logical fallacy of affirming the consequent",
-      "D": "No conclusion is valid because standard economic assumptions are often deductive myths"
-    },
-    "correct_option": "A",
-    "difficulty": "easy"
-  },
-  {
-    "id": "8c81d38d-830c-4ba0-bf79-3b85bfeb6a76",
-    "section": "Logical Reasoning",
-    "question_text": "A consumer states: 'Every single time I have eaten peanuts over the last three months, I have developed a minor skin rash within an hour.' Concluding from these three specific instances that he is universally allergic to all nuts commits which type of logical reasoning error?",
-    "options": {
-      "A": "A valid and structurally sound deductive categorical conclusion",
-      "B": "An error based on an unweighted false analogy mapping across domains",
-      "C": "The logical fallacy of making a hasty inductive generalization based on a limited sample size",
-      "D": "A flawless application of the formal *modus tollens* conditional rule"
-    },
-    "correct_option": "C",
-    "difficulty": "medium"
-  },
-  {
-    "id": "0fde986d-8557-4095-ac34-6fae9dd1b46d",
-    "section": "Logical Reasoning",
-    "question_text": "Premises: All successful entrepreneurs are risk-takers. John is a risk-taker. Concluding from this that John is a successful entrepreneur commits which formal categorical syllogism flaw?",
-    "options": {
-      "A": "The fallacy of an illicit major term distribution",
-      "B": "The fallacy of the undistributed middle term, as 'risk-taker' is not distributed in either premise",
-      "C": "The formal fallacy of drawing a conclusion from two negative premises",
-      "D": "The fallacy of an illicit minor term assignment"
-    },
-    "correct_option": "B",
-    "difficulty": "medium"
-  },
-  {
-    "id": "4c55f5b3-edca-4f23-ab5b-5a68dc2cc585",
-    "section": "Logical Reasoning",
-    "question_text": "A health study tracking 1,000 adults found that individuals who drink green tea regularly have a 30% lower statistical risk of heart disease. The authors concluded that drinking green tea directly prevents heart disease. What is the primary logical error in this reasoning?",
-    "options": {
-      "A": "It assumes that a observed statistical correlation between two variables automatically establishes direct causation",
-      "B": "It assumes that the clinical study data was gathered using fraudulent survey sheets",
-      "C": "It treats green tea as the single exclusive compound that affects cardiovascular health metrics",
-      "D": "It assumes that all 1,000 adults in the tracking cohort possessed identical medical histories"
-    },
-    "correct_option": "A",
+    "correct_option": "(censored)",
     "difficulty": "easy"
   },
   {
@@ -1192,7 +1790,85 @@
       "C": "The deductive layout commits the formal fallacy of introducing four distinct terms",
       "D": "No definitive categorical conclusion can be supported due to distribution errors"
     },
-    "correct_option": "A",
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "6044658c-aa4f-41a0-adc2-827a4e61039b",
+    "section": "Logical Reasoning",
+    "question_text": "Economic Rule: 'If a country has a high GDP, then its citizens enjoy a high standard of living.' Given that Country Y has a high GDP, what can be deduced with absolute logical certainty under the *modus ponens* rule?",
+    "options": {
+      "A": "Its citizens enjoy a high standard of living",
+      "B": "Country Y must also possess a high literacy rate parameter",
+      "C": "The economy commits the formal logical fallacy of affirming the consequent",
+      "D": "No conclusion is valid because standard economic assumptions are often deductive myths"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "0fde986d-8557-4095-ac34-6fae9dd1b46d",
+    "section": "Logical Reasoning",
+    "question_text": "Premises: All successful entrepreneurs are risk-takers. John is a risk-taker. Concluding from this that John is a successful entrepreneur commits which formal categorical syllogism flaw?",
+    "options": {
+      "A": "The fallacy of an illicit major term distribution",
+      "B": "The fallacy of the undistributed middle term, as 'risk-taker' is not distributed in either premise",
+      "C": "The formal fallacy of drawing a conclusion from two negative premises",
+      "D": "The fallacy of an illicit minor term assignment"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "4c55f5b3-edca-4f23-ab5b-5a68dc2cc585",
+    "section": "Logical Reasoning",
+    "question_text": "A health study tracking 1,000 adults found that individuals who drink green tea regularly have a 30% lower statistical risk of heart disease. The authors concluded that drinking green tea directly prevents heart disease. What is the primary logical error in this reasoning?",
+    "options": {
+      "A": "It assumes that a observed statistical correlation between two variables automatically establishes direct causation",
+      "B": "It assumes that the clinical study data was gathered using fraudulent survey sheets",
+      "C": "It treats green tea as the single exclusive compound that affects cardiovascular health metrics",
+      "D": "It assumes that all 1,000 adults in the tracking cohort possessed identical medical histories"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "8c81d38d-830c-4ba0-bf79-3b85bfeb6a76",
+    "section": "Logical Reasoning",
+    "question_text": "A consumer states: 'Every single time I have eaten peanuts over the last three months, I have developed a minor skin rash within an hour.' Concluding from these three specific instances that he is universally allergic to all nuts commits which type of logical reasoning error?",
+    "options": {
+      "A": "A valid and structurally sound deductive categorical conclusion",
+      "B": "An error based on an unweighted false analogy mapping across domains",
+      "C": "The logical fallacy of making a hasty inductive generalization based on a limited sample size",
+      "D": "A flawless application of the formal *modus tollens* conditional rule"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "7e332b91-3e84-4d1b-bca0-3f155cf15492",
+    "section": "Logical Reasoning",
+    "question_text": "Premises: All mammals are warm-blooded animals. All tigers are mammals. Evaluating the structural validity of the conclusion 'All tigers are warm-blooded animals' yields that the argument is:",
+    "options": {
+      "A": "Logically valid under standard categorical syllogism rules",
+      "B": "Invalid because it commits the formal fallacy of four distinct terms",
+      "C": "Invalid because the major term is illicitly distributed in the conclusion",
+      "D": "Invalid because the minor term is undistributed within the premise space"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "8a739efb-2a94-4a43-b03c-9020ac41291e",
+    "section": "Logical Reasoning",
+    "question_text": "A clinical study found that adults who drink coffee daily have a 20% lower statistical risk of type 2 diabetes. The authors concluded that coffee compounds protect against diabetes. Which of the following findings, if true, most seriously weakens this conclusion?",
+    "options": {
+      "A": "Coffee beans contain complex antioxidants that prevent systemic cell damage in laboratory trials",
+      "B": "Individuals who drink coffee daily also tend to engage in significantly higher rates of regular physical exercise",
+      "C": "The epidemiological tracking project was conducted over a comprehensive historical window of 10 years",
+      "D": "The study participants were randomly selected using census registration profiles across urban hubs"
+    },
+    "correct_option": "(censored)",
     "difficulty": "medium"
   },
   {
@@ -1205,7 +1881,7 @@
       "C": "Without a comparative control group using a placebo shampoo, the reported reduction could be due to alternative factors",
       "D": "The claim is supported because 80% represents an absolute statistical consensus baseline"
     },
-    "correct_option": "C",
+    "correct_option": "(censored)",
     "difficulty": "medium"
   },
   {
@@ -1218,20 +1894,7 @@
       "C": "Obesity metrics are driven entirely by the consumption of carbonated sugary drinks",
       "D": "The state treasury intends to allocate the revenue exclusively to digital health registry systems"
     },
-    "correct_option": "A",
-    "difficulty": "easy"
-  },
-  {
-    "id": "7e332b91-3e84-4d1b-bca0-3f155cf15492",
-    "section": "Logical Reasoning",
-    "question_text": "Premises: All mammals are warm-blooded animals. All tigers are mammals. Evaluating the structural validity of the conclusion 'All tigers are warm-blooded animals' yields that the argument is:",
-    "options": {
-      "A": "Logically valid under standard categorical syllogism rules",
-      "B": "Invalid because it commits the formal fallacy of four distinct terms",
-      "C": "Invalid because the major term is illicitly distributed in the conclusion",
-      "D": "Invalid because the minor term is undistributed within the premise space"
-    },
-    "correct_option": "A",
+    "correct_option": "(censored)",
     "difficulty": "easy"
   },
   {
@@ -1244,34 +1907,8 @@
       "C": "The fallacy of the illicit process of the major term, as 'risk-takers' is distributed in the conclusion but not in the premise",
       "D": "The formal fallacy of introducing four distinct categorical terms"
     },
-    "correct_option": "C",
+    "correct_option": "(censored)",
     "difficulty": "hard"
-  },
-  {
-    "id": "8a739efb-2a94-4a43-b03c-9020ac41291e",
-    "section": "Logical Reasoning",
-    "question_text": "A clinical study found that adults who drink coffee daily have a 20% lower statistical risk of type 2 diabetes. The authors concluded that coffee compounds protect against diabetes. Which of the following findings, if true, most seriously weakens this conclusion?",
-    "options": {
-      "A": "Coffee beans contain complex antioxidants that prevent systemic cell damage in laboratory trials",
-      "B": "Individuals who drink coffee daily also tend to engage in significantly higher rates of regular physical exercise",
-      "C": "The epidemiological tracking project was conducted over a comprehensive historical window of 10 years",
-      "D": "The study participants were randomly selected using census registration profiles across urban hubs"
-    },
-    "correct_option": "B",
-    "difficulty": "medium"
-  },
-  {
-    "id": "e9984d03-2cd3-4926-af08-ede697fc37f8",
-    "section": "Logical Reasoning",
-    "question_text": "Conditional Rule: 'If a country has a high literacy rate, then it has a high standard of living.' If Country Z is discovered to have a high standard of living, concluding that Country Z must have a high literacy rate commits which logical error?",
-    "options": {
-      "A": "A valid application of the deductive *modus ponens* rule",
-      "B": "The formal logical fallacy of affirming the consequent",
-      "C": "The formal logical fallacy of denying the antecedent",
-      "D": "A valid application of the deductive *modus tollens* rule"
-    },
-    "correct_option": "B",
-    "difficulty": "easy"
   },
   {
     "id": "9b810221-22fc-412a-9567-ee72d23d4f2a",
@@ -1283,7 +1920,7 @@
       "C": "The argument commits the formal fallacy of affirming the consequent",
       "D": "No deduction is valid because macroeconomic variables are inherently non-deductive"
     },
-    "correct_option": "A",
+    "correct_option": "(censored)",
     "difficulty": "medium"
   },
   {
@@ -1296,7 +1933,7 @@
       "C": "It utilizes a non-randomized sampling pool that is too small to yield any percentage values",
       "D": "Both A and B represent valid criticisms of the causal conclusion"
     },
-    "correct_option": "D",
+    "correct_option": "(censored)",
     "difficulty": "medium"
   },
   {
@@ -1309,7 +1946,7 @@
       "C": "The categorical breakdown commits the formal fallacy of an illicit major term process",
       "D": "The conclusion does not necessarily follow because the premises do not force an overlap between entrepreneurs and those who fail ventures"
     },
-    "correct_option": "D",
+    "correct_option": "(censored)",
     "difficulty": "medium"
   },
   {
@@ -1322,8 +1959,34 @@
       "C": "Logically invalid due to an undistributed middle term",
       "D": "Structurally sound but logically invalid"
     },
-    "correct_option": "A",
+    "correct_option": "(censored)",
     "difficulty": "easy"
+  },
+  {
+    "id": "e9984d03-2cd3-4926-af08-ede697fc37f8",
+    "section": "Logical Reasoning",
+    "question_text": "Conditional Rule: 'If a country has a high literacy rate, then it has a high standard of living.' If Country Z is discovered to have a high standard of living, concluding that Country Z must have a high literacy rate commits which logical error?",
+    "options": {
+      "A": "A valid application of the deductive *modus ponens* rule",
+      "B": "The formal logical fallacy of affirming the consequent",
+      "C": "The formal logical fallacy of denying the antecedent",
+      "D": "A valid application of the deductive *modus tollens* rule"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "058fcf20-0e70-4786-9456-0e923a64f477",
+    "section": "Logical Reasoning",
+    "question_text": "Five friends are sitting in a straight row. A is situated to the immediate left of B, but is positioned to the right of C. D is situated to the right of E, but is located to the left of C. Based on these spatial constraints, who is sitting exactly in the middle position?",
+    "options": {
+      "A": "A",
+      "B": "B",
+      "C": "C",
+      "D": "D"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "hard"
   },
   {
     "id": "4cc42173-b263-4637-adfc-8808e2835c82",
@@ -1335,7 +1998,7 @@
       "C": "Some roses may fade quickly, representing a logical possibility but not a mandatory certainty",
       "D": "All flowers are plants that fade quickly"
     },
-    "correct_option": "C",
+    "correct_option": "(censored)",
     "difficulty": "hard"
   },
   {
@@ -1348,20 +2011,7 @@
       "C": "RCR IT",
       "D": "RCR JT"
     },
-    "correct_option": "A",
-    "difficulty": "hard"
-  },
-  {
-    "id": "058fcf20-0e70-4786-9456-0e923a64f477",
-    "section": "Logical Reasoning",
-    "question_text": "Five friends are sitting in a straight row. A is situated to the immediate left of B, but is positioned to the right of C. D is situated to the right of E, but is located to the left of C. Based on these spatial constraints, who is sitting exactly in the middle position?",
-    "options": {
-      "A": "A",
-      "B": "B",
-      "C": "C",
-      "D": "D"
-    },
-    "correct_option": "C",
+    "correct_option": "(censored)",
     "difficulty": "hard"
   },
   {
@@ -1374,7 +2024,7 @@
       "C": "Outcome Q was optional",
       "D": "No logical deduction can be supported from negative outcomes"
     },
-    "correct_option": "B",
+    "correct_option": "(censored)",
     "difficulty": "easy"
   },
   {
@@ -1387,7 +2037,7 @@
       "C": "The conclusion is invalid because the premises contain an implicit semantic contradiction",
       "D": "The conclusion is valid because all marine organisms can traverse aerial zones"
     },
-    "correct_option": "B",
+    "correct_option": "(censored)",
     "difficulty": "hard"
   },
   {
@@ -1400,7 +2050,7 @@
       "C": "It ignores the possibility that national identity cards could be lost or counterfeited by criminal actors",
       "D": "It treats a necessary condition for public safety as a sufficient condition for eliminating crime"
     },
-    "correct_option": "A",
+    "correct_option": "(censored)",
     "difficulty": "hard"
   },
   {
@@ -1413,20 +2063,7 @@
       "C": "Spicy food is the single, exclusive trigger that can cause heartburn within John's digestive system",
       "D": "John refuses to consume antacid medications following his evening meals"
     },
-    "correct_option": "B",
-    "difficulty": "hard"
-  },
-  {
-    "id": "e978057a-a4f6-4de0-b7d2-e2451ff1df97",
-    "section": "Logical Reasoning",
-    "question_text": "An analyst argues: 'All successful entrepreneurs are risk-takers. Therefore, if you take risks, you will achieve financial success as an entrepreneur.' This structural argument is vulnerable to criticism because it:",
-    "options": {
-      "A": "It assumes that all risk-takers must be successful entrepreneurs",
-      "B": "It confuses a necessary condition for entrepreneurship (risk-taking) with a sufficient condition for achieving financial success, resulting in an invalid deduction",
-      "C": "It relies entirely on vague, unquantifiable emotional terms like 'success' and 'wealth'",
-      "D": "It fails to consider that some cautious individuals might enter the agricultural sector"
-    },
-    "correct_option": "B",
+    "correct_option": "(censored)",
     "difficulty": "hard"
   },
   {
@@ -1439,7 +2076,7 @@
       "C": "Independent clinical trials reveal that pure caffeine isolates administered alone show zero statistical correlation with changes in type 2 diabetes risk profiles",
       "D": "The study cohort was controlled for age variances but omitted historical weight trends"
     },
-    "correct_option": "C",
+    "correct_option": "(censored)",
     "difficulty": "hard"
   },
   {
@@ -1452,20 +2089,20 @@
       "C": "A substantial portion of single-occupant vehicle drivers state that they commute via personal cars due to a complete lack of transit options",
       "D": "The survey respondents participated voluntarily, introducing a slight statistical variance compared to a randomized census study"
     },
-    "correct_option": "A",
+    "correct_option": "(censored)",
     "difficulty": "hard"
   },
   {
-    "id": "465d8af2-8e44-40e9-817b-064182987be4",
+    "id": "e978057a-a4f6-4de0-b7d2-e2451ff1df97",
     "section": "Logical Reasoning",
-    "question_text": "Proponents argue that a tax on sugary drinks is justified because it improves public health by reducing consumption. Which of the following statements, if true, provides the strongest logical support for this argument?",
+    "question_text": "An analyst argues: 'All successful entrepreneurs are risk-takers. Therefore, if you take risks, you will achieve financial success as an entrepreneur.' This structural argument is vulnerable to criticism because it:",
     "options": {
-      "A": "Low-income households allocate a larger share of their monthly disposable income to food purchases than high-income families",
-      "B": "Empirical data from other regions shows that a tax on sugary drinks directly leads to a significant decrease in long-term obesity and related health conditions",
-      "C": "Sugary drinks are recognized by international health organizations as a major driver of obesity metrics",
-      "D": "The implementation of the tax will reduce the total commercial consumption of carbonated soft drinks by 20%"
+      "A": "It assumes that all risk-takers must be successful entrepreneurs",
+      "B": "It confuses a necessary condition for entrepreneurship (risk-taking) with a sufficient condition for achieving financial success, resulting in an invalid deduction",
+      "C": "It relies entirely on vague, unquantifiable emotional terms like 'success' and 'wealth'",
+      "D": "It fails to consider that some cautious individuals might enter the agricultural sector"
     },
-    "correct_option": "B",
+    "correct_option": "(censored)",
     "difficulty": "hard"
   },
   {
@@ -1478,20 +2115,7 @@
       "C": "Students who choose to meditate possess a significantly higher baseline intelligence quotient prior to joining any study",
       "D": "Mandatory structural sessions are less effective than entirely voluntary extracurricular routines"
     },
-    "correct_option": "B",
-    "difficulty": "hard"
-  },
-  {
-    "id": "0fb0a4ec-fa68-4761-86ec-1a3f8445817b",
-    "section": "Logical Reasoning",
-    "question_text": "An argument claims that a new strict speeding law caused a drop in traffic accidents. Which of the following findings, if true, would most severely weaken this argument?",
-    "options": {
-      "A": "The total number of speeding citations issued by municipal police rose by 20% over the same period",
-      "B": "The city concurrently launched a massive public transportation campaign and expanded subway lines during the same period, causing a significant drop in total personal cars on the road",
-      "C": "The text of the traffic law was widely shared on digital platforms prior to official enforcement",
-      "D": "The drop in localized traffic accidents aligns perfectly with a broader national trend across cities without speed laws"
-    },
-    "correct_option": "B",
+    "correct_option": "(censored)",
     "difficulty": "hard"
   },
   {
@@ -1504,7 +2128,20 @@
       "C": "Some successful entrepreneurs choose to invest their wealth in volatile green assets",
       "D": "All risk-takers are individuals who are cautious"
     },
-    "correct_option": "A",
+    "correct_option": "(censored)",
+    "difficulty": "hard"
+  },
+  {
+    "id": "0fb0a4ec-fa68-4761-86ec-1a3f8445817b",
+    "section": "Logical Reasoning",
+    "question_text": "An argument claims that a new strict speeding law caused a drop in traffic accidents. Which of the following findings, if true, would most severely weaken this argument?",
+    "options": {
+      "A": "The total number of speeding citations issued by municipal police rose by 20% over the same period",
+      "B": "The city concurrently launched a massive public transportation campaign and expanded subway lines during the same period, causing a significant drop in total personal cars on the road",
+      "C": "The text of the traffic law was widely shared on digital platforms prior to official enforcement",
+      "D": "The drop in localized traffic accidents aligns perfectly with a broader national trend across cities without speed laws"
+    },
+    "correct_option": "(censored)",
     "difficulty": "hard"
   },
   {
@@ -1517,7 +2154,20 @@
       "C": "Brand X toothpaste is the single consumer brand that incorporates fluoride ingredients",
       "D": "Survey tracking is inherently superior to clinical laboratory dental evaluations"
     },
-    "correct_option": "B",
+    "correct_option": "(censored)",
+    "difficulty": "hard"
+  },
+  {
+    "id": "465d8af2-8e44-40e9-817b-064182987be4",
+    "section": "Logical Reasoning",
+    "question_text": "Proponents argue that a tax on sugary drinks is justified because it improves public health by reducing consumption. Which of the following statements, if true, provides the strongest logical support for this argument?",
+    "options": {
+      "A": "Low-income households allocate a larger share of their monthly disposable income to food purchases than high-income families",
+      "B": "Empirical data from other regions shows that a tax on sugary drinks directly leads to a significant decrease in long-term obesity and related health conditions",
+      "C": "Sugary drinks are recognized by international health organizations as a major driver of obesity metrics",
+      "D": "The implementation of the tax will reduce the total commercial consumption of carbonated soft drinks by 20%"
+    },
+    "correct_option": "(censored)",
     "difficulty": "hard"
   },
   {
@@ -1530,7 +2180,7 @@
       "C": "The statistical correlation observed between coffee consumption and lower Parkinson's risk is driven by direct causation rather than an unmeasured lifestyle factor",
       "D": "Women will face an increased risk of neurological disorders if they replicate this consumption pattern"
     },
-    "correct_option": "C",
+    "correct_option": "(censored)",
     "difficulty": "hard"
   },
   {
@@ -1543,7 +2193,7 @@
       "C": "It utilizes highly emotional language to obscure a basic mathematical error in its survey accounting",
       "D": "It assumes that because public transit is beneficial for urban centers, it must be equally useful for interplanetary travel"
     },
-    "correct_option": "B",
+    "correct_option": "(censored)",
     "difficulty": "hard"
   },
   {
@@ -1556,7 +2206,7 @@
       "C": "The argument is valid because it serves as an example of a formal syllogistic contradiction",
       "D": "The argument is invalid because it assumes that GDP is the single economic index that defines a country's status"
     },
-    "correct_option": "B",
+    "correct_option": "(censored)",
     "difficulty": "hard"
   },
   {
@@ -1569,21 +2219,21 @@
       "C": "The argument is invalid because it commits the formal fallacy of affirming the consequent",
       "D": "The conclusion is invalid because it is possible for an animal to be a mammal without possessing lungs"
     },
-    "correct_option": "A",
+    "correct_option": "(censored)",
     "difficulty": "hard"
   },
   {
-    "id": "ffeb863f-c7f5-440c-86bd-ac1127568871",
+    "id": "91cb16b7-a809-4933-8b0a-07ac6f850563",
     "section": "Logical Reasoning",
-    "question_text": "Premises: All lawyers are graduates. Some graduates are judges. Therefore, some lawyers are judges. This argument is:",
+    "question_text": "Family Constraints: Amit is the father of Bina. Bina is the sister of Chetan. Chetan is the husband of Deepa. Deepa is the daughter of Emily. Based on these constraints, how is Emily related to Amit?",
     "options": {
-      "A": "Valid",
-      "B": "Invalid—the conclusion does not necessarily follow from the premises",
-      "C": "Valid only if all graduates are lawyers",
-      "D": "Invalid because it contains a false premise"
+      "A": "Wife",
+      "B": "Mother-in-law",
+      "C": "Sister-in-law",
+      "D": "Emily is Chetan's mother-in-law, meaning she is the co-in-law of Amit (no standard single direct term)"
     },
-    "correct_option": "B",
-    "difficulty": "easy"
+    "correct_option": "(censored)",
+    "difficulty": "hard"
   },
   {
     "id": "7a5614cb-d33c-41ff-987e-7742c23d45b0",
@@ -1595,7 +2245,7 @@
       "C": "Some students prefer tea over coffee for exam preparation",
       "D": "Coffee consumption has increased globally over the last decade"
     },
-    "correct_option": "B",
+    "correct_option": "(censored)",
     "difficulty": "medium"
   },
   {
@@ -1608,7 +2258,7 @@
       "C": "The average retail consumer demonstrates a natural psychological preference for electric drivetrains over fossil-fuel alternatives",
       "D": "Global automobile manufacturers intend to fully terminate all manufacturing operations prior to the 2030 deadline"
     },
-    "correct_option": "B",
+    "correct_option": "(censored)",
     "difficulty": "hard"
   },
   {
@@ -1621,111 +2271,20 @@
       "C": "Chef : Recipe",
       "D": "Lawyer : Court"
     },
-    "correct_option": "A",
+    "correct_option": "(censored)",
     "difficulty": "medium"
   },
   {
-    "id": "91cb16b7-a809-4933-8b0a-07ac6f850563",
+    "id": "ffeb863f-c7f5-440c-86bd-ac1127568871",
     "section": "Logical Reasoning",
-    "question_text": "Family Constraints: Amit is the father of Bina. Bina is the sister of Chetan. Chetan is the husband of Deepa. Deepa is the daughter of Emily. Based on these constraints, how is Emily related to Amit?",
+    "question_text": "Premises: All lawyers are graduates. Some graduates are judges. Therefore, some lawyers are judges. This argument is:",
     "options": {
-      "A": "Wife",
-      "B": "Mother-in-law",
-      "C": "Sister-in-law",
-      "D": "Emily is Chetan's mother-in-law, meaning she is the co-in-law of Amit (no standard single direct term)"
+      "A": "Valid",
+      "B": "Invalid—the conclusion does not necessarily follow from the premises",
+      "C": "Valid only if all graduates are lawyers",
+      "D": "Invalid because it contains a false premise"
     },
-    "correct_option": "D",
-    "difficulty": "hard"
-  },
-  {
-    "id": "59b33b2d-301f-49e1-b8af-a7294738272c",
-    "section": "Quantitative Techniques",
-    "question_text": "Milk and water are mixed inside a container in a strict volume ratio of 3:1. If the total volume of the liquid mixture is exactly 20 litres, what is the absolute quantity of milk present in the container?",
-    "options": {
-      "A": "5 litres",
-      "B": "10 litres",
-      "C": "15 litres",
-      "D": "12 litres"
-    },
-    "correct_option": "C",
-    "difficulty": "easy"
-  },
-  {
-    "id": "03b1c9f2-46c4-421f-825d-76f845b4ee62",
-    "section": "Quantitative Techniques",
-    "question_text": "Calculate the absolute value representing exactly 25% of a base parameter value of 200.",
-    "options": {
-      "A": "25",
-      "B": "40",
-      "C": "50",
-      "D": "75"
-    },
-    "correct_option": "C",
-    "difficulty": "easy"
-  },
-  {
-    "id": "cba62f7c-e67c-4894-a35a-f1f5254c9257",
-    "section": "Quantitative Techniques",
-    "question_text": "Worker A can finish a specific task in 10 days, while Worker B can finish the identical task independently in 15 days. How many days will they require to complete the task if they work together?",
-    "options": {
-      "A": "5",
-      "B": "6",
-      "C": "7",
-      "D": "8"
-    },
-    "correct_option": "B",
-    "difficulty": "easy"
-  },
-  {
-    "id": "8ea4ecc5-639f-4ca1-b0d7-f9c1318bbf04",
-    "section": "Quantitative Techniques",
-    "question_text": "A train with a constant structural length of 200 meters completely crosses a static platform measuring 400 meters in length in exactly 30 seconds. What is the speed of the train in km/h?",
-    "options": {
-      "A": "72",
-      "B": "60",
-      "C": "54",
-      "D": "48"
-    },
-    "correct_option": "A",
-    "difficulty": "medium"
-  },
-  {
-    "id": "1280509a-969f-4d58-a344-b1808b2009c9",
-    "section": "Quantitative Techniques",
-    "question_text": "The structural ratio of boys to girls inside a classroom is 3:2. If the total number of students in the room is exactly 40, how many boys are present?",
-    "options": {
-      "A": "16",
-      "B": "20",
-      "C": "24",
-      "D": "30"
-    },
-    "correct_option": "C",
-    "difficulty": "easy"
-  },
-  {
-    "id": "0f5c1210-7af7-4375-a894-d8f394d21473",
-    "section": "Quantitative Techniques",
-    "question_text": "The mathematical average of 6 numbers is exactly 15. If one number is removed from the dataset, the average of the remaining 5 numbers becomes 14. What was the value of the removed number?",
-    "options": {
-      "A": "20",
-      "B": "18",
-      "C": "16",
-      "D": "14"
-    },
-    "correct_option": "A",
-    "difficulty": "easy"
-  },
-  {
-    "id": "8d5b0878-a0cb-468d-98a3-9f8ec9df1b99",
-    "section": "Quantitative Techniques",
-    "question_text": "A shopkeeper sells an article at a profit margin of exactly 25% computed over the cost price. If the cost price of the item is Rs. 800, what is its final selling price?",
-    "options": {
-      "A": "Rs. 1000",
-      "B": "Rs. 960",
-      "C": "Rs. 1020",
-      "D": "Rs. 1040"
-    },
-    "correct_option": "A",
+    "correct_option": "(censored)",
     "difficulty": "easy"
   },
   {
@@ -1738,20 +2297,20 @@
       "C": "25",
       "D": "30"
     },
-    "correct_option": "B",
+    "correct_option": "(censored)",
     "difficulty": "medium"
   },
   {
-    "id": "dda826e2-0a75-448a-ab7e-5a64a7e3e0ae",
+    "id": "59b33b2d-301f-49e1-b8af-a7294738272c",
     "section": "Quantitative Techniques",
-    "question_text": "Find the sum of the first 20 natural numbers using standard arithmetic progression summation.",
+    "question_text": "Milk and water are mixed inside a container in a strict volume ratio of 3:1. If the total volume of the liquid mixture is exactly 20 litres, what is the absolute quantity of milk present in the container?",
     "options": {
-      "A": "190",
-      "B": "200",
-      "C": "210",
-      "D": "220"
+      "A": "5 litres",
+      "B": "10 litres",
+      "C": "15 litres",
+      "D": "12 litres"
     },
-    "correct_option": "C",
+    "correct_option": "(censored)",
     "difficulty": "easy"
   },
   {
@@ -1764,7 +2323,98 @@
       "C": "Rs. 1500",
       "D": "Rs. 800"
     },
-    "correct_option": "B",
+    "correct_option": "(censored)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "03b1c9f2-46c4-421f-825d-76f845b4ee62",
+    "section": "Quantitative Techniques",
+    "question_text": "Calculate the absolute value representing exactly 25% of a base parameter value of 200.",
+    "options": {
+      "A": "25",
+      "B": "40",
+      "C": "50",
+      "D": "75"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "cba62f7c-e67c-4894-a35a-f1f5254c9257",
+    "section": "Quantitative Techniques",
+    "question_text": "Worker A can finish a specific task in 10 days, while Worker B can finish the identical task independently in 15 days. How many days will they require to complete the task if they work together?",
+    "options": {
+      "A": "5",
+      "B": "6",
+      "C": "7",
+      "D": "8"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "8ea4ecc5-639f-4ca1-b0d7-f9c1318bbf04",
+    "section": "Quantitative Techniques",
+    "question_text": "A train with a constant structural length of 200 meters completely crosses a static platform measuring 400 meters in length in exactly 30 seconds. What is the speed of the train in km/h?",
+    "options": {
+      "A": "72",
+      "B": "60",
+      "C": "54",
+      "D": "48"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "1280509a-969f-4d58-a344-b1808b2009c9",
+    "section": "Quantitative Techniques",
+    "question_text": "The structural ratio of boys to girls inside a classroom is 3:2. If the total number of students in the room is exactly 40, how many boys are present?",
+    "options": {
+      "A": "16",
+      "B": "20",
+      "C": "24",
+      "D": "30"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "0f5c1210-7af7-4375-a894-d8f394d21473",
+    "section": "Quantitative Techniques",
+    "question_text": "The mathematical average of 6 numbers is exactly 15. If one number is removed from the dataset, the average of the remaining 5 numbers becomes 14. What was the value of the removed number?",
+    "options": {
+      "A": "20",
+      "B": "18",
+      "C": "16",
+      "D": "14"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "8d5b0878-a0cb-468d-98a3-9f8ec9df1b99",
+    "section": "Quantitative Techniques",
+    "question_text": "A shopkeeper sells an article at a profit margin of exactly 25% computed over the cost price. If the cost price of the item is Rs. 800, what is its final selling price?",
+    "options": {
+      "A": "Rs. 1000",
+      "B": "Rs. 960",
+      "C": "Rs. 1020",
+      "D": "Rs. 1040"
+    },
+    "correct_option": "(censored)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "dda826e2-0a75-448a-ab7e-5a64a7e3e0ae",
+    "section": "Quantitative Techniques",
+    "question_text": "Find the sum of the first 20 natural numbers using standard arithmetic progression summation.",
+    "options": {
+      "A": "190",
+      "B": "200",
+      "C": "210",
+      "D": "220"
+    },
+    "correct_option": "(censored)",
     "difficulty": "easy"
   }
 ]
