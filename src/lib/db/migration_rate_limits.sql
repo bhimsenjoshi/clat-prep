@@ -10,6 +10,8 @@ create table if not exists public.rate_limits (
 -- Enable RLS but allow service_role only
 alter table public.rate_limits enable row level security;
 
+-- Drop existing policy first (idempotent), then create
+drop policy if exists "Service role manages rate limits" on public.rate_limits;
 create policy "Service role manages rate limits"
   on public.rate_limits
   using (true)

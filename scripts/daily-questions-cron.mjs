@@ -50,7 +50,7 @@ for (const envPath of envPaths) {
   }
 }
 
-const SECTIONS = ['English Language', 'Current Affairs Including General Knowledge', 'Legal Reasoning', 'Logical Reasoning'];
+const SECTIONS = ['English Language', 'Current Affairs Including General Knowledge', 'Legal Reasoning', 'Logical Reasoning', 'Quantitative Techniques'];
 const QS_PER_PASSAGE = 6;
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
@@ -327,6 +327,44 @@ Return JSON with:
   - "passage": { "title": "Short title", "content": "The passage text", "source": "Source or 'Original for CLATly'", "difficulty": "easy|medium|hard" }
   - "questions": array of ${QS_PER_PASSAGE} objects (same format as above — with explanation as structured object)`,
 
+    'Quantitative Techniques': `You are a CLAT Quantitative Techniques content creator. Generate exactly 1 data interpretation passage with ${QS_PER_PASSAGE} questions. The passage must present numerical data embedded in narrative prose (NOT a raw table) with 3-4 categories and 2-3 relationship constraints. Data MUST be clean whole numbers.
+
+REQUIRED STRUCTURE — each passage must follow this pattern:
+1. Declare a TOTAL figure (e.g., "total production = 20,000 units")
+2. Assign percentages/ratios for first 1-2 categories (e.g., "ICE = 40% of total")
+3. Distribute remaining volume across 2-3 other categories using a RATIO or algebraic relationship (e.g., "EV:HEV = 3:2", or "P2P = Consumer Durable - ₹50 Cr")
+4. Apply a condition, filter, or loss rate to each category (e.g., "5% of Metro Core bandwidth encounters data drop anomalies")
+5. Questions must require: percentage change, compound ratios, weighted averages, difference-based inference, or multi-step algebra
+
+PASSAGE STYLE — narrative prose embedding all data relationships, e.g.:
+"A prominent Indian automotive manufacturing ecosystem tracked its multi-tier vehicle dispatches across three primary variants... The cumulative production run for the financial cycle totaled exactly 20,000 units. The structural ratio of total EV units to total HEV units deployed across all matrices was firmly established at 3:2."
+
+GOOD EXAMPLE TOPICS (use these):
+- EV/HEV/ICE production with distribution channels
+- Telecom bandwidth by node type with drop rates
+- Banking loan portfolio segments with NPA rates
+- Energy grid generation by source with transmission losses
+- Agricultural inventory by crop type with quality rejections
+- Student enrollment by stream with pass/fail rates
+- Budget allocation across departments with utilization rates
+
+CRITICAL: NEVER copy-paste a data value directly as question_text. Every question must require computation — not a direct read.
+
+EXPLANATION FORMAT — Each explanation MUST be structured as follows:
+  "explanation": {
+    "correct_answer_rationale": "Show the exact step-by-step calculation. Include formulas and intermediate values.",
+    "incorrect_option_analysis": {
+      "A": "Why option A is wrong — identify the computational mistake or data misinterpretation.",
+      "B": "Why option B is wrong — identify the computational mistake or data misinterpretation.",
+      "C": "Why option C is wrong — identify the computational mistake or data misinterpretation.",
+      "D": "Why option D is wrong — identify the computational mistake or data misinterpretation."
+    },
+    "wrong_answer_guidance": "If the student answered incorrectly, a 1-2 sentence pointer showing the correct formula or which data to use."
+  }
+
+Return JSON with:
+  - "passage": { "title": "Data set title", "content": "Narrative passage embedding all data relationships", "source": "Adapted from CLAT-style data set", "difficulty": "easy|medium|hard" }
+  - "questions": array of ${QS_PER_PASSAGE} objects (same format as above — with explanation as structured object)`,
   };
   return prompts[section] || prompts['English Language'];
 }
