@@ -19,6 +19,10 @@ interface SectionCardProps {
   children: ReactNode;
   /** Optional className override for the card wrapper */
   className?: string;
+  /** Optional href — wraps the entire card body as a clickable link */
+  href?: string;
+  /** Optional click handler on the card body */
+  onClick?: () => void;
 }
 
 export default function SectionCard({
@@ -30,6 +34,8 @@ export default function SectionCard({
   variant = 'default',
   children,
   className = '',
+  href,
+  onClick,
 }: SectionCardProps) {
   const [expanded, setExpanded] = useState(defaultExpanded);
   const showBody = !collapsible || expanded;
@@ -80,11 +86,28 @@ export default function SectionCard({
       </div>
 
       {/* ─── Body ─── */}
-      {showBody && (
-        <div className="px-5 md:px-6 pb-5 md:pb-6">
-          {children}
-        </div>
-      )}
+      {showBody && (() => {
+        const body = (
+          <div className="px-5 md:px-6 pb-5 md:pb-6">
+            {children}
+          </div>
+        );
+        if (href) {
+          return (
+            <a href={href} className="block no-underline hover:opacity-90 transition-opacity">
+              {body}
+            </a>
+          );
+        }
+        if (onClick) {
+          return (
+            <div onClick={onClick} className="cursor-pointer hover:opacity-90 transition-opacity">
+              {body}
+            </div>
+          );
+        }
+        return body;
+      })()}
     </div>
   );
 }

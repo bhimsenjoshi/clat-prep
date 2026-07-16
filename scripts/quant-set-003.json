@@ -1,0 +1,89 @@
+{
+  "id": "qt-set-003-fintech",
+  "section": "Quantitative Techniques",
+  "title": "Digital Banking Lending Portfolios",
+  "source": "Neo-Banking Credit Risk Registry",
+  "content": "A digital lending startup extends short-term lines of credit through Micro loans, Consumer Durable financing, and Peer-to-Peer (P2P) consolidation models. The aggregate outstanding portfolio assets value is ₹500 Crores. Micro loans comprise precisely 30% of the aggregate value. The remaining active portfolio space is distributed between Consumer Durable assets and P2P lines. The volume of outstanding P2P consolidation assets is exactly ₹50 Crores less than the Consumer Durable line value. The annualized non-performing asset (NPA) percentages tracking systemic default are identified as follows: 6% for Micro loans, 4% for Consumer Durable financing, and 10% for P2P models.",
+  "difficulty": "medium",
+  "created_at": "2026-07-16T10:10:00.000000+00:00",
+  "practice_questions": [
+    {
+      "id": "qt-q301",
+      "tags": ["algebra", "finance"],
+      "marks": 1,
+      "topic": "Data Interpretation",
+      "source": "daily",
+      "options": {"A": "₹150 Crores", "B": "₹200 Crores", "C": "₹250 Crores", "D": "₹300 Crores"},
+      "question_text": "Determine the exact value of the outstanding asset pool allocated specifically to the Consumer Durable financing vertical within the neo-banking enterprise.",
+      "correct_option": "B",
+      "negative_marks": 0.25,
+      "question_number": 1,
+      "explanation": "{\"correct_answer_rationale\":\"Total outstanding = 500 Crores. Micro loans = 30% of 500 = 150 Crores. Balance = 350 Crores. Equation: Consumer Durable (X) + P2P (X - 50) = 350 => 2X = 400 => X = 200 Crores. P2P holds 150 Crores.\",\"incorrect_option_analysis\":{\"A\":\"This represents the balance configuration of the P2P or Micro segment.\",\"C\":\"Assumes a plain division ignoring parameters.\",\"D\":\"Exceeds the parameter boundaries for the remaining matrix.\"},\"wrong_answer_guidance\":\"Deduct the Micro loan values from the asset base prior to constructing the variable matrix solve.\"}"
+    },
+    {
+      "id": "qt-q302",
+      "tags": ["percentages"],
+      "marks": 1,
+      "topic": "Data Interpretation",
+      "source": "daily",
+      "options": {"A": "₹15 Crores", "B": "₹24 Crores", "C": "₹32 Crores", "D": "₹40 Crores"},
+      "question_text": "Calculate the cumulative value of Non-Performing Assets (NPAs) across all three lending verticals combined.",
+      "correct_option": "C",
+      "negative_marks": 0.25,
+      "question_number": 2,
+      "explanation": "{\"correct_answer_rationale\":\"Micro loan NPA = 6% of 150 = 9 Crores. Consumer Durable NPA = 4% of 200 = 8 Crores. P2P NPA = 10% of 150 = 15 Crores. Total NPAs = 9 + 8 + 15 = 32 Crores.\",\"incorrect_option_analysis\":{\"A\":\"Matches only the isolated P2P vertical performance array.\",\"B\":\"Calculation mismatch error formatting structural values.\",\"D\":\"Derived from an unweighted summation error across matrices.\"},\"wrong_answer_guidance\":\"Calculate absolute default metrics for each individual vertical systematically before combining.\"}"
+    },
+    {
+      "id": "qt-q303",
+      "tags": ["ratios"],
+      "marks": 1,
+      "topic": "Data Interpretation",
+      "source": "daily",
+      "options": {"A": "3:4", "B": "4:3", "C": "1:1", "D": "5:3"},
+      "question_text": "What is the ratio of the asset value allocated to the Micro loans vertical to the asset value allocated to the P2P consolidation vertical?",
+      "correct_option": "C",
+      "negative_marks": 0.25,
+      "question_number": 3,
+      "explanation": "{\"correct_answer_rationale\":\"Micro loan allocation = 150 Crores. P2P consolidation allocation = 150 Crores. Ratio = 150 : 150 = 1 : 1.\",\"incorrect_option_analysis\":{\"A\":\"Compares Micro loans to the Consumer Durable sector allocations.\",\"B\":\"Inverts the relationship mapping tracking matrices.\",\"D\":\"Erroneous calculation split tracking logic.\"},\"wrong_answer_guidance\":\"Establish the absolute allocations for both segments explicitly to find the proportional relation.\"}"
+    },
+    {
+      "id": "qt-q304",
+      "tags": ["percentages"],
+      "marks": 1,
+      "topic": "Data Interpretation",
+      "source": "daily",
+      "options": {"A": "5.60%", "B": "6.40%", "C": "6.67%", "D": "8.00%"},
+      "question_text": "What is the weighted average NPA percentage across the entire ₹500 Crore lending portfolio of the startup?",
+      "correct_option": "B",
+      "negative_marks": 0.25,
+      "question_number": 4,
+      "explanation": "{\"correct_answer_rationale\":\"Total NPA = 32 Crores. Total base = 500 Crores. Weighted percentage = (32 / 500) * 100 = 6.4%.\",\"incorrect_option_analysis\":{\"A\":\"Computational variance flaw tracking defaults.\",\"C\":\"Simple arithmetic average error: (6 + 4 + 10) / 3 = 6.67%.\",\"D\":\"Unweighted calculation overshoot baseline.\"},\"wrong_answer_guidance\":\"Avoid taking a direct unweighted mean of percentages; solve explicitly with total value weights.\"}"
+    },
+    {
+      "id": "qt-q305",
+      "tags": ["percentages"],
+      "marks": 1,
+      "topic": "Data Interpretation",
+      "source": "daily",
+      "options": {"A": "₹45 Crores", "B": "₹57 Crores", "C": "₹65 Crores", "D": "₹75 Crores"},
+      "question_text": "What is the absolute difference between the total performing (non-defaulting) assets in the Consumer Durable financing vertical and the total performing assets in the P2P consolidation vertical?",
+      "correct_option": "B",
+      "negative_marks": 0.25,
+      "question_number": 5,
+      "explanation": "{\"correct_answer_rationale\":\"Consumer Durable performing = 200 - 8 = 192 Crores. P2P performing = 150 - 15 = 135 Crores. Difference = 192 - 135 = 57 Crores.\",\"incorrect_option_analysis\":{\"A\":\"Compares basic configuration arrays before subtracting defaults.\",\"C\":\"Subtraction arithmetic error.\",\"D\":\"Miscalculates internal parameter boundaries.\"},\"wrong_answer_guidance\":\"Deduct absolute defaults from each target vertical before taking their performance difference.\"}"
+    },
+    {
+      "id": "qt-q306",
+      "tags": ["percentages"],
+      "marks": 1,
+      "topic": "Data Interpretation",
+      "source": "daily",
+      "options": {"A": "15.00%", "B": "20.00%", "C": "25.00%", "D": "33.33%"},
+      "question_text": "If the startup decides to write off ₹50 Crores of P2P assets as bad debt next quarter, what percentage of the remaining total portfolio will consist of the Micro loans vertical?",
+      "correct_option": "D",
+      "negative_marks": 0.25,
+      "question_number": 6,
+      "explanation": "{\"correct_answer_rationale\":\"Original portfolio shrinks by 50 Crores to 450 Crores. Micro loans fixed at 150 Crores. New proportion = (150 / 450) * 100 = 33.33%.\",\"incorrect_option_analysis\":{\"A\":\"Misaligned ratio tracking.\",\"B\":\"Calculation oversight using static metrics parameters.\",\"C\":\"Reduces the wrong subset components array.\"},\"wrong_answer_guidance\":\"Recalculate your percentage division using the newly minimized master denominator base of 450 Crores.\"}"
+    }
+  ]
+}

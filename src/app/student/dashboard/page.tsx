@@ -573,7 +573,7 @@ export default function StudentDashboard() {
         {/* ════════════════════════════════════════════ */}
         {/* #2 — STREAK + TODAY STATS                     */}
         {/* ════════════════════════════════════════════ */}
-        <SectionCard title="Today's Stats" icon="📊" collapsible defaultExpanded={false}>
+        <SectionCard title="Today's Stats" icon="📊" collapsible defaultExpanded={false} href="/student/analytics">
           <div className="grid grid-cols-3 md:grid-cols-6 gap-2">
           <div className="bg-card border border-theme rounded-lg p-2 text-center">
             <div className="text-lg mb-0.5">{streak > 0 ? '🔥' : '❄️'}</div>

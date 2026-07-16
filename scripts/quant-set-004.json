@@ -1,0 +1,89 @@
+{
+  "id": "qt-set-004-renewables",
+  "section": "Quantitative Techniques",
+  "title": "Clean Energy Grid Distribution Matrix",
+  "source": "Central Electricity Regulatory Commission Data",
+  "content": "An integrated power transmission enterprise monitors generation across four primary installations: Solar Arrays, Wind Farms, Biomass Plants, and Hydroelectric Stations. The composite daily generation capacity stands at 16,000 Megawatt-hours (MWh). Hydroelectric generation represents 20% of this total capacity. The remaining volume of daily generation is distributed among Solar, Wind, and Biomass installations in the absolute ratio of 5:2:1 respectively. The operational internal consumption costs (transmission losses) within the facilities run at 4% for Solar Arrays, 5% for Wind Farms, 8% for Biomass Plants, and 2.5% for Hydroelectric Stations.",
+  "difficulty": "medium",
+  "created_at": "2026-07-16T10:15:00.000000+00:00",
+  "practice_questions": [
+    {
+      "id": "qt-q401",
+      "tags": ["ratios", "averages"],
+      "marks": 1,
+      "topic": "Data Interpretation",
+      "source": "daily",
+      "options": {"A": "5.00:1.00", "B": "5.21:1.00", "C": "8.00:3.00", "D": "10.00:3.00"},
+      "question_text": "What is the exact ratio of the net daily electricity generation available for active transmission (after deducting internal consumption losses) from Solar Arrays to that of Biomass Plants?",
+      "correct_option": "B",
+      "negative_marks": 0.25,
+      "question_number": 1,
+      "explanation": "{\"correct_answer_rationale\":\"Total = 16,000 MWh. Hydro = 20% = 3,200 MWh. Balance = 12,800 MWh. Split via 5:2:1 => Solar = 8,000 MWh, Wind = 3,200 MWh, Biomass = 1,600 MWh. Net Solar = 8,000 * 0.96 = 7,680 MWh. Net Biomass = 1,600 * 0.92 = 1,472 MWh. Ratio = 7,680 : 1,472 = 5.21:1.\",\"incorrect_option_analysis\":{\"A\":\"Matches gross metrics baseline ignoring distinct loss parameters.\",\"C\":\"Calculation error factoring Hydro metrics.\",\"D\":\"Rounding parameter shift variance anomaly.\"},\"wrong_answer_guidance\":\"Deduct internal consumption losses explicitly before matching final ratio frameworks.\"}"
+    },
+    {
+      "id": "qt-q402",
+      "tags": ["percentages"],
+      "marks": 1,
+      "topic": "Data Interpretation",
+      "source": "daily",
+      "options": {"A": "320 MWh", "B": "440 MWh", "C": "512 MWh", "D": "688 MWh"},
+      "question_text": "What is the cumulative daily transmission loss (internal consumption) in Megawatt-hours (MWh) across all four clean energy generating installations?",
+      "correct_option": "D",
+      "negative_marks": 0.25,
+      "question_number": 2,
+      "explanation": "{\"correct_answer_rationale\":\"Solar loss = 4% of 8,000 = 320 MWh; Wind loss = 5% of 3,200 = 160 MWh; Biomass loss = 8% of 1,600 = 128 MWh; Hydro loss = 2.5% of 3,200 = 80 MWh. Total = 320+160+128+80 = 688 MWh.\",\"incorrect_option_analysis\":{\"A\":\"Isolates only the Solar network output parameter.\",\"B\":\"Calculation omission mistake mapping node indices.\",\"C\":\"Combines selective indices ignoring Hydro.\"},\"wrong_answer_guidance\":\"Multiply each plant capacity baseline against individual network loss percentages, then combine.\"}"
+    },
+    {
+      "id": "qt-q403",
+      "tags": ["percentages"],
+      "marks": 1,
+      "topic": "Data Interpretation",
+      "source": "daily",
+      "options": {"A": "3.50%", "B": "4.30%", "C": "4.88%", "D": "6.00%"},
+      "question_text": "What is the overall average transmission loss percentage across the entire integrated power transmission network daily?",
+      "correct_option": "B",
+      "negative_marks": 0.25,
+      "question_number": 3,
+      "explanation": "{\"correct_answer_rationale\":\"Total losses = 688 MWh. Total capacity = 16,000 MWh. Systemic loss = (688 / 16,000) * 100 = 4.3%.\",\"incorrect_option_analysis\":{\"A\":\"Computational tracking system error.\",\"C\":\"Simple mean error: (4+5+8+2.5)/4 = 4.875%.\",\"D\":\"Overshot rounding parameter trap value.\"},\"wrong_answer_guidance\":\"Divide global losses (688 MWh) by the complete cumulative grid infrastructure base (16,000 MWh).\"}"
+    },
+    {
+      "id": "qt-q404",
+      "tags": ["averages"],
+      "marks": 1,
+      "topic": "Data Interpretation",
+      "source": "daily",
+      "options": {"A": "2,840 MWh", "B": "3,000 MWh", "C": "3,828 MWh", "D": "4,000 MWh"},
+      "question_text": "What is the average net daily electricity generation in Megawatt-hours (MWh) available for transmission per station across all four power installations?",
+      "correct_option": "C",
+      "negative_marks": 0.25,
+      "question_number": 4,
+      "explanation": "{\"correct_answer_rationale\":\"Total net output = 16,000 - 688 = 15,312 MWh. Average across 4 stations = 15,312 / 4 = 3,828 MWh.\",\"incorrect_option_analysis\":{\"A\":\"Fails to include Hydro operational metrics.\",\"B\":\"Arbitrary uniform estimate.\",\"D\":\"Simple mean using uncorrected gross capacity values.\"},\"wrong_answer_guidance\":\"Determine total net available power first before dividing equally across the active operational array.\"}"
+    },
+    {
+      "id": "qt-q405",
+      "tags": ["percentages"],
+      "marks": 1,
+      "topic": "Data Interpretation",
+      "source": "daily",
+      "options": {"A": "640 MWh", "B": "1,200 MWh", "C": "1,440 MWh", "D": "80 MWh"},
+      "question_text": "What is the absolute difference between the net daily electricity generation available for active transmission from the Wind Farms and the Hydroelectric Stations?",
+      "correct_option": "D",
+      "negative_marks": 0.25,
+      "question_number": 5,
+      "explanation": "{\"correct_answer_rationale\":\"Net Wind = 3,200 - 160 = 3,040 MWh. Net Hydro = 3,200 - 80 = 3,120 MWh. Difference = 3,120 - 3,040 = 80 MWh.\",\"incorrect_option_analysis\":{\"A\":\"Uses raw uncorrected matrix dimensions.\",\"B\":\"Arithmetic distortion variable validation error.\",\"C\":\"Calculation error using wrong capacity indicators.\"},\"wrong_answer_guidance\":\"Find net transmission metrics for both specific installations prior to subtraction.\"}"
+    },
+    {
+      "id": "qt-q406",
+      "tags": ["percentages"],
+      "marks": 1,
+      "topic": "Data Interpretation",
+      "source": "daily",
+      "options": {"A": "25.00%", "B": "40.00%", "C": "146.15%", "D": "200.00%"},
+      "question_text": "By what percentage does the net daily electricity generation from Solar Arrays exceed the net daily electricity generation of the Hydroelectric Stations?",
+      "correct_option": "C",
+      "negative_marks": 0.25,
+      "question_number": 6,
+      "explanation": "{\"correct_answer_rationale\":\"Net Solar = 7,680 MWh. Net Hydro = 3,120 MWh. Excess = ((7,680 - 3,120) / 3,120) * 100 = 146.15%.\",\"incorrect_option_analysis\":{\"A\":\"Proportional assignment variance mismatch.\",\"B\":\"Uses uncorrected gross inputs.\",\"D\":\"Flat estimate trap value.\"},\"wrong_answer_guidance\":\"Use net Hydro generation (3,120 MWh) as your denominator anchor.\"}"
+    }
+  ]
+}

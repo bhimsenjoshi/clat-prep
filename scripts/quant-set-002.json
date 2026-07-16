@@ -1,0 +1,89 @@
+{
+  "id": "qt-set-002-telecom",
+  "section": "Quantitative Techniques",
+  "title": "Telecom Network Traffic Data Metrics",
+  "source": "5G Infrastructure Operational Audit",
+  "content": "A regional telecommunications hub monitors the transmission load of network nodes classified into three categories: Metro Core, Urban Edge, and Suburb Relays. The aggregated data bandwidth flowing through the hub daily equals 8,000 Terabytes (TB). The bandwidth across Metro Core stands at 45% of the daily limit. The remaining data load is divided between the Urban Edge and Suburb Relays in a structural ratio of 7:4 respectively. Packet dropping issues due to overhead latency affect different segments: 5% of Metro Core bandwidth encounters data drop anomalies, 8% of Urban Edge bandwidth encounters drops, and 12% of Suburb Relays bandwidth suffers structural drops.",
+  "difficulty": "hard",
+  "created_at": "2026-07-16T10:05:00.000000+00:00",
+  "practice_questions": [
+    {
+      "id": "qt-q201",
+      "tags": ["averages", "networks"],
+      "marks": 1,
+      "topic": "Data Interpretation",
+      "source": "daily",
+      "options": {"A": "496 TB", "B": "596 TB", "C": "688 TB", "D": "720 TB"},
+      "question_text": "Calculate the absolute quantity of total bandwidth in Terabytes (TB) that encounters structural data drop anomalies across the entire regional network hub daily.",
+      "correct_option": "B",
+      "negative_marks": 0.25,
+      "question_number": 1,
+      "explanation": "{\"correct_answer_rationale\":\"Total Bandwidth = 8,000 TB. Metro Core = 45% of 8,000 = 3,600 TB. Balance = 4,400 TB. Urban Edge = (7/11)*4,400 = 2,800 TB. Suburb Relays = (4/11)*4,400 = 1,600 TB. Drops: Metro Core = 5% of 3,600 = 180 TB; Urban Edge = 8% of 2,800 = 224 TB; Suburb Relays = 12% of 1,600 = 192 TB. Total drops = 180 + 224 + 192 = 596 TB.\",\"incorrect_option_analysis\":{\"A\":\"Scales drops uniformly ignoring accurate weights.\",\"C\":\"Arithmetic mistake combining matrices.\",\"D\":\"Flat percentage mistake using total base.\"},\"wrong_answer_guidance\":\"Find individual segment data drops explicitly and then compute the sum.\"}"
+    },
+    {
+      "id": "qt-q202",
+      "tags": ["ratios"],
+      "marks": 1,
+      "topic": "Data Interpretation",
+      "source": "daily",
+      "options": {"A": "9:4", "B": "9:5", "C": "7:4", "D": "7:5"},
+      "question_text": "What is the ratio of daily bandwidth flowing through the Metro Core to that flowing through the Suburb Relays?",
+      "correct_option": "A",
+      "negative_marks": 0.25,
+      "question_number": 2,
+      "explanation": "{\"correct_answer_rationale\":\"Metro Core bandwidth = 3,600 TB. Suburb Relays bandwidth = 1,600 TB. Ratio = 3,600 : 1,600 = 36 : 16 = 9 : 4.\",\"incorrect_option_analysis\":{\"B\":\"Uses incorrect bandwidth parameters for Suburb Relays.\",\"C\":\"This matches the Urban Edge to Suburb Relays ratio.\",\"D\":\"Visual error drawing direct metrics from text.\"},\"wrong_answer_guidance\":\"Reduce the fraction of Metro Core bandwidth over Suburb Relays bandwidth completely.\"}"
+    },
+    {
+      "id": "qt-q203",
+      "tags": ["percentages"],
+      "marks": 1,
+      "topic": "Data Interpretation",
+      "source": "daily",
+      "options": {"A": "6.20%", "B": "7.45%", "C": "8.33%", "D": "9.10%"},
+      "question_text": "What percentage of the daily total network traffic bandwidth of 8,000 TB experiences data drop anomalies across the entire hub?",
+      "correct_option": "B",
+      "negative_marks": 0.25,
+      "question_number": 3,
+      "explanation": "{\"correct_answer_rationale\":\"Total drops = 596 TB. Total traffic baseline = 8,000 TB. Overall percentage = (596 / 8,000) * 100 = 7.45%.\",\"incorrect_option_analysis\":{\"A\":\"Calculated under incorrect total metrics parameters.\",\"C\":\"Simple average error calculation: (5 + 8 + 12) / 3 = 8.33%.\",\"D\":\"Uses wrong computational tracking arrays.\"},\"wrong_answer_guidance\":\"Divide total network data drop volume (596 TB) by the baseline bandwidth (8,000 TB).\"}"
+    },
+    {
+      "id": "qt-q204",
+      "tags": ["percentages"],
+      "marks": 1,
+      "topic": "Data Interpretation",
+      "source": "daily",
+      "options": {"A": "50%", "B": "60%", "C": "75%", "D": "80%"},
+      "question_text": "By what percentage does the daily bandwidth of the Urban Edge exceed that of the Suburb Relays?",
+      "correct_option": "C",
+      "negative_marks": 0.25,
+      "question_number": 4,
+      "explanation": "{\"correct_answer_rationale\":\"Urban Edge = 2,800 TB. Suburb Relays = 1,600 TB. Difference = 2,800 - 1,600 = 1,200 TB. Percentage excess = (1,200 / 1,600) * 100 = 75%.\",\"incorrect_option_analysis\":{\"A\":\"Uses the wrong denominator base matrix.\",\"B\":\"Matches the remaining split calculations incorrectly.\",\"D\":\"Arithmetic precision calculation tracking failure.\"},\"wrong_answer_guidance\":\"Divide the traffic difference (1,200 TB) by the Suburb Relays capacity base (1,600 TB).\"}"
+    },
+    {
+      "id": "qt-q205",
+      "tags": ["percentages"],
+      "marks": 1,
+      "topic": "Data Interpretation",
+      "source": "daily",
+      "options": {"A": "3,420 TB", "B": "3,984 TB", "C": "4,120 TB", "D": "4,400 TB"},
+      "question_text": "What is the absolute daily bandwidth (in TB) that successfully transits the network without encountering drops across both Urban Edge and Suburb Relays combined?",
+      "correct_option": "B",
+      "negative_marks": 0.25,
+      "question_number": 5,
+      "explanation": "{\"correct_answer_rationale\":\"Urban Edge clear transit = 2,800 - 224 = 2,576 TB. Suburb Relays clear transit = 1,600 - 192 = 1,408 TB. Combined clear bandwidth = 2,576 + 1,408 = 3,984 TB.\",\"incorrect_option_analysis\":{\"A\":\"Matches isolated metrics configurations incorrectly.\",\"C\":\"Arithmetic validation oversight.\",\"D\":\"Represents total baseline prior to drop allocations.\"},\"wrong_answer_guidance\":\"Deduct the individual node data drops from their respective capacities, then sum the dynamic balance.\"}"
+    },
+    {
+      "id": "qt-q206",
+      "tags": ["percentages"],
+      "marks": 1,
+      "topic": "Data Interpretation",
+      "source": "daily",
+      "options": {"A": "15:16", "B": "45:56", "C": "855:644", "D": "644:855"},
+      "question_text": "What is the ratio of successful daily bandwidth transit in Metro Core to that in Urban Edge?",
+      "correct_option": "C",
+      "negative_marks": 0.25,
+      "question_number": 6,
+      "explanation": "{\"correct_answer_rationale\":\"Successful Metro Core = 3,600 - 180 = 3,420 TB. Successful Urban Edge = 2,800 - 224 = 2,576 TB. Ratio = 3,420 : 2,576. Divided by 4 = 855 : 644.\",\"incorrect_option_analysis\":{\"A\":\"Uses unweighted raw node values.\",\"B\":\"Directly references uncorrected prompt inputs.\",\"D\":\"Inverts the relationship parameters completely.\"},\"wrong_answer_guidance\":\"Obtain the successful transit weights for both streams explicitly before matching structural parameters.\"}"
+    }
+  ]
+}
