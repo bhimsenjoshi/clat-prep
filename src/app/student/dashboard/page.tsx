@@ -322,7 +322,7 @@ export default function StudentDashboard() {
     };
 
     const today = toISTDate(new Date().toISOString());
-    fetch('/api/editorials/activity')
+    fetch('/api/editorials/activity', { cache: 'no-store' })
       .then(r => r.json())
       .then(data => {
         const read = new Set<string>((data.activities || []).map((a: any) => a.article_url));
