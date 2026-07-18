@@ -136,21 +136,22 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Failed to create session' }, { status: 500 });
     }
 
-    // Strip correct_option from client-bound questions
-    const safeQueue = orderedQueue.map(({ correct_option, explanation, ...safe }) => ({
-      ...safe,
+    // Return all questions with explanation parsed, keep correct_option for client-side checking
+    const queue = orderedQueue.map(q => ({
+      ...q,
       explanation: (() => {
-        if (typeof explanation === 'string') {
-          try { return JSON.parse(explanation); } catch { return explanation; }
+        const raw = q.explanation;
+        if (typeof raw === 'string') {
+          try { return JSON.parse(raw); } catch { return raw; }
         }
-        return explanation;
+        return raw;
       })(),
     }));
 
     return NextResponse.json({
       session_id: sessionResult.data.id,
-      questions: safeQueue,
-      total: safeQueue.length,
+      questions: queue,
+      total: queue.length,
       daily_remaining: profile.subscription_plan === 'free'
         ? (profile.daily_free_questions ?? 10)
         : 'unlimited',
