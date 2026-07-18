@@ -193,14 +193,17 @@ export default function QuickFireQuiz() {
 
   // ── Navigation ──
   const nextQuestion = () => {
-    const nextPos = (historyPos !== null ? historyPos : trackedResponses.length - 1) + 1;
-
-    if (nextPos >= trackedResponses.length) {
-      // Move to next unanswered question
-      const newIdx = currentIdx + 1;
-      if (newIdx < questions.length) {
-        setCurrentIdx(newIdx);
+    if (historyPos !== null) {
+      const nextPos = historyPos + 1;
+      if (nextPos < trackedResponses.length) {
+        // Move forward within trackedResponses
+        setHistoryPos(nextPos);
+        setResult(trackedResponses[nextPos].result);
+        setSelected(trackedResponses[nextPos].selected_option);
+      } else {
+        // Exit history mode, resume quiz at the unanswered question
         setHistoryPos(null);
+        setCurrentIdx(trackedResponses.length);
         setSelected(null);
         setResult(null);
         timerRef.current = Date.now();
@@ -209,10 +212,17 @@ export default function QuickFireQuiz() {
         setElapsedSeconds(0);
       }
     } else {
-      // Move forward within trackedResponses
-      setHistoryPos(nextPos);
-      setResult(trackedResponses[nextPos].result);
-      setSelected(trackedResponses[nextPos].selected_option);
+      // Not in history — move to next question
+      const newIdx = currentIdx + 1;
+      if (newIdx < questions.length) {
+        setCurrentIdx(newIdx);
+        setSelected(null);
+        setResult(null);
+        timerRef.current = Date.now();
+        pauseAccumulatedRef.current = 0;
+        setTimerPaused(false);
+        setElapsedSeconds(0);
+      }
     }
   };
 
@@ -268,7 +278,7 @@ export default function QuickFireQuiz() {
 
   const hasNext = historyPos !== null
     ? historyPos + 1 < trackedResponses.length
-    : currentIdx + 1 < questions.length;
+    : trackedResponses.length < questions.length;
 
   const hasPrev = historyPos !== null
     ? historyPos > 0
@@ -448,6 +458,52 @@ export default function QuickFireQuiz() {
                   </p>
                 </div>
               </div>
+            {historyPos !== null ? (
+                <p className="text-[10px] text-muted text-right mt-1">
+                  Q{historyPos + 1} of {trackedResponses.length} answered
+                </p>
+              ) : (
+                <p className="text-[10px] text-muted text-right mt-1">
+                  {trackedResponses.length} answered
+                </p>
+              )}
+            </div>
+
+            {/* Question text + options with correct/incorrect highlighting */}
+            <div className="bg-card rounded-xl p-6 border border-theme">
+              <p className="text-base font-medium text-primary leading-relaxed mb-4">
+                {displayQuestion.question_text}
+              </p>
+              <div className="space-y-2">
+                {Object.entries(displayQuestion.options).map(([key, value]) => {
+                  const isSelected = displayResult.your_answer === key;
+                  const isCorrectOpt = displayResult.correct_option === key;
+                  return (
+                    <div key={key} className={`flex items-center gap-3 border rounded-lg px-4 py-3 text-sm ${
+                      isCorrectOpt
+                        ? 'border-success bg-success/30 ring-1 ring-success/50'
+                        : isSelected
+                        ? 'border-danger bg-danger/30 ring-1 ring-danger/50'
+                        : 'border-theme'
+                    }`}>
+                      <span className={`w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold ${
+                        isCorrectOpt ? 'bg-success text-white' :
+                        isSelected ? 'bg-danger text-white' :
+                        'bg-card-hover text-secondary'
+                      }`}>
+                        {isCorrectOpt ? '✓' : isSelected ? '✗' : key}
+                      </span>
+                      <span className={`flex-1 ${
+                        isCorrectOpt ? 'text-success font-medium' :
+                        isSelected ? 'text-danger' :
+                        'text-primary'
+                      }`}>
+                        {value}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
 
             {/* Explanation */}
@@ -502,7 +558,9 @@ export default function QuickFireQuiz() {
                   onClick={nextQuestion}
                   className={`${hasPrev ? 'flex-1' : 'w-full'} py-4 rounded-xl font-medium bg-gradient-accent text-white hover:bg-accent-hover transition shadow-lg shadow-accent/20`}
                 >
-                  {historyPos !== null ? 'Next →' : 'Next Question →'}
+                  {historyPos !== null
+                    ? (historyPos < trackedResponses.length - 1 ? 'Next →' : '→ Resume Quiz')
+                    : 'Next Question →'}
                 </button>
               ) : (
                 <button
