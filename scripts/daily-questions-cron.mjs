@@ -50,6 +50,47 @@ for (const envPath of envPaths) {
   }
 }
 
+// ─── Topic bank mapping ───
+const TOPIC_BANK_FILES = {
+  'English Language': 'topic-bank-english.json',
+  'Current Affairs Including General Knowledge': 'topic-bank-current-affairs.json',
+  'Legal Reasoning': 'topic-bank-legal.json',
+  'Logical Reasoning': 'topic-bank-logical.json',
+};
+
+// ─── Load a topic bank JSON file ───
+function loadTopicBank(section) {
+  const filename = TOPIC_BANK_FILES[section];
+  if (!filename) return null;
+  const filepath = resolve(scriptDir, filename);
+  if (!existsSync(filepath)) return null;
+  return JSON.parse(readFileSync(filepath, 'utf-8'));
+}
+
+// ─── Pick the next unused topic for a section from the topic bank ───
+async function pickNextTopic(section) {
+  const bank = loadTopicBank(section);
+  if (!bank || bank.length === 0) return null;
+
+  // Fetch already-used indices from the tracker (sorted by bank_index)
+  const baseUrl = `${SUPABASE_URL.replace(/\/$/, '')}/rest/v1/topic_tracker`;
+  const usedUrl = `${baseUrl}?section=eq.${encodeURIComponent(section)}&select=bank_index&order=bank_index`;
+  const usedData = await supabaseGet(usedUrl);
+  
+  const usedIndices = new Set((usedData || []).map(r => r.bank_index));
+
+  // Find the first unused index
+  for (let i = 0; i < bank.length; i++) {
+    if (!usedIndices.has(i)) {
+      return { index: i, topic: bank[i] };
+    }
+  }
+
+  // All topics used — reset (cycle back)
+  console.log(`    🔄 All ${bank.length} topics used for ${section}. Resetting cycle.`);
+  return { index: 0, topic: bank[0] };
+}
+
 const SECTIONS = ['English Language', 'Current Affairs Including General Knowledge', 'Legal Reasoning', 'Logical Reasoning'];
 const QS_PER_PASSAGE = 6;
 
@@ -389,10 +430,18 @@ async function main() {
     try {
       console.log(`  → ${section}...`);
 
-      // Step 1: Call AI for passage + questions together
+      // Step 0: Pick the next unused topic from the topic bank
+      const topicPick = await pickNextTopic(section);
+      let topicInstruction = '';
+      if (topicPick) {
+        topicInstruction = `\n\nTOPIC TO COVER (first time this topic is being used): "${topicPick.topic.title}" (domain: ${topicPick.topic.domain}). CRITICAL: You MUST write a passage on EXACTLY this topic. Choose your own unique angle within this topic.`;
+        console.log(`    📋 Topic from bank: "${topicPick.topic.title}" (#${topicPick.index})`);
+      }
+
+      // Step 1: Call AI for passage + questions together — with topic guidance
       const { passageData, questions: rawQuestions } = await callDeepSeek(
         buildPassagePrompt(section),
-        `Generate 1 passage and ${QS_PER_PASSAGE} CLAT practice questions for the "${section}" section. The passage must be formatted as per CLAT 2025 standards.`
+        `Generate 1 passage and ${QS_PER_PASSAGE} CLAT practice questions for the "${section}" section.${topicInstruction}`
       );
 
       if (!rawQuestions || rawQuestions.length === 0) {
@@ -408,7 +457,7 @@ async function main() {
         console.log(`    ⚠️ No passage returned by AI — retrying section "${section}" once...`);
         const retry = await callDeepSeek(
           buildPassagePrompt(section),
-          `Generate 1 passage and ${QS_PER_PASSAGE} CLAT practice questions for the "${section}" section. The passage must be formatted as per CLAT 2025 standards. CRITICAL: The response MUST include a valid "passage" object with a "content" field.`
+          `Generate 1 passage and ${QS_PER_PASSAGE} CLAT practice questions for the "${section}" section.${topicInstruction || ''} CRITICAL: The response MUST include a valid "passage" object with a "content" field.`
         );
         if (retry.passageData && retry.passageData.content) {
           finalPassageData = retry.passageData;
@@ -445,6 +494,22 @@ async function main() {
         passageId = passageRows?.[0]?.id || null;
         totalPassages++;
         console.log(`    📄 New passage inserted: "${finalPassageData.title || 'Untitled'}" (id: ${passageId ? passageId.substring(0, 8) + '...' : 'none'})`);
+
+        // Record topic usage in tracker
+        if (topicPick && passageId) {
+          const trackerUrl = `${SUPABASE_URL.replace(/\/$/, '')}/rest/v1/topic_tracker`;
+          await fetch(trackerUrl, {
+            method: 'POST',
+            headers: { ...SUPABASE_HEADERS, 'Prefer': 'resolution=merge-duplicates' },
+            body: JSON.stringify({
+              section,
+              bank_index: topicPick.index,
+              topic_title: topicPick.topic.title,
+              domain: topicPick.topic.domain,
+              passage_id: passageId,
+            }),
+          });
+        }
       }
 
       // Step 3: Normalise questions with passage link and metadata
