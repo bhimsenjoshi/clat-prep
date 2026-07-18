@@ -171,11 +171,19 @@ export default function PracticeQuiz() {
       }
 
       setSessionId(data.session_id);
-      const { correct_option: co, ...safeQuestion } = data.question;
-      currentCorrectOptionRef.current = co || null;
-      setQuestion(safeQuestion);
-      setQuestionIds(data.question_ids || []);
-      setRemainingIds((data.question_ids || []).filter((id: string) => id !== safeQuestion.id));
+
+      // API now returns a passage-grouped queue
+      if (data.questions && data.questions.length > 0) {
+        const first = data.questions[0];
+        const { correct_option: co, ...safeFirst } = first;
+        currentCorrectOptionRef.current = co || null;
+        setQuestion(safeFirst);
+        setQuestionIds(data.questions.map((q: any) => q.id));
+        setRemainingIds(data.questions.slice(1).map((q: any) => q.id));
+      } else {
+        throw new Error('No questions returned');
+      }
+
       setDailyRemaining(data.daily_remaining);
       setStarted(true);
     } catch (err) {
