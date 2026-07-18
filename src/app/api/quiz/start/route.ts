@@ -22,48 +22,18 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Parallel: fetch profile + all question IDs + answered session IDs
-    const [profileResult, idsResult, sessionIdsResult] = await Promise.all([
+    // Parallel: fetch profile
+    const [profileResult] = await Promise.all([
       supabase
         .from('profiles')
         .select('daily_free_questions, last_practice_date, subscription_plan')
         .eq('id', user.id)
         .single(),
-      supabase
-        .from('practice_questions')
-        .select('id, created_at')
-        .eq('section', section)
-        .not('passage_id', 'is', null) // Only CLAT-format passage-linked questions
-        .order('created_at', { ascending: false }),
-      supabase
-        .from('quiz_sessions')
-        .select('id')
-        .eq('student_id', user.id)
-        .eq('section', section),
     ]);
 
     const profile = profileResult.data;
     if (!profile) {
       return NextResponse.json({ error: 'Profile not found' }, { status: 404 });
-    }
-
-    // Keep IDs in created_at order (newest first) to prioritise today's questions
-    let questionIds = (idsResult.data ?? []).map(q => q.id);
-
-    // Filter out already-answered questions to avoid repeats
-    const sessionIds = (sessionIdsResult.data ?? []).map(s => s.id);
-    if (sessionIds.length > 0) {
-      const { data: answeredData } = await supabase
-        .from('quiz_responses')
-        .select('question_id')
-        .in('session_id', sessionIds);
-      
-      const answeredQuestionIds = new Set((answeredData ?? []).map(r => r.question_id));
-      const freshIds = questionIds.filter(id => !answeredQuestionIds.has(id));
-      if (freshIds.length > 0) {
-        questionIds = freshIds;
-      }
-      // If all exhausted, keep all IDs (fresh cycle) — still newest-first
     }
 
     // Reset daily count if new day
@@ -82,6 +52,23 @@ export async function POST(req: NextRequest) {
         code: 'DAILY_LIMIT_REACHED',
         message: "You've used all 10 free questions today. Upgrade to premium for unlimited!",
       }, { status: 403 });
+    }
+
+    // Fetch already-answered question IDs for this user+section (to skip completed passages)
+    let answeredQuestionIds = new Set<string>();
+    const { data: allSessions } = await supabase
+      .from('quiz_sessions')
+      .select('id')
+      .eq('student_id', user.id)
+      .eq('section', section);
+
+    const existingSessionIds = (allSessions ?? []).map(s => s.id);
+    if (existingSessionIds.length > 0) {
+      const { data: answeredData } = await supabase
+        .from('quiz_responses')
+        .select('question_id')
+        .in('session_id', existingSessionIds);
+      answeredQuestionIds = new Set((answeredData ?? []).map(r => r.question_id));
     }
 
     // ── Fetch all passage-linked questions for passage-grouped queue ──
@@ -143,11 +130,14 @@ export async function POST(req: NextRequest) {
       // else: duplicate title, skip this older passage
     }
 
-    // Build final passage map with only kept passages
+    // Build final passage map with only kept passages, exclude fully-answered passages
     const passageMap: Record<string, any[]> = {};
     for (const [pid, qs] of Object.entries(tempMap)) {
-      if (keptPassageIds.has(pid)) {
-        passageMap[pid] = qs;
+      if (!keptPassageIds.has(pid)) continue;
+      // Exclude passage only if ALL its questions have been answered
+      const unanswered = qs.filter((q: any) => !answeredQuestionIds.has(q.id));
+      if (unanswered.length > 0) {
+        passageMap[pid] = unanswered;
       }
     }
 
