@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
 import PageHeader from '@/components/PageHeader';
@@ -22,6 +22,12 @@ interface AnswerResult {
   correct_option: string;
   explanation: string | Record<string, any>;
   your_answer: string;
+}
+
+interface TrackedResponse {
+  question: QuestionData;
+  result: AnswerResult;
+  selected_option: string;
 }
 
 const SECTION_MAP: Record<string, string> = {
@@ -55,21 +61,35 @@ export default function QuickFireQuiz() {
   const [result, setResult] = useState<AnswerResult | null>(null);
   const [loading, setLoading] = useState(true);
   const [answering, setAnswering] = useState(false);
-  const [showExplanation, setShowExplanation] = useState(false);
   const [stats, setStats] = useState({ correct: 0, total: 0 });
   const [sessionComplete, setSessionComplete] = useState(false);
   const [totalQuestions, setTotalQuestions] = useState(0);
-  const questionStartTime = useRef<number>(Date.now());
+  const [trackedResponses, setTrackedResponses] = useState<TrackedResponse[]>([]);
+  const [historyPos, setHistoryPos] = useState<number | null>(null);
+  const [timerPaused, setTimerPaused] = useState(false);
+  const [elapsedSeconds, setElapsedSeconds] = useState(0);
+  const timerRef = useRef<number>(Date.now());
+  const pauseAccumulatedRef = useRef<number>(0);
 
   useEffect(() => {
     if (!sectionName) return;
     startSession();
   }, [sectionName]);
 
+  // ── Live timer tick ──
+  useEffect(() => {
+    if (!sessionId || loading || sessionComplete || result) return;
+    const interval = setInterval(() => {
+      if (!timerPaused) {
+        setElapsedSeconds(Math.floor((Date.now() - timerRef.current) / 1000));
+      }
+    }, 250);
+    return () => clearInterval(interval);
+  }, [sessionId, loading, sessionComplete, result, timerPaused]);
+
   const startSession = async () => {
     setLoading(true);
     try {
-      // Refresh auth cookie
       await supabase.auth.getSession();
 
       const res = await fetch('/api/quiz/quickfire/start', {
@@ -99,7 +119,10 @@ export default function QuickFireQuiz() {
       setQuestions(data.questions);
       setTotalQuestions(data.questions.length);
       setCurrentIdx(0);
-      questionStartTime.current = Date.now();
+      timerRef.current = Date.now();
+      pauseAccumulatedRef.current = 0;
+      setElapsedSeconds(0);
+      setTimerPaused(false);
     } catch (err) {
       console.error('Start error:', err);
       alert('Failed to start. Please try again.');
@@ -109,11 +132,17 @@ export default function QuickFireQuiz() {
   };
 
   const submitAnswer = async (option: string) => {
-    if (!sessionId || !currentQuestion || answering) return;
+    if (!sessionId || answering) return;
+    // Derive current question from trackedResponses (if browsing history) or questions array
+    const question = currentIdx < questions.length ? questions[currentIdx] : null;
+    if (!question) return;
+
     setAnswering(true);
     setSelected(option);
+    setTimerPaused(true);
+    pauseAccumulatedRef.current += Math.floor((Date.now() - timerRef.current) / 1000) - elapsedSeconds;
 
-    const timeTaken = Math.round((Date.now() - questionStartTime.current) / 1000);
+    const timeTaken = Math.round((Date.now() - (timerRef.current + pauseAccumulatedRef.current * 1000 - elapsedSeconds * 1000)) / 1000);
     const nextIdx = currentIdx + 1;
 
     try {
@@ -122,9 +151,9 @@ export default function QuickFireQuiz() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           session_id: sessionId,
-          question_id: currentQuestion.id,
+          question_id: question.id,
           selected_option: option,
-          time_taken_seconds: timeTaken,
+          time_taken_seconds: Math.max(1, timeTaken),
           next_index: nextIdx,
           total: totalQuestions,
         }),
@@ -132,6 +161,14 @@ export default function QuickFireQuiz() {
 
       const data = await res.json();
       setResult(data.result);
+
+      const newResponse: TrackedResponse = {
+        question,
+        result: data.result,
+        selected_option: option,
+      };
+
+      setTrackedResponses(prev => [...prev, newResponse]);
       setStats(prev => ({
         correct: prev.correct + (data.result.is_correct ? 1 : 0),
         total: prev.total + 1,
@@ -139,21 +176,47 @@ export default function QuickFireQuiz() {
 
       if (data.session_complete) {
         setSessionComplete(true);
-      } else {
-        setTimeout(() => setShowExplanation(true), 200);
       }
     } catch (err) {
       console.error('Submit error:', err);
+      setTimerPaused(false);
     }
     setAnswering(false);
   };
 
+  // ── Navigation ──
   const nextQuestion = () => {
-    setSelected(null);
-    setResult(null);
-    setShowExplanation(false);
-    setCurrentIdx(prev => prev + 1);
-    questionStartTime.current = Date.now();
+    const nextPos = (historyPos !== null ? historyPos : trackedResponses.length - 1) + 1;
+
+    if (nextPos >= trackedResponses.length) {
+      // Move to next unanswered question
+      const newIdx = currentIdx + 1;
+      if (newIdx < questions.length) {
+        setCurrentIdx(newIdx);
+        setHistoryPos(null);
+        setSelected(null);
+        setResult(null);
+        timerRef.current = Date.now();
+        pauseAccumulatedRef.current = 0;
+        setTimerPaused(false);
+        setElapsedSeconds(0);
+      }
+    } else {
+      // Move forward within trackedResponses
+      setHistoryPos(nextPos);
+      setResult(trackedResponses[nextPos].result);
+      setSelected(trackedResponses[nextPos].selected_option);
+    }
+  };
+
+  const prevQuestion = () => {
+    if (trackedResponses.length === 0) return;
+    const prevPos = (historyPos !== null ? historyPos : trackedResponses.length - 1) - 1;
+    if (prevPos < 0) return;
+
+    setHistoryPos(prevPos);
+    setResult(trackedResponses[prevPos].result);
+    setSelected(trackedResponses[prevPos].selected_option);
   };
 
   const endSession = async () => {
@@ -166,7 +229,43 @@ export default function QuickFireQuiz() {
     router.push('/student/quick-fire');
   };
 
-  const currentQuestion = questions[currentIdx];
+  const formatTime = (s: number) => {
+    const m = Math.floor(s / 60);
+    const sec = s % 60;
+    return `${m.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
+  };
+
+  const TimerDisplay = () => (
+    <span className={`text-xs font-mono font-semibold tabular-nums flex items-center gap-1 ${
+      timerPaused ? 'text-amber-400' : 'text-accent'
+    }`}>
+      <span>{timerPaused ? '⏸️' : '⏱️'}</span>
+      {formatTime(elapsedSeconds)}
+    </span>
+  );
+
+  // Determine which question/result to display
+  const displayQuestion = historyPos !== null
+    ? trackedResponses[historyPos]?.question ?? null
+    : currentIdx < questions.length
+      ? questions[currentIdx]
+      : null;
+
+  const displayResult = historyPos !== null
+    ? trackedResponses[historyPos]?.result ?? null
+    : result;
+
+  const displaySelected = historyPos !== null
+    ? trackedResponses[historyPos]?.selected_option ?? null
+    : selected;
+
+  const hasNext = historyPos !== null
+    ? historyPos + 1 < trackedResponses.length
+    : currentIdx + 1 < questions.length;
+
+  const hasPrev = historyPos !== null
+    ? historyPos > 0
+    : trackedResponses.length > 0;
 
   // Section not found
   if (!sectionName) {
@@ -250,6 +349,8 @@ export default function QuickFireQuiz() {
             <span className="text-secondary">
               ✅ {stats.correct}/{stats.total}
             </span>
+            {/* Timer — visible during answering, not while viewing result */}
+            {!displayResult && <TimerDisplay />}
             <button onClick={endSession}
               className="text-muted hover:text-primary transition">
               ✕ End
@@ -259,20 +360,20 @@ export default function QuickFireQuiz() {
       </div>
 
       <div className="max-w-3xl mx-auto px-4 py-6">
-        {currentQuestion && !showExplanation ? (
+        {displayQuestion && !displayResult ? (
           // ─── Question View (no passage) ───
           <div className="space-y-6">
             <div className="bg-card rounded-xl p-6 border border-theme">
               {/* Difficulty + tags */}
               <div className="flex items-center gap-2 mb-4">
                 <span className={`text-[10px] font-medium uppercase tracking-wider px-2 py-0.5 rounded-full ${
-                  currentQuestion.difficulty === 'easy' ? 'bg-success/50 text-success' :
-                  currentQuestion.difficulty === 'hard' ? 'bg-danger/50 text-danger' :
+                  displayQuestion.difficulty === 'easy' ? 'bg-success/50 text-success' :
+                  displayQuestion.difficulty === 'hard' ? 'bg-danger/50 text-danger' :
                   'bg-warning/50 text-warning'
                 }`}>
-                  {currentQuestion.difficulty}
+                  {displayQuestion.difficulty}
                 </span>
-                {currentQuestion.tags?.length > 0 && currentQuestion.tags.slice(0, 3).map(tag => (
+                {displayQuestion.tags?.length > 0 && displayQuestion.tags.slice(0, 3).map(tag => (
                   <span key={tag} className="text-[10px] text-muted bg-card-hover px-2 py-0.5 rounded-full">
                     {tag}
                   </span>
@@ -281,12 +382,12 @@ export default function QuickFireQuiz() {
 
               {/* Question text — no passage display */}
               <p className="text-lg font-medium text-primary leading-relaxed mb-6">
-                {currentQuestion.question_text}
+                {displayQuestion.question_text}
               </p>
 
               {/* Options */}
               <div className="space-y-3">
-                {Object.entries(currentQuestion.options).map(([key, value]) => (
+                {Object.entries(displayQuestion.options).map(([key, value]) => (
                   <button
                     key={key}
                     onClick={() => submitAnswer(key)}
@@ -308,25 +409,25 @@ export default function QuickFireQuiz() {
               </div>
             </div>
           </div>
-        ) : currentQuestion && result ? (
+        ) : displayQuestion && displayResult ? (
           // ─── Result + Explanation View ───
           <div className="space-y-4">
             {/* Result banner */}
             <div className={`rounded-xl p-4 border ${
-              result.is_correct
+              displayResult.is_correct
                 ? 'bg-success/20 border-success/50'
                 : 'bg-danger/20 border-danger/50'
             }`}>
               <div className="flex items-center gap-3">
-                <span className="text-2xl">{result.is_correct ? '✅' : '❌'}</span>
+                <span className="text-2xl">{displayResult.is_correct ? '✅' : '❌'}</span>
                 <div>
-                  <p className={`font-bold ${result.is_correct ? 'text-success' : 'text-danger'}`}>
-                    {result.is_correct ? 'Correct!' : 'Incorrect'}
+                  <p className={`font-bold ${displayResult.is_correct ? 'text-success' : 'text-danger'}`}>
+                    {displayResult.is_correct ? 'Correct!' : 'Incorrect'}
                   </p>
                   <p className="text-xs text-secondary mt-0.5">
-                    Your answer: <span className="font-mono">{result.your_answer}</span>
-                    {!result.is_correct && (
-                      <> · Correct answer: <span className="font-mono text-success">{result.correct_option}</span></>
+                    Your answer: <span className="font-mono">{displayResult.your_answer}</span>
+                    {!displayResult.is_correct && (
+                      <> · Correct answer: <span className="font-mono text-success">{displayResult.correct_option}</span></>
                     )}
                   </p>
                 </div>
@@ -334,8 +435,8 @@ export default function QuickFireQuiz() {
             </div>
 
             {/* Explanation */}
-            {result.explanation && (() => {
-              const exp = result.explanation;
+            {displayResult.explanation && (() => {
+              const exp = displayResult.explanation;
               if (typeof exp === 'string') {
                 return (
                   <div className="bg-card rounded-xl p-5 border border-theme">
@@ -360,7 +461,7 @@ export default function QuickFireQuiz() {
                       ))}
                     </div>
                   )}
-                  {!result.is_correct && exp.wrong_answer_guidance && (
+                  {!displayResult.is_correct && exp.wrong_answer_guidance && (
                     <div className="bg-amber-900/30 border border-warning/50 rounded-xl p-4">
                       <p className="text-[11px] font-semibold text-warning uppercase tracking-wider mb-1">💡 Pointer</p>
                       <p className="text-sm text-secondary leading-relaxed">{exp.wrong_answer_guidance}</p>
@@ -370,14 +471,32 @@ export default function QuickFireQuiz() {
               );
             })()}
 
-            {/* Next button */}
-            <button
-              onClick={nextQuestion}
-              disabled={answering}
-              className="w-full py-4 rounded-xl font-medium bg-gradient-accent text-white hover:bg-accent-hover transition shadow-lg shadow-accent/20 disabled:opacity-50"
-            >
-              Next Question →
-            </button>
+            {/* Navigation buttons */}
+            <div className="flex gap-3">
+              {hasPrev && (
+                <button
+                  onClick={prevQuestion}
+                  className="flex-1 py-4 rounded-xl font-medium bg-card text-secondary border border-theme hover:bg-card-hover transition"
+                >
+                  ← Previous
+                </button>
+              )}
+              {hasNext ? (
+                <button
+                  onClick={nextQuestion}
+                  className={`${hasPrev ? 'flex-1' : 'w-full'} py-4 rounded-xl font-medium bg-gradient-accent text-white hover:bg-accent-hover transition shadow-lg shadow-accent/20`}
+                >
+                  {historyPos !== null ? 'Next →' : 'Next Question →'}
+                </button>
+              ) : (
+                <button
+                  onClick={endSession}
+                  className={`${hasPrev ? 'flex-1' : 'w-full'} py-4 rounded-xl font-medium bg-gradient-accent text-white hover:bg-accent-hover transition shadow-lg shadow-accent/20`}
+                >
+                  📊 View Results
+                </button>
+              )}
+            </div>
           </div>
         ) : null}
       </div>
