@@ -146,6 +146,13 @@ export default function QuizPage() {
 
       // Store the full queue from API
       if (data.questions && data.questions.length > 0) {
+        console.log('[DEBUG] startSession:', {
+          totalQs: data.questions.length,
+          firstQid: data.questions[0].id.slice(0, 8),
+          firstQtext: data.questions[0].question_text.slice(0, 50),
+          allIds: data.questions.map((q: any) => q.id.slice(0, 8)),
+          allTexts: data.questions.map((q: any) => q.question_text.slice(0, 40)),
+        });
         setFullQueue(data.questions);
         setCurrentIndex(0);
         const { correct_option, ...safeFirst } = data.questions[0];
@@ -167,6 +174,12 @@ export default function QuizPage() {
 
   const submitAnswer = async (option: string) => {
     if (!sessionId || !question || isSubmitting) return;
+    console.log('[DEBUG] submitAnswer:', {
+      qid: question.id.slice(0, 8),
+      currentIndex,
+      remainingCount: fullQueue.length - currentIndex - 1,
+      remainingIds: fullQueue.slice(currentIndex + 1).map(q => q.id.slice(0, 8)),
+    });
     setIsSubmitting(true);
     setSelected(option);
 
@@ -209,6 +222,14 @@ export default function QuizPage() {
   // Serve next question — keep updater pure, side effects outside
   const nextQuestion = useCallback(() => {
     const nextIdx = currentIndex + 1;
+    console.log('[DEBUG] nextQuestion:', {
+      currentIndex,
+      nextIdx,
+      fullQueueLen: fullQueue.length,
+      inBounds: nextIdx < fullQueue.length,
+      nextQid: nextIdx < fullQueue.length ? fullQueue[nextIdx].id.slice(0, 8) : 'N/A',
+      nextQtext: nextIdx < fullQueue.length ? fullQueue[nextIdx].question_text.slice(0, 50) : 'N/A',
+    });
     if (nextIdx < fullQueue.length) {
       setSelected(null);
       setResult(null);
@@ -435,6 +456,10 @@ export default function QuizPage() {
         {question && !showExplanation ? (
           // ─── Question View ───
           <div className="space-y-6">
+            {/* Debug info */}
+            <div className="text-[10px] text-muted font-mono bg-card-hover px-3 py-1 rounded-lg">
+              [i:{currentIndex + 1}/{fullQueue.length}] q:{question.id.slice(0, 8)} #{question.passage_id?.slice(0, 8)}
+            </div>
             {/* Question card */}
             <div className="bg-card rounded-xl p-6 border border-theme">
               {/* Difficulty badge */}
