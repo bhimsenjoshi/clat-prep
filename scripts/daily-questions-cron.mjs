@@ -431,9 +431,8 @@ async function main() {
       const dupCheckUrl = `${SUPABASE_URL.replace(/\/$/, '')}/rest/v1/practice_passages?content_hash=eq.${contentHash}&select=id,title`;
       const { data: existing } = await supabaseGet(dupCheckUrl);
       if (existing && existing.length > 0) {
-        console.log(`    ⏭️ Duplicate passage detected: "${finalPassageData.title}" matches existing passage "${existing[0].title}" (id: ${existing[0].id.substring(0,8)}). Reusing existing passage for questions.`);
-        passageId = existing[0].id;
-        totalPassages++; // Count it anyway
+        console.log(`    ⏭️ Duplicate passage detected: "${finalPassageData.title}" matches existing passage "${existing[0].title}" (id: ${existing[0].id.substring(0,8)}). Discarding entire section — new questions would crowd the existing passage.`);
+        continue;
       } else {
         // Insert new passage
         const passageRows = await supabaseInsert('practice_passages', [{
