@@ -314,32 +314,37 @@ export default function StudentDashboard() {
 
   // ─── Fetch editorial activity (reads + quizzes) + today's editorial stats ───
   useEffect(() => {
-    const toISTDate = (dateVal: string | null): string => {
-      if (!dateVal) return '';
-      const d = new Date(dateVal);
-      const istOffset = 5.5 * 60 * 60 * 1000;
-      return new Date(d.getTime() + istOffset).toISOString().split('T')[0];
+    const loadEditorialStats = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const toISTDate = (dateVal: string | null): string => {
+        if (!dateVal) return '';
+        const d = new Date(dateVal);
+        const istOffset = 5.5 * 60 * 60 * 1000;
+        return new Date(d.getTime() + istOffset).toISOString().split('T')[0];
+      };
+
+      const today = toISTDate(new Date().toISOString());
+      try {
+      const res = await fetch(`/api/editorials/activity?uid=${user.id}`, { cache: 'no-store' });
+      const data = await res.json();
+      const read = new Set<string>((data.activities || []).map((a: any) => a.article_url));
+      setReadArticles(read);
+
+      // Today's editorial stats
+      const todayActivities = (data.activities || []).filter((a: any) => {
+        const d = toISTDate(a.read_at || a.created_at);
+        return d === today;
+      });
+      setEditorialTodayRead(todayActivities.length);
+      const todayCorrect = todayActivities.reduce((s: number, a: any) => s + (a.quiz_correct || 0), 0);
+      const todayTotal = todayActivities.reduce((s: number, a: any) => s + (a.quiz_total || 0), 0);
+      setEditorialQuizTodayCorrect(todayCorrect);
+      setEditorialQuizTodayTotal(todayTotal);
+    } catch {}
     };
-
-    const today = toISTDate(new Date().toISOString());
-    fetch('/api/editorials/activity', { cache: 'no-store' })
-      .then(r => r.json())
-      .then(data => {
-        const read = new Set<string>((data.activities || []).map((a: any) => a.article_url));
-        setReadArticles(read);
-
-        // Today's editorial stats
-        const todayActivities = (data.activities || []).filter((a: any) => {
-          const d = toISTDate(a.read_at || a.created_at);
-          return d === today;
-        });
-        setEditorialTodayRead(todayActivities.length);
-        const todayCorrect = todayActivities.reduce((s: number, a: any) => s + (a.quiz_correct || 0), 0);
-        const todayTotal = todayActivities.reduce((s: number, a: any) => s + (a.quiz_total || 0), 0);
-        setEditorialQuizTodayCorrect(todayCorrect);
-        setEditorialQuizTodayTotal(todayTotal);
-      })
-      .catch(() => {});
+    loadEditorialStats();
   }, []);
 
   const completed = attempts.filter(a => a.submitted_at);

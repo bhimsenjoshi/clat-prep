@@ -98,10 +98,13 @@ const toISTDate = (dateVal: string | null): string | null => {
   return new Date(d.getTime() + istOffset).toISOString().split('T')[0];
 };
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
     const { user, supabase } = await getServerUser();
     if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+    // Log user for debugging editorial stats issue
+    console.log('[editorial/activity] GET for user:', user.id.slice(0, 8), user.email);
 
     const { data: activities, error } = await supabase
       .from('editorial_activity')
