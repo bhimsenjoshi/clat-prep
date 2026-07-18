@@ -68,7 +68,7 @@ def supabase_patch(url_suffix, data):
         print(f"  Error on PATCH: {e}")
         return None
 
-def call_deepseek(messages, model="deepseek-chat"):
+def call_deepseek(messages, model="deepseek-v4-flash"):
     url = "https://api.deepseek.com/v1/chat/completions"
     payload = {
         "model": model,

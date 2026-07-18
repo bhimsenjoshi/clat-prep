@@ -182,7 +182,7 @@ export default function QuizPage() {
           selected_option: option,
           time_taken_seconds: timeTaken,
           remaining_ids: questionQueue.length > 0
-            ? questionQueue.slice(queuePosition).map(q => q.id)
+            ? questionQueue.map(q => q.id)
             : [],
         }),
       });
@@ -209,19 +209,18 @@ export default function QuizPage() {
 
   // Serve next question from the passage-grouped queue
   const nextQuestion = useCallback(() => {
-    const nextPos = queuePosition + 1;
-    if (nextPos < questionQueue.length) {
-      setSelected(null);
-      setResult(null);
-      setShowExplanation(false);
-      questionStartTime.current = Date.now();
-      const { correct_option, ...safeQ } = questionQueue[nextPos] as any;
-      setQuestion(safeQ as QuestionData);
-      setQueuePosition(nextPos);
-    } else {
+    if (questionQueue.length === 0) {
       setSessionComplete(true);
+      return;
     }
-  }, [queuePosition, questionQueue]);
+    setSelected(null);
+    setResult(null);
+    setShowExplanation(false);
+    questionStartTime.current = Date.now();
+    const { correct_option, ...safeQ } = questionQueue[0] as any;
+    setQuestion(safeQ as QuestionData);
+    setQuestionQueue(prev => prev.slice(1));
+  }, [questionQueue]);
 
   // Fetch all unasked questions for the section at start, grouped by passage
   const buildPassageQueue = useCallback(async (extraExcludeIds: string[] = []) => {

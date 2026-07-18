@@ -67,7 +67,7 @@ Source: ${source || 'News'}`;
         'Authorization': `Bearer ${process.env.DEEPSEEK_API_KEY}`,
       },
       body: JSON.stringify({
-        model: 'deepseek-chat',
+        model: 'deepseek-v4-flash',
         messages: [
           { role: 'system', content: 'You generate CLAT GK quiz questions. Always respond with valid JSON only.' },
           { role: 'user', content: prompt },

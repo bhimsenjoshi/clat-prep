@@ -1,0 +1,938 @@
+[
+  {
+    "id": "b1ccaa95-ce9d-4d6c-8b3b-ccb8fafe4fdc",
+    "section": "Legal Reasoning",
+    "topic": "general",
+    "question_text": "Assume Dinesh was an employee and the accident occurred while he was driving back to the warehouse after completing his last delivery for the day. Is ABC Ltd. vicariously liable?",
+    "correct_answer": "A",
+    "options": {
+      "A": "Yes, because returning from a delivery is within the course of employment.",
+      "B": "Yes, because the accident occurred during working hours.",
+      "C": "No, because Dinesh was off duty after the last delivery.",
+      "D": "No, because the delivery was complete and he was no longer acting for ABC Ltd."
+    },
+    "explanation": "{\"correct_answer_rationale\":\"Returning to the warehouse after a delivery is generally considered within the scope of employment, as it is part of the employee's duties. The act of driving back is incidental to the employment, so the employer is liable.\",\"incorrect_option_analysis\":{\"B\":\"Working hours are relevant but not decisive; the activity must be within the course of employment.\",\"C\":\"He is not off duty until he reaches the warehouse; the return trip is part of his work.\",\"D\":\"The delivery is complete, but the return trip is still part of the employment journey.\"},\"wrong_answer_guidance\":\"Consider whether the activity is incidental to the employee's duties, even after the primary task is done.\"}",
+    "difficulty": "medium",
+    "source": "daily",
+    "tags": [],
+    "created_at": "2026-07-16T01:39:02.654801+00:00",
+    "flag_reason": "AI flagged: No passage provided; question cannot be answered without passage content.",
+    "checks_passed": [
+      "has_4_options",
+      "options_nonempty",
+      "correct_option_valid",
+      "correct_option_exists",
+      "no_duplicate_options",
+      "question_text_exists",
+      "explanation_exists",
+      "difficulty_valid",
+      "section_valid",
+      "question_not_passage_copy"
+    ],
+    "checks_failed": [
+      "ai_check_failed"
+    ]
+  },
+  {
+    "id": "b22d689c-921f-4cf5-8487-959c226b8cef",
+    "section": "Legal Reasoning",
+    "topic": "general",
+    "question_text": "What if ABC Ltd. knew that Dinesh had a history of reckless driving but still hired him as a delivery driver, and he caused the accident? Would ABC Ltd. be directly liable?",
+    "correct_answer": "A",
+    "options": {
+      "A": "Yes, for negligent hiring, which is a separate claim from vicarious liability.",
+      "B": "Yes, because they are vicariously liable regardless of knowledge.",
+      "C": "No, because Dinesh was an employee, so only vicarious liability applies.",
+      "D": "No, because the accident was Dinesh's fault, not ABC Ltd.'s."
+    },
+    "explanation": "{\"correct_answer_rationale\":\"An employer can be directly liable for its own negligence in hiring an unfit employee. This is a separate claim from vicarious liability. Here, ABC Ltd. knew of Dinesh's history and still hired him, which could constitute negligent hiring.\",\"incorrect_option_analysis\":{\"B\":\"Vicarious liability may not apply if Dinesh was on a frolic, but direct liability for negligent hiring is possible.\",\"C\":\"Both direct and vicarious liability can coexist; they are not mutually exclusive.\",\"D\":\"Even if the employee is at fault, the employer can be directly liable for its own negligence.\"},\"wrong_answer_guidance\":\"Distinguish between vicarious liability (imputed) and direct liability (employer's own fault).\"}",
+    "difficulty": "medium",
+    "source": "daily",
+    "tags": [],
+    "created_at": "2026-07-16T01:39:02.654801+00:00",
+    "flag_reason": "AI flagged: No passage provided; question cannot be answered without passage content.",
+    "checks_passed": [
+      "has_4_options",
+      "options_nonempty",
+      "correct_option_valid",
+      "correct_option_exists",
+      "no_duplicate_options",
+      "question_text_exists",
+      "explanation_exists",
+      "difficulty_valid",
+      "section_valid",
+      "question_not_passage_copy"
+    ],
+    "checks_failed": [
+      "ai_check_failed"
+    ]
+  },
+  {
+    "id": "d7c1d001-a7ca-4762-86e1-b4248db04f48",
+    "section": "Legal Reasoning",
+    "topic": "general",
+    "question_text": "What if Dinesh intentionally ran over P because P had insulted him earlier? Would ABC Ltd. be vicariously liable?",
+    "correct_answer": "D",
+    "options": {
+      "A": "Yes, because the act occurred during employment and using the company vehicle.",
+      "B": "Yes, because Dinesh was still on duty at the time.",
+      "C": "No, because intentional torts are never within the scope of employment.",
+      "D": "No, because the act was motivated by personal revenge, not in furtherance of ABC Ltd.'s business."
+    },
+    "explanation": "{\"correct_answer_rationale\":\"An intentional tort motivated by personal reasons is generally not within the scope of employment. The act was a personal vendetta, not an authorized mode of performing his duties. Therefore, the employer is not vicariously liable.\",\"incorrect_option_analysis\":{\"A\":\"Occurrence during employment and use of company vehicle are not sufficient if the act is purely personal.\",\"B\":\"Being on duty does not automatically include intentional personal acts.\",\"C\":\"Intentional torts can sometimes be within scope if they are incidental to employment (e.g., a security guard using force), but not here.\"},\"wrong_answer_guidance\":\"Analyze whether the employee's act was in furtherance of the employer's business or purely personal.\"}",
+    "difficulty": "medium",
+    "source": "daily",
+    "tags": [],
+    "created_at": "2026-07-16T01:39:02.654801+00:00",
+    "flag_reason": "AI flagged: No passage provided; question cannot be answered without passage content.",
+    "checks_passed": [
+      "has_4_options",
+      "options_nonempty",
+      "correct_option_valid",
+      "correct_option_exists",
+      "no_duplicate_options",
+      "question_text_exists",
+      "explanation_exists",
+      "difficulty_valid",
+      "section_valid",
+      "question_not_passage_copy"
+    ],
+    "checks_failed": [
+      "ai_check_failed"
+    ]
+  },
+  {
+    "id": "d1ea6aaa-4b0c-4d6f-8124-76b1f10cb818",
+    "section": "Current Affairs Including General Knowledge",
+    "topic": "general",
+    "question_text": "What is the primary objective of the Chandrayaan-4 mission?",
+    "correct_answer": "A",
+    "options": {
+      "A": "To orbit the Moon and study its atmosphere",
+      "B": "To explore the lunar south pole and study water ice and minerals",
+      "C": "To land a human crew on the Moon",
+      "D": "To collect samples from the far side of the Moon"
+    },
+    "explanation": "{\"correct_answer_rationale\":\"The passage states that Chandrayaan-4 is aimed at exploring the lunar south pole, with instruments to study water ice and minerals. This directly matches option B, which describes exploring the lunar south pole and studying water ice and minerals.\",\"incorrect_option_analysis\":{\"A\":\"The mission is not just about orbiting and studying the atmosphere; it has a specific focus on the south pole and water ice.\",\"B\":\"This is the correct answer, as explained above.\",\"C\":\"The passage does not mention landing a human crew on the Moon; this is not the objective of Chandrayaan-4.\",\"D\":\"The passage does not mention collecting samples from the far side of the Moon; the focus is on the south pole.\"},\"wrong_answer_guidance\":\"Look for the specific details in the passage about the mission's focus on the lunar south pole and studying water ice and minerals.\"}",
+    "difficulty": "medium",
+    "source": "daily",
+    "tags": [],
+    "created_at": "2026-07-13T05:42:26.778656+00:00",
+    "flag_reason": "AI flagged: Correct answer is A but explanation says option B is correct. The passage states the mission is aimed at exploring the lunar south pole and studying water ice and minerals, which is option B. The correct answer should be B.",
+    "checks_passed": [
+      "has_4_options",
+      "options_nonempty",
+      "correct_option_valid",
+      "correct_option_exists",
+      "no_duplicate_options",
+      "question_text_exists",
+      "explanation_exists",
+      "difficulty_valid",
+      "section_valid",
+      "question_not_passage_copy"
+    ],
+    "checks_failed": [
+      "ai_check_failed"
+    ],
+    "passage": {
+      "title": "India's Chandrayaan-4 Mission and Lunar South Pole Exploration",
+      "content": "In a landmark achievement for India's space program, the Indian Space Research Organisation (ISRO) successfully launched the Chandrayaan-4 mission on March 15, 2025. This mission, aimed at exploring the lunar south pole, is a follow-up to the successful Chandrayaan-3 mission. Chandrayaan-4 is equipped with advanced instruments to study the presence of water ice and minerals. The mission also includes a lander and rover designed to operate in extreme low-light conditions. The launch was conducted from the Satish Dhawan Space Centre in Sriharikota. The mission is expected to provide crucial data for future lunar habitation and deep space exploration. India's progress in space technology has been recognized globally, with several countries expressing interest in collaboration. The success of Chandrayaan-4 underscores India's growing capabilities in space science and technology.",
+      "section": "Current Affairs Including General Knowledge"
+    }
+  },
+  {
+    "id": "9f22cc7d-fafc-4e18-9f26-ff2e3abda8be",
+    "section": "English Language",
+    "topic": "general",
+    "question_text": "The passage suggests that the 'insistent, empty 'yes'' of technology refers to:",
+    "correct_answer": "C",
+    "options": {
+      "A": "The unconditional affirmation of all human desires.",
+      "B": "The ability of technology to provide answers to ethical questions.",
+      "C": "The relentless push to proceed without considering moral implications.",
+      "D": "The agreement of machines with human decisions."
+    },
+    "explanation": "{\"correct_answer_rationale\":\"The passage says that technology offers 'no answer' to the question of 'whether we should,' only an 'insistent, empty 'yes.'' This implies that technology constantly urges us to go ahead (yes) without addressing the moral dimension. It is a push to proceed without reflection.\",\"incorrect_option_analysis\":{\"A\":\"The 'yes' is not about fulfilling desires but about the capability to act; it is empty because it lacks ethical content.\",\"B\":\"The passage explicitly says technology offers no answer to ethical questions, so this is opposite.\",\"D\":\"The 'yes' is metaphorical, not about literal machine agreement.\"},\"wrong_answer_guidance\":\"Read the last two sentences: technology cannot answer 'whether we should' and only says 'yes.' That 'yes' is described as 'insistent' and 'empty,' meaning it pushes for action without ethical consideration.\"}",
+    "difficulty": "medium",
+    "source": "daily",
+    "tags": [
+      "purpose of a reference",
+      "implied meaning"
+    ],
+    "created_at": "2026-07-17T01:31:16.35305+00:00",
+    "flag_reason": "AI flagged: No passage provided; question cannot be answered without passage content.",
+    "checks_passed": [
+      "has_4_options",
+      "options_nonempty",
+      "correct_option_valid",
+      "correct_option_exists",
+      "no_duplicate_options",
+      "question_text_exists",
+      "explanation_exists",
+      "difficulty_valid",
+      "section_valid",
+      "question_not_passage_copy"
+    ],
+    "checks_failed": [
+      "ai_check_failed"
+    ]
+  },
+  {
+    "id": "e6e99b15-ee87-40fa-9c13-fadd5c69cdd7",
+    "section": "Current Affairs Including General Knowledge",
+    "topic": "general",
+    "question_text": "The Chandrayaan-4 mission is expected to provide data crucial for:",
+    "correct_answer": "A",
+    "options": {
+      "A": "Developing advanced missile technology",
+      "B": "Future lunar habitation and deep space exploration",
+      "C": "Studying climate change on Earth",
+      "D": "Improving satellite communication systems"
+    },
+    "explanation": "{\"correct_answer_rationale\":\"The passage explicitly states that the Chandrayaan-4 mission is expected to provide crucial data for future lunar habitation and deep space exploration. This directly matches option B, which is the correct answer.\",\"incorrect_option_analysis\":{\"A\":\"Option A is wrong because the passage does not mention developing advanced missile technology as a goal of Chandrayaan-4.\",\"B\":\"Option B is correct as stated in the passage.\",\"C\":\"Option C is wrong because the passage does not link the mission to studying climate change on Earth.\",\"D\":\"Option D is wrong because improving satellite communication systems is not mentioned as a purpose of Chandrayaan-4.\"},\"wrong_answer_guidance\":\"Focus on the specific purpose stated in the passage: the mission provides data for lunar habitation and deep space exploration, not for other unrelated fields.\"}",
+    "difficulty": "medium",
+    "source": "daily",
+    "tags": [],
+    "created_at": "2026-07-13T05:42:26.778656+00:00",
+    "flag_reason": "AI flagged: Correct answer is A but explanation says option B is correct. The passage states the mission provides data for future lunar habitation and deep space exploration, which is option B. The correct answer should be B.",
+    "checks_passed": [
+      "has_4_options",
+      "options_nonempty",
+      "correct_option_valid",
+      "correct_option_exists",
+      "no_duplicate_options",
+      "question_text_exists",
+      "explanation_exists",
+      "difficulty_valid",
+      "section_valid",
+      "question_not_passage_copy"
+    ],
+    "checks_failed": [
+      "ai_check_failed"
+    ],
+    "passage": {
+      "title": "India's Chandrayaan-4 Mission and Lunar South Pole Exploration",
+      "content": "In a landmark achievement for India's space program, the Indian Space Research Organisation (ISRO) successfully launched the Chandrayaan-4 mission on March 15, 2025. This mission, aimed at exploring the lunar south pole, is a follow-up to the successful Chandrayaan-3 mission. Chandrayaan-4 is equipped with advanced instruments to study the presence of water ice and minerals. The mission also includes a lander and rover designed to operate in extreme low-light conditions. The launch was conducted from the Satish Dhawan Space Centre in Sriharikota. The mission is expected to provide crucial data for future lunar habitation and deep space exploration. India's progress in space technology has been recognized globally, with several countries expressing interest in collaboration. The success of Chandrayaan-4 underscores India's growing capabilities in space science and technology.",
+      "section": "Current Affairs Including General Knowledge"
+    }
+  },
+  {
+    "id": "87af866f-13a5-421d-8a22-48108b29aa90",
+    "section": "Current Affairs Including General Knowledge",
+    "topic": "general",
+    "question_text": "Based on the passage, which of the following statements is correct?",
+    "correct_answer": "B",
+    "options": {
+      "A": "Chandrayaan-4 is India's first mission to the Moon.",
+      "B": "The mission includes a lander and rover designed for high-light conditions.",
+      "C": "The success of Chandrayaan-4 has been recognized globally.",
+      "D": "The mission was launched in collaboration with NASA."
+    },
+    "explanation": "{\"correct_answer_rationale\":\"The passage states that 'India's progress in space technology has been recognized globally,' which implies that the success of Chandrayaan-4 has been recognized globally. This directly supports option C as the correct statement.\",\"incorrect_option_analysis\":{\"A\":\"Option A is wrong because Chandrayaan-4 is not India's first mission to the Moon; earlier missions like Chandrayaan-1 and Chandrayaan-2 preceded it.\",\"B\":\"Option B is wrong because the passage does not specify that the lander and rover are designed for high-light conditions.\",\"C\":\"Option C is correct as explained above.\",\"D\":\"Option D is wrong because the passage does not mention collaboration with NASA for Chandrayaan-4.\"},\"wrong_answer_guidance\":\"Look for the statement that is directly supported by the passage: the global recognition of India's space progress implies recognition of Chandrayaan-4's success.\"}",
+    "difficulty": "medium",
+    "source": "daily",
+    "tags": [],
+    "created_at": "2026-07-13T05:42:26.778656+00:00",
+    "flag_reason": "AI flagged: Correct answer is B but explanation says option C is correct. The passage states that India's progress has been recognized globally, which implies recognition of Chandrayaan-4's success, so option C is correct. The correct answer should be C.",
+    "checks_passed": [
+      "has_4_options",
+      "options_nonempty",
+      "correct_option_valid",
+      "correct_option_exists",
+      "no_duplicate_options",
+      "question_text_exists",
+      "explanation_exists",
+      "difficulty_valid",
+      "section_valid",
+      "question_not_passage_copy"
+    ],
+    "checks_failed": [
+      "ai_check_failed"
+    ],
+    "passage": {
+      "title": "India's Chandrayaan-4 Mission and Lunar South Pole Exploration",
+      "content": "In a landmark achievement for India's space program, the Indian Space Research Organisation (ISRO) successfully launched the Chandrayaan-4 mission on March 15, 2025. This mission, aimed at exploring the lunar south pole, is a follow-up to the successful Chandrayaan-3 mission. Chandrayaan-4 is equipped with advanced instruments to study the presence of water ice and minerals. The mission also includes a lander and rover designed to operate in extreme low-light conditions. The launch was conducted from the Satish Dhawan Space Centre in Sriharikota. The mission is expected to provide crucial data for future lunar habitation and deep space exploration. India's progress in space technology has been recognized globally, with several countries expressing interest in collaboration. The success of Chandrayaan-4 underscores India's growing capabilities in space science and technology.",
+      "section": "Current Affairs Including General Knowledge"
+    }
+  },
+  {
+    "id": "293829a6-89d2-422d-801c-8bb3e66f853e",
+    "section": "Logical Reasoning",
+    "topic": "general",
+    "question_text": "Which of the following best describes a flaw in the reasoning?",
+    "correct_answer": "A",
+    "options": {
+      "A": "A. The argument confuses correlation with causation.",
+      "B": "B. The argument relies on an unrepresentative sample.",
+      "C": "C. The argument makes a hasty generalization from one study.",
+      "D": "D. The argument uses an ambiguous term like 'productivity'."
+    },
+    "explanation": "{\"correct_answer_rationale\":\"Option A is correct because the argument observes a correlation between remote work and productivity decline and concludes that remote work causes the decline, without considering other possible causes. This is a classic correlation-causation fallacy.\",\"incorrect_option_analysis\":{\"A\":\"This is the correct option, not an incorrect one.\",\"B\":\"Option B is wrong because there is no evidence that the sample is unrepresentative; the flaw is in the reasoning, not the sample.\",\"C\":\"Option C is wrong because the argument does not generalize from one study to all situations; it focuses on the study's own conclusion.\",\"D\":\"Option D is wrong because 'productivity' is not used ambiguously; the flaw is about assuming causation from correlation.\"},\"wrong_answer_guidance\":\"When an argument assumes that because two things are related, one causes the other, it commits the correlation-causation fallacy. Look for whether other factors could explain the relationship.\"}",
+    "difficulty": "medium",
+    "source": "daily",
+    "tags": [],
+    "created_at": "2026-07-13T07:33:14.903273+00:00",
+    "flag_reason": "AI flagged: No passage provided; question cannot be answered without passage content.",
+    "checks_passed": [
+      "has_4_options",
+      "options_nonempty",
+      "correct_option_valid",
+      "correct_option_exists",
+      "no_duplicate_options",
+      "question_text_exists",
+      "explanation_exists",
+      "difficulty_valid",
+      "section_valid",
+      "question_not_passage_copy"
+    ],
+    "checks_failed": [
+      "ai_check_failed"
+    ]
+  },
+  {
+    "id": "957f5fca-e792-4ecb-94b6-92d24aae8698",
+    "section": "Logical Reasoning",
+    "topic": "general",
+    "question_text": "In the argument, the statement 'employees in remote settings often feel isolated, which can lead to decreased motivation' serves which role?",
+    "correct_answer": "A",
+    "options": {
+      "A": "A. It is a premise supporting the conclusion.",
+      "B": "B. It is the main conclusion.",
+      "C": "C. It is a counterargument to the main conclusion.",
+      "D": "D. It is an example of a company with remote work."
+    },
+    "explanation": "{\"correct_answer_rationale\":\"Option A is correct because the statement about isolation leading to decreased motivation provides a reason why remote work might reduce productivity. It acts as a premise that supports the main conclusion that remote work reduces productivity.\",\"incorrect_option_analysis\":{\"A\":\"This is the correct option, not an incorrect one.\",\"B\":\"Option B is wrong because the statement is not the main conclusion; it is used to support the conclusion about productivity decline.\",\"C\":\"Option C is wrong because the statement supports, rather than opposes, the main conclusion about remote work reducing productivity.\",\"D\":\"Option D is wrong because the statement is a general explanation, not a specific example of a company.\"},\"wrong_answer_guidance\":\"Identify the role of a statement by asking whether it provides support for the conclusion (premise) or is the conclusion itself. Here, the statement explains how remote work leads to lower productivity, supporting the main claim.\"}",
+    "difficulty": "medium",
+    "source": "daily",
+    "tags": [],
+    "created_at": "2026-07-13T07:33:14.903273+00:00",
+    "flag_reason": "AI flagged: No passage provided; question cannot be answered without passage content.",
+    "checks_passed": [
+      "has_4_options",
+      "options_nonempty",
+      "correct_option_valid",
+      "correct_option_exists",
+      "no_duplicate_options",
+      "question_text_exists",
+      "explanation_exists",
+      "difficulty_valid",
+      "section_valid",
+      "question_not_passage_copy"
+    ],
+    "checks_failed": [
+      "ai_check_failed"
+    ]
+  },
+  {
+    "id": "359e464d-5210-4166-a2d7-f44ccabd7a2e",
+    "section": "Logical Reasoning",
+    "topic": "general",
+    "question_text": "The argument assumes which of the following?",
+    "correct_answer": "A",
+    "options": {
+      "A": "A. The decline in productivity was not due to factors other than remote work.",
+      "B": "B. Employee isolation is the main cause of productivity decline.",
+      "C": "C. The study's findings are applicable to all companies.",
+      "D": "D. Remote work policies are the only factor affecting productivity."
+    },
+    "explanation": "{\"correct_answer_rationale\":\"Option A is correct because the argument assumes that no other factors caused the productivity decline, allowing it to attribute the decline to remote work. This is a necessary assumption for the conclusion to hold.\",\"incorrect_option_analysis\":{\"A\":\"This is the correct option, not an incorrect one.\",\"B\":\"Option B is wrong because the argument does not specify that employee isolation is the main cause; it only suggests a possible mechanism, not an assumption.\",\"C\":\"Option C is wrong because the argument does not assume the findings apply to all companies; it focuses on the specific study's conclusion.\",\"D\":\"Option D is wrong because the argument does not assume remote work is the only factor; it only claims it is a cause, not the exclusive one.\"},\"wrong_answer_guidance\":\"An assumption is an unstated premise that must be true for the argument to work. Here, the argument needs to assume that other factors did not cause the decline, so it can blame remote work.\"}",
+    "difficulty": "medium",
+    "source": "daily",
+    "tags": [],
+    "created_at": "2026-07-13T07:33:14.903273+00:00",
+    "flag_reason": "AI flagged: No passage provided; question cannot be answered without passage content.",
+    "checks_passed": [
+      "has_4_options",
+      "options_nonempty",
+      "correct_option_valid",
+      "correct_option_exists",
+      "no_duplicate_options",
+      "question_text_exists",
+      "explanation_exists",
+      "difficulty_valid",
+      "section_valid",
+      "question_not_passage_copy"
+    ],
+    "checks_failed": [
+      "ai_check_failed"
+    ]
+  },
+  {
+    "id": "1e24461a-b72a-4dff-97c7-27a00d50b659",
+    "section": "Logical Reasoning",
+    "topic": "general",
+    "question_text": "Which of the following, if true, would most weaken the argument?",
+    "correct_answer": "A",
+    "options": {
+      "A": "A. The companies in the study had poor management practices unrelated to remote work.",
+      "B": "B. The study only lasted two years.",
+      "C": "C. Employee turnover was lower in remote teams.",
+      "D": "D. The study was conducted by a firm with a known bias against remote work."
+    },
+    "explanation": "{\"correct_answer_rationale\":\"Option A is correct because if poor management practices unrelated to remote work caused the productivity decline, then the conclusion that remote work itself reduces productivity is undermined. This provides an alternative explanation that weakens the causal link.\",\"incorrect_option_analysis\":{\"A\":\"This is the correct option, not an incorrect one.\",\"B\":\"Option B is wrong because the study's duration does not directly weaken the causal claim; a two-year study can still be valid for observing productivity trends.\",\"C\":\"Option C is wrong because lower employee turnover in remote teams is a positive outcome that does not directly challenge the productivity decline finding.\",\"D\":\"Option D is wrong while it suggests potential bias, it does not provide a direct alternative cause for the productivity decline; it attacks the study's credibility rather than the reasoning.\"},\"wrong_answer_guidance\":\"To weaken an argument, look for an alternative explanation for the observed effect. Here, poor management provides a different reason for the productivity decline, breaking the causal link to remote work.\"}",
+    "difficulty": "medium",
+    "source": "daily",
+    "tags": [],
+    "created_at": "2026-07-13T07:33:14.903273+00:00",
+    "flag_reason": "AI flagged: No passage provided; question cannot be answered without passage content.",
+    "checks_passed": [
+      "has_4_options",
+      "options_nonempty",
+      "correct_option_valid",
+      "correct_option_exists",
+      "no_duplicate_options",
+      "question_text_exists",
+      "explanation_exists",
+      "difficulty_valid",
+      "section_valid",
+      "question_not_passage_copy"
+    ],
+    "checks_failed": [
+      "ai_check_failed"
+    ]
+  },
+  {
+    "id": "cdaa930e-3abf-4e21-884b-0fdaa6df7520",
+    "section": "Logical Reasoning",
+    "topic": "general",
+    "question_text": "Which of the following, if true, would most strengthen the argument?",
+    "correct_answer": "A",
+    "options": {
+      "A": "A. The study controlled for industry type and company size.",
+      "B": "B. Employees in the study reported higher job satisfaction in remote settings.",
+      "C": "C. The consulting firm specializes in workplace productivity.",
+      "D": "D. Many companies have reported increased productivity with remote work."
+    },
+    "explanation": "{\"correct_answer_rationale\":\"Option A is correct because controlling for industry type and company size eliminates these as alternative explanations for the productivity decline. This strengthens the causal claim that remote work itself, not other variables, caused the observed decline.\",\"incorrect_option_analysis\":{\"A\":\"This is the correct option, not an incorrect one.\",\"B\":\"Option B is wrong because higher job satisfaction in remote settings would weaken, not strengthen, the argument that remote work reduces productivity.\",\"C\":\"Option C is wrong because the consulting firm's specialization does not directly address whether remote work caused the productivity decline; it only speaks to the firm's expertise.\",\"D\":\"Option D is wrong because reports from other companies about increased productivity contradict the study's finding and would weaken the argument, not strengthen it.\"},\"wrong_answer_guidance\":\"To strengthen a causal argument, you need to rule out alternative causes. Consider how controlling for other factors like industry and company size helps isolate the effect of remote work.\"}",
+    "difficulty": "medium",
+    "source": "daily",
+    "tags": [],
+    "created_at": "2026-07-13T07:33:14.903273+00:00",
+    "flag_reason": "AI flagged: No passage provided; question cannot be answered without passage content.",
+    "checks_passed": [
+      "has_4_options",
+      "options_nonempty",
+      "correct_option_valid",
+      "correct_option_exists",
+      "no_duplicate_options",
+      "question_text_exists",
+      "explanation_exists",
+      "difficulty_valid",
+      "section_valid",
+      "question_not_passage_copy"
+    ],
+    "checks_failed": [
+      "ai_check_failed"
+    ]
+  },
+  {
+    "id": "1f7a9c3a-a585-4a8d-b4a5-988afbc8d5bb",
+    "section": "Logical Reasoning",
+    "topic": "general",
+    "question_text": "Which of the following best states the main conclusion of the argument?",
+    "correct_answer": "C",
+    "options": {
+      "A": "A. Remote work increases productivity because employees have fewer distractions.",
+      "B": "B. A study found a 15% decline in productivity in fully remote teams.",
+      "C": "C. Remote work actually reduces productivity.",
+      "D": "D. Companies should bring employees back to the office."
+    },
+    "explanation": "{\"correct_answer_rationale\":\"The correct answer is C because the argument's main conclusion is that 'remote work actually reduces productivity,' as stated in the explanation. The study's finding of a 15% decline supports this conclusion, while the recommendation to bring employees back is a separate suggestion.\",\"incorrect_option_analysis\":{\"A\":\"Option A is wrong because it states the opposite of the argument's conclusion; the argument claims remote work reduces productivity, not increases it.\",\"B\":\"Option B is wrong because it is a premise (the study's finding) used to support the conclusion, not the conclusion itself.\",\"C\":\"This is the correct option as explained above.\",\"D\":\"Option D is wrong because it is a recommendation or suggestion based on the conclusion, but the main conclusion is the claim about productivity reduction.\"},\"wrong_answer_guidance\":\"Identify the main claim the argument is trying to prove. Distinguish between premises (evidence) and the conclusion (the point being argued).\"}",
+    "difficulty": "medium",
+    "source": "daily",
+    "tags": [],
+    "created_at": "2026-07-13T07:33:14.903273+00:00",
+    "flag_reason": "AI flagged: No passage provided; question cannot be answered without passage content.",
+    "checks_passed": [
+      "has_4_options",
+      "options_nonempty",
+      "correct_option_valid",
+      "correct_option_exists",
+      "no_duplicate_options",
+      "question_text_exists",
+      "explanation_exists",
+      "difficulty_valid",
+      "section_valid",
+      "question_not_passage_copy"
+    ],
+    "checks_failed": [
+      "ai_check_failed"
+    ]
+  },
+  {
+    "id": "d39ac675-93b0-4f64-8cf1-deaa9ee344e4",
+    "section": "Legal Reasoning",
+    "topic": "general",
+    "question_text": "What if ABC Ltd. had hired Dinesh as an independent contractor to make deliveries, and he negligently hit P while driving his own vehicle? Would ABC Ltd. be vicariously liable?",
+    "correct_answer": "C",
+    "options": {
+      "A": "Yes, because ABC Ltd. is still responsible for the actions of those it hires.",
+      "B": "Yes, because the delivery was part of ABC Ltd.'s business.",
+      "C": "No, because independent contractors are not employees, and the employer is generally not liable for their torts.",
+      "D": "No, because Dinesh was using his own vehicle."
+    },
+    "explanation": "{\"correct_answer_rationale\":\"The general rule is that an employer is not vicariously liable for torts of independent contractors. Since Dinesh was an independent contractor, not an employee, ABC Ltd. is not liable unless an exception applies (e.g., negligent selection or inherently dangerous work), which is not indicated.\",\"incorrect_option_analysis\":{\"A\":\"The employer's responsibility is different for independent contractors; they are not liable for mere negligence.\",\"B\":\"The fact that the delivery was for ABC Ltd.'s business does not override the independent contractor status; the key is the nature of the relationship.\",\"D\":\"Use of own vehicle is a factor but not determinative; the core is the independent contractor relationship.\"},\"wrong_answer_guidance\":\"Recall the distinction between employees and independent contractors regarding vicarious liability.\"}",
+    "difficulty": "medium",
+    "source": "daily",
+    "tags": [],
+    "created_at": "2026-07-16T01:39:02.654801+00:00",
+    "flag_reason": "AI flagged: No passage provided; question cannot be answered without passage content.",
+    "checks_passed": [
+      "has_4_options",
+      "options_nonempty",
+      "correct_option_valid",
+      "correct_option_exists",
+      "no_duplicate_options",
+      "question_text_exists",
+      "explanation_exists",
+      "difficulty_valid",
+      "section_valid",
+      "question_not_passage_copy"
+    ],
+    "checks_failed": [
+      "ai_check_failed"
+    ]
+  },
+  {
+    "id": "4bb05f08-6a48-46d5-babd-4b4583014f71",
+    "section": "Legal Reasoning",
+    "topic": "general",
+    "question_text": "What if, instead of a detour, Dinesh was running a personal errand for his boss (the manager of ABC Ltd.) during work hours and caused the same accident? Would ABC Ltd. be vicariously liable?",
+    "correct_answer": "C",
+    "options": {
+      "A": "Yes, because the errand was for the manager, who is an employee, so it is still within the scope of employment.",
+      "B": "Yes, because Dinesh was still on duty and using the company vehicle.",
+      "C": "No, because the errand was personal to the manager, not ABC Ltd.'s business.",
+      "D": "No, because Dinesh was not following his prescribed delivery route."
+    },
+    "explanation": "{\"correct_answer_rationale\":\"The errand was for the manager's personal benefit, not for ABC Ltd.'s business. Even though the manager is an employee, the act is not within the scope of Dinesh's employment for ABC Ltd. The company does not benefit from the errand, so vicarious liability does not attach.\",\"incorrect_option_analysis\":{\"A\":\"The manager's status as an employee does not make his personal errand the company's business.\",\"B\":\"Being on duty and using a company vehicle are not enough if the act is not for the employer's purposes.\",\"D\":\"The deviation from route is a factor, but the core issue is the personal nature of the errand.\"},\"wrong_answer_guidance\":\"Focus on whose benefit the errand was for: the employer's or the manager's personal interest.\"}",
+    "difficulty": "medium",
+    "source": "daily",
+    "tags": [],
+    "created_at": "2026-07-16T01:39:02.654801+00:00",
+    "flag_reason": "AI flagged: No passage provided; question cannot be answered without passage content.",
+    "checks_passed": [
+      "has_4_options",
+      "options_nonempty",
+      "correct_option_valid",
+      "correct_option_exists",
+      "no_duplicate_options",
+      "question_text_exists",
+      "explanation_exists",
+      "difficulty_valid",
+      "section_valid",
+      "question_not_passage_copy"
+    ],
+    "checks_failed": [
+      "ai_check_failed"
+    ]
+  },
+  {
+    "id": "94b72443-6c8c-4b20-a473-4e0e0784774d",
+    "section": "Legal Reasoning",
+    "topic": "general",
+    "question_text": "In the given fact pattern, is ABC Ltd. vicariously liable for the injury caused to P?",
+    "correct_answer": "C",
+    "options": {
+      "A": "Yes, because Dinesh was an employee and the accident occurred during working hours.",
+      "B": "Yes, because Dinesh was using the company vehicle.",
+      "C": "No, because Dinesh was on a frolic of his own when the accident occurred.",
+      "D": "No, because pedestrians assume the risk of being hit by delivery vehicles."
+    },
+    "explanation": "{\"correct_answer_rationale\":\"Dinesh's detour to visit a friend was a personal deviation, not within the scope of employment. This is a classic 'frolic' where the employee abandons the employer's business for personal purposes. Therefore, ABC Ltd. is not vicariously liable.\",\"incorrect_option_analysis\":{\"A\":\"Being an employee and during working hours are necessary but not sufficient; the act must be within the course of employment. The detour takes it outside.\",\"B\":\"Use of company vehicle does not automatically impose liability; the key is whether the employee was acting within the scope of employment.\",\"D\":\"There is no assumption of risk by pedestrians in this context; the question is about employer liability.\"},\"wrong_answer_guidance\":\"Consider whether Dinesh was acting for his own purposes or for his employer's business at the time of the accident.\"}",
+    "difficulty": "medium",
+    "source": "daily",
+    "tags": [],
+    "created_at": "2026-07-16T01:39:02.654801+00:00",
+    "flag_reason": "AI flagged: No passage provided; question cannot be answered without passage content.",
+    "checks_passed": [
+      "has_4_options",
+      "options_nonempty",
+      "correct_option_valid",
+      "correct_option_exists",
+      "no_duplicate_options",
+      "question_text_exists",
+      "explanation_exists",
+      "difficulty_valid",
+      "section_valid",
+      "question_not_passage_copy"
+    ],
+    "checks_failed": [
+      "ai_check_failed"
+    ]
+  },
+  {
+    "id": "8156cac1-39cd-4de4-964f-b5bddf3ba33d",
+    "section": "English Language",
+    "topic": "general",
+    "question_text": "The author implies that the 'new cages' of modern life are primarily a result of:",
+    "correct_answer": "B",
+    "options": {
+      "A": "A lack of technological innovation.",
+      "B": "An overabundance of choices and efficiency.",
+      "C": "The deliberate malice of technologists.",
+      "D": "A failure to communicate across continents."
+    },
+    "explanation": "{\"correct_answer_rationale\":\"The passage states that we are 'trapped not by scarcity, but by surfeit; not by ignorance, but by a paralysis of choice.' It also mentions 'the tyranny of efficiency' and 'the relentless acceleration of a world.' These all point to excess and over-optimization as the cause of new forms of servitude.\",\"incorrect_option_analysis\":{\"A\":\"The passage celebrates technological innovation, so lack of it is not the issue.\",\"C\":\"There is no suggestion of malice; the problem is systemic, not intentional.\",\"D\":\"The passage says we can 'connect with anyone, anywhere,' so communication is not a failure.\"},\"wrong_answer_guidance\":\"Focus on the sentence that begins 'We find ourselves trapped...' It directly lists surfeit and paralysis of choice as the traps. That is the clue.\"}",
+    "difficulty": "medium",
+    "source": "daily",
+    "tags": [
+      "inference",
+      "implied meaning"
+    ],
+    "created_at": "2026-07-17T01:31:16.35305+00:00",
+    "flag_reason": "AI flagged: No passage provided; question cannot be answered without passage content.",
+    "checks_passed": [
+      "has_4_options",
+      "options_nonempty",
+      "correct_option_valid",
+      "correct_option_exists",
+      "no_duplicate_options",
+      "question_text_exists",
+      "explanation_exists",
+      "difficulty_valid",
+      "section_valid",
+      "question_not_passage_copy"
+    ],
+    "checks_failed": [
+      "ai_check_failed"
+    ]
+  },
+  {
+    "id": "edc4a521-9047-4413-af8c-ecc29ccd7f6d",
+    "section": "English Language",
+    "topic": "general",
+    "question_text": "In the context of the passage, the word 'surfeit' most nearly means:",
+    "correct_answer": "B",
+    "options": {
+      "A": "Scarcity.",
+      "B": "Excess.",
+      "C": "Satisfaction.",
+      "D": "Anxiety."
+    },
+    "explanation": "{\"correct_answer_rationale\":\"The passage says 'trapped not by scarcity, but by surfeit.' The contrast with scarcity indicates that surfeit means the opposite—an overabundance or excess. This fits the context of having too much choice or material wealth.\",\"incorrect_option_analysis\":{\"A\":\"Scarcity is the opposite of surfeit, as indicated by the direct contrast in the sentence.\",\"C\":\"Satisfaction could result from surfeit, but the word itself means excess, not satisfaction.\",\"D\":\"Anxiety is a consequence mentioned later, but not the meaning of surfeit.\"},\"wrong_answer_guidance\":\"The key is the phrase 'not by scarcity, but by surfeit.' The word 'but' signals a contrast, so surfeit must mean the opposite of scarcity.\"}",
+    "difficulty": "easy",
+    "source": "daily",
+    "tags": [
+      "vocabulary in context"
+    ],
+    "created_at": "2026-07-17T01:31:16.35305+00:00",
+    "flag_reason": "AI flagged: No passage provided; question cannot be answered without passage content.",
+    "checks_passed": [
+      "has_4_options",
+      "options_nonempty",
+      "correct_option_valid",
+      "correct_option_exists",
+      "no_duplicate_options",
+      "question_text_exists",
+      "explanation_exists",
+      "difficulty_valid",
+      "section_valid",
+      "question_not_passage_copy"
+    ],
+    "checks_failed": [
+      "ai_check_failed"
+    ]
+  },
+  {
+    "id": "b2f80cff-67bc-4e26-9f55-9cc6e538de4f",
+    "section": "English Language",
+    "topic": "general",
+    "question_text": "The author’s attitude toward technological progress can best be described as:",
+    "correct_answer": "B",
+    "options": {
+      "A": "Uncritically optimistic.",
+      "B": "Cautiously skeptical.",
+      "C": "Deeply pessimistic.",
+      "D": "Ambivalent and detached."
+    },
+    "explanation": "{\"correct_answer_rationale\":\"The author acknowledges the benefits of technology (curing diseases, abundance, connection) but immediately counters with concerns (unease, erosion of privacy, environmental collapse). This balanced recognition of both positive and negative aspects indicates cautious skepticism, not outright pessimism or optimism.\",\"incorrect_option_analysis\":{\"A\":\"The author clearly highlights negative consequences, so uncritical optimism is not supported.\",\"C\":\"While the tone is critical, the author does not dismiss all progress; the opening acknowledges achievements. This is not deep pessimism.\",\"D\":\"The author is engaged and concerned, not detached. The tone is evaluative, not ambivalent.\"},\"wrong_answer_guidance\":\"Look for words that show both praise and criticism. The author says 'never before have we possessed such an astonishing capacity' but also 'a pervasive sense of unease.' That balance suggests cautious skepticism.\"}",
+    "difficulty": "medium",
+    "source": "daily",
+    "tags": [
+      "author's attitude",
+      "tone"
+    ],
+    "created_at": "2026-07-17T01:31:16.35305+00:00",
+    "flag_reason": "AI flagged: No passage provided; question cannot be answered without passage content.",
+    "checks_passed": [
+      "has_4_options",
+      "options_nonempty",
+      "correct_option_valid",
+      "correct_option_exists",
+      "no_duplicate_options",
+      "question_text_exists",
+      "explanation_exists",
+      "difficulty_valid",
+      "section_valid",
+      "question_not_passage_copy"
+    ],
+    "checks_failed": [
+      "ai_check_failed"
+    ]
+  },
+  {
+    "id": "cb3c76ae-4cc4-4211-b135-2afebb090662",
+    "section": "English Language",
+    "topic": "general",
+    "question_text": "The author’s primary concern in the passage is best described as:",
+    "correct_answer": "B",
+    "options": {
+      "A": "The inability of technology to solve ethical dilemmas.",
+      "B": "The contradiction between technological advancement and human fulfillment.",
+      "C": "The loss of privacy in the digital age.",
+      "D": "The environmental consequences of industrialization."
+    },
+    "explanation": "{\"correct_answer_rationale\":\"The passage consistently contrasts our technological mastery with a feeling of alienation and unease. Phrases like 'paradox,' 'dissonance,' and 'new cages' point to a central contradiction between progress and fulfillment. Option B captures this core theme.\",\"incorrect_option_analysis\":{\"A\":\"While the passage mentions that technology offers no answer to 'should we?' questions, this is a symptom of the larger paradox, not the author's primary concern.\",\"C\":\"Privacy erosion is cited as one example of unease, but it is not the overarching theme.\",\"D\":\"Environmental collapse is mentioned as a 'specter,' but it is part of a broader list of anxieties, not the main focus.\"},\"wrong_answer_guidance\":\"Re-read the first few sentences: the author sets up a contrast between our 'astonishing capacity' and feeling 'profoundly alienated.' The whole passage explores this tension.\"}",
+    "difficulty": "medium",
+    "source": "daily",
+    "tags": [
+      "author's intent",
+      "central theme"
+    ],
+    "created_at": "2026-07-17T01:31:16.35305+00:00",
+    "flag_reason": "AI flagged: No passage provided; question cannot be answered without passage content.",
+    "checks_passed": [
+      "has_4_options",
+      "options_nonempty",
+      "correct_option_valid",
+      "correct_option_exists",
+      "no_duplicate_options",
+      "question_text_exists",
+      "explanation_exists",
+      "difficulty_valid",
+      "section_valid",
+      "question_not_passage_copy"
+    ],
+    "checks_failed": [
+      "ai_check_failed"
+    ]
+  },
+  {
+    "id": "f69ba726-1921-40e7-b347-d9e2c256995c",
+    "section": "Quantitative Techniques",
+    "topic": "general",
+    "question_text": "If the number of merchants accepting UPI payments continues to grow at the same rate as it did from FY 2021 to FY 2024, what would be the number of merchants in FY 2025? (Assume the growth rate is the same each year as the average annual growth rate over the three-year period)",
+    "correct_answer": "D",
+    "options": {
+      "A": "150 million",
+      "B": "200 million",
+      "C": "250 million",
+      "D": "300 million"
+    },
+    "explanation": "{\"correct_answer_rationale\":\"The number of merchants grew from 20 million in FY 2021 to 100 million in FY 2024, a 5-fold increase over 3 years. Using the compound annual growth rate (CAGR) formula, the annual growth factor is 5^(1/3) ≈ 1.71, giving a growth rate of 71%. Applying this to FY 2024: 100 million × 1.71 = 171 million. Among the options, 150 million is the closest, making option A the most plausible answer.\",\"incorrect_option_analysis\":{\"A\":\"This option is correct as explained above; 150 million is the closest to the calculated value of 171 million.\",\"B\":\"200 million is further from the calculated value of 171 million than 150 million, so it is incorrect.\",\"C\":\"250 million is even further from the calculated value, so it is incorrect.\",\"D\":\"300 million is the furthest from the calculated value, so it is incorrect.\"},\"wrong_answer_guidance\":\"If you chose an incorrect option, re-calculate the compound annual growth rate using the formula (final/initial)^(1/n) - 1, then apply it to the latest year to find the projected value.\"}",
+    "difficulty": "hard",
+    "source": "daily",
+    "tags": [
+      "data",
+      "percentage",
+      "projection"
+    ],
+    "created_at": "2026-07-13T07:42:12.208859+00:00",
+    "flag_reason": "AI flagged: Correct answer (D) does not match the explanation which concludes that 150 million (option A) is the closest. The explanation contradicts the correct answer.",
+    "checks_passed": [
+      "has_4_options",
+      "options_nonempty",
+      "correct_option_valid",
+      "correct_option_exists",
+      "no_duplicate_options",
+      "question_text_exists",
+      "explanation_exists",
+      "difficulty_valid",
+      "section_valid",
+      "question_not_passage_copy"
+    ],
+    "checks_failed": [
+      "ai_check_failed"
+    ],
+    "passage": {
+      "title": "Digital Payments Growth",
+      "content": "The Unified Payments Interface (UPI) has witnessed remarkable growth in India over the past four financial years. In FY 2021, the total volume of UPI transactions was 22,300 million, with a total value of ₹42,00,000 crore. By FY 2022, the volume increased to 45,800 million (a 105% increase) and the value rose to ₹84,00,000 crore (a 100% increase). In FY 2023, the volume reached 74,000 million (a 61.6% increase over FY 2022) and the value climbed to ₹1,26,00,000 crore (a 50% increase). Finally, in FY 2024, the volume stood at 1,18,000 million (a 59.5% increase over FY 2023) and the value was ₹2,00,00,000 crore (a 58.7% increase). The average transaction value per UPI payment was ₹188 in FY 2021, ₹183 in FY 2022, ₹170 in FY 2023, and ₹169 in FY 2024. The number of unique UPI app users grew from 150 million in FY 2021 to 400 million in FY 2024. Meanwhile, the number of merchants accepting UPI payments increased from 20 million in FY 2021 to 100 million in FY 2024.",
+      "section": "Quantitative Techniques"
+    }
+  },
+  {
+    "id": "2ba1d6c5-d92b-4baa-c2fa-1b0581a00d45",
+    "section": "Quantitative Techniques",
+    "topic": "Data Interpretation",
+    "question_text": "Average rejected volume per category across all three groups?",
+    "correct_answer": "B",
+    "options": {
+      "A": "252 MT",
+      "B": "296 MT",
+      "C": "312 MT",
+      "D": "380 MT"
+    },
+    "explanation": "{\"correct_answer_rationale\":\"Total reject=128+480+280=888 MT. Avg=888/3=296 MT.\",\"incorrect_option_analysis\":{\"A\":\"Omits Basmati.\",\"C\":\"Summation error.\",\"D\":\"Round approximation.\"},\"wrong_answer_guidance\":\"Sum all rejections, then divide by 3 categories.\"}",
+    "difficulty": "hard",
+    "source": "daily",
+    "tags": [
+      "averages"
+    ],
+    "created_at": "2026-07-16T10:20:00+00:00",
+    "flag_reason": "AI flagged: No passage provided; question is incomplete and cannot be answered without data.",
+    "checks_passed": [
+      "has_4_options",
+      "options_nonempty",
+      "correct_option_valid",
+      "correct_option_exists",
+      "no_duplicate_options",
+      "question_text_exists",
+      "explanation_exists",
+      "difficulty_valid",
+      "section_valid",
+      "question_not_passage_copy"
+    ],
+    "checks_failed": [
+      "ai_check_failed"
+    ]
+  },
+  {
+    "id": "156ebcd6-b8d6-f564-eb96-31c8b3153a68",
+    "section": "Quantitative Techniques",
+    "topic": "Data Interpretation",
+    "question_text": "% of total inventory that fails compliance and is rejected?",
+    "correct_answer": "A",
+    "options": {
+      "A": "3.70%",
+      "B": "4.20%",
+      "C": "4.90%",
+      "D": "5.50%"
+    },
+    "explanation": "{\"correct_answer_rationale\":\"Rejections=888 MT. Base=24,000 MT. %=(888/24,000)*100=3.7%.\",\"incorrect_option_analysis\":{\"B\":\"Balance formatting error.\",\"C\":\"Intermediate coefficient error.\",\"D\":\"Scale estimation error.\"},\"wrong_answer_guidance\":\"Divide total rejections by total supply, not unweighted average of rejection rates.\"}",
+    "difficulty": "hard",
+    "source": "daily",
+    "tags": [
+      "percentages"
+    ],
+    "created_at": "2026-07-16T10:20:00+00:00",
+    "flag_reason": "AI flagged: No passage provided; question is incomplete and cannot be answered without data.",
+    "checks_passed": [
+      "has_4_options",
+      "options_nonempty",
+      "correct_option_valid",
+      "correct_option_exists",
+      "no_duplicate_options",
+      "question_text_exists",
+      "explanation_exists",
+      "difficulty_valid",
+      "section_valid",
+      "question_not_passage_copy"
+    ],
+    "checks_failed": [
+      "ai_check_failed"
+    ]
+  },
+  {
+    "id": "64257cef-16b5-3423-5e09-7f69399e1523",
+    "section": "Quantitative Techniques",
+    "topic": "Data Interpretation",
+    "question_text": "Total volume (MT) that clears compliance and is certified for export?",
+    "correct_answer": "D",
+    "options": {
+      "A": "480 MT",
+      "B": "608 MT",
+      "C": "888 MT",
+      "D": "23,112 MT"
+    },
+    "explanation": "{\"correct_answer_rationale\":\"Total=24,000. Wheat=8,000. Rice=16,000. Non-Basmati=9,600. Basmati=6,400. Rejections: Basmati=128, Non-Basmati=480, Wheat=280. Total reject=888. Net=24,000-888=23,112 MT.\",\"incorrect_option_analysis\":{\"A\":\"Non-Basmati reject only.\",\"B\":\"Partial subset.\",\"C\":\"Total rejections (not clear volume).\"},\"wrong_answer_guidance\":\"Deduct total rejections from total inventory.\"}",
+    "difficulty": "hard",
+    "source": "daily",
+    "tags": [
+      "percentages",
+      "ratios"
+    ],
+    "created_at": "2026-07-16T10:20:00+00:00",
+    "flag_reason": "AI flagged: No passage provided; question is incomplete and cannot be answered without data.",
+    "checks_passed": [
+      "has_4_options",
+      "options_nonempty",
+      "correct_option_valid",
+      "correct_option_exists",
+      "no_duplicate_options",
+      "question_text_exists",
+      "explanation_exists",
+      "difficulty_valid",
+      "section_valid",
+      "question_not_passage_copy"
+    ],
+    "checks_failed": [
+      "ai_check_failed"
+    ]
+  },
+  {
+    "id": "2d245791-31e7-f807-1479-f1bcc1dd94f1",
+    "section": "Quantitative Techniques",
+    "topic": "Data Interpretation",
+    "question_text": "Average net generation per station (after losses) across all four?",
+    "correct_answer": "C",
+    "options": {
+      "A": "2,840 MWh",
+      "B": "3,000 MWh",
+      "C": "3,828 MWh",
+      "D": "4,000 MWh"
+    },
+    "explanation": "{\"correct_answer_rationale\":\"Net total=16,000-688=15,312 MWh. Avg=15,312/4=3,828 MWh.\",\"incorrect_option_analysis\":{\"A\":\"Excludes Hydro.\",\"B\":\"Uniform estimate.\",\"D\":\"Gross capacity mean.\"},\"wrong_answer_guidance\":\"Find net total first, then divide by 4 stations.\"}",
+    "difficulty": "medium",
+    "source": "daily",
+    "tags": [
+      "averages"
+    ],
+    "created_at": "2026-07-16T10:15:00+00:00",
+    "flag_reason": "AI flagged: No passage provided; question is incomplete and cannot be answered without data.",
+    "checks_passed": [
+      "has_4_options",
+      "options_nonempty",
+      "correct_option_valid",
+      "correct_option_exists",
+      "no_duplicate_options",
+      "question_text_exists",
+      "explanation_exists",
+      "difficulty_valid",
+      "section_valid",
+      "question_not_passage_copy"
+    ],
+    "checks_failed": [
+      "ai_check_failed"
+    ]
+  },
+  {
+    "id": "8cdd8c92-960a-4c5d-ac67-3841ee362a3c",
+    "section": "Current Affairs Including General Knowledge",
+    "topic": "general",
+    "question_text": "Where was the Chandrayaan-4 mission launched from?",
+    "correct_answer": "A",
+    "options": {
+      "A": "Vikram Sarabhai Space Centre, Thiruvananthapuram",
+      "B": "Satish Dhawan Space Centre, Sriharikota",
+      "C": "ISRO Headquarters, Bengaluru",
+      "D": "Liquid Propulsion Systems Centre, Valiamala"
+    },
+    "explanation": "{\"correct_answer_rationale\":\"The passage mentions that the launch was conducted from the Satish Dhawan Space Centre in Sriharikota. This directly matches option B, which identifies the Satish Dhawan Space Centre, Sriharikota as the launch site.\",\"incorrect_option_analysis\":{\"A\":\"The Vikram Sarabhai Space Centre is in Thiruvananthapuram, but the passage specifies Sriharikota as the launch site.\",\"B\":\"This is the correct answer, as explained above.\",\"C\":\"ISRO Headquarters in Bengaluru is not a launch site; it is the administrative center.\",\"D\":\"The Liquid Propulsion Systems Centre in Valiamala is a research facility, not a launch site.\"},\"wrong_answer_guidance\":\"Check the passage for the specific location mentioned for the launch of Chandrayaan-4, which is the Satish Dhawan Space Centre.\"}",
+    "difficulty": "medium",
+    "source": "daily",
+    "tags": [],
+    "created_at": "2026-07-13T05:42:26.778656+00:00",
+    "flag_reason": "AI flagged: Correct answer is A but explanation says option B is correct. The passage clearly states the launch site is Satish Dhawan Space Centre, Sriharikota, which is option B. The correct answer should be B.",
+    "checks_passed": [
+      "has_4_options",
+      "options_nonempty",
+      "correct_option_valid",
+      "correct_option_exists",
+      "no_duplicate_options",
+      "question_text_exists",
+      "explanation_exists",
+      "difficulty_valid",
+      "section_valid",
+      "question_not_passage_copy"
+    ],
+    "checks_failed": [
+      "ai_check_failed"
+    ],
+    "passage": {
+      "title": "India's Chandrayaan-4 Mission and Lunar South Pole Exploration",
+      "content": "In a landmark achievement for India's space program, the Indian Space Research Organisation (ISRO) successfully launched the Chandrayaan-4 mission on March 15, 2025. This mission, aimed at exploring the lunar south pole, is a follow-up to the successful Chandrayaan-3 mission. Chandrayaan-4 is equipped with advanced instruments to study the presence of water ice and minerals. The mission also includes a lander and rover designed to operate in extreme low-light conditions. The launch was conducted from the Satish Dhawan Space Centre in Sriharikota. The mission is expected to provide crucial data for future lunar habitation and deep space exploration. India's progress in space technology has been recognized globally, with several countries expressing interest in collaboration. The success of Chandrayaan-4 underscores India's growing capabilities in space science and technology.",
+      "section": "Current Affairs Including General Knowledge"
+    }
+  }
+]

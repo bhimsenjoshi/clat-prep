@@ -99,7 +99,7 @@ async function callDeepSeek() {
       'Authorization': `Bearer ${DEEPSEEK_KEY}`,
     },
     body: JSON.stringify({
-      model: 'deepseek-chat',
+      model: 'deepseek-v4-flash',
       messages: [
         { role: 'system', content: prompt },
         { role: 'user', content: 'Generate 10 standalone CLAT quant questions for Quick Fire mode. No passages, no data tables. Each question self-contained.' }

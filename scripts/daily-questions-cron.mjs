@@ -120,7 +120,7 @@ async function callDeepSeek(systemPrompt, userPrompt, retries = 2) {
           'Authorization': `Bearer ${DEEPSEEK_KEY}`,
         },
         body: JSON.stringify({
-          model: 'deepseek-chat',
+          model: 'deepseek-v4-flash',
           messages: [
             { role: 'system', content: systemPrompt },
             { role: 'user', content: userPrompt },
@@ -470,7 +470,22 @@ async function main() {
         }
       }
       if (!finalPassageData || !finalPassageData.content) {
-        console.log(`    ❌ Retry failed — no passage returned. Skipping section "${section}" entirely (no orphan standalone questions).`);
+        console.log(`    ❌ Retry failed — no passage returned. Skipping section "${section}" entirely.`);
+        continue;
+      }
+
+      // 🛡️ Combined guardrail: abort if passage or questions are invalid (prevents orphan questions)
+      const validQuestions = [];
+      for (let i = 0; i < finalQuestions.length; i++) {
+        const q = finalQuestions[i];
+        const normalised = normalise(q, null, i + 1);
+        if (normalised) {
+          normalised.section = section;
+          validQuestions.push(normalised);
+        }
+      }
+      if (!finalPassageData.content || validQuestions.length === 0) {
+        console.log(`    ❌ Hard Abort: Section "${section}" failed validation (passage: ${!!finalPassageData.content}, questions: ${validQuestions.length}). Skipping insertion to prevent orphan question clutter.`);
         continue;
       }
 
@@ -523,15 +538,10 @@ async function main() {
         }
       }
 
-      // Step 3: Normalise questions with passage link and metadata
-      const validQuestions = [];
-      for (let i = 0; i < finalQuestions.length; i++) {
-        const q = finalQuestions[i];
-        const normalised = normalise(q, passageId, i + 1);
-        if (normalised) {
-          normalised.section = section;
-          validQuestions.push(normalised);
-        }
+      // Step 3: Update passage link on pre-normalised questions
+      for (const q of validQuestions) {
+        q.passage_id = passageId;
+        q.question_number = validQuestions.indexOf(q) + 1;
       }
 
       if (validQuestions.length === 0) {
