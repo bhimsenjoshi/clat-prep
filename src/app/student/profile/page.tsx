@@ -59,6 +59,33 @@ export default function ProfilePage() {
     loadProfile();
   }, [router, supabase]);
 
+  // ─── Re-fetch subscription plan when page becomes visible ───
+  // Catches upgrades done by admin while student is on this page
+  useEffect(() => {
+    if (!profile?.id) return;
+    const refreshPlan = async () => {
+      const { data } = await supabase
+        .from('profiles')
+        .select('subscription_plan, is_promo_user, promo_claimed_at, daily_free_questions, last_practice_date')
+        .eq('id', profile.id)
+        .single();
+      if (data) {
+        setProfile(prev => prev ? { ...prev, ...data } : prev);
+      }
+    };
+    // Poll every 30s while page is visible
+    const interval = setInterval(() => {
+      if (document.visibilityState === 'visible') refreshPlan();
+    }, 30000);
+    // Also refresh when tab becomes visible
+    const onVisible = () => refreshPlan();
+    document.addEventListener('visibilitychange', onVisible);
+    return () => {
+      clearInterval(interval);
+      document.removeEventListener('visibilitychange', onVisible);
+    };
+  }, [profile?.id, supabase]);
+
   const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file || !profile) return;
