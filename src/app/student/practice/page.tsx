@@ -63,6 +63,7 @@ export default function PracticeQuiz() {
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const [passageText, setPassageText] = useState<string | null>(null);
   const [passageExpanded, setPassageExpanded] = useState(true);
+  const [historyPos, setHistoryPos] = useState<number | null>(null); // position in trackedResponses when viewing prev
   const timerRef = useRef<number>(Date.now());
   const pauseAccumulatedRef = useRef<number>(0);
   const prevPassageIdRef = useRef<string | null>(null);
@@ -329,18 +330,46 @@ export default function PracticeQuiz() {
   };
 
   const prevQuestion = () => {
-    if (prevQuestionRef.current) {
-      // Restore previous question + its result
-      setQuestion(prevQuestionRef.current.question);
-      setResult(prevQuestionRef.current.result);
-      currentCorrectOptionRef.current = prevQuestionRef.current.question.correct_option;
-      // Push current question back into queue front
+    if (trackedResponses.length === 0) return;
+    const idx = historyPos !== null
+      ? Math.max(0, historyPos - 1)
+      : trackedResponses.length - 1;
+    setHistoryPos(idx);
+    const entry = trackedResponses[idx];
+    setQuestion(entry.question);
+    setResult(entry.result);
+    currentCorrectOptionRef.current = entry.question.correct_option;
+    // Clear pending next since we're looking at history
+    nextQuestionRef.current = null;
+    nextCorrectOptionRef.current = null;
+    prevQuestionRef.current = null;
+  };
+
+  const forwardFromPrev = () => {
+    if (historyPos === null) return;
+    const nextPos = historyPos + 1;
+    if (nextPos < trackedResponses.length) {
+      setHistoryPos(nextPos);
+      const entry = trackedResponses[nextPos];
+      setQuestion(entry.question);
+      setResult(entry.result);
+      currentCorrectOptionRef.current = entry.question.correct_option;
+    } else {
+      // Back to current — go to next unanswered question
+      setHistoryPos(null);
+      setResult(null);
+      setSelectedOption(null);
       if (nextQuestionRef.current) {
-        setQuestionQueue(prev => [nextQuestionRef.current!, ...prev]);
+        setQuestion(nextQuestionRef.current);
+        currentCorrectOptionRef.current = nextCorrectOptionRef.current;
+        nextQuestionRef.current = null;
+        nextCorrectOptionRef.current = null;
       }
-      nextQuestionRef.current = null;
-      nextCorrectOptionRef.current = null;
-      prevQuestionRef.current = null;
+      setTimerPaused(false);
+      pauseAccumulatedRef.current = 0;
+      setElapsedSeconds(0);
+      timerRef.current = Date.now();
+      setPassageExpanded(true);
     }
   };
 
@@ -753,8 +782,10 @@ export default function PracticeQuiz() {
         {/* Result / Feedback — shows current result OR historic review */}
         {result && (() => {
           const isViewing = viewingHistoric && reviewBackIdx !== null && trackedResponses[reviewBackIdx];
-          const displayRes = isViewing ? trackedResponses[reviewBackIdx].result : result;
-          const displayQ = isViewing ? trackedResponses[reviewBackIdx].question : question!;
+          const displayRes = isViewing ? trackedResponses[reviewBackIdx].result :
+            historyPos !== null ? trackedResponses[historyPos].result : result;
+          const displayQ = isViewing ? trackedResponses[reviewBackIdx].question :
+            historyPos !== null ? trackedResponses[historyPos].question : question!;
 
           return (
             <div className={`border rounded-xl p-6 mb-4 ${
@@ -803,6 +834,7 @@ export default function PracticeQuiz() {
               <div className="mt-6 flex justify-between gap-3">
                 {isViewing ? (
                   <>
+
                     <button onClick={goBackReview} disabled={reviewBackIdx! <= 0}
                       className="flex-1 bg-card border border-theme px-5 py-2.5 rounded-xl font-medium hover:bg-card-hover transition disabled:opacity-40"
                     >← Previous</button>
@@ -810,9 +842,18 @@ export default function PracticeQuiz() {
                       className="flex-1 bg-accent text-white px-5 py-2.5 rounded-xl font-medium hover:bg-accent-hover transition"
                     >{reviewBackIdx! < trackedResponses.length - 1 ? 'Next →' : '→ Back to Current'}</button>
                   </>
+                ) : historyPos !== null ? (
+                  <>
+                    <button onClick={prevQuestion} disabled={historyPos <= 0}
+                      className="flex-1 bg-card border border-theme px-5 py-2.5 rounded-xl font-medium hover:bg-card-hover transition disabled:opacity-40"
+                    >← Previous</button>
+                    <button onClick={forwardFromPrev}
+                      className="flex-1 bg-accent text-white px-5 py-2.5 rounded-xl font-medium hover:bg-accent-hover transition"
+                    >{historyPos < trackedResponses.length - 1 ? 'Next →' : (nextQuestionRef.current ? '→ Resume Quiz' : '→ Back')}</button>
+                  </>
                 ) : (
                   <>
-                    <button onClick={prevQuestion} disabled={!prevQuestionRef.current}
+                    <button onClick={prevQuestion} disabled={trackedResponses.length === 0}
                       className="flex-1 bg-card border border-theme px-5 py-2.5 rounded-xl font-medium hover:bg-card-hover transition disabled:opacity-40"
                     >← Previous</button>
                     <button onClick={nextQuestion} disabled={sessionComplete}
