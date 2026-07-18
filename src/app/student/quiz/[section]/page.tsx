@@ -70,6 +70,7 @@ export default function QuizPage() {
   const [passageExpanded, setPassageExpanded] = useState(true);
   const [fullQueue, setFullQueue] = useState<QuestionData[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const prevPassageIdRef = useRef<string | null>(null);
 
   const questionStartTime = useRef<number>(Date.now());
@@ -165,11 +166,12 @@ export default function QuizPage() {
   };
 
   const submitAnswer = async (option: string) => {
-    if (!sessionId || !question || answering) return;
-    setAnswering(true);
+    if (!sessionId || !question || isSubmitting) return;
+    setIsSubmitting(true);
     setSelected(option);
 
     const timeTaken = Math.round((Date.now() - questionStartTime.current) / 1000);
+    const remainingIds = fullQueue.slice(currentIndex + 1).map(q => q.id);
 
     try {
       const res = await fetch('/api/quiz/respond', {
@@ -180,9 +182,7 @@ export default function QuizPage() {
           question_id: question.id,
           selected_option: option,
           time_taken_seconds: timeTaken,
-          remaining_ids: fullQueue.length > 0 && currentIndex < fullQueue.length - 1
-            ? fullQueue.slice(currentIndex + 1).map(q => q.id)
-            : [],
+          remaining_ids: remainingIds,
         }),
       });
 
@@ -203,24 +203,27 @@ export default function QuizPage() {
     } catch (err) {
       console.error('Failed to submit answer:', err);
     }
-    setAnswering(false);
+    setIsSubmitting(false);
   };
 
-  // Serve next question using single-queue + index
+  // Serve next question using functional state update
   const nextQuestion = useCallback(() => {
-    const nextIdx = currentIndex + 1;
-    if (nextIdx < fullQueue.length) {
-      setSelected(null);
-      setResult(null);
-      setShowExplanation(false);
-      questionStartTime.current = Date.now();
-      setCurrentIndex(nextIdx);
-      const { correct_option, ...safeQ } = fullQueue[nextIdx] as any;
-      setQuestion(safeQ as QuestionData);
-    } else {
-      setSessionComplete(true);
-    }
-  }, [currentIndex, fullQueue]);
+    setCurrentIndex((prevIdx) => {
+      const nextIdx = prevIdx + 1;
+      if (nextIdx < fullQueue.length) {
+        setSelected(null);
+        setResult(null);
+        setShowExplanation(false);
+        questionStartTime.current = Date.now();
+        const { correct_option, ...safeQ } = fullQueue[nextIdx] as any;
+        setQuestion(safeQ as QuestionData);
+        return nextIdx;
+      } else {
+        setSessionComplete(true);
+        return prevIdx;
+      }
+    });
+  }, [fullQueue]);
 
   // Fetch all unasked questions for the section at start, grouped by passage
   const buildPassageQueue = useCallback(async (extraExcludeIds: string[] = []) => {
@@ -486,9 +489,9 @@ export default function QuizPage() {
                   <button
                     key={key}
                     onClick={() => submitAnswer(key)}
-                    disabled={answering}
+                    disabled={isSubmitting}
                     className={`w-full text-left p-4 rounded-xl border transition-all duration-150 bg-card ${
-                      answering
+                      isSubmitting
                         ? 'opacity-50 cursor-not-allowed border-theme'
                         : 'border-theme hover:border-accent hover:bg-card-hover cursor-pointer'
                     }`}

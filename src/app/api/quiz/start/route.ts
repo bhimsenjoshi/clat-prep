@@ -149,10 +149,17 @@ export async function POST(req: NextRequest) {
       return maxB - maxA;
     });
 
-    // Build ordered queue
+    // Build ordered queue with deterministic sort (created_at + question_number)
     const orderedQueue: any[] = [];
     for (const pid of sortedKeptIds) {
-      passageMap[pid].sort((a: any, b: any) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
+      passageMap[pid].sort((a: any, b: any) => {
+        const timeA = new Date(a.created_at).getTime();
+        const timeB = new Date(b.created_at).getTime();
+        if (timeA === timeB) {
+          return (a.question_number || 0) - (b.question_number || 0);
+        }
+        return timeA - timeB;
+      });
       orderedQueue.push(...passageMap[pid]);
     }
 
