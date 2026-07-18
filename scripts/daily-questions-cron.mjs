@@ -400,9 +400,7 @@ async function main() {
         continue;
       }
 
-      // Step 2: Insert passage into practice_passages table
-      // CRITICAL: ALL questions must be passage-linked (CLAT format).
-      // If AI returns no passage, RETRY ONCE before skipping the section entirely.
+      // Step 2: Check for duplicate passage content before inserting
       let passageId = null;
       let finalPassageData = passageData;
       let finalQuestions = rawQuestions;
@@ -423,16 +421,32 @@ async function main() {
         console.log(`    ❌ Retry failed — no passage returned. Skipping section "${section}" entirely (no orphan standalone questions).`);
         continue;
       }
-      const passageRows = await supabaseInsert('practice_passages', [{
-        section,
-        title: finalPassageData.title || '',
-        source: finalPassageData.source || 'AI-generated',
-        content: finalPassageData.content,
-        difficulty: (finalPassageData.difficulty || 'medium').toLowerCase(),
-      }]);
-      passageId = passageRows?.[0]?.id || null;
-      totalPassages++;
-      console.log(`    📄 Passage inserted: "${finalPassageData.title || 'Untitled'}" (id: ${passageId ? passageId.substring(0, 8) + '...' : 'none'})`);
+
+      // App-level duplicate check: hash the content and query for existing match
+      const contentBytes = new TextEncoder().encode(finalPassageData.content);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', contentBytes);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      const contentHash = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+      
+      const dupCheckUrl = `${SUPABASE_URL.replace(/\/$/, '')}/rest/v1/practice_passages?content_hash=eq.${contentHash}&select=id,title`;
+      const { data: existing } = await supabaseGet(dupCheckUrl);
+      if (existing && existing.length > 0) {
+        console.log(`    ⏭️ Duplicate passage detected: "${finalPassageData.title}" matches existing passage "${existing[0].title}" (id: ${existing[0].id.substring(0,8)}). Reusing existing passage for questions.`);
+        passageId = existing[0].id;
+        totalPassages++; // Count it anyway
+      } else {
+        // Insert new passage
+        const passageRows = await supabaseInsert('practice_passages', [{
+          section,
+          title: finalPassageData.title || '',
+          source: finalPassageData.source || 'AI-generated',
+          content: finalPassageData.content,
+          difficulty: (finalPassageData.difficulty || 'medium').toLowerCase(),
+        }]);
+        passageId = passageRows?.[0]?.id || null;
+        totalPassages++;
+        console.log(`    📄 New passage inserted: "${finalPassageData.title || 'Untitled'}" (id: ${passageId ? passageId.substring(0, 8) + '...' : 'none'})`);
+      }
 
       // Step 3: Normalise questions with passage link and metadata
       const validQuestions = [];
