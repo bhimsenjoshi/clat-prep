@@ -371,7 +371,7 @@ export default function QuickFireQuiz() {
           // ─── Question View (no passage) ───
           <div className="space-y-6">
             <div className="bg-card rounded-xl p-6 border border-theme">
-              {/* Difficulty + tags */}
+              {/* Difficulty + tags + ID badge */}
               <div className="flex items-center gap-2 mb-4">
                 <span className={`text-[10px] font-medium uppercase tracking-wider px-2 py-0.5 rounded-full ${
                   displayQuestion.difficulty === 'easy' ? 'bg-success/50 text-success' :
@@ -385,6 +385,10 @@ export default function QuickFireQuiz() {
                     {tag}
                   </span>
                 ))}
+                <span className="ml-auto px-1.5 py-0.5 rounded text-[10px] bg-card-hover text-muted font-mono"
+                  title="Question ID (debug)">
+                  q:{displayQuestion.id.slice(0, 8)}
+                </span>
               </div>
 
               {/* Question text — no passage display */}
@@ -438,6 +442,9 @@ export default function QuickFireQuiz() {
                     {!displayResult.is_correct && (
                       <> · Correct answer: <span className="font-mono text-success">{displayResult.correct_option}</span></>
                     )}
+                  </p>
+                  <p className="text-[10px] text-muted font-mono mt-1">
+                    q:{displayQuestion.id.slice(0, 8)}
                   </p>
                 </div>
               </div>
