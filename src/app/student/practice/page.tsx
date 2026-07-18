@@ -697,6 +697,11 @@ export default function PracticeQuiz() {
             <span className="text-xs text-secondary">
               {typeof dailyRemaining === 'number' ? `${dailyRemaining} free today` : '♾️ Unlimited'}
             </span>
+            {trackedResponses.length > 0 && (
+              <span className="text-[10px] text-muted font-mono">
+                {trackedResponses.length} answered
+              </span>
+            )}
           </div>
         </div>
       </div>
@@ -825,6 +830,13 @@ export default function PracticeQuiz() {
                     </p>
                   </div>
                 </div>
+              )}
+              {trackedResponses.length > 1 && !isViewing && (
+                <p className="text-[10px] text-muted text-right -mt-2 mb-2">
+                  {historyPos !== null
+                    ? `Q${historyPos + 1} of ${trackedResponses.length} answered`
+                    : `${trackedResponses.length} answered`}
+                </p>
               )}
 
               {/* The actual question + answer + explanation */}
