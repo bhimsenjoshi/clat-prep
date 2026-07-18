@@ -23,6 +23,7 @@ export async function POST(req: NextRequest) {
         .from('practice_questions')
         .select('id, correct_option, explanation')
         .eq('id', question_id)
+        .eq('validation_status', 'passed')
         .single(),
       supabase
         .from('quiz_sessions')

@@ -50,6 +50,9 @@ for (const envPath of envPaths) {
   }
 }
 
+// ─── Dynamic import of validator for post-generation check ───
+let validatePendingQuestions = null;
+
 // ─── Topic bank mapping ───
 const TOPIC_BANK_FILES = {
   'English Language': 'topic-bank-english.json',
@@ -548,6 +551,18 @@ async function main() {
     } catch (err) {
       console.log(`    ❌ Error: ${err.message}`);
     }
+  }
+
+  // Step 5: Run auto-validation on newly inserted questions
+  try {
+    if (!validatePendingQuestions) {
+      const validatorModule = await import('./validate-questions.mjs');
+      validatePendingQuestions = validatorModule.validatePendingQuestions;
+    }
+    const validationResult = await validatePendingQuestions();
+    console.log(`    🔍 ${validationResult.passed}/${validationResult.total} passed validation (${validationResult.flagged} flagged)`);
+  } catch (valErr) {
+    console.log(`    ⚠️ Validation step failed: ${valErr.message}`);
   }
 
   console.log(`\n✅ Done! ${totalPassages} passages + ${totalQuestions} new questions added today.`);

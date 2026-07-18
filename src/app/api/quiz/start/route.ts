@@ -76,6 +76,7 @@ export async function POST(req: NextRequest) {
       .from('practice_questions')
       .select('id, section, topic, question_text, passage, passage_id, options, correct_option, difficulty, explanation, tags, created_at')
       .eq('section', section)
+      .eq('validation_status', 'passed')
       .not('passage_id', 'is', null);
 
     if (!allPassageQuestions || allPassageQuestions.length === 0) {

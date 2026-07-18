@@ -32,6 +32,7 @@ export async function POST(req: NextRequest) {
         .from('practice_questions')
         .select('id, section, topic, question_text, passage, passage_id, options, correct_option, difficulty, explanation, tags')
         .eq('section', section)
+        .eq('validation_status', 'passed')
         .is('passage_id', null)
         .order('created_at', { ascending: false }),
     ]);
