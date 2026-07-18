@@ -153,6 +153,18 @@ export default function QuizPage() {
           allIds: data.questions.map((q: any) => q.id.slice(0, 8)),
           allTexts: data.questions.map((q: any) => q.question_text.slice(0, 40)),
         });
+        // Detect duplicates in queue
+        const ids = data.questions.map((q: any) => q.id);
+        const seen = new Set<string>();
+        const dups: string[] = [];
+        for (const id of ids) {
+          if (seen.has(id)) dups.push(id.slice(0, 8));
+          seen.add(id);
+        }
+        if (dups.length > 0) {
+          console.error('[DEBUG] DUPLICATE IDS IN QUEUE:', dups);
+          alert(`⚠️ DEBUG: Duplicate question IDs in queue: ${dups.join(', ')}`);
+        }
         setFullQueue(data.questions);
         setCurrentIndex(0);
         const { correct_option, ...safeFirst } = data.questions[0];
@@ -456,9 +468,16 @@ export default function QuizPage() {
         {question && !showExplanation ? (
           // ─── Question View ───
           <div className="space-y-6">
-            {/* Debug info */}
-            <div className="text-[10px] text-muted font-mono bg-card-hover px-3 py-1 rounded-lg">
-              [i:{currentIndex + 1}/{fullQueue.length}] q:{question.id.slice(0, 8)} #{question.passage_id?.slice(0, 8)}
+            {/* Debug info — shows full queue to detect duplicates */}
+            <div className="text-[9px] text-muted font-mono bg-card-hover px-3 py-2 rounded-lg leading-relaxed">
+              <div>[i:{currentIndex + 1}/{fullQueue.length}] ▶ q:{question.id.slice(0, 8)} ◀ #{question.passage_id?.slice(0, 8)}</div>
+              <div className="truncate" title={fullQueue.map(q => q.id.slice(0, 8)).join(' ')}>
+                Q:{fullQueue.map((q, i) => (
+                  i === currentIndex
+                    ? <span key={q.id} className="text-accent font-semibold">[{q.id.slice(0, 8)}] </span>
+                    : <span key={q.id}>{q.id.slice(0, 8)} </span>
+                ))}
+              </div>
             </div>
             {/* Question card */}
             <div className="bg-card rounded-xl p-6 border border-theme">
