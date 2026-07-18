@@ -68,8 +68,8 @@ export default function QuizPage() {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [passageText, setPassageText] = useState<string | null>(null);
   const [passageExpanded, setPassageExpanded] = useState(true);
-  const [questionQueue, setQuestionQueue] = useState<QuestionData[]>([]);
-  const [queuePosition, setQueuePosition] = useState(0);
+  const [fullQueue, setFullQueue] = useState<QuestionData[]>([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
   const prevPassageIdRef = useRef<string | null>(null);
 
   const questionStartTime = useRef<number>(Date.now());
@@ -143,13 +143,12 @@ export default function QuizPage() {
       setSessionId(data.session_id);
       setDailyRemaining(data.daily_remaining);
 
-      // API now returns a passage-grouped queue as the first batch
+      // Store the full queue from API
       if (data.questions && data.questions.length > 0) {
-        const first = data.questions[0];
-        const { correct_option, ...safeFirst } = first;
+        setFullQueue(data.questions);
+        setCurrentIndex(0);
+        const { correct_option, ...safeFirst } = data.questions[0];
         setQuestion(safeFirst as QuestionData);
-        setQuestionQueue(data.questions.slice(1));
-        setQueuePosition(0);
       } else {
         setSessionComplete(true);
       }
@@ -181,8 +180,8 @@ export default function QuizPage() {
           question_id: question.id,
           selected_option: option,
           time_taken_seconds: timeTaken,
-          remaining_ids: questionQueue.length > 0
-            ? questionQueue.map(q => q.id)
+          remaining_ids: fullQueue.length > 0 && currentIndex < fullQueue.length - 1
+            ? fullQueue.slice(currentIndex + 1).map(q => q.id)
             : [],
         }),
       });
@@ -207,20 +206,21 @@ export default function QuizPage() {
     setAnswering(false);
   };
 
-  // Serve next question from the passage-grouped queue
+  // Serve next question using single-queue + index
   const nextQuestion = useCallback(() => {
-    if (questionQueue.length === 0) {
+    const nextIdx = currentIndex + 1;
+    if (nextIdx < fullQueue.length) {
+      setSelected(null);
+      setResult(null);
+      setShowExplanation(false);
+      questionStartTime.current = Date.now();
+      setCurrentIndex(nextIdx);
+      const { correct_option, ...safeQ } = fullQueue[nextIdx] as any;
+      setQuestion(safeQ as QuestionData);
+    } else {
       setSessionComplete(true);
-      return;
     }
-    setSelected(null);
-    setResult(null);
-    setShowExplanation(false);
-    questionStartTime.current = Date.now();
-    const { correct_option, ...safeQ } = questionQueue[0] as any;
-    setQuestion(safeQ as QuestionData);
-    setQuestionQueue(prev => prev.slice(1));
-  }, [questionQueue]);
+  }, [currentIndex, fullQueue]);
 
   // Fetch all unasked questions for the section at start, grouped by passage
   const buildPassageQueue = useCallback(async (extraExcludeIds: string[] = []) => {
