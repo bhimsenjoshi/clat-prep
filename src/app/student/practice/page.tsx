@@ -69,6 +69,7 @@ export default function PracticeQuiz() {
   const nextQuestionRef = useRef<Question | null>(null);  // holds next Q securely until user clicks "Next"
   const nextCorrectOptionRef = useRef<string | null>(null); // correct_option for the next question
   const currentCorrectOptionRef = useRef<string | null>(null); // correct_option for instant client-side check
+  const prevQuestionRef = useRef<{ question: Question; result: AnswerResult } | null>(null);
   const supabase = createClient();
 
   // Auth check + auto-start from dashboard card click
@@ -234,6 +235,8 @@ export default function PracticeQuiz() {
         const nextQ = questionQueue[0];
         nextQuestionRef.current = nextQ;
         nextCorrectOptionRef.current = nextQ.correct_option ?? null;
+        // Save current for prev navigation
+        prevQuestionRef.current = { question: question, result: localResult };
         setQuestionQueue(prev => prev.slice(1));
         setRemainingIds(prev => prev ? prev.slice(1) : null);
       } else {
@@ -325,7 +328,22 @@ export default function PracticeQuiz() {
     return `${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
   };
 
-  // ── Shared timer display ──
+  const prevQuestion = () => {
+    if (prevQuestionRef.current) {
+      // Restore previous question + its result
+      setQuestion(prevQuestionRef.current.question);
+      setResult(prevQuestionRef.current.result);
+      currentCorrectOptionRef.current = prevQuestionRef.current.question.correct_option;
+      // Push current question back into queue front
+      if (nextQuestionRef.current) {
+        setQuestionQueue(prev => [nextQuestionRef.current!, ...prev]);
+      }
+      nextQuestionRef.current = null;
+      nextCorrectOptionRef.current = null;
+      prevQuestionRef.current = null;
+    }
+  };
+
   const TimerDisplay = () => (
     <span className={`text-xs font-mono font-semibold tabular-nums flex items-center gap-1 ${
       timerPaused ? 'text-amber-400' : 'text-accent'
@@ -364,7 +382,7 @@ export default function PracticeQuiz() {
         <p className="text-sm font-medium mb-1 text-primary">{q.question_text}</p>
         {q.passage_id && (
           <p className="text-[10px] font-mono text-muted mb-3">
-            Passage: #{q.passage_id.slice(0, 8)}
+            Passage: #{q.passage_id.slice(0, 8)} · q:{q.id.slice(0, 8)}
           </p>
         )}
         <div className="grid grid-cols-2 gap-2">
@@ -700,6 +718,10 @@ export default function PracticeQuiz() {
                     #{question.passage_id.slice(0, 8)}
                   </span>
                 )}
+                <span className="ml-0.5 px-1.5 py-0.5 rounded text-[10px] bg-card-hover text-muted font-mono"
+                  title="Question ID (debug)">
+                  q:{question.id.slice(0, 8)}
+                </span>
               </span>
               {TimerDisplay()}
             </div>
@@ -790,7 +812,7 @@ export default function PracticeQuiz() {
                   </>
                 ) : (
                   <>
-                    <button onClick={goBackReview} disabled={trackedResponses.length === 0}
+                    <button onClick={prevQuestion} disabled={!prevQuestionRef.current}
                       className="flex-1 bg-card border border-theme px-5 py-2.5 rounded-xl font-medium hover:bg-card-hover transition disabled:opacity-40"
                     >← Previous</button>
                     <button onClick={nextQuestion} disabled={sessionComplete}
