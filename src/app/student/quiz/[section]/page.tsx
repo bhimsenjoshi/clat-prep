@@ -141,17 +141,20 @@ export default function QuizPage() {
       }
 
       setSessionId(data.session_id);
-      setQuestion(data.question);
       setDailyRemaining(data.daily_remaining);
-      questionStartTime.current = Date.now();
 
-      // Build passage-grouped question queue for subsequent questions
-      // Exclude the first question (already served by API) to avoid duplicates
-      const queue = await buildPassageQueue(data.question?.id ? [data.question.id] : []);
-      if (queue && queue.length > 0) {
-        setQuestionQueue(queue);
+      // API now returns a passage-grouped queue as the first batch
+      if (data.questions && data.questions.length > 0) {
+        const first = data.questions[0];
+        const { correct_option, ...safeFirst } = first;
+        setQuestion(safeFirst as QuestionData);
+        setQuestionQueue(data.questions.slice(1));
         setQueuePosition(0);
+      } else {
+        setSessionComplete(true);
       }
+
+      questionStartTime.current = Date.now();
 
       // Get user id from session
       const { data: { user } } = await supabase.auth.getUser();
@@ -178,6 +181,9 @@ export default function QuizPage() {
           question_id: question.id,
           selected_option: option,
           time_taken_seconds: timeTaken,
+          remaining_ids: questionQueue.length > 0
+            ? questionQueue.slice(queuePosition).map(q => q.id)
+            : [],
         }),
       });
 
@@ -191,7 +197,6 @@ export default function QuizPage() {
       if (data.session_complete) {
         setSessionComplete(true);
       } else if (data.next_question) {
-        // Preload next question but don't show yet
         setTimeout(() => setShowExplanation(true), 200);
       } else {
         setSessionComplete(true);

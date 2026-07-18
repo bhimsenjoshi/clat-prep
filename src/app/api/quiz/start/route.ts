@@ -33,6 +33,7 @@ export async function POST(req: NextRequest) {
         .from('practice_questions')
         .select('id, created_at')
         .eq('section', section)
+        .not('passage_id', 'is', null) // Only CLAT-format passage-linked questions
         .order('created_at', { ascending: false }),
       supabase
         .from('quiz_sessions')
@@ -83,55 +84,73 @@ export async function POST(req: NextRequest) {
       }, { status: 403 });
     }
 
-    if (questionIds.length === 0) {
+    // ── Fetch all passage-linked questions for passage-grouped queue ──
+    const { data: allPassageQuestions } = await supabase
+      .from('practice_questions')
+      .select('id, section, topic, question_text, passage, passage_id, options, correct_option, difficulty, explanation, tags, created_at')
+      .eq('section', section)
+      .not('passage_id', 'is', null);
+
+    if (!allPassageQuestions || allPassageQuestions.length === 0) {
       return NextResponse.json({
         session_id: null,
-        question: null,
+        questions: [],
         needs_seeding: true,
       });
     }
 
-    // Pick the first question from the newest-first list
-    // prioritising latest generated questions (today's batch first)
-    const firstId = questionIds[0] || questionIds[Math.floor(Math.random() * questionIds.length)];
+    // Group by passage, newest passages first, questions within passage in created_at order
+    const passageMap: Record<string, any[]> = {};
+    for (const q of allPassageQuestions) {
+      if (!passageMap[q.passage_id]) passageMap[q.passage_id] = [];
+      passageMap[q.passage_id].push(q);
+    }
+    // Sort passages by newest question's created_at (descending)
+    const sortedPassageIds = Object.keys(passageMap).sort((a, b) => {
+      const maxA = Math.max(...passageMap[a].map(q => new Date(q.created_at).getTime()));
+      const maxB = Math.max(...passageMap[b].map(q => new Date(q.created_at).getTime()));
+      return maxB - maxA;
+    });
+    // Build ordered queue: all questions from passage A (in order), then passage B, etc.
+    const orderedQueue: any[] = [];
+    for (const pid of sortedPassageIds) {
+      // Sort questions within each passage by created_at (oldest first = original order)
+      passageMap[pid].sort((a: any, b: any) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
+      orderedQueue.push(...passageMap[pid]);
+    }
 
-    // Fetch first question + create session in parallel
-    const [questionResult, sessionResult] = await Promise.all([
-      supabase
-        .from('practice_questions')
-        .select('id, section, topic, question_text, passage, passage_id, options, correct_option, difficulty, explanation, tags')
-        .eq('id', firstId)
-        .single(),
-      supabase
-        .from('quiz_sessions')
-        .insert({
-          student_id: user.id,
-          section,
-          topic,
-          questions_answered: 0,
-          correct_count: 0,
-        })
-        .select('id')
-        .single(),
-    ]);
+    // Create session
+    const sessionResult = await supabase
+      .from('quiz_sessions')
+      .insert({
+        student_id: user.id,
+        section,
+        topic,
+        questions_answered: 0,
+        correct_count: 0,
+      })
+      .select('id')
+      .single();
 
     if (sessionResult.error || !sessionResult.data) {
       return NextResponse.json({ error: 'Failed to create session' }, { status: 500 });
     }
 
+    // Strip correct_option from client-bound questions
+    const safeQueue = orderedQueue.map(({ correct_option, explanation, ...safe }) => ({
+      ...safe,
+      explanation: (() => {
+        if (typeof explanation === 'string') {
+          try { return JSON.parse(explanation); } catch { return explanation; }
+        }
+        return explanation;
+      })(),
+    }));
+
     return NextResponse.json({
       session_id: sessionResult.data.id,
-      question: {
-        ...questionResult.data,
-        explanation: (() => {
-          const raw = questionResult.data?.explanation;
-          if (typeof raw === 'string') {
-            try { return JSON.parse(raw); } catch { return raw; }
-          }
-          return raw;
-        })(),
-      },
-      question_ids: questionIds, // Client uses this for fast PK-based next-question lookup
+      questions: safeQueue,
+      total: safeQueue.length,
       daily_remaining: profile.subscription_plan === 'free'
         ? (profile.daily_free_questions ?? 10)
         : 'unlimited',
