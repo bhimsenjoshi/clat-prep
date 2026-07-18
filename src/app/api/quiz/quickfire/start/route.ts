@@ -113,14 +113,14 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Failed to create session' }, { status: 500 });
     }
 
-    // Strip correct_option from client-bound questions
-    const safeBatch = batch.map(({ correct_option, explanation, ...safe }) => ({
+    // Strip passage fields (not needed for Quick Fire standalone questions)
+    const safeBatch = batch.map(({ passage, passage_id, ...safe }) => ({
       ...safe,
       explanation: (() => {
-        if (typeof explanation === 'string') {
-          try { return JSON.parse(explanation); } catch { return explanation; }
+        if (typeof safe.explanation === 'string') {
+          try { return JSON.parse(safe.explanation); } catch { return safe.explanation; }
         }
-        return explanation;
+        return safe.explanation;
       })(),
     }));
 

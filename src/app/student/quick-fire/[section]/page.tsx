@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useRef, useCallback } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
 import PageHeader from '@/components/PageHeader';
@@ -13,6 +13,7 @@ interface QuestionData {
   question_text: string;
   options: Record<string, string>;
   difficulty: string;
+  correct_option: string;
   explanation?: any;
   tags: string[];
 }
@@ -132,19 +133,40 @@ export default function QuickFireQuiz() {
   };
 
   const submitAnswer = async (option: string) => {
-    if (!sessionId || answering) return;
-    // Derive current question from trackedResponses (if browsing history) or questions array
+    if (!sessionId || selected || answering) return;
     const question = currentIdx < questions.length ? questions[currentIdx] : null;
     if (!question) return;
 
-    setAnswering(true);
+    const timeTaken = Math.max(1, Math.round((Date.now() - timerRef.current) / 1000));
     setSelected(option);
+    setAnswering(true);
     setTimerPaused(true);
     pauseAccumulatedRef.current += Math.floor((Date.now() - timerRef.current) / 1000) - elapsedSeconds;
 
-    const timeTaken = Math.round((Date.now() - (timerRef.current + pauseAccumulatedRef.current * 1000 - elapsedSeconds * 1000)) / 1000);
+    // ── Instant client-side check (like practice) ──
+    const isCorrectLocally = option === question.correct_option;
+    const localResult: AnswerResult = {
+      is_correct: isCorrectLocally,
+      correct_option: question.correct_option,
+      explanation: question.explanation ?? '',
+      your_answer: option,
+    };
+    setResult(localResult);
+
+    const newResponse: TrackedResponse = {
+      question,
+      result: localResult,
+      selected_option: option,
+    };
+    setTrackedResponses(prev => [...prev, newResponse]);
+    setStats(prev => ({
+      correct: prev.correct + (isCorrectLocally ? 1 : 0),
+      total: prev.total + 1,
+    }));
+
     const nextIdx = currentIdx + 1;
 
+    // ── Fire API call in background to record response ──
     try {
       const res = await fetch('/api/quiz/quickfire/respond', {
         method: 'POST',
@@ -153,33 +175,18 @@ export default function QuickFireQuiz() {
           session_id: sessionId,
           question_id: question.id,
           selected_option: option,
-          time_taken_seconds: Math.max(1, timeTaken),
+          time_taken_seconds: timeTaken,
           next_index: nextIdx,
           total: totalQuestions,
         }),
       });
 
       const data = await res.json();
-      setResult(data.result);
-
-      const newResponse: TrackedResponse = {
-        question,
-        result: data.result,
-        selected_option: option,
-      };
-
-      setTrackedResponses(prev => [...prev, newResponse]);
-      setStats(prev => ({
-        correct: prev.correct + (data.result.is_correct ? 1 : 0),
-        total: prev.total + 1,
-      }));
-
       if (data.session_complete) {
         setSessionComplete(true);
       }
     } catch (err) {
-      console.error('Submit error:', err);
-      setTimerPaused(false);
+      console.error('Background respond error:', err);
     }
     setAnswering(false);
   };
@@ -391,11 +398,13 @@ export default function QuickFireQuiz() {
                   <button
                     key={key}
                     onClick={() => submitAnswer(key)}
-                    disabled={answering}
+                    disabled={selected !== null}
                     className={`w-full text-left p-4 rounded-xl border transition-all duration-150 bg-card ${
-                      answering
-                        ? 'opacity-50 cursor-not-allowed border-theme'
-                        : 'border-theme hover:border-accent hover:bg-card-hover cursor-pointer'
+                      selected === key
+                        ? 'border-accent bg-accent-subtle ring-1 ring-accent/50'
+                        : selected
+                          ? 'opacity-50 cursor-not-allowed border-theme'
+                          : 'border-theme hover:border-accent hover:bg-card-hover cursor-pointer'
                     }`}
                   >
                     <div className="flex items-start gap-3">
