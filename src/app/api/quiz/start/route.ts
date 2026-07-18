@@ -99,22 +99,68 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // Group by passage, newest passages first, questions within passage in created_at order
-    const passageMap: Record<string, any[]> = {};
-    for (const q of allPassageQuestions) {
-      if (!passageMap[q.passage_id]) passageMap[q.passage_id] = [];
-      passageMap[q.passage_id].push(q);
+    // Get passage titles to deduplicate by title (avoid cron-regenerated duplicates)
+    const passageIds = [...new Set(allPassageQuestions.map(q => q.passage_id))];
+    const { data: passages } = await supabase
+      .from('practice_passages')
+      .select('id, title')
+      .in('id', passageIds);
+
+    const passageTitleMap: Record<string, string> = {};
+    if (passages) {
+      for (const p of passages) {
+        passageTitleMap[p.id] = p.title;
+      }
     }
+
+    // Group by passage, keep only the newest passage per unique (section, title)
+    const tempMap: Record<string, any[]> = {};
+    const titleFirstSeen: Record<string, string> = {}; // title -> first passage_id we saw
+    for (const q of allPassageQuestions) {
+      if (!tempMap[q.passage_id]) tempMap[q.passage_id] = [];
+      tempMap[q.passage_id].push(q);
+    }
+
     // Sort passages by newest question's created_at (descending)
-    const sortedPassageIds = Object.keys(passageMap).sort((a, b) => {
+    const sortedByNewest = Object.keys(tempMap).sort((a, b) => {
+      const maxA = Math.max(...tempMap[a].map(q => new Date(q.created_at).getTime()));
+      const maxB = Math.max(...tempMap[b].map(q => new Date(q.created_at).getTime()));
+      return maxB - maxA;
+    });
+
+    // Deduplicate: keep only the first (newest) passage per unique title
+    const keptPassageIds = new Set<string>();
+    for (const pid of sortedByNewest) {
+      const title = passageTitleMap[pid];
+      if (!title) {
+        keptPassageIds.add(pid); // no title info, keep it
+        continue;
+      }
+      if (!titleFirstSeen[title]) {
+        titleFirstSeen[title] = pid;
+        keptPassageIds.add(pid);
+      }
+      // else: duplicate title, skip this older passage
+    }
+
+    // Build final passage map with only kept passages
+    const passageMap: Record<string, any[]> = {};
+    for (const [pid, qs] of Object.entries(tempMap)) {
+      if (keptPassageIds.has(pid)) {
+        passageMap[pid] = qs;
+      }
+    }
+
+    // Sort kept passages by newest created_at (descending)
+    const sortedKeptIds = Object.keys(passageMap).sort((a, b) => {
       const maxA = Math.max(...passageMap[a].map(q => new Date(q.created_at).getTime()));
       const maxB = Math.max(...passageMap[b].map(q => new Date(q.created_at).getTime()));
       return maxB - maxA;
     });
-    // Build ordered queue: all questions from passage A (in order), then passage B, etc.
+
+    // Build ordered queue
     const orderedQueue: any[] = [];
-    for (const pid of sortedPassageIds) {
-      // Sort questions within each passage by created_at (oldest first = original order)
+    for (const pid of sortedKeptIds) {
       passageMap[pid].sort((a: any, b: any) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
       orderedQueue.push(...passageMap[pid]);
     }

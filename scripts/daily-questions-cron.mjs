@@ -482,6 +482,14 @@ async function main() {
       if (existing && existing.length > 0) {
         console.log(`    ⏭️ Duplicate passage detected: "${finalPassageData.title}" matches existing passage "${existing[0].title}" (id: ${existing[0].id.substring(0,8)}). Discarding entire section — new questions would crowd the existing passage.`);
         continue;
+      }
+      
+      // Also check by title+section — catch regenerated passages with same topic
+      const titleCheckUrl = `${SUPABASE_URL.replace(/\/$/, '')}/rest/v1/practice_passages?section=eq.${encodeURIComponent(section)}&title=eq.${encodeURIComponent(finalPassageData.title || '')}&select=id,title`;
+      const { data: existingByTitle } = await supabaseGet(titleCheckUrl);
+      if (existingByTitle && existingByTitle.length > 0) {
+        console.log(`    ⏭️ Passage with same title+section exists: "${finalPassageData.title}" (id: ${existingByTitle[0].id.substring(0,8)}). Skipping to avoid duplicate topic.`);
+        continue;
       } else {
         // Insert new passage
         const passageRows = await supabaseInsert('practice_passages', [{
