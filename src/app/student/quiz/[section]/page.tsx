@@ -206,24 +206,21 @@ export default function QuizPage() {
     setIsSubmitting(false);
   };
 
-  // Serve next question using functional state update
+  // Serve next question — keep updater pure, side effects outside
   const nextQuestion = useCallback(() => {
-    setCurrentIndex((prevIdx) => {
-      const nextIdx = prevIdx + 1;
-      if (nextIdx < fullQueue.length) {
-        setSelected(null);
-        setResult(null);
-        setShowExplanation(false);
-        questionStartTime.current = Date.now();
-        const { correct_option, ...safeQ } = fullQueue[nextIdx] as any;
-        setQuestion(safeQ as QuestionData);
-        return nextIdx;
-      } else {
-        setSessionComplete(true);
-        return prevIdx;
-      }
-    });
-  }, [fullQueue]);
+    const nextIdx = currentIndex + 1;
+    if (nextIdx < fullQueue.length) {
+      setSelected(null);
+      setResult(null);
+      setShowExplanation(false);
+      questionStartTime.current = Date.now();
+      const { correct_option, ...safeQ } = fullQueue[nextIdx] as any;
+      setQuestion(safeQ as QuestionData);
+      setCurrentIndex(nextIdx);
+    } else {
+      setSessionComplete(true);
+    }
+  }, [currentIndex, fullQueue]);
 
   // Fetch all unasked questions for the section at start, grouped by passage
   const buildPassageQueue = useCallback(async (extraExcludeIds: string[] = []) => {

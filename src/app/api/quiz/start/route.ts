@@ -149,10 +149,10 @@ export async function POST(req: NextRequest) {
       return maxB - maxA;
     });
 
-    // Build ordered queue with deterministic sort (created_at + question_number)
+    // Build ordered queue with deterministic sort + dedup by text
     const orderedQueue: any[] = [];
     for (const pid of sortedKeptIds) {
-      passageMap[pid].sort((a: any, b: any) => {
+      const sortedQ = [...passageMap[pid]].sort((a: any, b: any) => {
         const timeA = new Date(a.created_at).getTime();
         const timeB = new Date(b.created_at).getTime();
         if (timeA === timeB) {
@@ -160,7 +160,14 @@ export async function POST(req: NextRequest) {
         }
         return timeA - timeB;
       });
-      orderedQueue.push(...passageMap[pid]);
+      // Deduplicate by question text within passage (defensive — catches cron-generated near-duplicates)
+      const seen = new Set<string>();
+      for (const q of sortedQ) {
+        const key = (q.question_text || '').trim().toLowerCase().slice(0, 100);
+        if (seen.has(key)) continue;
+        seen.add(key);
+        orderedQueue.push(q);
+      }
     }
 
     // Create session

@@ -476,11 +476,18 @@ async function main() {
 
       // 🛡️ Combined guardrail: abort if passage or questions are invalid (prevents orphan questions)
       const validQuestions = [];
+      const seenTexts = new Set();
       for (let i = 0; i < finalQuestions.length; i++) {
         const q = finalQuestions[i];
         const normalised = normalise(q, null, i + 1);
         if (normalised) {
           normalised.section = section;
+          const key = (normalised.question_text || '').trim().toLowerCase().slice(0, 100);
+          if (seenTexts.has(key)) {
+            console.log(`    ⚠️ Skipping duplicate in batch (q${i + 1})`);
+            continue;
+          }
+          seenTexts.add(key);
           validQuestions.push(normalised);
         }
       }
