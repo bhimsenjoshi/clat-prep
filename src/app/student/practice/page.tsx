@@ -23,7 +23,7 @@ interface Question {
   passage_id: string | null;
   options: Record<string, string>;
   difficulty: string;
-  correct_option?: string;
+  correct_option: string;
   explanation?: string;
 }
 
@@ -45,7 +45,7 @@ export default function PracticeQuiz() {
   const [selectedSection, setSelectedSection] = useState<string | null>(null);
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [question, setQuestion] = useState<Question | null>(null);
-  const [questionIds, setQuestionIds] = useState<string[]>([]);
+  const [questionQueue, setQuestionQueue] = useState<Question[]>([]);
   const [remainingIds, setRemainingIds] = useState<string[] | null>(null);
   const [result, setResult] = useState<AnswerResult | null>(null);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
@@ -175,10 +175,9 @@ export default function PracticeQuiz() {
       // API now returns a passage-grouped queue
       if (data.questions && data.questions.length > 0) {
         const first = data.questions[0];
-        const { correct_option: co, ...safeFirst } = first;
-        currentCorrectOptionRef.current = co || null;
-        setQuestion(safeFirst);
-        setQuestionIds(data.questions.map((q: any) => q.id));
+        currentCorrectOptionRef.current = first.correct_option ?? null;
+        setQuestion(first);
+        setQuestionQueue(data.questions.slice(1));
         setRemainingIds(data.questions.slice(1).map((q: any) => q.id));
       } else {
         throw new Error('No questions returned');
@@ -213,7 +212,7 @@ export default function PracticeQuiz() {
       setTrackedResponses(prev => [...prev, { question, result: localResult }]);
     }
 
-    // ── Fire API call in background to record response + fetch next question ──
+    // ── Fire API call in background to record response ──
     try {
       const res = await fetch('/api/quiz/respond', {
         method: 'POST',
@@ -230,11 +229,13 @@ export default function PracticeQuiz() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Failed to submit answer');
 
-      if (data.next_question) {
-        const { correct_option: nco, ...safeNext } = data.next_question;
-        nextQuestionRef.current = safeNext;
-        nextCorrectOptionRef.current = nco || null;
-        setRemainingIds(data.remaining_ids);
+      // Serve next question from the client-side passage-grouped queue
+      if (questionQueue.length > 0) {
+        const nextQ = questionQueue[0];
+        nextQuestionRef.current = nextQ;
+        nextCorrectOptionRef.current = nextQ.correct_option ?? null;
+        setQuestionQueue(prev => prev.slice(1));
+        setRemainingIds(prev => prev ? prev.slice(1) : null);
       } else {
         setSessionComplete(true);
       }
@@ -276,6 +277,8 @@ export default function PracticeQuiz() {
     setSelectedSection(null);
     setSessionId(null);
     setQuestion(null);
+    setQuestionQueue([]);
+    setRemainingIds(null);
     setResult(null);
     setSelectedOption(null);
     setSessionComplete(false);
@@ -358,7 +361,12 @@ export default function PracticeQuiz() {
             )}
           </div>
         )}
-        <p className="text-sm font-medium mb-3 text-primary">{q.question_text}</p>
+        <p className="text-sm font-medium mb-1 text-primary">{q.question_text}</p>
+        {q.passage_id && (
+          <p className="text-[10px] font-mono text-muted mb-3">
+            Passage: #{q.passage_id.slice(0, 8)}
+          </p>
+        )}
         <div className="grid grid-cols-2 gap-2">
           {(() => {
             let opts = q.options;
@@ -675,15 +683,21 @@ export default function PracticeQuiz() {
         {question && !result && !(viewingHistoric && reviewBackIdx !== null) && (
           <div className="bg-card border border-theme rounded-xl p-6 mb-4">
             <div className="flex items-center justify-between mb-4">
-              <span className="text-xs text-secondary">
+              <span className="text-xs text-secondary flex items-center gap-1.5 flex-wrap">
                 {selectedSection}
                 {question.difficulty && (
-                  <span className={`ml-2 px-1.5 py-0.5 rounded text-[10px] ${
+                  <span className={`ml-0.5 px-1.5 py-0.5 rounded text-[10px] ${
                     question.difficulty === 'hard' ? 'bg-danger/50 text-danger' :
                     question.difficulty === 'easy' ? 'bg-success/50 text-success' :
                     'bg-info/50 text-info'
                   }`}>
                     {question.difficulty}
+                  </span>
+                )}
+                {question.passage_id && (
+                  <span className="ml-0.5 px-1.5 py-0.5 rounded text-[10px] bg-magenta/20 text-magenta font-mono"
+                    title="Passage ID (debug)">
+                    #{question.passage_id.slice(0, 8)}
                   </span>
                 )}
               </span>
