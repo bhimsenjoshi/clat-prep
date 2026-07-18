@@ -200,6 +200,103 @@ const MECHANICAL_CHECKS = [
 
 // ─── Main validation function ───
 
+async function callDeepSeek(systemPrompt, userPrompt, retries = 2) {
+  const DEEPSEEK_KEY = process.env.DEEPSEEK_API_KEY;
+  if (!DEEPSEEK_KEY) throw new Error('DEEPSEEK_API_KEY not set — AI validation requires it');
+
+  for (let attempt = 1; attempt <= retries; attempt++) {
+    try {
+      const res = await fetch('https://api.deepseek.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${DEEPSEEK_KEY}`,
+        },
+        body: JSON.stringify({
+          model: 'deepseek-chat',
+          messages: [
+            { role: 'system', content: systemPrompt },
+            { role: 'user', content: userPrompt },
+          ],
+          temperature: 0.1,
+          max_tokens: 8192,
+          response_format: { type: 'json_object' },
+        }),
+      });
+
+      if (!res.ok) {
+        const text = await res.text();
+        if (attempt < retries) {
+          console.log(`    ⚠️ DeepSeek error ${res.status} (attempt ${attempt}) — retrying...`);
+          await new Promise(r => setTimeout(r, 2000));
+          continue;
+        }
+        throw new Error(`DeepSeek error ${res.status}: ${text}`);
+      }
+
+      const data = await res.json();
+      const raw = data?.choices?.[0]?.message?.content;
+      if (!raw) throw new Error('Empty DeepSeek response');
+
+      let parsed;
+      try {
+        parsed = JSON.parse(raw);
+      } catch {
+        const jsonMatch = raw.match(/\{[\s\S]*\}/);
+        if (jsonMatch) {
+          try { parsed = JSON.parse(jsonMatch[0]); } catch {
+            throw new Error('Failed to parse AI response as JSON');
+          }
+        } else {
+          throw new Error('Failed to parse AI response as JSON');
+        }
+      }
+
+      return parsed;
+    } catch (err) {
+      if (attempt < retries) {
+        console.log(`    ⚠️ Attempt ${attempt} failed: ${err.message} — retrying...`);
+        await new Promise(r => setTimeout(r, 2000));
+        continue;
+      }
+      throw err;
+    }
+  }
+}
+
+function buildAiValidationPrompt(questionsToValidate) {
+  const questionsJson = questionsToValidate.map((q, i) => ({
+    index: i,
+    id: q.id,
+    section: q.section,
+    question_text: q.question_text,
+    passage_content: q.passage_content || q.passage_text || null,
+    options: (() => {
+      const opts = parseOptions(q.options);
+      return opts || {};
+    })(),
+    correct_answer: q.correct_option,
+    explanation: q.explanation,
+    difficulty: q.difficulty,
+  }));
+
+  return {
+    system: `You are a CLAT question validator. Review each question and flag any issues.
+
+For each question check:
+1. ANSWER ACCURACY: Is the correct_answer genuinely correct? Does the explanation support it?
+2. OPTION QUALITY: Are all 4 options distinct and plausible (not trivially wrong)?
+3. EXPLANATION MATCH: Does the explanation actually explain why the correct answer is right and why others are wrong?
+4. PASSAGE RELEVANCE: If there's a passage, does the question genuinely relate to its content? 
+5. CLAT APPROPRIATENESS: Is this a CLAT-quality question (tests reasoning/knowledge, not trivia)? For Current Affairs, does it require external knowledge beyond what's in the passage?
+
+Be conservative — only flag questions that have CLEAR issues. If everything looks reasonable, pass it.
+Return JSON: { "results": [{ "index": 0, "passed": true, "reasons": [] }, { "index": 1, "passed": false, "reasons": ["Explanation contradicts correct answer"] }] }`,
+
+    user: `Validate these CLAT questions:\n\n${JSON.stringify(questionsJson, null, 2)}`,
+  };
+}
+
 export async function validatePendingQuestions() {
   if (!SUPABASE_URL || !SERVICE_KEY || !ANON_KEY) {
     throw new Error('Supabase env vars not set (NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, NEXT_PUBLIC_SUPABASE_ANON_KEY)');
@@ -266,6 +363,60 @@ export async function validatePendingQuestions() {
     });
   }
 
+  // ─── AI Validation — send mechanically-passed questions to DeepSeek ───
+  const mechanicallyPassed = results.filter(r => r.status_after === 'passed');
+  let aiFlaggedCount = 0;
+
+  if (mechanicallyPassed.length > 0 && process.env.DEEPSEEK_API_KEY) {
+    console.log(`🤖 Running AI validation on ${mechanicallyPassed.length} mechanically-passed questions...`);
+
+    // Build lookup: result item id -> full question data
+    const questionById = {};
+    for (const q of pendingQuestions) {
+      questionById[q.id] = q;
+    }
+
+    try {
+      const { system, user } = buildAiValidationPrompt(
+        mechanicallyPassed.map(r => questionById[r.id]).filter(Boolean)
+      );
+      const aiResult = await callDeepSeek(system, user);
+
+      if (aiResult && aiResult.results && Array.isArray(aiResult.results)) {
+        // Map AI results back to questions using the index
+        const mechanicallyPassedQuestions = mechanicallyPassed
+          .map(r => questionById[r.id])
+          .filter(Boolean);
+
+        for (const aiCheck of aiResult.results) {
+          if (aiCheck.passed === false && aiCheck.reasons && aiCheck.reasons.length > 0) {
+            const qData = mechanicallyPassedQuestions[aiCheck.index];
+            if (qData) {
+              const resultItem = results.find(r => r.id === qData.id);
+              if (resultItem) {
+                resultItem.status_after = 'flagged';
+                resultItem.checks_failed.push('ai_check_failed');
+                resultItem.notes = `AI flagged: ${aiCheck.reasons.join('; ')}`;
+                aiFlaggedCount++;
+              }
+            }
+          }
+        }
+        console.log(`  🤖 AI flagged ${aiFlaggedCount} questions out of ${mechanicallyPassed.length}`);
+      } else {
+        console.log(`  🤖 AI validation returned unexpected format — treating all as passed`);
+      }
+    } catch (aiErr) {
+      console.log(`  ⚠️ AI validation error: ${aiErr.message} — all mechanically-passed questions will be marked passed`);
+    }
+  } else if (mechanicallyPassed.length > 0 && !process.env.DEEPSEEK_API_KEY) {
+    console.log(`  ⚠️ No DEEPSEEK_API_KEY set — skipping AI validation. All mechanically-passed questions marked passed.`);
+  }
+
+  // Adjust counts after AI validation
+  passedCount = results.filter(r => r.status_after === 'passed').length;
+  flaggedCount = results.filter(r => r.status_after === 'flagged').length;
+
   // ─── Batch UPDATE validation_status on practice_questions ───
   console.log(`📝 Updating validation statuses...`);
 
@@ -300,10 +451,10 @@ export async function validatePendingQuestions() {
     total: results.length,
     passed: passedCount,
     flagged: flaggedCount,
-    ai_flagged: 0,
+    ai_flagged: aiFlaggedCount,
   };
 
-  console.log(`\n📊 Validation complete: ${summary.total} total, ${summary.passed} passed, ${summary.flagged} flagged`);
+  console.log(`\n📊 Validation complete: ${summary.total} total, ${summary.passed} passed, ${summary.flagged} flagged (${summary.ai_flagged} by AI)`);
   return summary;
 }
 
