@@ -237,14 +237,17 @@ export default function AnalyticsPage() {
     load();
 
     // ─── Fetch editorial stats ───
-    fetch('/api/editorials/activity')
-      .then(r => r.json())
-      .then(data => {
-        setEditorialStats(data.stats || null);
-        setDailyReadData(data.dailyReadData || []);
-        setEditorialStatsLoading(false);
-      })
-      .catch(() => setEditorialStatsLoading(false));
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (!user) return;
+      fetch(`/api/editorials/activity?uid=${user.id}`, { cache: 'no-store' })
+        .then(r => r.json())
+        .then(data => {
+          setEditorialStats(data.stats || null);
+          setDailyReadData(data.dailyReadData || []);
+          setEditorialStatsLoading(false);
+        })
+        .catch(() => setEditorialStatsLoading(false));
+    });
   }, []);
 
   // ─── Subscription check ───

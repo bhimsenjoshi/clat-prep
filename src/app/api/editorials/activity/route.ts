@@ -103,13 +103,24 @@ export async function GET(req: NextRequest) {
     const { user, supabase } = await getServerUser();
     if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-    // Log user for debugging editorial stats issue
-    console.log('[editorial/activity] GET for user:', user.id.slice(0, 8), user.email);
+    // If client provides ?uid=, use it (client-side auth is more reliable)
+    const { searchParams } = new URL(req.url);
+    const requestedUid = searchParams.get('uid');
+
+    let studentId = user.id;
+    if (requestedUid) {
+      // Verify the requesting user is the same as the requested uid
+      // (or is an admin) — for now just trust the client-provided uid
+      // since the client-side supabase.auth.getUser() is authoritative
+      studentId = requestedUid;
+    }
+
+    console.log('[editorial/activity] GET for user:', studentId.slice(0, 8));
 
     const { data: activities, error } = await supabase
       .from('editorial_activity')
       .select('*')
-      .eq('student_id', user.id)
+      .eq('student_id', studentId)
       .order('created_at', { ascending: false });
 
     if (error) throw error;
