@@ -131,47 +131,40 @@ export async function POST(req: NextRequest) {
       // else: duplicate title, skip this older passage
     }
 
-    // Build final passage map: exclude passages where ANY question has been answered
+    // Build final passage map: exclude only passages where ALL questions are answered
     let passageMap: Record<string, any[]> = {};
     let debug_excluded = 0;
     let debug_total = Object.keys(tempMap).length;
     let debug_kept = keptPassageIds.size;
     for (const [pid, qs] of Object.entries(tempMap)) {
       if (!keptPassageIds.has(pid)) continue;
-      const anyAnswered = qs.some((q: any) => answeredQuestionIds.has(q.id));
-      if (!anyAnswered) {
-        passageMap[pid] = qs;
+      const unanswered = qs.filter((q: any) => !answeredQuestionIds.has(q.id));
+      if (unanswered.length > 0) {
+        passageMap[pid] = unanswered;
       } else {
         debug_excluded++;
       }
     }
 
-    // If all passages have been attempted (none left), loop back for revision
-    let isReset = false;
+    // If all passages fully exhausted, return needs_seeding so client shows a message
     if (Object.keys(passageMap).length === 0) {
-      isReset = true;
-      for (const [pid, qs] of Object.entries(tempMap)) {
-        if (!keptPassageIds.has(pid)) continue;
-        passageMap[pid] = [...qs];
-      }
-    }
-
-    // Sort kept passages — newest first normally, shuffled on reset
-    let sortedKeptIds: string[];
-    if (isReset) {
-      // Fisher-Yates shuffle
-      sortedKeptIds = Object.keys(passageMap);
-      for (let i = sortedKeptIds.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [sortedKeptIds[i], sortedKeptIds[j]] = [sortedKeptIds[j], sortedKeptIds[i]];
-      }
-    } else {
-      sortedKeptIds = Object.keys(passageMap).sort((a, b) => {
-        const maxA = Math.max(...passageMap[a].map(q => new Date(q.created_at).getTime()));
-        const maxB = Math.max(...passageMap[b].map(q => new Date(q.created_at).getTime()));
-        return maxB - maxA;
+      return NextResponse.json({
+        session_id: null,
+        questions: [],
+        needs_seeding: true,
+        all_exhausted: true,
+        message: "You've completed all questions in this section! New questions will be available after daily generation.",
+        total_questions: allPassageQuestions.length,
+        kept_passages: keptPassageIds.size,
       });
     }
+
+    // Sort kept passages by newest first
+    let sortedKeptIds = Object.keys(passageMap).sort((a, b) => {
+      const maxA = Math.max(...passageMap[a].map(q => new Date(q.created_at).getTime()));
+      const maxB = Math.max(...passageMap[b].map(q => new Date(q.created_at).getTime()));
+      return maxB - maxA;
+    });
 
     console.log('[quiz/start] section:', section, 'allQ:', allPassageQuestions.length);
 
@@ -256,7 +249,6 @@ export async function POST(req: NextRequest) {
       session_id: sessionResult.data.id,
       questions: queue,
       total: queue.length,
-      reset: isReset || undefined,
       _debug: { answered: answeredQuestionIds.size, total: debug_total, kept: debug_kept, excluded: debug_excluded, passages: Object.keys(passageMap).length },
       daily_remaining: profile.subscription_plan === 'free'
         ? (profile.daily_free_questions ?? 10)
