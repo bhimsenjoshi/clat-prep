@@ -132,13 +132,20 @@ export async function POST(req: NextRequest) {
     }
 
     // Build final passage map with only kept passages, exclude fully-answered passages
-    const passageMap: Record<string, any[]> = {};
+    let passageMap: Record<string, any[]> = {};
     for (const [pid, qs] of Object.entries(tempMap)) {
       if (!keptPassageIds.has(pid)) continue;
-      // Exclude passage only if ALL its questions have been answered
       const unanswered = qs.filter((q: any) => !answeredQuestionIds.has(q.id));
       if (unanswered.length > 0) {
         passageMap[pid] = unanswered;
+      }
+    }
+
+    // If all passages fully answered, loop back — include ALL questions for reiteration
+    if (Object.keys(passageMap).length === 0) {
+      for (const [pid, qs] of Object.entries(tempMap)) {
+        if (!keptPassageIds.has(pid)) continue;
+        passageMap[pid] = [...qs];
       }
     }
 
