@@ -170,6 +170,18 @@ export async function POST(req: NextRequest) {
       }
     }
 
+    console.log('[quiz/start] section:', section, 'allQ:', allPassageQuestions.length, 'keptPassages:', keptPassageIds.size, 'passageMap:', Object.keys(passageMap).length, 'queue:', orderedQueue.length);
+
+    // If queue is empty after filtering, return needs_seeding response
+    if (orderedQueue.length === 0) {
+      return NextResponse.json({
+        session_id: null,
+        questions: [],
+        needs_seeding: true,
+        total: 0,
+      });
+    }
+
     // Create session
     const sessionResult = await supabase
       .from('quiz_sessions')
