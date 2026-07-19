@@ -189,7 +189,7 @@ export default function PracticeQuiz() {
       setStarted(true);
     } catch (err) {
       console.error('Start error:', err);
-      alert('Failed to start quiz. Please try again.');
+      alert('Failed to start quiz: ' + (err instanceof Error ? err.message : String(err)));
       setSelectedSection(null);
     }
     setLoading(false);
