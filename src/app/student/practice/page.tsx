@@ -166,7 +166,10 @@ export default function PracticeQuiz() {
       }
 
       if (data.needs_seeding) {
-        alert('No questions available for this section yet. Questions are being generated daily!');
+        const debugMsg = data.total_questions !== undefined
+          ? `\n\nDebug: ${data.total_questions}Q fetched, ${data.kept_passages || '?'} passages kept, ${data.passage_map_passages || '?'} unfiltered, ${data.passage_questions || '?'} unanswered`
+          : '';
+        alert('No questions available for this section yet. Questions are being generated daily!' + debugMsg);
         setLoading(false);
         setSelectedSection(null);
         return;
