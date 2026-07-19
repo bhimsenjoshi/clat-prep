@@ -243,12 +243,6 @@ export default function PracticeQuiz() {
   const submitPassage = async () => {
     if (phase !== 'answering' || !sessionId) return;
     const qs = currentQuestions;
-    const answered = qs.filter(q => answers[q.id]).length;
-
-    if (qs.length > 0 && answered === 0) {
-      alert('Please answer at least one question before submitting.');
-      return;
-    }
 
     const now = Date.now();
     const timeTaken = Math.round((now - passageTimerStartRef.current) / 1000);
@@ -369,7 +363,7 @@ export default function PracticeQuiz() {
 
   // ── Share result/explanation component ──
 
-  function ResultBody({ response, question: q }: { response: AnswerResult; question: Question }) {
+  function ResultBody({ response, question: q, showIds }: { response: AnswerResult; question: Question; showIds?: boolean }) {
     return (
       <>
         <div className="flex items-center gap-2 mb-2">
@@ -379,8 +373,13 @@ export default function PracticeQuiz() {
             {response.is_correct ? '✓ Correct' : '✗ Incorrect'}
           </span>
           <span className="text-[10px] text-muted font-mono">
-            Your: {response.your_answer} · Correct: {response.correct_option}
+            Your: {response.your_answer || '—'} · Correct: {response.correct_option}
           </span>
+          {showIds && (
+            <span className="text-[10px] text-muted font-mono ml-auto" title="Passage ID · Question ID">
+              #{q.passage_id?.slice(0, 8)} · q:{q.id.slice(0, 8)}
+            </span>
+          )}
         </div>
         <p className="text-sm mb-3 text-primary">{q.question_text}</p>
         <div className="grid grid-cols-2 gap-1.5 mb-3">
@@ -642,6 +641,34 @@ export default function PracticeQuiz() {
           </div>
         )}
 
+        {/* Passage results summary (review only) */}
+        {isReviewing && (() => {
+          const qs = passageGroups[currentPassageIdx] || [];
+          const correct = qs.filter(q => results[q.id]?.is_correct).length;
+          const wrong = qs.filter(q => results[q.id] && !results[q.id].is_correct).length;
+          const unanswered = qs.length - correct - wrong;
+          const marks = correct - wrong * 0.25;
+          const timeTaken = qs[0] ? results[qs[0].id]?.time_taken_seconds : 0;
+          return (
+            <div className="mb-4 bg-card border border-theme rounded-xl p-3">
+              <div className="flex items-center justify-between mb-1.5">
+                <span className="text-[10px] font-medium text-accent uppercase tracking-wide">Passage Results</span>
+                {timeTaken != null && (
+                  <span className="text-[10px] text-muted font-mono">⏱ {timeTaken}s</span>
+                )}
+              </div>
+              <div className="flex items-center gap-4 text-xs">
+                <span className="text-success font-medium">+1 ✓ {correct}</span>
+                <span className="text-danger font-medium">-0.25 ✗ {wrong}</span>
+                <span className="text-muted">— {unanswered}</span>
+                <span className="ml-auto text-sm font-bold text-primary">
+                  {marks >= 0 ? '+' : ''}{marks.toFixed(2)}
+                </span>
+              </div>
+            </div>
+          );
+        })()}
+
         {/* Questions */}
         <div className="space-y-4">
           {currentQuestions.map((q, qIdx) => (
@@ -733,8 +760,7 @@ export default function PracticeQuiz() {
           ) : (
             <button
               onClick={submitPassage}
-              disabled={currentQuestions.length > 0 && currentQuestions.every(q => !answers[q.id])}
-              className="bg-accent text-white px-5 py-2.5 rounded-xl font-medium hover:bg-accent-hover transition disabled:opacity-50 text-sm"
+              className="bg-accent text-white px-5 py-2.5 rounded-xl font-medium hover:bg-accent-hover transition text-sm"
             >
               📝 Submit Passage ({currentQuestions.filter(q => answers[q.id]).length}/{currentQuestions.length})
             </button>
