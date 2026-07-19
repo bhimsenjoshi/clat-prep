@@ -33,6 +33,7 @@ interface AnswerResult {
   correct_option: string;
   explanation: string | Record<string, any>;
   your_answer: string;
+  attempted: boolean;
   time_taken_seconds?: number;
 }
 
@@ -252,7 +253,8 @@ export default function PracticeQuiz() {
     const newTracked: TrackedResponse[] = [];
     for (const q of qs) {
       const ans = answers[q.id] || '';
-      const isCorrect = ans === q.correct_option;
+      const attempted = ans !== '';
+      const isCorrect = attempted && ans === q.correct_option;
       const exp = typeof q.explanation === 'string'
         ? (() => { try { return JSON.parse(q.explanation); } catch { return q.explanation; } })()
         : q.explanation;
@@ -261,6 +263,7 @@ export default function PracticeQuiz() {
         correct_option: q.correct_option,
         explanation: exp,
         your_answer: ans,
+        attempted,
         time_taken_seconds: timeTaken,
       };
       newResults[q.id] = r;
@@ -367,13 +370,20 @@ export default function PracticeQuiz() {
     return (
       <>
         <div className="flex items-center gap-2 mb-2">
+          {!response.attempted ? (
+            <span className="px-2 py-0.5 rounded text-xs font-bold bg-muted bg-opacity-20 text-muted">— Skipped</span>
+          ) : (
           <span className={`px-2 py-0.5 rounded text-xs font-bold ${
             response.is_correct ? 'bg-success/30 text-success' : 'bg-danger/30 text-danger'
           }`}>
             {response.is_correct ? '✓ Correct' : '✗ Incorrect'}
           </span>
+          )}
           <span className="text-[10px] text-muted font-mono">
-            Your: {response.your_answer || '—'} · Correct: {response.correct_option}
+            {response.attempted
+              ? `Your: ${response.your_answer || '—'} · Correct: ${response.correct_option}`
+              : `Correct: ${response.correct_option}`
+            }
           </span>
           {showIds && (
             <span className="text-[10px] text-muted font-mono ml-auto" title="Passage ID · Question ID">
@@ -381,7 +391,6 @@ export default function PracticeQuiz() {
             </span>
           )}
         </div>
-        <p className="text-sm mb-3 text-primary">{q.question_text}</p>
         <div className="grid grid-cols-2 gap-1.5 mb-3">
           {(() => {
             let opts = q.options;
@@ -428,7 +437,7 @@ export default function PracticeQuiz() {
                     <p className="text-[10px] font-medium text-success uppercase tracking-wider mb-1">✅ Why this is correct</p>
                     <p className="text-xs text-secondary leading-relaxed">{exp.correct_answer_rationale || ''}</p>
                   </div>
-                  {!response.is_correct && exp.wrong_answer_guidance && (
+                  {response.attempted && !response.is_correct && exp.wrong_answer_guidance && (
                     <div className="p-2.5 bg-amber-900/30 border border-warning/50 rounded-lg">
                       <p className="text-[10px] font-medium text-warning uppercase tracking-wider mb-1">💡 Pointer</p>
                       <p className="text-xs text-secondary leading-relaxed">{exp.wrong_answer_guidance}</p>
@@ -645,7 +654,8 @@ export default function PracticeQuiz() {
         {isReviewing && (() => {
           const qs = passageGroups[currentPassageIdx] || [];
           const correct = qs.filter(q => results[q.id]?.is_correct).length;
-          const wrong = qs.filter(q => results[q.id] && !results[q.id].is_correct).length;
+          const wrong = qs.filter(q => results[q.id]?.attempted && !results[q.id].is_correct).length;
+          const unanswered = qs.filter(q => results[q.id] && !results[q.id].attempted).length;
           const marks = correct - wrong * 0.25;
           const timeTaken = qs[0] ? results[qs[0].id]?.time_taken_seconds : 0;
           return (
@@ -658,9 +668,10 @@ export default function PracticeQuiz() {
               </div>
               <div className="flex items-center gap-4 text-xs">
                 <span className="text-success font-medium">✓ +{correct}</span>
-                <span className="text-danger font-medium">✗ -{wrong * 0.25}</span>
-                <span className="ml-auto text-sm font-bold tabular-nums text-primary">
-                  {marks >= 0 ? '+' : ''}{marks.toFixed(2)}
+                {wrong > 0 && <span className="text-danger font-medium">✗ -{wrong * 0.25}</span>}
+                {unanswered > 0 && <span className="text-muted">— {unanswered} skipped</span>}
+                <span className="ml-auto text-xs font-bold tabular-nums text-primary">
+                  Score: {marks >= 0 ? '+' : ''}{marks.toFixed(2)}
                 </span>
               </div>
             </div>
