@@ -193,14 +193,7 @@ export default function PracticeQuiz() {
       }
 
       if (data.needs_seeding) {
-        if (data.all_exhausted) {
-          alert(data.message || "You've completed all questions in this section! New questions coming daily.");
-        } else {
-          const debugMsg = data.total_questions !== undefined
-            ? `\n\nDebug: ${data.total_questions}Q fetched, ${data.kept_passages || '?'} passages kept, ${data.passage_map_passages || '?'} unfiltered, ${data.passage_questions || '?'} unanswered`
-            : '';
-          alert('No questions available for this section yet. Questions are being generated daily!' + debugMsg);
-        }
+        alert('No questions available for this section yet. Questions are being generated daily!');
         setLoading(false);
         return;
       }
@@ -208,6 +201,7 @@ export default function PracticeQuiz() {
       setSessionId(data.session_id);
       setDailyRemaining(data.daily_remaining);
       if (data._debug) console.log('[quiz/start debug]', JSON.stringify(data._debug));
+      if (data.repeat) setResetFlag(true);
 
       // Group questions by passage_id
       const questions: Question[] = data.questions || [];

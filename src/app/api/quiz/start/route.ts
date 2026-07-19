@@ -131,32 +131,29 @@ export async function POST(req: NextRequest) {
       // else: duplicate title, skip this older passage
     }
 
-    // Build final passage map: exclude only passages where ALL questions are answered
+    // Build final passage map: exclude passages where ANY question is answered
     let passageMap: Record<string, any[]> = {};
     let debug_excluded = 0;
     let debug_total = Object.keys(tempMap).length;
     let debug_kept = keptPassageIds.size;
+    let isRepeat = false;
     for (const [pid, qs] of Object.entries(tempMap)) {
       if (!keptPassageIds.has(pid)) continue;
-      const unanswered = qs.filter((q: any) => !answeredQuestionIds.has(q.id));
-      if (unanswered.length > 0) {
-        passageMap[pid] = unanswered;
+      const hasAnyAnswered = qs.some((q: any) => answeredQuestionIds.has(q.id));
+      if (!hasAnyAnswered) {
+        passageMap[pid] = qs; // All questions for this passage (none answered yet)
       } else {
         debug_excluded++;
       }
     }
 
-    // If all passages fully exhausted, return needs_seeding so client shows a message
+    // If all passages exhausted, repeat all questions with repeat flag
     if (Object.keys(passageMap).length === 0) {
-      return NextResponse.json({
-        session_id: null,
-        questions: [],
-        needs_seeding: true,
-        all_exhausted: true,
-        message: "You've completed all questions in this section! New questions will be available after daily generation.",
-        total_questions: allPassageQuestions.length,
-        kept_passages: keptPassageIds.size,
-      });
+      for (const [pid, qs] of Object.entries(tempMap)) {
+        if (!keptPassageIds.has(pid)) continue;
+        passageMap[pid] = qs; // Return all questions (ignore answered status)
+      }
+      isRepeat = true;
     }
 
     // Sort kept passages by newest first
@@ -249,6 +246,7 @@ export async function POST(req: NextRequest) {
       session_id: sessionResult.data.id,
       questions: queue,
       total: queue.length,
+      repeat: isRepeat,
       _debug: { answered: answeredQuestionIds.size, total: debug_total, kept: debug_kept, excluded: debug_excluded, passages: Object.keys(passageMap).length },
       daily_remaining: profile.subscription_plan === 'free'
         ? (profile.daily_free_questions ?? 10)
