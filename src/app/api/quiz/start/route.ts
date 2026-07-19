@@ -133,6 +133,9 @@ export async function POST(req: NextRequest) {
 
     // Build final passage map: exclude passages where ANY question has been answered
     let passageMap: Record<string, any[]> = {};
+    let debug_excluded = 0;
+    let debug_total = Object.keys(tempMap).length;
+    let debug_kept = keptPassageIds.size;
     for (const [pid, qs] of Object.entries(tempMap)) {
       if (!keptPassageIds.has(pid)) continue;
       const anyAnswered = qs.some((q: any) => answeredQuestionIds.has(q.id));
@@ -155,9 +158,6 @@ export async function POST(req: NextRequest) {
 
     // Sort kept passages — newest first normally, shuffled on reset
     let sortedKeptIds: string[];
-    let debug_excluded = 0;
-    let debug_total = Object.keys(tempMap).length;
-    let debug_kept = keptPassageIds.size;
     if (isReset) {
       // Fisher-Yates shuffle
       sortedKeptIds = Object.keys(passageMap);
