@@ -149,6 +149,13 @@ export async function POST(req: NextRequest) {
       return maxB - maxA;
     });
 
+    console.log('[quiz/start] section:', section, 'allQ:', allPassageQuestions.length);
+
+    // Log passage grouping after dedup
+    const filteredPassageIds = Object.keys(passageMap);
+    console.log('[quiz/start] passageMap:', filteredPassageIds.length, 'passages,', 
+      filteredPassageIds.reduce((sum, pid) => sum + passageMap[pid].length, 0), 'questions');
+
     // Build ordered queue with deterministic sort + dedup by text
     const orderedQueue: any[] = [];
     for (const pid of sortedKeptIds) {
@@ -172,13 +179,23 @@ export async function POST(req: NextRequest) {
 
     console.log('[quiz/start] section:', section, 'allQ:', allPassageQuestions.length, 'keptPassages:', keptPassageIds.size, 'passageMap:', Object.keys(passageMap).length, 'queue:', orderedQueue.length);
 
-    // If queue is empty after filtering, return needs_seeding response
+    // If queue is empty after filtering, return needs_seeding response with debug info
     if (orderedQueue.length === 0) {
+      // Count per-passage questions after unanswered filter
+      const passageBreakdown: Record<string, number> = {};
+      for (const [pid, qs] of Object.entries(passageMap)) {
+        passageBreakdown[pid.slice(0, 8)] = qs.length;
+      }
       return NextResponse.json({
         session_id: null,
         questions: [],
         needs_seeding: true,
         total: 0,
+        total_questions: allPassageQuestions.length,
+        kept_passages: keptPassageIds.size,
+        passage_map_passages: Object.keys(passageMap).length,
+        passage_questions: Object.values(passageMap).reduce((s: number, qs: any[]) => s + qs.length, 0),
+        passage_breakdown: passageBreakdown,
       });
     }
 
