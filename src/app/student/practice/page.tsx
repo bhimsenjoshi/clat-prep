@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import PageHeader from '@/components/PageHeader';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
@@ -67,6 +67,19 @@ export default function PracticeQuiz() {
   const pauseAccumulatedRef = useRef<number>(0);
   const passageTimerStartRef = useRef<number>(Date.now());
   const [resetFlag, setResetFlag] = useState(false);
+  const [allPassageResults, setAllPassageResults] = useState<Record<number, Record<string, AnswerResult>>>({}); // passageIdx -> results
+
+  // Track answered counts per passage for navigation
+  const groupedAnswerCount = useCallback((passageIdx: number) => {
+    const qs = passageGroups[passageIdx] || [];
+    if (passageIdx === currentPassageIdx) {
+      return qs.filter(q => answers[q.id]).length;
+    }
+    // For already-submitted passages, count from stored results
+    const stored = allPassageResults[passageIdx];
+    if (stored) return Object.keys(stored).length;
+    return 0;
+  }, [passageGroups, currentPassageIdx, answers, allPassageResults]);
 
   // Auth check + auto-start from dashboard card click
   useEffect(() => {
@@ -230,10 +243,10 @@ export default function PracticeQuiz() {
   const submitPassage = async () => {
     if (phase !== 'answering' || !sessionId) return;
     const qs = currentQuestions;
-    const unanswered = qs.filter(q => !answers[q.id]);
+    const answered = qs.filter(q => answers[q.id]).length;
 
-    if (qs.length > 0 && unanswered.length > 0) {
-      alert(`Please answer all ${qs.length} questions before submitting.`);
+    if (qs.length > 0 && answered === 0) {
+      alert('Please answer at least one question before submitting.');
       return;
     }
 
@@ -261,6 +274,7 @@ export default function PracticeQuiz() {
     }
     setResults(newResults);
     setTrackedResponses(prev => [...prev, ...newTracked]);
+    setAllPassageResults(prev => ({ ...prev, [currentPassageIdx]: newResults }));
     setPhase('reviewing');
 
     // Fire batch API calls in background
@@ -286,6 +300,18 @@ export default function PracticeQuiz() {
     passageTimerStartRef.current = now;
   };
 
+  // ── Previous passage (review) ──
+
+  const prevPassage = () => {
+    if (currentPassageIdx <= 0) return;
+    setCurrentPassageIdx(prev => prev - 1);
+    // Load stored results for the previous passage
+    const stored = allPassageResults[currentPassageIdx - 1];
+    setResults(stored || {});
+    setPhase('reviewing');
+    setPassageExpanded(true);
+  };
+
   // ── Next passage ──
 
   const nextPassage = () => {
@@ -301,10 +327,20 @@ export default function PracticeQuiz() {
       setPhase('complete');
       return;
     }
-    setCurrentPassageIdx(prev => prev + 1);
-    setAnswers({});
-    setResults({});
-    setPhase('answering');
+    const nextIdx = currentPassageIdx + 1;
+    const stored = allPassageResults[nextIdx];
+    if (stored) {
+      // Already submitted — go to review
+      setCurrentPassageIdx(nextIdx);
+      setResults(stored);
+      setPhase('reviewing');
+    } else {
+      // Not yet answered
+      setCurrentPassageIdx(nextIdx);
+      setAnswers({});
+      setResults({});
+      setPhase('answering');
+    }
     setPassageExpanded(true);
     setTimerPaused(false);
     pauseAccumulatedRef.current = 0;
@@ -328,6 +364,7 @@ export default function PracticeQuiz() {
     pauseAccumulatedRef.current = 0;
     setElapsedSeconds(0);
     setResetFlag(false);
+    setAllPassageResults({});
   };
 
   // ── Share result/explanation component ──
@@ -617,9 +654,9 @@ export default function PracticeQuiz() {
               <div className="flex items-center justify-between mb-3">
                 <span className="text-xs text-secondary flex items-center gap-1.5">
                   <span className="w-5 h-5 rounded-full bg-theme-subtle text-secondary flex items-center justify-center text-[10px] font-bold">
-                    {q.question_number || qIdx + 1}
+                    {qIdx + 1}
                   </span>
-                  {q.difficulty && (
+                  {isReviewing && results[q.id] && q.difficulty && (
                     <span className={`px-1.5 py-0.5 rounded text-[10px] ${
                       q.difficulty === 'hard' ? 'bg-danger/50 text-danger' :
                       q.difficulty === 'easy' ? 'bg-success/50 text-success' :
@@ -628,9 +665,6 @@ export default function PracticeQuiz() {
                       {q.difficulty}
                     </span>
                   )}
-                  <span className="ml-0.5 px-1.5 py-0.5 rounded text-[10px] bg-magenta/20 text-magenta font-mono" title="Passage ID">
-                    #{q.passage_id?.slice(0, 8)}
-                  </span>
                 </span>
                 {isReviewing && results[q.id] && (
                   <span className={`text-[10px] font-bold ${
@@ -679,21 +713,28 @@ export default function PracticeQuiz() {
         <div className="mt-6 flex justify-center gap-3">
           {isReviewing ? (
             <>
+              <button
+                onClick={prevPassage}
+                disabled={currentPassageIdx <= 0}
+                className="bg-card border border-theme px-4 py-2.5 rounded-xl font-medium hover:bg-card-hover transition disabled:opacity-40 text-xs"
+              >
+                ← Prev Passage
+              </button>
               <span className="text-[10px] text-muted self-center">
-                {currentPassageIdx + 1} of {totalPassages} passages
+                {currentPassageIdx + 1}/{totalPassages}
               </span>
               <button
                 onClick={nextPassage}
-                className="bg-accent text-white px-6 py-2.5 rounded-xl font-medium hover:bg-accent-hover transition"
+                className="bg-accent text-white px-4 py-2.5 rounded-xl font-medium hover:bg-accent-hover transition text-xs"
               >
-                {isLastPassage ? '📊 View Results' : 'Next Passage →'}
+                {isLastPassage ? '📊 Results' : 'Next Passage →'}
               </button>
             </>
           ) : (
             <button
               onClick={submitPassage}
-              disabled={currentQuestions.length > 0 && currentQuestions.some(q => !answers[q.id])}
-              className="bg-accent text-white px-6 py-2.5 rounded-xl font-medium hover:bg-accent-hover transition disabled:opacity-50"
+              disabled={currentQuestions.length > 0 && currentQuestions.every(q => !answers[q.id])}
+              className="bg-accent text-white px-5 py-2.5 rounded-xl font-medium hover:bg-accent-hover transition disabled:opacity-50 text-sm"
             >
               📝 Submit Passage ({currentQuestions.filter(q => answers[q.id]).length}/{currentQuestions.length})
             </button>
