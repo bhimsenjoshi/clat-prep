@@ -204,6 +204,7 @@ export default function PracticeQuiz() {
       setSessionId(data.session_id);
       setDailyRemaining(data.daily_remaining);
       if (data.reset) setResetFlag(true);
+      if (data._debug) console.log('[quiz/start debug]', JSON.stringify(data._debug));
 
       // Group questions by passage_id
       const questions: Question[] = data.questions || [];

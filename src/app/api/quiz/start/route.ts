@@ -138,6 +138,8 @@ export async function POST(req: NextRequest) {
       const anyAnswered = qs.some((q: any) => answeredQuestionIds.has(q.id));
       if (!anyAnswered) {
         passageMap[pid] = qs;
+      } else {
+        debug_excluded++;
       }
     }
 
@@ -153,6 +155,9 @@ export async function POST(req: NextRequest) {
 
     // Sort kept passages — newest first normally, shuffled on reset
     let sortedKeptIds: string[];
+    let debug_excluded = 0;
+    let debug_total = Object.keys(tempMap).length;
+    let debug_kept = keptPassageIds.size;
     if (isReset) {
       // Fisher-Yates shuffle
       sortedKeptIds = Object.keys(passageMap);
@@ -252,6 +257,7 @@ export async function POST(req: NextRequest) {
       questions: queue,
       total: queue.length,
       reset: isReset || undefined,
+      _debug: { answered: answeredQuestionIds.size, total: debug_total, kept: debug_kept, excluded: debug_excluded, passages: Object.keys(passageMap).length },
       daily_remaining: profile.subscription_plan === 'free'
         ? (profile.daily_free_questions ?? 10)
         : 'unlimited',
