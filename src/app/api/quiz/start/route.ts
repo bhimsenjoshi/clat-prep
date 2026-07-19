@@ -131,30 +131,42 @@ export async function POST(req: NextRequest) {
       // else: duplicate title, skip this older passage
     }
 
-    // Build final passage map with only kept passages, exclude fully-answered passages
+    // Build final passage map: exclude passages where ANY question has been answered
     let passageMap: Record<string, any[]> = {};
     for (const [pid, qs] of Object.entries(tempMap)) {
       if (!keptPassageIds.has(pid)) continue;
-      const unanswered = qs.filter((q: any) => !answeredQuestionIds.has(q.id));
-      if (unanswered.length > 0) {
-        passageMap[pid] = unanswered;
+      const anyAnswered = qs.some((q: any) => answeredQuestionIds.has(q.id));
+      if (!anyAnswered) {
+        passageMap[pid] = qs;
       }
     }
 
-    // If all passages fully answered, loop back — include ALL questions for reiteration
+    // If all passages have been attempted (none left), loop back for revision
+    let isReset = false;
     if (Object.keys(passageMap).length === 0) {
+      isReset = true;
       for (const [pid, qs] of Object.entries(tempMap)) {
         if (!keptPassageIds.has(pid)) continue;
         passageMap[pid] = [...qs];
       }
     }
 
-    // Sort kept passages by newest created_at (descending)
-    const sortedKeptIds = Object.keys(passageMap).sort((a, b) => {
-      const maxA = Math.max(...passageMap[a].map(q => new Date(q.created_at).getTime()));
-      const maxB = Math.max(...passageMap[b].map(q => new Date(q.created_at).getTime()));
-      return maxB - maxA;
-    });
+    // Sort kept passages — newest first normally, shuffled on reset
+    let sortedKeptIds: string[];
+    if (isReset) {
+      // Fisher-Yates shuffle
+      sortedKeptIds = Object.keys(passageMap);
+      for (let i = sortedKeptIds.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [sortedKeptIds[i], sortedKeptIds[j]] = [sortedKeptIds[j], sortedKeptIds[i]];
+      }
+    } else {
+      sortedKeptIds = Object.keys(passageMap).sort((a, b) => {
+        const maxA = Math.max(...passageMap[a].map(q => new Date(q.created_at).getTime()));
+        const maxB = Math.max(...passageMap[b].map(q => new Date(q.created_at).getTime()));
+        return maxB - maxA;
+      });
+    }
 
     console.log('[quiz/start] section:', section, 'allQ:', allPassageQuestions.length);
 
@@ -239,6 +251,7 @@ export async function POST(req: NextRequest) {
       session_id: sessionResult.data.id,
       questions: queue,
       total: queue.length,
+      reset: isReset || undefined,
       daily_remaining: profile.subscription_plan === 'free'
         ? (profile.daily_free_questions ?? 10)
         : 'unlimited',
