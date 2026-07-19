@@ -646,7 +646,6 @@ export default function PracticeQuiz() {
           const qs = passageGroups[currentPassageIdx] || [];
           const correct = qs.filter(q => results[q.id]?.is_correct).length;
           const wrong = qs.filter(q => results[q.id] && !results[q.id].is_correct).length;
-          const unanswered = qs.length - correct - wrong;
           const marks = correct - wrong * 0.25;
           const timeTaken = qs[0] ? results[qs[0].id]?.time_taken_seconds : 0;
           return (
@@ -658,10 +657,9 @@ export default function PracticeQuiz() {
                 )}
               </div>
               <div className="flex items-center gap-4 text-xs">
-                <span className="text-success font-medium">+1 ✓ {correct}</span>
-                <span className="text-danger font-medium">-0.25 ✗ {wrong}</span>
-                <span className="text-muted">— {unanswered}</span>
-                <span className="ml-auto text-sm font-bold text-primary">
+                <span className="text-success font-medium">✓ +{correct}</span>
+                <span className="text-danger font-medium">✗ -{wrong * 0.25}</span>
+                <span className="ml-auto text-sm font-bold tabular-nums text-primary">
                   {marks >= 0 ? '+' : ''}{marks.toFixed(2)}
                 </span>
               </div>
