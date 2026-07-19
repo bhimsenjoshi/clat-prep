@@ -25,6 +25,7 @@ interface Question {
   difficulty: string;
   correct_option: string;
   explanation?: string;
+  question_number?: number;
 }
 
 interface AnswerResult {
@@ -40,38 +41,32 @@ interface TrackedResponse {
   result: AnswerResult;
 }
 
+type Phase = 'select' | 'answering' | 'reviewing' | 'complete';
+
 export default function PracticeQuiz() {
   const router = useRouter();
+  const [phase, setPhase] = useState<Phase>('select');
   const [selectedSection, setSelectedSection] = useState<string | null>(null);
   const [sessionId, setSessionId] = useState<string | null>(null);
-  const [question, setQuestion] = useState<Question | null>(null);
-  const [questionQueue, setQuestionQueue] = useState<Question[]>([]);
-  const [remainingIds, setRemainingIds] = useState<string[] | null>(null);
-  const [result, setResult] = useState<AnswerResult | null>(null);
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
-  const [dailyRemaining, setDailyRemaining] = useState<number | string>(10);
   const [loading, setLoading] = useState(false);
-  const [started, setStarted] = useState(false);
-  const [completed, setCompleted] = useState(false);
-  const [sessionComplete, setSessionComplete] = useState(false);
+  const [dailyRemaining, setDailyRemaining] = useState<number | string>(10);
   const [authCheckDone, setAuthCheckDone] = useState(false);
-  const [showReview, setShowReview] = useState(false);
-  const [reviewBackIdx, setReviewBackIdx] = useState<number | null>(null);
-  const [viewingHistoric, setViewingHistoric] = useState(false);
-  const [trackedResponses, setTrackedResponses] = useState<TrackedResponse[]>([]);
-  const [timerPaused, setTimerPaused] = useState(false);
-  const [elapsedSeconds, setElapsedSeconds] = useState(0);
+  const supabase = createClient();
+
+  // Passage-grouped state
+  const [passageGroups, setPassageGroups] = useState<Question[][]>([]);
+  const [currentPassageIdx, setCurrentPassageIdx] = useState(0);
   const [passageText, setPassageText] = useState<string | null>(null);
   const [passageExpanded, setPassageExpanded] = useState(true);
-  const [historyPos, setHistoryPos] = useState<number | null>(null); // position in trackedResponses when viewing prev
+  const [answers, setAnswers] = useState<Record<string, string>>({}); // question_id -> selected option
+  const [results, setResults] = useState<Record<string, AnswerResult>>({}); // question_id -> result after submit
+  const [trackedResponses, setTrackedResponses] = useState<TrackedResponse[]>([]);
+  const [elapsedSeconds, setElapsedSeconds] = useState(0);
+  const [timerPaused, setTimerPaused] = useState(false);
   const timerRef = useRef<number>(Date.now());
   const pauseAccumulatedRef = useRef<number>(0);
-  const prevPassageIdRef = useRef<string | null>(null);
-  const nextQuestionRef = useRef<Question | null>(null);  // holds next Q securely until user clicks "Next"
-  const nextCorrectOptionRef = useRef<string | null>(null); // correct_option for the next question
-  const currentCorrectOptionRef = useRef<string | null>(null); // correct_option for instant client-side check
-  const prevQuestionRef = useRef<{ question: Question; result: AnswerResult } | null>(null);
-  const supabase = createClient();
+  const passageTimerStartRef = useRef<number>(Date.now());
+  const [resetFlag, setResetFlag] = useState(false);
 
   // Auth check + auto-start from dashboard card click
   useEffect(() => {
@@ -88,63 +83,82 @@ export default function PracticeQuiz() {
     });
   }, [router]);
 
-  // ── Live timer tick ──
+  // Timer tick
   useEffect(() => {
-    if (!started || completed || result) return;
+    if (phase !== 'answering' || timerPaused) return;
     const interval = setInterval(() => {
-      if (!timerPaused) {
-        setElapsedSeconds(Math.floor((Date.now() - timerRef.current) / 1000));
-      }
+      setElapsedSeconds(Math.floor((Date.now() - timerRef.current) / 1000));
     }, 250);
     return () => clearInterval(interval);
-  }, [started, completed, result, timerPaused]);
+  }, [phase, timerPaused]);
 
-  // ── Fetch passage text from practice_passages ──
+  // Fetch passage text when passage changes
+  const currentQuestions = passageGroups[currentPassageIdx] || [];
+  const currentPassageId = currentQuestions[0]?.passage_id || null;
+
   useEffect(() => {
-    if (!question?.passage_id) {
+    if (!currentPassageId) {
       setPassageText(null);
-      prevPassageIdRef.current = null;
       setPassageExpanded(true);
       return;
     }
-    if (question.passage_id === prevPassageIdRef.current && passageText) return;
-    prevPassageIdRef.current = question.passage_id;
-
     supabase
       .from('practice_passages')
       .select('content')
-      .eq('id', question.passage_id)
+      .eq('id', currentPassageId)
       .single()
       .then(({ data }) => {
         if (data?.content) setPassageText(data.content);
       });
-  }, [question?.passage_id, supabase]);
+  }, [currentPassageId, supabase]);
+
+  // ── Timer controls ──
 
   const togglePause = () => {
     if (timerPaused) {
-      // Resume: shift timerRef forward by the pause duration
       const pauseDuration = Date.now() - pauseAccumulatedRef.current;
       timerRef.current = timerRef.current + pauseDuration;
       pauseAccumulatedRef.current = 0;
       setTimerPaused(false);
     } else {
-      // Pause: record when we paused
       pauseAccumulatedRef.current = Date.now();
       setTimerPaused(true);
     }
   };
 
+  const formatTime = (s: number) => {
+    const m = Math.floor(s / 60);
+    const sec = s % 60;
+    return `${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
+  };
+
+  const TimerDisplay = () => (
+    <span className={`text-xs font-mono font-semibold tabular-nums flex items-center gap-1 ${
+      timerPaused ? 'text-amber-400' : 'text-accent'
+    }`}>
+      <span>{timerPaused ? '⏸️' : '⏱️'}</span>
+      {formatTime(elapsedSeconds)}
+    </span>
+  );
+
+  // ── Start quiz ──
+
   const startQuiz = async (section: string) => {
     setLoading(true);
     setSelectedSection(section);
-    setResult(null);
-    setSelectedOption(null);
-    setSessionComplete(false);
-    setCompleted(false);
+    setPassageGroups([]);
+    setCurrentPassageIdx(0);
+    setAnswers({});
+    setResults({});
+    setTrackedResponses([]);
+    setPassageText(null);
+    setPhase('select');
     setTimerPaused(false);
     pauseAccumulatedRef.current = 0;
     setElapsedSeconds(0);
     timerRef.current = Date.now();
+    passageTimerStartRef.current = Date.now();
+    setResetFlag(false);
 
     try {
       const res = await fetch('/api/quiz/start', {
@@ -159,7 +173,6 @@ export default function PracticeQuiz() {
         if (data.code === 'DAILY_LIMIT_REACHED') {
           alert(data.message);
           setLoading(false);
-          setSelectedSection(null);
           return;
         }
         throw new Error(data.error || 'Failed to start');
@@ -171,296 +184,203 @@ export default function PracticeQuiz() {
           : '';
         alert('No questions available for this section yet. Questions are being generated daily!' + debugMsg);
         setLoading(false);
-        setSelectedSection(null);
         return;
       }
 
       setSessionId(data.session_id);
-
-      // API now returns a passage-grouped queue
-      if (data.questions && data.questions.length > 0) {
-        const first = data.questions[0];
-        currentCorrectOptionRef.current = first.correct_option ?? null;
-        setQuestion(first);
-        setQuestionQueue(data.questions.slice(1));
-        setRemainingIds(data.questions.slice(1).map((q: any) => q.id));
-      } else {
-        throw new Error('No questions returned');
-      }
-
       setDailyRemaining(data.daily_remaining);
-      setStarted(true);
+      if (data.reset) setResetFlag(true);
+
+      // Group questions by passage_id
+      const questions: Question[] = data.questions || [];
+      const groups: Record<string, Question[]> = {};
+      for (const q of questions) {
+        const pid = q.passage_id || 'standalone';
+        if (!groups[pid]) groups[pid] = [];
+        groups[pid].push(q);
+      }
+      const grouped = Object.values(groups)
+        .filter(g => g.length > 0)
+        .map(g => g.sort((a, b) => (a.question_number || 0) - (b.question_number || 0)));
+
+      setPassageGroups(grouped);
+      setCurrentPassageIdx(0);
+      setAnswers({});
+      setResults({});
+      setPhase('answering');
     } catch (err) {
       console.error('Start error:', err);
       alert('Failed to start quiz: ' + (err instanceof Error ? err.message : String(err)));
-      setSelectedSection(null);
     }
     setLoading(false);
   };
 
-  const answerQuestion = async (option: string) => {
-    if (!question || !sessionId || selectedOption) return;
-    setSelectedOption(option);
-    const timeTaken = Math.round((Date.now() - timerRef.current) / 1000);
+  // ── Select/deselect answer ──
 
-    // ── Instant client-side check ──
-    const isCorrectLocally = option === currentCorrectOptionRef.current;
-    const localResult: AnswerResult = {
-      is_correct: isCorrectLocally,
-      correct_option: currentCorrectOptionRef.current ?? '?',
-      explanation: question.explanation ?? '',
-      your_answer: option,
-      time_taken_seconds: timeTaken,
-    };
-    setResult(localResult);
-    if (question) {
-      setTrackedResponses(prev => [...prev, { question, result: localResult }]);
-    }
-
-    // ── Fire API call in background to record response ──
-    try {
-      const res = await fetch('/api/quiz/respond', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          session_id: sessionId,
-          question_id: question.id,
-          selected_option: option,
-          time_taken_seconds: timeTaken,
-          remaining_ids: remainingIds,
-        }),
-      });
-
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Failed to submit answer');
-
-      // Serve next question from the client-side passage-grouped queue
-      if (questionQueue.length > 0) {
-        const nextQ = questionQueue[0];
-        nextQuestionRef.current = nextQ;
-        nextCorrectOptionRef.current = nextQ.correct_option ?? null;
-        // Save current for prev navigation
-        prevQuestionRef.current = { question: question, result: localResult };
-        setQuestionQueue(prev => prev.slice(1));
-        setRemainingIds(prev => prev ? prev.slice(1) : null);
-      } else {
-        setSessionComplete(true);
-      }
-    } catch (err) {
-      console.error('Background respond error:', err);
-    }
+  const selectAnswer = (questionId: string, option: string) => {
+    if (phase !== 'answering') return;
+    setAnswers(prev => ({
+      ...prev,
+      [questionId]: prev[questionId] === option ? '' : option, // toggle off if same
+    }));
   };
 
-  const nextQuestion = () => {
-    if (nextQuestionRef.current) {
-      setQuestion(nextQuestionRef.current);
-      currentCorrectOptionRef.current = nextCorrectOptionRef.current;
-      nextQuestionRef.current = null;
-      nextCorrectOptionRef.current = null;
+  // ── Submit current passage ──
+
+  const submitPassage = async () => {
+    if (phase !== 'answering' || !sessionId) return;
+    const qs = currentQuestions;
+    const unanswered = qs.filter(q => !answers[q.id]);
+
+    if (qs.length > 0 && unanswered.length > 0) {
+      alert(`Please answer all ${qs.length} questions before submitting.`);
+      return;
     }
-    setResult(null);
-    setSelectedOption(null);
+
+    const now = Date.now();
+    const timeTaken = Math.round((now - passageTimerStartRef.current) / 1000);
+
+    // Build results client-side
+    const newResults: Record<string, AnswerResult> = {};
+    const newTracked: TrackedResponse[] = [];
+    for (const q of qs) {
+      const ans = answers[q.id] || '';
+      const isCorrect = ans === q.correct_option;
+      const exp = typeof q.explanation === 'string'
+        ? (() => { try { return JSON.parse(q.explanation); } catch { return q.explanation; } })()
+        : q.explanation;
+      const r: AnswerResult = {
+        is_correct: isCorrect,
+        correct_option: q.correct_option,
+        explanation: exp,
+        your_answer: ans,
+        time_taken_seconds: timeTaken,
+      };
+      newResults[q.id] = r;
+      newTracked.push({ question: q, result: r });
+    }
+    setResults(newResults);
+    setTrackedResponses(prev => [...prev, ...newTracked]);
+    setPhase('reviewing');
+
+    // Fire batch API calls in background
+    for (const q of qs) {
+      const ans = answers[q.id] || '';
+      try {
+        await fetch('/api/quiz/respond', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            session_id: sessionId,
+            question_id: q.id,
+            selected_option: ans,
+            time_taken_seconds: timeTaken,
+          }),
+        });
+      } catch (err) {
+        console.error('Failed to record answer:', err);
+      }
+    }
+
+    // Mark the passage timer for next passage
+    passageTimerStartRef.current = now;
+  };
+
+  // ── Next passage ──
+
+  const nextPassage = () => {
+    if (currentPassageIdx + 1 >= passageGroups.length) {
+      // All done — end session
+      if (sessionId) {
+        supabase
+          .from('quiz_sessions')
+          .update({ ended_at: new Date().toISOString() })
+          .eq('id', sessionId)
+          .then();
+      }
+      setPhase('complete');
+      return;
+    }
+    setCurrentPassageIdx(prev => prev + 1);
+    setAnswers({});
+    setResults({});
+    setPhase('answering');
+    setPassageExpanded(true);
     setTimerPaused(false);
     pauseAccumulatedRef.current = 0;
     setElapsedSeconds(0);
     timerRef.current = Date.now();
-    setPassageExpanded(true);
   };
 
-  const endSession = async () => {
-    if (sessionId) {
-      const supabase = createClient();
-      await supabase
-        .from('quiz_sessions')
-        .update({ ended_at: new Date().toISOString() })
-        .eq('id', sessionId);
-    }
-    setCompleted(true);
-  };
+  // ── Start new session ──
 
   const startNew = () => {
-    setStarted(false);
-    setCompleted(false);
+    setPhase('select');
     setSelectedSection(null);
     setSessionId(null);
-    setQuestion(null);
-    setQuestionQueue([]);
-    setRemainingIds(null);
-    setResult(null);
-    setSelectedOption(null);
-    setSessionComplete(false);
-    setShowReview(false);
-    setReviewBackIdx(null);
-    setViewingHistoric(false);
+    setPassageGroups([]);
+    setCurrentPassageIdx(0);
+    setAnswers({});
+    setResults({});
     setTrackedResponses([]);
+    setPassageText(null);
     setTimerPaused(false);
     pauseAccumulatedRef.current = 0;
     setElapsedSeconds(0);
-    nextQuestionRef.current = null;
-    nextCorrectOptionRef.current = null;
-    currentCorrectOptionRef.current = null;
+    setResetFlag(false);
   };
 
-  const goBackReview = () => {
-    if (trackedResponses.length === 0) return;
-    if (reviewBackIdx !== null && reviewBackIdx > 0) {
-      setReviewBackIdx(reviewBackIdx - 1);
-    } else if (reviewBackIdx === null) {
-      setReviewBackIdx(trackedResponses.length - 1);
-      setViewingHistoric(true);
-    }
-  };
+  // ── Share result/explanation component ──
 
-  const goForwardFromReview = () => {
-    if (reviewBackIdx === null) return;
-    if (reviewBackIdx < trackedResponses.length - 1) {
-      setReviewBackIdx(reviewBackIdx + 1);
-    } else {
-      setReviewBackIdx(null);
-      setViewingHistoric(false);
-    }
-  };
-
-  const exitReview = () => {
-    setReviewBackIdx(null);
-    setViewingHistoric(false);
-  };
-
-  const formatTime = (s: number) => {
-    const m = Math.floor(s / 60);
-    const sec = s % 60;
-    return `${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
-  };
-
-  const prevQuestion = () => {
-    if (trackedResponses.length === 0) return;
-    const idx = historyPos !== null
-      ? Math.max(0, historyPos - 1)
-      : trackedResponses.length - 1;
-    setHistoryPos(idx);
-    const entry = trackedResponses[idx];
-    setQuestion(entry.question);
-    setResult(entry.result);
-    currentCorrectOptionRef.current = entry.question.correct_option;
-    // Clear pending next since we're looking at history
-    nextQuestionRef.current = null;
-    nextCorrectOptionRef.current = null;
-    prevQuestionRef.current = null;
-  };
-
-  const forwardFromPrev = () => {
-    if (historyPos === null) return;
-    const nextPos = historyPos + 1;
-    if (nextPos < trackedResponses.length) {
-      setHistoryPos(nextPos);
-      const entry = trackedResponses[nextPos];
-      setQuestion(entry.question);
-      setResult(entry.result);
-      currentCorrectOptionRef.current = entry.question.correct_option;
-    } else {
-      // Back to current — go to next unanswered question
-      setHistoryPos(null);
-      setResult(null);
-      setSelectedOption(null);
-      if (nextQuestionRef.current) {
-        setQuestion(nextQuestionRef.current);
-        currentCorrectOptionRef.current = nextCorrectOptionRef.current;
-        nextQuestionRef.current = null;
-        nextCorrectOptionRef.current = null;
-      }
-      setTimerPaused(false);
-      pauseAccumulatedRef.current = 0;
-      setElapsedSeconds(0);
-      timerRef.current = Date.now();
-      setPassageExpanded(true);
-    }
-  };
-
-  const TimerDisplay = () => (
-    <span className={`text-xs font-mono font-semibold tabular-nums flex items-center gap-1 ${
-      timerPaused ? 'text-amber-400' : 'text-accent'
-    }`}>
-      <span>{timerPaused ? '⏸️' : '⏱️'}</span>
-      {formatTime(elapsedSeconds)}
-    </span>
-  );
-
-  // ── Shared answer/explanation block ──
   function ResultBody({ response, question: q }: { response: AnswerResult; question: Question }) {
     return (
       <>
-        {(passageText || q.passage) && (
-          <div className="mb-3 bg-card border border-theme rounded-xl overflow-hidden">
-            <button
-              onClick={() => setPassageExpanded(!passageExpanded)}
-              className="w-full flex items-center justify-between px-4 py-2.5 text-left hover:bg-card-hover transition"
-            >
-              <div className="flex items-center gap-2">
-                <span className="text-[10px] font-medium text-accent uppercase tracking-wide">Passage</span>
-              </div>
-              <svg className={`w-3.5 h-3.5 text-secondary transition-transform ${passageExpanded ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
-            {passageExpanded && (
-              <div className="px-4 pb-4 max-h-48 overflow-y-auto">
-                <p className="text-xs text-secondary leading-relaxed whitespace-pre-wrap">
-                  {passageText || q.passage}
-                </p>
-              </div>
-            )}
-          </div>
-        )}
-        <p className="text-sm font-medium mb-1 text-primary">{q.question_text}</p>
-        {q.passage_id && (
-          <p className="text-[10px] font-mono text-muted mb-3">
-            Passage: #{q.passage_id.slice(0, 8)} · q:{q.id.slice(0, 8)}
-          </p>
-        )}
-        <div className="grid grid-cols-2 gap-2">
+        <div className="flex items-center gap-2 mb-2">
+          <span className={`px-2 py-0.5 rounded text-xs font-bold ${
+            response.is_correct ? 'bg-success/30 text-success' : 'bg-danger/30 text-danger'
+          }`}>
+            {response.is_correct ? '✓ Correct' : '✗ Incorrect'}
+          </span>
+          <span className="text-[10px] text-muted font-mono">
+            Your: {response.your_answer} · Correct: {response.correct_option}
+          </span>
+        </div>
+        <p className="text-sm mb-3 text-primary">{q.question_text}</p>
+        <div className="grid grid-cols-2 gap-1.5 mb-3">
           {(() => {
             let opts = q.options;
-            if (typeof opts === 'string') {
-              try { opts = JSON.parse(opts); } catch {}
-            }
+            if (typeof opts === 'string') { try { opts = JSON.parse(opts); } catch {} }
             return Object.entries(opts).map(([key, value]) => {
-            const isSelected = response.your_answer === key;
-            const isCorrectOpt = response.correct_option === key;
-            return (
-              <div key={key} className={`flex items-center gap-2 border rounded-lg px-3 py-2 text-sm ${
-                isCorrectOpt
-                  ? 'border-success bg-success/30 ring-1 ring-success/50'
-                  : isSelected
-                  ? 'border-danger bg-danger/30 ring-1 ring-danger/50'
-                  : 'border-theme'
-              }`}>
-                <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold ${
-                  isCorrectOpt ? 'bg-success text-white' :
-                  isSelected ? 'bg-danger text-white' :
-                  'bg-theme-subtle text-secondary'
+              const isSelected = response.your_answer === key;
+              const isCorrectOpt = response.correct_option === key;
+              return (
+                <div key={key} className={`flex items-center gap-2 border rounded-lg px-3 py-1.5 text-xs ${
+                  isCorrectOpt
+                    ? 'border-success bg-success/30 ring-1 ring-success/50'
+                    : isSelected
+                    ? 'border-danger bg-danger/30 ring-1 ring-danger/50'
+                    : 'border-theme'
                 }`}>
-                  {isCorrectOpt ? '✓' : isSelected ? '✗' : key}
-                </span>
-                <span className={`flex-1 ${
-                  isCorrectOpt ? 'text-success font-medium' :
-                  isSelected ? 'text-danger' :
-                  'text-primary'
-                }`}>
-                  {value}
-                </span>
-              </div>
-            );
-          });
-        })()}
+                  <span className={`w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-bold ${
+                    isCorrectOpt ? 'bg-success text-white' :
+                    isSelected ? 'bg-danger text-white' :
+                    'bg-theme-subtle text-secondary'
+                  }`}>
+                    {isCorrectOpt ? '✓' : isSelected ? '✗' : key}
+                  </span>
+                  <span className="flex-1 text-secondary">{value}</span>
+                </div>
+              );
+            });
+          })()}
         </div>
         {response.explanation && (
-          <div className="mt-3 space-y-3">
+          <div className="space-y-2">
             {(() => {
               const exp = response.explanation;
-              // Handle both old string format and new structured object format
               if (typeof exp === 'string') {
                 return (
-                  <div className="p-3 bg-info/20 border border-info/50 rounded-lg">
+                  <div className="p-2.5 bg-info/20 border border-info/50 rounded-lg">
                     <p className="text-[10px] font-medium text-info uppercase tracking-wider mb-1">Explanation</p>
                     <p className="text-xs text-secondary leading-relaxed">{exp}</p>
                   </div>
@@ -468,22 +388,12 @@ export default function PracticeQuiz() {
               }
               return (
                 <>
-                  <div className="p-3 bg-success/20 border border-success/50 rounded-lg">
+                  <div className="p-2.5 bg-success/20 border border-success/50 rounded-lg">
                     <p className="text-[10px] font-medium text-success uppercase tracking-wider mb-1">✅ Why this is correct</p>
                     <p className="text-xs text-secondary leading-relaxed">{exp.correct_answer_rationale || ''}</p>
                   </div>
-                  {exp.incorrect_option_analysis && (
-                    <div className="p-3 bg-danger/20 border border-danger/50 rounded-lg">
-                      <p className="text-[10px] font-medium text-danger uppercase tracking-wider mb-2">❌ Why others are wrong</p>
-                      {Object.entries(exp.incorrect_option_analysis as Record<string, string>).map(([opt, reason]) => (
-                        <p key={opt} className="text-xs text-secondary leading-relaxed mb-1.5 last:mb-0">
-                          <span className="font-mono font-bold text-secondary">{opt}:</span> {reason}
-                        </p>
-                      ))}
-                    </div>
-                  )}
                   {!response.is_correct && exp.wrong_answer_guidance && (
-                    <div className="p-3 bg-amber-900/30 border border-warning/50 rounded-lg">
+                    <div className="p-2.5 bg-amber-900/30 border border-warning/50 rounded-lg">
                       <p className="text-[10px] font-medium text-warning uppercase tracking-wider mb-1">💡 Pointer</p>
                       <p className="text-xs text-secondary leading-relaxed">{exp.wrong_answer_guidance}</p>
                     </div>
@@ -497,6 +407,8 @@ export default function PracticeQuiz() {
     );
   }
 
+  // ══════════════════════════ RENDER ══════════════════════════
+
   if (!authCheckDone) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-page">
@@ -505,21 +417,29 @@ export default function PracticeQuiz() {
     );
   }
 
-  // ── Section Selector ──
-  if (!started) {
+  // ── SECTION SELECTOR ──
+
+  if (phase === 'select') {
     return (
       <div className="min-h-screen bg-page text-primary">
         <PageHeader title='Practice' navItems={[{href:'/student/dashboard',label:'Dashboard',icon:'🏛️'}]} />
         <div className="max-w-2xl mx-auto px-4 py-12">
           <h1 className="text-2xl font-bold mb-2 text-heading">📋 Practice Questions</h1>
           <p className="text-secondary text-sm mb-8">
-            Pick a section to practice. Instant feedback on every answer.
+            Pick a section to practice. Answer all passage questions together (just like the real CLAT!).
             {typeof dailyRemaining === 'number' && (
               <span className="ml-2 text-accent">({dailyRemaining} free questions remaining today)</span>
             )}
           </p>
 
-          {/* Upgrade banner for free users */}
+          {resetFlag && (
+            <div className="mb-6 bg-magenta/20 border border-magenta/50 rounded-xl p-3">
+              <p className="text-xs text-magenta font-medium">
+                🔄 You've seen all questions! Reiterating for revision.
+              </p>
+            </div>
+          )}
+
           {dailyRemaining !== 'unlimited' && typeof dailyRemaining === 'number' && dailyRemaining <= 3 && (
             <Link href="/student/profile"
               className="block mb-6 bg-gradient-to-r from-amber-900/30 to-orange-900/30 border border-warning/50 rounded-xl p-4 hover:border-warning transition group">
@@ -563,64 +483,13 @@ export default function PracticeQuiz() {
     );
   }
 
-  // ── Completed Screen ──
-  if (completed) {
+  // ── COMPLETE SCREEN ──
+
+  if (phase === 'complete') {
     const correct = trackedResponses.filter(r => r.result.is_correct).length;
     const total = trackedResponses.length;
     const pct = total > 0 ? Math.round((correct / total) * 100) : 0;
     const icon = pct >= 70 ? '🎉' : pct >= 40 ? '💪' : '📚';
-
-    if (showReview) {
-      return (
-        <div className="min-h-screen bg-page text-primary">
-          <PageHeader title='Practice' navItems={[{href:'/student/dashboard',label:'Dashboard',icon:'🏛️'}]} />
-          <div className="border-b border-theme bg-card-hover backdrop-blur-sm sticky top-0 z-10">
-            <div className="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
-              <button onClick={() => setShowReview(false)} className="text-muted hover:text-primary transition text-sm">
-                ← Back to Results
-              </button>
-              <span className="text-xs text-secondary">
-                {SECTIONS.find(s => s.id === selectedSection)?.icon} {selectedSection}
-              </span>
-            </div>
-          </div>
-          <div className="max-w-3xl mx-auto px-4 py-6 space-y-4">
-            {trackedResponses.map((r, idx) => (
-              <div key={r.question.id} className={`border rounded-xl overflow-hidden ${
-                r.result.is_correct ? 'border-success/50' : 'border-danger/50'
-              }`}>
-                <div className={`px-4 py-2 flex items-center gap-2 ${
-                  r.result.is_correct ? 'bg-success/20' : 'bg-danger/20'
-                }`}>
-                  <span>{r.result.is_correct ? '✅' : '❌'}</span>
-                  <span className="text-xs font-medium text-secondary">Q{idx + 1}</span>
-                  {r.question.difficulty && (
-                    <span className={`text-[10px] px-1.5 py-0.5 rounded ${
-                      r.question.difficulty === 'hard' ? 'bg-danger/50 text-danger' :
-                      r.question.difficulty === 'easy' ? 'bg-success/50 text-success' :
-                      'bg-info/50 text-info'
-                    }`}>{r.question.difficulty}</span>
-                  )}
-                  <span className="ml-auto text-xs text-secondary flex items-center gap-2">
-                    <span>⏱ {r.result.time_taken_seconds}s</span>
-                    <span>·</span>
-                    <span>Your: {r.result.your_answer} · Correct: {r.result.correct_option}</span>
-                  </span>
-                </div>
-                <div className="px-4 py-3">
-                  <ResultBody response={r.result} question={r.question} />
-                </div>
-              </div>
-            ))}
-            <div className="flex gap-3 justify-center pb-8">
-              <button onClick={() => setShowReview(false)} className="bg-card border border-theme px-6 py-2.5 rounded-xl font-medium hover:bg-card-hover transition">
-                ← Back to Results
-              </button>
-            </div>
-          </div>
-        </div>
-      );
-    }
 
     return (
       <div className="min-h-screen bg-page text-primary flex items-center justify-center">
@@ -641,7 +510,7 @@ export default function PracticeQuiz() {
             </div>
             {trackedResponses.length > 0 && (
               <div className="text-xs text-secondary mb-3">
-                Avg ⏱ {Math.round(trackedResponses.reduce((s, r) => s + (r.result.time_taken_seconds ?? 0), 0) / trackedResponses.length)}s per question
+                Avg ⏱ {Math.round(trackedResponses.reduce((s, r) => s + (r.result.time_taken_seconds ?? 0), 0) / trackedResponses.length)}s per passage
               </div>
             )}
             <div className="pt-4 border-t border-theme">
@@ -652,17 +521,11 @@ export default function PracticeQuiz() {
               </p>
               <p className="text-sm text-secondary">Accuracy</p>
               <p className="text-xs text-secondary mt-2">
-                {selectedSection} · {total} question{total !== 1 ? 's' : ''}
+                {selectedSection} · {total} question{total !== 1 ? 's' : ''} · {passageGroups.length} passage{passageGroups.length !== 1 ? 's' : ''}
               </p>
             </div>
           </div>
           <div className="flex gap-3 justify-center">
-            {trackedResponses.length > 0 && (
-              <button onClick={() => setShowReview(true)}
-                className="bg-accent text-white px-5 py-2.5 rounded-xl font-medium hover:bg-accent-hover transition">
-                📋 Review Answers
-              </button>
-            )}
             <button onClick={startNew} className="border border-theme px-5 py-2.5 rounded-xl font-medium hover:bg-card-hover transition">
               🔄 Practice Again
             </button>
@@ -675,43 +538,50 @@ export default function PracticeQuiz() {
     );
   }
 
-  // ── Active Quiz ──
+  // ── ACTIVE: ANSWERING OR REVIEWING ──
+
+  const isReviewing = phase === 'reviewing';
+  const totalPassages = passageGroups.length;
+  const passageNum = currentPassageIdx + 1;
+  const isLastPassage = currentPassageIdx >= totalPassages - 1;
+
   return (
     <div className="min-h-screen bg-page text-primary">
       <PageHeader title='Practice' navItems={[{href:'/student/dashboard',label:'Dashboard',icon:'🏛️'}]} />
+
       {/* Top bar */}
       <div className="border-b border-theme bg-card-hover backdrop-blur-sm sticky top-0 z-10">
         <div className="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
-          <button onClick={startNew} className="text-sm text-muted hover:text-primary transition flex items-center gap-1.5">
-            <span className="text-base">←</span>
+          <button onClick={isReviewing ? undefined : startNew} className="text-sm text-muted hover:text-primary transition flex items-center gap-1.5">
+            {!isReviewing && <><span className="text-base">←</span> <span className="text-xs">Exit</span></>}
           </button>
           <div className="flex items-center gap-3">
-            {TimerDisplay()}
-            <button
-              onClick={togglePause}
-              className={`text-[10px] font-medium px-2 py-1 rounded-lg transition ${
-                timerPaused
-                  ? 'bg-tint-green text-stat-emerald hover:bg-emerald-900/40'
-                  : 'bg-tint-amber text-stat-amber hover:bg-amber-900/40'
-              }`}
-            >
-              {timerPaused ? '▶ Resume' : '⏸ Pause'}
-            </button>
+            <span className="text-[10px] text-muted font-mono">
+              Passage {passageNum}/{totalPassages} · {currentQuestions.length} Q
+            </span>
+            {!isReviewing && <TimerDisplay />}
+            {!isReviewing && (
+              <button
+                onClick={togglePause}
+                className={`text-[10px] font-medium px-2 py-1 rounded-lg transition ${
+                  timerPaused
+                    ? 'bg-tint-green text-stat-emerald hover:bg-emerald-900/40'
+                    : 'bg-tint-amber text-stat-amber hover:bg-amber-900/40'
+                }`}
+              >
+                {timerPaused ? '▶ Resume' : '⏸ Pause'}
+              </button>
+            )}
             <span className="text-xs text-secondary">
               {typeof dailyRemaining === 'number' ? `${dailyRemaining} free today` : '♾️ Unlimited'}
             </span>
-            {trackedResponses.length > 0 && (
-              <span className="text-[10px] text-muted font-mono">
-                {trackedResponses.length} answered
-              </span>
-            )}
           </div>
         </div>
       </div>
 
       <div className="max-w-3xl mx-auto px-4 py-6">
-        {/* Passage — collapsible (from practice_passages or inline) */}
-        {question && (passageText || question.passage) && !result && (
+        {/* Passage */}
+        {currentQuestions.length > 0 && passageText && (
           <div className="mb-4 bg-card border border-theme rounded-xl overflow-hidden">
             <button
               onClick={() => setPassageExpanded(!passageExpanded)}
@@ -719,6 +589,7 @@ export default function PracticeQuiz() {
             >
               <div className="flex items-center gap-2">
                 <span className="font-medium text-xs text-accent uppercase tracking-wide">Passage</span>
+                {isReviewing && <span className="text-[10px] text-muted">(for review)</span>}
               </div>
               <svg className={`w-4 h-4 text-secondary transition-transform ${passageExpanded ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -727,159 +598,107 @@ export default function PracticeQuiz() {
             {passageExpanded && (
               <div className="px-5 pb-5 max-h-60 overflow-y-auto">
                 <p className="text-sm text-secondary leading-relaxed whitespace-pre-wrap">
-                  {passageText || question.passage}
+                  {passageText}
                 </p>
               </div>
             )}
           </div>
         )}
 
-        {/* Question — only show when no result (i.e. unanswered question) */}
-        {question && !result && !(viewingHistoric && reviewBackIdx !== null) && (
-          <div className="bg-card border border-theme rounded-xl p-6 mb-4">
-            <div className="flex items-center justify-between mb-4">
-              <span className="text-xs text-secondary flex items-center gap-1.5 flex-wrap">
-                {selectedSection}
-                {question.difficulty && (
-                  <span className={`ml-0.5 px-1.5 py-0.5 rounded text-[10px] ${
-                    question.difficulty === 'hard' ? 'bg-danger/50 text-danger' :
-                    question.difficulty === 'easy' ? 'bg-success/50 text-success' :
-                    'bg-info/50 text-info'
-                  }`}>
-                    {question.difficulty}
-                  </span>
-                )}
-                {question.passage_id && (
-                  <span className="ml-0.5 px-1.5 py-0.5 rounded text-[10px] bg-magenta/20 text-magenta font-mono"
-                    title="Passage ID (debug)">
-                    #{question.passage_id.slice(0, 8)}
-                  </span>
-                )}
-                <span className="ml-0.5 px-1.5 py-0.5 rounded text-[10px] bg-card-hover text-muted font-mono"
-                  title="Question ID (debug)">
-                  q:{question.id.slice(0, 8)}
-                </span>
-              </span>
-              {TimerDisplay()}
-            </div>
-            <p className="font-medium text-base mb-5 leading-relaxed text-primary">{question.question_text}</p>
-            <div className="space-y-2">
-              {(() => {
-                let opts = question.options;
-                if (typeof opts === 'string') { try { opts = JSON.parse(opts); } catch {} }
-                return Object.entries(opts).map(([key, value]) => (
-                <button
-                  key={key}
-                  onClick={() => answerQuestion(key)}
-                  disabled={!!selectedOption}
-                  className={`w-full text-left px-4 py-3 rounded-xl border text-sm transition ${
-                    selectedOption === key
-                      ? 'border-accent bg-accent-subtle text-accent ring-1 ring-accent/50'
-                      : 'border-theme hover:border-theme-subtle hover:bg-card-hover'
-                  } disabled:opacity-60`}
-                >
-                  <span className="font-semibold mr-3 text-secondary">{key}.</span>
-                  <span className="text-primary">{value}</span>
-                </button>
-              ));
-            })()}
-            </div>
-          </div>
-        )}
-
-        {/* Result / Feedback — shows current result OR historic review */}
-        {result && (() => {
-          const isViewing = viewingHistoric && reviewBackIdx !== null && trackedResponses[reviewBackIdx];
-          const displayRes = isViewing ? trackedResponses[reviewBackIdx].result :
-            historyPos !== null ? trackedResponses[historyPos].result : result;
-          const displayQ = isViewing ? trackedResponses[reviewBackIdx].question :
-            historyPos !== null ? trackedResponses[historyPos].question : question!;
-
-          return (
-            <div className={`border rounded-xl p-6 mb-4 ${
-              isViewing ? 'bg-card border-theme' :
-              displayRes.is_correct ? 'bg-success/20 border-success' : 'bg-danger/20 border-danger'
+        {/* Questions */}
+        <div className="space-y-4">
+          {currentQuestions.map((q, qIdx) => (
+            <div key={q.id} className={`bg-card border rounded-xl p-4 ${
+              isReviewing
+                ? (results[q.id]?.is_correct ? 'border-success/50' : 'border-danger/50')
+                : 'border-theme'
             }`}>
-              {/* Header row — different for historic vs current */}
-              {isViewing ? (
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center gap-2">
-                    <span>{displayRes.is_correct ? '✅' : '❌'}</span>
-                    <span className="text-xs font-medium text-secondary">Q{reviewBackIdx! + 1} of {trackedResponses.length}</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <button onClick={goBackReview} disabled={reviewBackIdx! <= 0}
-                      className="text-xs text-muted hover:text-primary transition disabled:opacity-30 px-1.5 py-0.5 rounded hover:bg-card-hover"
-                    >←</button>
-                    <span className="text-[10px] text-muted px-1">{reviewBackIdx! + 1}/{trackedResponses.length}</span>
-                    <button onClick={goForwardFromReview}
-                      className="text-xs text-muted hover:text-primary transition px-1.5 py-0.5 rounded hover:bg-card-hover"
-                    >
-                      {reviewBackIdx! < trackedResponses.length - 1 ? '→' : '→ Current'}
-                    </button>
-                    <button onClick={exitReview}
-                      className="text-xs text-muted hover:text-primary transition ml-1 px-1.5 py-0.5 rounded hover:bg-card-hover"
-                    >✕</button>
-                  </div>
-                </div>
-              ) : (
-                <div className="flex items-center gap-3 mb-3">
-                  <span className="text-2xl">{displayRes.is_correct ? '✅' : '❌'}</span>
-                  <div>
-                    <p className="font-bold text-lg text-heading">{displayRes.is_correct ? 'Correct!' : 'Incorrect'}</p>
-                    <p className="text-xs text-secondary">
-                      Your answer: {displayRes.your_answer} · Correct: {displayRes.correct_option}
-                      {displayRes.time_taken_seconds != null && <span className="ml-2">· ⏱ {displayRes.time_taken_seconds}s</span>}
-                    </p>
-                  </div>
-                </div>
-              )}
-              {trackedResponses.length > 1 && !isViewing && (
-                <p className="text-[10px] text-muted text-right -mt-2 mb-2">
-                  {historyPos !== null
-                    ? `Q${historyPos + 1} of ${trackedResponses.length} answered`
-                    : `${trackedResponses.length} answered`}
-                </p>
-              )}
-
-              {/* The actual question + answer + explanation */}
-              <ResultBody response={displayRes} question={displayQ} />
-
-              {/* Action buttons */}
-              <div className="mt-6 flex justify-between gap-3">
-                {isViewing ? (
-                  <>
-
-                    <button onClick={goBackReview} disabled={reviewBackIdx! <= 0}
-                      className="flex-1 bg-card border border-theme px-5 py-2.5 rounded-xl font-medium hover:bg-card-hover transition disabled:opacity-40"
-                    >← Previous</button>
-                    <button onClick={goForwardFromReview}
-                      className="flex-1 bg-accent text-white px-5 py-2.5 rounded-xl font-medium hover:bg-accent-hover transition"
-                    >{reviewBackIdx! < trackedResponses.length - 1 ? 'Next →' : '→ Back to Current'}</button>
-                  </>
-                ) : historyPos !== null ? (
-                  <>
-                    <button onClick={prevQuestion} disabled={historyPos <= 0}
-                      className="flex-1 bg-card border border-theme px-5 py-2.5 rounded-xl font-medium hover:bg-card-hover transition disabled:opacity-40"
-                    >← Previous</button>
-                    <button onClick={forwardFromPrev}
-                      className="flex-1 bg-accent text-white px-5 py-2.5 rounded-xl font-medium hover:bg-accent-hover transition"
-                    >{historyPos < trackedResponses.length - 1 ? 'Next →' : (nextQuestionRef.current ? '→ Resume Quiz' : '→ Back')}</button>
-                  </>
-                ) : (
-                  <>
-                    <button onClick={prevQuestion} disabled={trackedResponses.length === 0}
-                      className="flex-1 bg-card border border-theme px-5 py-2.5 rounded-xl font-medium hover:bg-card-hover transition disabled:opacity-40"
-                    >← Previous</button>
-                    <button onClick={nextQuestion} disabled={sessionComplete}
-                      className="flex-1 bg-accent text-white px-5 py-2.5 rounded-xl font-medium hover:bg-accent-hover transition disabled:opacity-50"
-                    >{sessionComplete ? 'Session Complete' : 'Next Question'}</button>
-                  </>
+              {/* Question header */}
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-xs text-secondary flex items-center gap-1.5">
+                  <span className="w-5 h-5 rounded-full bg-theme-subtle text-secondary flex items-center justify-center text-[10px] font-bold">
+                    {q.question_number || qIdx + 1}
+                  </span>
+                  {q.difficulty && (
+                    <span className={`px-1.5 py-0.5 rounded text-[10px] ${
+                      q.difficulty === 'hard' ? 'bg-danger/50 text-danger' :
+                      q.difficulty === 'easy' ? 'bg-success/50 text-success' :
+                      'bg-info/50 text-info'
+                    }`}>
+                      {q.difficulty}
+                    </span>
+                  )}
+                  <span className="ml-0.5 px-1.5 py-0.5 rounded text-[10px] bg-magenta/20 text-magenta font-mono" title="Passage ID">
+                    #{q.passage_id?.slice(0, 8)}
+                  </span>
+                </span>
+                {isReviewing && results[q.id] && (
+                  <span className={`text-[10px] font-bold ${
+                    results[q.id].is_correct ? 'text-success' : 'text-danger'
+                  }`}>
+                    {results[q.id].is_correct ? '✓' : '✗'}
+                  </span>
                 )}
               </div>
+
+              <p className="text-sm font-medium mb-3 text-primary leading-relaxed">{q.question_text}</p>
+
+              {/* Options */}
+              {!isReviewing ? (
+                <div className="grid grid-cols-2 gap-2">
+                  {(() => {
+                    let opts = q.options;
+                    if (typeof opts === 'string') { try { opts = JSON.parse(opts); } catch {} }
+                    return Object.entries(opts).map(([key, value]) => {
+                      const selected = answers[q.id] === key;
+                      return (
+                        <button
+                          key={key}
+                          onClick={() => selectAnswer(q.id, key)}
+                          className={`text-left px-3 py-2 rounded-xl border text-xs transition ${
+                            selected
+                              ? 'border-accent bg-accent-subtle text-accent ring-1 ring-accent/50'
+                              : 'border-theme hover:border-theme-subtle hover:bg-card-hover'
+                          }`}
+                        >
+                          <span className="font-semibold mr-2 text-secondary">{key}.</span>
+                          <span className="text-primary">{value}</span>
+                        </button>
+                      );
+                    });
+                  })()}
+                </div>
+              ) : results[q.id] ? (
+                <ResultBody response={results[q.id]} question={q} />
+              ) : null}
             </div>
-          );
-        })()}
+          ))}
+        </div>
+
+        {/* Action buttons */}
+        <div className="mt-6 flex justify-center gap-3">
+          {isReviewing ? (
+            <>
+              <span className="text-[10px] text-muted self-center">
+                {currentPassageIdx + 1} of {totalPassages} passages
+              </span>
+              <button
+                onClick={nextPassage}
+                className="bg-accent text-white px-6 py-2.5 rounded-xl font-medium hover:bg-accent-hover transition"
+              >
+                {isLastPassage ? '📊 View Results' : 'Next Passage →'}
+              </button>
+            </>
+          ) : (
+            <button
+              onClick={submitPassage}
+              disabled={currentQuestions.length > 0 && currentQuestions.some(q => !answers[q.id])}
+              className="bg-accent text-white px-6 py-2.5 rounded-xl font-medium hover:bg-accent-hover transition disabled:opacity-50"
+            >
+              📝 Submit Passage ({currentQuestions.filter(q => answers[q.id]).length}/{currentQuestions.length})
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );
