@@ -98,6 +98,12 @@ const toISTDate = (dateVal: string | null): string | null => {
   return new Date(d.getTime() + istOffset).toISOString().split('T')[0];
 };
 
+// Check if a YYYY-MM-DD IST date is a Sunday (no editorials generated)
+const isSunday = (dateStr: string): boolean => {
+  const [y, m, d] = dateStr.split('-').map(Number);
+  return new Date(y, m - 1, d).getDay() === 0;
+};
+
 export async function GET(req: NextRequest) {
   try {
     const { user, supabase } = await getServerUser();
@@ -150,8 +156,21 @@ export async function GET(req: NextRequest) {
         const prev = new Date(readDates[i - 1]);
         const curr = new Date(readDates[i]);
         const diff = (prev.getTime() - curr.getTime()) / 86400000;
-        if (Math.round(diff) === 1) streak++;
-        else break;
+        const roundedDiff = Math.round(diff);
+        if (roundedDiff === 1) {
+          streak++;
+        } else if (roundedDiff === 2) {
+          // Check if the missing day is a Sunday (no editorials on Sunday)
+          const missingDate = new Date(prev.getTime() - 86400000);
+          const missingDateStr = missingDate.toISOString().split('T')[0];
+          if (isSunday(missingDateStr)) {
+            streak++; // Forgive Sunday gap — no editorials generated
+          } else {
+            break;
+          }
+        } else {
+          break;
+        }
       }
     }
 
