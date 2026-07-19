@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 
 const FEEDS = [
   { id: 'the-hindu', name: 'The Hindu', url: 'https://www.thehindu.com/opinion/editorial/feeder/default.rss', icon: '📰' },
+  { id: 'the-hindu-opinion', name: 'The Hindu Opinion', url: 'https://www.thehindu.com/opinion/feeder/default.rss', icon: '📝' },
   { id: 'indian-express', name: 'Indian Express', url: 'https://indianexpress.com/section/opinion/editorials/feed/', icon: '📰' },
   { id: 'livelaw', name: 'LiveLaw', url: 'https://www.livelaw.in/google_feeds.xml', icon: '⚖️' },
 ];

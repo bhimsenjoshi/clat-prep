@@ -717,9 +717,10 @@ export default function StudentDashboard() {
               {(() => {
                 // Group by source, keep 3 per source
                 const bySource: Record<string, any[]> = {};
-                const sourceOrder = ['the-hindu', 'indian-express', 'livelaw'];
+                const sourceOrder = ['the-hindu', 'the-hindu-opinion', 'indian-express', 'livelaw'];
                 const sourceMeta: Record<string, { name: string; icon: string }> = {
                   'the-hindu': { name: 'The Hindu', icon: '📰' },
+                  'the-hindu-opinion': { name: 'The Hindu Opinion', icon: '📝' },
                   'indian-express': { name: 'Indian Express', icon: '📰' },
                   'livelaw': { name: 'LiveLaw', icon: '⚖️' },
                 };
