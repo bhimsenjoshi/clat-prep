@@ -739,7 +739,7 @@ export default function PracticeQuiz() {
                   })()}
                 </div>
               ) : results[q.id] ? (
-                <ResultBody response={results[q.id]} question={q} />
+                <ResultBody response={results[q.id]} question={q} showIds={true} />
               ) : null}
             </div>
           ))}
