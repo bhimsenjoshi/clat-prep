@@ -413,6 +413,148 @@ Return JSON with:
   return prompts[section] || prompts['English Language'];
 }
 
+// ─── Process a single section (runs in parallel with other sections) ───
+
+async function processSection(section) {
+  console.log(`  → ${section}...`);
+  let sectionPassages = 0;
+  let sectionQuestions = 0;
+
+  // Step 0: Pick the next unused topic from the topic bank
+  const topicPick = await pickNextTopic(section);
+  let topicInstruction = '';
+  if (topicPick) {
+    topicInstruction = `\n\nTOPIC TO COVER (first time this topic is being used): "${topicPick.topic.title}" (domain: ${topicPick.topic.domain}). CRITICAL: You MUST write a passage on EXACTLY this topic. Choose your own unique angle within this topic.`;
+    console.log(`    📋 Topic from bank: "${topicPick.topic.title}" (#${topicPick.index})`);
+  }
+
+  // Step 1: Call AI for passage + questions together — with topic guidance
+  const { passageData, questions: rawQuestions } = await callDeepSeek(
+    buildPassagePrompt(section),
+    `Generate 1 passage and ${QS_PER_PASSAGE} CLAT practice questions for the "${section}" section.${topicInstruction}`
+  );
+
+  if (!rawQuestions || rawQuestions.length === 0) {
+    console.log(`    ⚠️ No questions generated`);
+    return { passages: 0, questions: 0 };
+  }
+
+  // Step 2: Check for duplicate passage content before inserting
+  let passageId = null;
+  let finalPassageData = passageData;
+  let finalQuestions = rawQuestions;
+  if (!finalPassageData || !finalPassageData.content) {
+    console.log(`    ⚠️ No passage returned by AI — retrying section "${section}" once...`);
+    const retry = await callDeepSeek(
+      buildPassagePrompt(section),
+      `Generate 1 passage and ${QS_PER_PASSAGE} CLAT practice questions for the "${section}" section.${topicInstruction || ''} CRITICAL: The response MUST include a valid "passage" object with a "content" field.`
+    );
+    if (retry.passageData && retry.passageData.content) {
+      finalPassageData = retry.passageData;
+      if (retry.questions && retry.questions.length > 0) {
+        finalQuestions = retry.questions;
+      }
+    }
+  }
+  if (!finalPassageData || !finalPassageData.content) {
+    console.log(`    ❌ Retry failed — no passage returned. Skipping section "${section}" entirely.`);
+    return { passages: 0, questions: 0 };
+  }
+
+  // 🛡️ Combined guardrail: abort if passage or questions are invalid (prevents orphan questions)
+  const validQuestions = [];
+  const seenTexts = new Set();
+  for (let i = 0; i < finalQuestions.length; i++) {
+    const q = finalQuestions[i];
+    const normalised = normalise(q, null, i + 1);
+    if (normalised) {
+      normalised.section = section;
+      const key = (normalised.question_text || '').trim().toLowerCase().slice(0, 100);
+      if (seenTexts.has(key)) {
+        console.log(`    ⚠️ Skipping duplicate in batch (q${i + 1})`);
+        continue;
+      }
+      seenTexts.add(key);
+      validQuestions.push(normalised);
+    }
+  }
+  if (!finalPassageData.content || validQuestions.length === 0) {
+    console.log(`    ❌ Hard Abort: Section "${section}" failed validation (passage: ${!!finalPassageData.content}, questions: ${validQuestions.length}). Skipping insertion.`);
+    return { passages: 0, questions: 0 };
+  }
+
+  // App-level duplicate check: hash the content and query for existing match
+  const contentBytes = new TextEncoder().encode(finalPassageData.content);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', contentBytes);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const contentHash = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  
+  const dupCheckUrl = `${SUPABASE_URL.replace(/\/$/, '')}/rest/v1/practice_passages?content_hash=eq.${contentHash}&select=id,title`;
+  const { data: existing } = await supabaseGet(dupCheckUrl);
+  if (existing && existing.length > 0) {
+    console.log(`    ⏭️ Duplicate passage detected: "${finalPassageData.title}" matches existing passage "${existing[0].title}" (id: ${existing[0].id.substring(0,8)}). Discarding.`);
+    return { passages: 0, questions: 0 };
+  }
+  
+  // Also check by title+section — catch regenerated passages with same topic
+  const titleCheckUrl = `${SUPABASE_URL.replace(/\/$/, '')}/rest/v1/practice_passages?section=eq.${encodeURIComponent(section)}&title=eq.${encodeURIComponent(finalPassageData.title || '')}&select=id,title`;
+  const { data: existingByTitle } = await supabaseGet(titleCheckUrl);
+  if (existingByTitle && existingByTitle.length > 0) {
+    console.log(`    ⏭️ Passage with same title+section exists: "${finalPassageData.title}" (id: ${existingByTitle[0].id.substring(0,8)}). Skipping.`);
+    return { passages: 0, questions: 0 };
+  }
+
+  // Insert new passage
+  const passageRows = await supabaseInsert('practice_passages', [{
+    section,
+    title: finalPassageData.title || '',
+    source: finalPassageData.source || 'AI-generated',
+    content: finalPassageData.content,
+    difficulty: (finalPassageData.difficulty || 'medium').toLowerCase(),
+  }]);
+  passageId = passageRows?.[0]?.id || null;
+  sectionPassages++;
+  console.log(`    📄 New passage inserted: "${finalPassageData.title || 'Untitled'}" (id: ${passageId ? passageId.substring(0, 8) + '...' : 'none'})`);
+
+  // Record topic usage in tracker
+  if (topicPick && passageId) {
+    const trackerUrl = `${SUPABASE_URL.replace(/\/$/, '')}/rest/v1/topic_tracker`;
+    await fetch(trackerUrl, {
+      method: 'POST',
+      headers: { ...SUPABASE_HEADERS, 'Prefer': 'resolution=merge-duplicates' },
+      body: JSON.stringify({
+        section,
+        bank_index: topicPick.index,
+        topic_title: topicPick.topic.title,
+        domain: topicPick.topic.domain,
+        passage_id: passageId,
+      }),
+    });
+  }
+
+  // Step 3: Update passage link on pre-normalised questions
+  for (const q of validQuestions) {
+    q.passage_id = passageId;
+    q.question_number = validQuestions.indexOf(q) + 1;
+  }
+
+  if (validQuestions.length === 0) {
+    console.log(`    ⚠️ No valid questions after normalisation`);
+    if (passageId) {
+      const delUrl = `${SUPABASE_URL.replace(/\/$/, '')}/rest/v1/practice_passages?id=eq.${passageId}`;
+      await fetch(delUrl, { method: 'DELETE', headers: SUPABASE_HEADERS });
+    }
+    return { passages: 0, questions: 0 };
+  }
+
+  // Step 4: Insert all questions
+  await supabaseInsert('practice_questions', validQuestions);
+  sectionQuestions = validQuestions.length;
+  console.log(`    ✅ ${validQuestions.length} questions inserted (passage-linked)`);
+
+  return { passages: sectionPassages, questions: sectionQuestions };
+}
+
 // ─── Main ───
 
 async function main() {
@@ -426,149 +568,21 @@ async function main() {
   }
 
   console.log(`📅 Generating 1 passage + ${QS_PER_PASSAGE} questions per section (${SECTIONS.length} sections)...`);
-  let totalPassages = 0;
-  let totalQuestions = 0;
 
-  for (const section of SECTIONS) {
-    try {
-      console.log(`  → ${section}...`);
-
-      // Step 0: Pick the next unused topic from the topic bank
-      const topicPick = await pickNextTopic(section);
-      let topicInstruction = '';
-      if (topicPick) {
-        topicInstruction = `\n\nTOPIC TO COVER (first time this topic is being used): "${topicPick.topic.title}" (domain: ${topicPick.topic.domain}). CRITICAL: You MUST write a passage on EXACTLY this topic. Choose your own unique angle within this topic.`;
-        console.log(`    📋 Topic from bank: "${topicPick.topic.title}" (#${topicPick.index})`);
+  // Run all sections in parallel — keeps total time ~max(1 section) < 120s
+  const sectionResults = await Promise.allSettled(
+    SECTIONS.map(async (section) => {
+      try {
+        return await processSection(section);
+      } catch (err) {
+        console.log(`    ❌ ${section} error: ${err.message}`);
+        return { passages: 0, questions: 0 };
       }
+    })
+  );
 
-      // Step 1: Call AI for passage + questions together — with topic guidance
-      const { passageData, questions: rawQuestions } = await callDeepSeek(
-        buildPassagePrompt(section),
-        `Generate 1 passage and ${QS_PER_PASSAGE} CLAT practice questions for the "${section}" section.${topicInstruction}`
-      );
-
-      if (!rawQuestions || rawQuestions.length === 0) {
-        console.log(`    ⚠️ No questions generated`);
-        continue;
-      }
-
-      // Step 2: Check for duplicate passage content before inserting
-      let passageId = null;
-      let finalPassageData = passageData;
-      let finalQuestions = rawQuestions;
-      if (!finalPassageData || !finalPassageData.content) {
-        console.log(`    ⚠️ No passage returned by AI — retrying section "${section}" once...`);
-        const retry = await callDeepSeek(
-          buildPassagePrompt(section),
-          `Generate 1 passage and ${QS_PER_PASSAGE} CLAT practice questions for the "${section}" section.${topicInstruction || ''} CRITICAL: The response MUST include a valid "passage" object with a "content" field.`
-        );
-        if (retry.passageData && retry.passageData.content) {
-          finalPassageData = retry.passageData;
-          if (retry.questions && retry.questions.length > 0) {
-            finalQuestions = retry.questions;
-          }
-        }
-      }
-      if (!finalPassageData || !finalPassageData.content) {
-        console.log(`    ❌ Retry failed — no passage returned. Skipping section "${section}" entirely.`);
-        continue;
-      }
-
-      // 🛡️ Combined guardrail: abort if passage or questions are invalid (prevents orphan questions)
-      const validQuestions = [];
-      const seenTexts = new Set();
-      for (let i = 0; i < finalQuestions.length; i++) {
-        const q = finalQuestions[i];
-        const normalised = normalise(q, null, i + 1);
-        if (normalised) {
-          normalised.section = section;
-          const key = (normalised.question_text || '').trim().toLowerCase().slice(0, 100);
-          if (seenTexts.has(key)) {
-            console.log(`    ⚠️ Skipping duplicate in batch (q${i + 1})`);
-            continue;
-          }
-          seenTexts.add(key);
-          validQuestions.push(normalised);
-        }
-      }
-      if (!finalPassageData.content || validQuestions.length === 0) {
-        console.log(`    ❌ Hard Abort: Section "${section}" failed validation (passage: ${!!finalPassageData.content}, questions: ${validQuestions.length}). Skipping insertion to prevent orphan question clutter.`);
-        continue;
-      }
-
-      // App-level duplicate check: hash the content and query for existing match
-      const contentBytes = new TextEncoder().encode(finalPassageData.content);
-      const hashBuffer = await crypto.subtle.digest('SHA-256', contentBytes);
-      const hashArray = Array.from(new Uint8Array(hashBuffer));
-      const contentHash = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-      
-      const dupCheckUrl = `${SUPABASE_URL.replace(/\/$/, '')}/rest/v1/practice_passages?content_hash=eq.${contentHash}&select=id,title`;
-      const { data: existing } = await supabaseGet(dupCheckUrl);
-      if (existing && existing.length > 0) {
-        console.log(`    ⏭️ Duplicate passage detected: "${finalPassageData.title}" matches existing passage "${existing[0].title}" (id: ${existing[0].id.substring(0,8)}). Discarding entire section — new questions would crowd the existing passage.`);
-        continue;
-      }
-      
-      // Also check by title+section — catch regenerated passages with same topic
-      const titleCheckUrl = `${SUPABASE_URL.replace(/\/$/, '')}/rest/v1/practice_passages?section=eq.${encodeURIComponent(section)}&title=eq.${encodeURIComponent(finalPassageData.title || '')}&select=id,title`;
-      const { data: existingByTitle } = await supabaseGet(titleCheckUrl);
-      if (existingByTitle && existingByTitle.length > 0) {
-        console.log(`    ⏭️ Passage with same title+section exists: "${finalPassageData.title}" (id: ${existingByTitle[0].id.substring(0,8)}). Skipping to avoid duplicate topic.`);
-        continue;
-      } else {
-        // Insert new passage
-        const passageRows = await supabaseInsert('practice_passages', [{
-          section,
-          title: finalPassageData.title || '',
-          source: finalPassageData.source || 'AI-generated',
-          content: finalPassageData.content,
-          difficulty: (finalPassageData.difficulty || 'medium').toLowerCase(),
-        }]);
-        passageId = passageRows?.[0]?.id || null;
-        totalPassages++;
-        console.log(`    📄 New passage inserted: "${finalPassageData.title || 'Untitled'}" (id: ${passageId ? passageId.substring(0, 8) + '...' : 'none'})`);
-
-        // Record topic usage in tracker
-        if (topicPick && passageId) {
-          const trackerUrl = `${SUPABASE_URL.replace(/\/$/, '')}/rest/v1/topic_tracker`;
-          await fetch(trackerUrl, {
-            method: 'POST',
-            headers: { ...SUPABASE_HEADERS, 'Prefer': 'resolution=merge-duplicates' },
-            body: JSON.stringify({
-              section,
-              bank_index: topicPick.index,
-              topic_title: topicPick.topic.title,
-              domain: topicPick.topic.domain,
-              passage_id: passageId,
-            }),
-          });
-        }
-      }
-
-      // Step 3: Update passage link on pre-normalised questions
-      for (const q of validQuestions) {
-        q.passage_id = passageId;
-        q.question_number = validQuestions.indexOf(q) + 1;
-      }
-
-      if (validQuestions.length === 0) {
-        console.log(`    ⚠️ No valid questions after normalisation`);
-        if (passageId) {
-          const delUrl = `${SUPABASE_URL.replace(/\/$/, '')}/rest/v1/practice_passages?id=eq.${passageId}`;
-          await fetch(delUrl, { method: 'DELETE', headers: SUPABASE_HEADERS });
-        }
-        continue;
-      }
-
-      // Step 4: Insert all questions
-      await supabaseInsert('practice_questions', validQuestions);
-      console.log(`    ✅ ${validQuestions.length} questions inserted (${passageId ? 'passage-linked' : 'standalone'})`);
-      totalQuestions += validQuestions.length;
-
-    } catch (err) {
-      console.log(`    ❌ Error: ${err.message}`);
-    }
-  }
+  const totalPassages = sectionResults.reduce((s, r) => s + (r.status === 'fulfilled' ? r.value.passages : 0), 0);
+  const totalQuestions = sectionResults.reduce((s, r) => s + (r.status === 'fulfilled' ? r.value.questions : 0), 0);
 
   // Step 5: Run auto-validation on newly inserted questions
   try {
