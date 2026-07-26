@@ -20,7 +20,7 @@ interface Attempt {
 export default function StudentTestsPage() {
   const supabase = createClient();
   const [tests, setTests] = useState<Test[] | null>(null);
-  const [attemptedMap, setAttemptedMap] = useState<Map<string, boolean>>(new Map());
+  const [attemptedMap, setAttemptedMap] = useState<Map<string, boolean | 'in_progress'>>(new Map());
   const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
@@ -42,8 +42,8 @@ export default function StudentTestsPage() {
           .select('test_id, submitted_at')
           .eq('student_id', authUser.id);
 
-        const map = new Map<string, boolean>(
-          (attemptsData ?? []).map((a: Attempt) => [a.test_id, a.submitted_at !== null])
+        const map = new Map<string, boolean | 'in_progress'>(
+          (attemptsData ?? []).map((a: Attempt) => [a.test_id, a.submitted_at !== null ? true : 'in_progress'])
         );
         setAttemptedMap(map);
       }
@@ -103,9 +103,11 @@ export default function StudentTestsPage() {
                     <Link href="/student/dashboard"
                       className="border border-theme px-4 py-2 rounded-lg text-xs font-medium text-secondary hover:bg-elevated transition">Exit</Link>
                   </div>
-                ) : isAttempted === false ? (
+                ) : isAttempted === 'in_progress' ? (
                   <Link href={`/student/exams/${test.id}`}
-                    className="bg-accent text-white px-5 py-2 rounded-lg text-sm font-medium hover:bg-accent-hover transition">Start Exam</Link>
+                    className="bg-emerald-500 text-white px-5 py-2 rounded-lg text-sm font-medium hover:bg-emerald-600 transition flex items-center gap-1.5">
+                    <span>▶</span> Resume
+                  </Link>
                 ) : (
                   <Link
                     href={`/student/exams/${test.id}`}

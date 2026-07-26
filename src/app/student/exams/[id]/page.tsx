@@ -87,9 +87,11 @@ export default function ExamTakingPage({ params }: TestPageProps) {
       setSections(sectionsData ?? []);
 
       const sectionIds = (sectionsData ?? []).map((s: any) => s.id);
+      let qData: any[] | null = null;
       if (sectionIds.length) {
-        const { data: qData } = await supabase.from('questions').select('*').in('section_id', sectionIds);
-        setQuestions(qData ?? []);
+        const { data } = await supabase.from('questions').select('*').in('section_id', sectionIds);
+        qData = data ?? [];
+        setQuestions(qData);
       }
 
       // Reset all state to defaults
@@ -153,6 +155,30 @@ export default function ExamTakingPage({ params }: TestPageProps) {
           setAnswers(answerMap);
           setQuestionTimes(timeMap);
         }
+
+        // Restore position from last_question_id
+        if (unsubmitted.last_question_id) {
+          const targetQ = (qData ?? []).find((q: any) => q.id === unsubmitted.last_question_id);
+          if (targetQ) {
+            // Find section index
+            const secIdx = (sectionsData ?? []).findIndex((s: any) => s.id === targetQ.section_id);
+            if (secIdx !== -1) {
+              setCurrentSectionIdx(secIdx);
+              // Find group and question index within section
+              const secQs = (qData ?? []).filter((q: any) => q.section_id === (sectionsData ?? [])[secIdx].id);
+              const groups = groupByPassage(secQs as Question[]);
+              let found = false;
+              for (let g = 0; g < groups.length && !found; g++) {
+                const qIdx = groups[g].questions.findIndex((q: any) => q.id === unsubmitted.last_question_id);
+                if (qIdx !== -1) {
+                  setCurrentGroupIdx(g);
+                  setCurrentQIdx(qIdx);
+                  found = true;
+                }
+              }
+            }
+          }
+        }
       } else {
         const { data: attempt } = await supabase.from('attempts').insert({
           test_id: id, student_id: user.id,
@@ -213,6 +239,15 @@ export default function ExamTakingPage({ params }: TestPageProps) {
     };
   }, [submitted, loading, test, attemptId]);
 
+  // ─── Periodic auto-save (every 30s) ───
+  useEffect(() => {
+    if (submitted || loading || !attemptId || !currentQuestion?.id) return;
+    const interval = setInterval(() => {
+      supabase.from('attempts').update({ last_question_id: currentQuestion.id }).eq('id', attemptId).then();
+    }, 30000);
+    return () => clearInterval(interval);
+  }, [submitted, loading, attemptId, currentQuestion?.id]);
+
   // ─── Quit / Exit ───
   const handleQuit = () => setShowExitModal(true);
 
@@ -222,10 +257,9 @@ export default function ExamTakingPage({ params }: TestPageProps) {
       clearInterval(timerRef.current);
       timerRef.current = null;
     }
-    // Delete attempt from DB
-    if (attemptId) {
-      const { error } = await supabase.from('attempts').delete().eq('id', attemptId);
-      if (error) console.error('Exit delete failed:', error);
+    // Save final position before leaving
+    if (attemptId && currentQuestion?.id) {
+      await supabase.from('attempts').update({ last_question_id: currentQuestion.id }).eq('id', attemptId);
     }
     setShowExitModal(false);
     router.push('/student/dashboard');
@@ -243,6 +277,14 @@ export default function ExamTakingPage({ params }: TestPageProps) {
       setPassageExpanded(true);
     } else {
       setPassageExpanded(false);
+    }
+    // Save position for crash recovery
+    const sec = sections[sectionIdx];
+    const secQs = questions.filter((q) => q.section_id === sec?.id);
+    const groups = groupByPassage(secQs);
+    const targetQ = groups[groupIdx]?.questions[qIdx];
+    if (targetQ && attemptId) {
+      supabase.from('attempts').update({ last_question_id: targetQ.id }).eq('id', attemptId).then();
     }
   };
 
@@ -295,7 +337,7 @@ export default function ExamTakingPage({ params }: TestPageProps) {
     totalScore = Math.max(0, totalScore);
     const totalPct = Math.round((totalScore / questions.length) * 100);
     for (const r of responsesToUpsert) await supabase.from('responses').upsert(r, { onConflict: 'attempt_id, question_id' });
-    await supabase.from('attempts').update({ submitted_at: new Date().toISOString(), total_score: totalPct, section_scores: sectionScores }).eq('id', attemptId);
+    await supabase.from('attempts').update({ submitted_at: new Date().toISOString(), total_score: totalPct, section_scores: sectionScores, last_question_id: null }).eq('id', attemptId);
 
     setResultScores(sections.map((s) => ({ section: s.name, score: Math.max(0, Math.round(sectionScores[s.name]?.raw ?? 0)), total: allSectionQuestions[s.id]?.length ?? 0 })));
     setResultTotal(totalPct);
@@ -587,10 +629,10 @@ export default function ExamTakingPage({ params }: TestPageProps) {
               </div>
               <h3 className="text-lg font-bold text-primary mb-2">Exit Exam?</h3>
               <p className="text-sm text-secondary mb-1">
-                Your current progress will be <span className="font-semibold text-danger">lost</span>.
+                Your progress is <span className="font-semibold text-success">automatically saved</span>.
               </p>
               <p className="text-sm text-secondary mb-6">
-                All answers and time spent will not be saved.
+                You can resume from where you left off later.
               </p>
               <div className="flex gap-3">
                 <button onClick={cancelExit}
