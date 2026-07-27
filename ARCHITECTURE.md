@@ -1,7 +1,7 @@
 # CLAT Prep Hub — Architecture & System Design
 
-> **Version:** 3.0  
-> **Last Updated:** July 14, 2026
+> **Version:** 3.1  
+> **Last Updated:** July 26, 2026
 
 ---
 
@@ -251,6 +251,28 @@ clat-prep/
 | time_taken_seconds | int4 | |
 | created_at | timestamptz | |
 
+### `attempts` (exam attempts)
+| Column | Type | Notes |
+|--------|------|-------|
+| id | uuid | PK |
+| test_id | uuid | FK → tests |
+| student_id | uuid | FK → profiles |
+| started_at | timestamptz | Created when exam begins |
+| submitted_at | timestamptz | Null until exam submitted |
+| total_score | numeric | Calculated on submit (+1 / -0.25) |
+| section_scores | jsonb | Per-section breakdown `{section: {raw, attempted}}` |
+| last_question_id | uuid | **Crash recovery** — FK → questions. Updated on every navigation + every 30s auto-save. Restored on reload. Cleared on submit. |
+
+### `responses` (exam answers, one row per question per attempt)
+| Column | Type | Notes |
+|--------|------|-------|
+| id | uuid | PK |
+| attempt_id | uuid | FK → attempts |
+| question_id | uuid | FK → questions |
+| selected_option | text | A/B/C/D (null = viewed but not answered) |
+| is_correct | boolean | Evaluated on submit (null until then) |
+| time_taken_seconds | int4 | Cumulative time spent |
+
 ### `original_papers` / `sections` / `passages` / `questions` / `answer_keys`
 5-table normalized schema for authentic CLAT papers (CLAT 2025 UG Set A, CLAT 2026 UG, Mock Test #2, Full Length Mock).
 
@@ -382,15 +404,21 @@ Same logic as cron — calls `generateAllSections()` helper.
 
 ## 📝 Exam Flow (Original CLAT Papers)
 
-1. **Exams page** (`/student/exams`) lists available papers
+1. **Exams page** (`/student/exams`) lists available papers — each card shows **Start Exam**, **▶ Resume** (green, in-progress), or **🔄 Retake** (completed)
 2. **Start exam** → creates `attempts` row with `started_at` → 120-min countdown
-3. **Timer** — server-side expires_at recalibration, no localStorage drift, auto-submit on expiry
-4. **Navigation** — sections left sidebar, back/next within section, question palette
-5. **Pause/Resume** — pauses timer, hides content
-6. **Exit** → confirmation modal, deletes in-progress attempt from DB
-7. **Submit** → locks answers, scores section-wise, shows total + section scores
-8. **Review** → per-question review with correct answers + explanations
-9. **Retake** → dropped unique constraint on (test_id, student_id) allows unlimited retakes
+3. **Timer** — elapsed from `started_at`, recalculated on reload. Auto-submit on expiry
+4. **Navigation** — sections palette, passage-grouped questions, back/next
+5. **Answer tracking** — every option tap does `upsert` to `responses` table (instant persistence)
+6. **Position auto-save** — `last_question_id` updated on every navigation + every 30s via setInterval → `attempts` table
+7. **Crash recovery** — on reload, if unsubmitted attempt exists:
+   - Restores all answers from `responses` table
+   - Restores timer from `started_at` (remaining = 7200 - elapsed)
+   - Restores position from `last_question_id` → finds section/group/question index → navigates student to exact question
+   - Stale attempts (>150 min old) auto-deleted, fresh start
+8. **Exit** → confirmation modal with "progress auto-saved, resume later" message. Saves final position, does NOT delete attempt
+9. **Submit** → evaluates all answers (+1 / -0.25), stores `total_score` + `section_scores`, clears `last_question_id`, locks attempt
+10. **Review** → per-question review with correct answers + explanations
+11. **Retake** → dropped unique constraint on (test_id, student_id) allows unlimited retakes
 
 ---
 

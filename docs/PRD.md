@@ -1,9 +1,9 @@
 # CLAT Prep Hub — Product Requirements Document (PRD)
 
-> **Version:** 3.0  
+> **Version:** 3.1  
 > **Status:** Active  
 > **Author:** Bhimsen (@Bhimsen443)  
-> **Last Updated:** July 14, 2026
+> **Last Updated:** July 26, 2026
 
 ---
 
@@ -129,14 +129,16 @@ CLAT Prep Hub is an AI-powered practice test platform for CLAT (Common Law Admis
 | EXM-04 | **Mock Test #2** — 5-section mock test | P0 |
 | EXM-05 | **Full Length Mock** — comprehensive mock with real passage data | P0 |
 | EXM-06 | Normalized 5-table schema: `original_papers\|sections\|passages\|questions\|answer_keys` | P0 |
-| EXM-07 | **120-minute countdown timer** — server-side recalibration, no localStorage | P0 |
-| EXM-08 | **Auto-submit** on timer expiry | P0 |
-| EXM-09 | **Exit confirmation modal** — warns about progress loss | P0 |
-| EXM-10 | **Attempt cleanup on exit** — deletes in-progress attempt from DB | P0 |
-| EXM-11 | **Retake support** — dropped unique constraint on (test_id, student_id) | P0 |
-| EXM-12 | **45 test coverage** — timer lifecycle, submit, review, exit scenarios | P1 |
-| EXM-13 | **Options in `{A,B,C,D}` dict format** — critical for exam page compatibility | P0 |
-| EXM-14 | **Answer key import** — separate `answer_keys` table, 3-col layout artifact | P0 |
+|| EXM-07 | **120-minute countdown timer** — calculated from `started_at`, recalculated on reload | P0 |
+|| EXM-08 | **Auto-submit** on timer expiry | P0 |
+|| EXM-09 | **Crash recovery** — per-question answer upsert on every tap; position (`last_question_id`) saved on navigation + every 30s; timer restores from `started_at` | P0 |
+|| EXM-10 | **Resume button** — exam listing shows ▶ Resume (green) for in-progress, 🔄 Retake for completed | P0 |
+|| EXM-11 | **Exit saves progress** — modal confirms auto-saved, does NOT delete attempt | P0 |
+|| EXM-12 | **Stale cleanup** — unsubmitted attempts >150 min auto-deleted on reload | P0 |
+|| EXM-13 | **Retake support** — dropped unique constraint on (test_id, student_id) | P0 |
+|| EXM-14 | **45 test coverage** — timer lifecycle, submit, review, exit, crash scenarios | P1 |
+|| EXM-15 | **Options in `{A,B,C,D}` dict format** — critical for exam page compatibility | P0 |
+|| EXM-16 | **Answer key import** — separate `answer_keys` table, 3-col layout artifact | P0 |
 
 ### 3.7 Subscription & Monetization
 

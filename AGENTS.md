@@ -35,6 +35,20 @@ This version has breaking changes — APIs, conventions, and file structure may 
 2. **Standalone** (`passage_id IS NULL`) — Quick Fire mode only.
 3. **Options must be JSON dict**: `{A: "text", B: "text", C: "text", D: "text"}`.
 
+### Exam Flow (Resume + Crash Recovery)
+- **Answer persistence**: Every option tap does `upsert` to `responses` table — instant crash-safe save
+- **Position auto-save**: `last_question_id` saved to `attempts` on every navigation + every 30s via setInterval
+- **Timer**: Calculated from `started_at` — `remaining = 7200 - elapsed` (not localStorage)
+- **On reload (resume)**:
+  - Detects unsubmitted attempt (`attempts.submitted_at IS NULL`)
+  - Restores all answers from `responses` table
+  - Restores timer from `started_at`
+  - Restores position from `last_question_id` → finds section/group/question index
+  - Stale attempts >150min deleted, fresh start
+- **Exit**: Saves final position, does NOT delete attempt. Modal says "auto-saved, resume later"
+- **Submit**: Evaluates all answers (+1/-0.25), stores `total_score` + `section_scores`, clears `last_question_id`
+- **Exam listing**: Shows ▶ Resume (green, in-progress) or 🔄 Retake (amber, completed)
+
 ### Practice Flow (important!)
 1. Client calls `POST /api/quiz/start` with `{ section }`.
 2. API fetches ALL passage-linked questions for section, groups by passage, deduplicates by title (keeps newest per title+section), skips passages where all questions already answered.
