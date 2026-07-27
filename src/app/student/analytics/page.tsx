@@ -365,6 +365,13 @@ export default function AnalyticsPage() {
     const sortedTimes = [...allTimes].sort((a, b) => a - b);
     const tn = sortedTimes.length;
 
+    // Per-section total times across attempts (for section-level box plot)
+    const sectionTotalTimes = completed
+      .map(a => a.section_time[name] ?? 0)
+      .filter(t => t > 0)
+      .sort((a, b) => a - b);
+    const stn = sectionTotalTimes.length;
+
     // Per-session accuracies for median accuracy
     const accs = completed
       .map(a => {
@@ -403,6 +410,15 @@ export default function AnalyticsPage() {
       maxTime: tn > 0 ? sortedTimes[tn - 1] : 0,
       medianAccuracy: medianAcc,
       sessions,
+      // Section-level total time stats (per exam attempt)
+      medianSectionTime: stn > 0
+        ? (stn % 2 === 1 ? sectionTotalTimes[Math.floor(stn / 2)] : Math.round((sectionTotalTimes[stn / 2 - 1] + sectionTotalTimes[stn / 2]) / 2))
+        : 0,
+      q1SectionTime: stn > 0 ? sectionTotalTimes[Math.floor(stn * 0.25)] : 0,
+      q3SectionTime: stn > 0 ? sectionTotalTimes[Math.floor(stn * 0.75)] : 0,
+      minSectionTime: stn > 0 ? sectionTotalTimes[0] : 0,
+      maxSectionTime: stn > 0 ? sectionTotalTimes[stn - 1] : 0,
+      sessionLevelCount: stn,
     };
   });
 
@@ -616,7 +632,7 @@ export default function AnalyticsPage() {
       {/* Scrollable table on mobile */}
       <div className="overflow-x-auto">
         {/* Header row */}
-        <div className="min-w-[780px] px-6 py-2.5 border-b border-theme flex items-center gap-0 text-[11px] text-secondary font-bold uppercase tracking-wider">
+        <div className="min-w-[1050px] px-6 py-2.5 border-b border-theme flex items-center gap-0 text-[11px] text-secondary font-bold uppercase tracking-wider">
           <span className="w-[28px] shrink-0 text-center"></span>
           <span className="w-[140px] shrink-0 text-left">Section</span>
           <span className="w-[80px] shrink-0 text-center">Corr</span>
@@ -624,7 +640,9 @@ export default function AnalyticsPage() {
           <span className="w-[60px] shrink-0 text-center">Q</span>
           <span className="w-[80px] shrink-0 text-center">Acc</span>
           <span className="w-[80px] shrink-0 text-center">Med</span>
+          <span className="w-[80px] shrink-0 text-center">⏱️ Sec</span>
           <span className="w-[190px] shrink-0 text-left">Time Dist.</span>
+          <span className="w-[190px] shrink-0 text-left">Sec Dist.</span>
         </div>
         <div className="divide-y divide-theme-light">
           {testSectionStats.map(s => {
@@ -632,6 +650,9 @@ export default function AnalyticsPage() {
             const accColor = s.accuracy >= 70
               ? 'text-success' : s.accuracy >= 40 ? 'text-warning' : 'text-danger';
             const fmt = (sec: number) => sec >= 60 ? `${Math.floor(sec / 60)}m${sec % 60}s` : `${sec}s`;
+
+            // Section-level time stats
+            const st = s as any;
 
             // Abbreviated section names (fixed width)
             const shortName: Record<string, string> = {
@@ -643,7 +664,7 @@ export default function AnalyticsPage() {
             };
 
             return (
-              <div key={s.name} className="min-w-[780px] px-6 py-3.5 flex items-center gap-0 hover:bg-elevated transition">
+              <div key={s.name} className="min-w-[1050px] px-6 py-3.5 flex items-center gap-0 hover:bg-elevated transition">
                 {/* Icon */}
                 <span className="text-base shrink-0 w-[28px] text-center">{s.icon}</span>
                 {/* Section name */}
@@ -657,16 +678,16 @@ export default function AnalyticsPage() {
                 <span className="text-xs text-muted shrink-0 w-[60px] text-center">{s.totalQuestions}</span>
                 {/* Acc */}
                 <span className={`text-sm font-bold shrink-0 w-[80px] text-center ${accColor}`}>{s.accuracy}%</span>
-                {/* Med */}
+                {/* Med — per-question median time */}
                 <span className="text-xs font-semibold text-blue-400 shrink-0 w-[80px] text-center">{n > 0 ? fmt(s.medianTimeSeconds) : '—'}</span>
+                {/* ⏱️ Sec — median total section time per exam */}
+                <span className="text-xs font-semibold text-purple-400 shrink-0 w-[80px] text-center">{s.sessions > 0 ? fmt(st.medianSectionTime) : '—'}</span>
 
-                {/* Box plot — left-aligned, compact */}
+                {/* Per-question time box plot */}
                 <div className="w-[190px] shrink-0 flex items-center justify-start">
                   {s.totalQuestions >= 2 ? (
                     <svg viewBox="0 0 100 16" className="w-full h-4 max-w-[100px]" preserveAspectRatio="none">
-                      {/* Whisker line */}
                       <line x1={0} y1={8} x2={100} y2={8} stroke="#334155" strokeWidth="1"/>
-                      {/* IQR box */}
                       <rect
                         x={Math.min(s.q1Time / 240 * 100, 96)}
                         y={3}
@@ -677,15 +698,12 @@ export default function AnalyticsPage() {
                       >
                         <title>Q₁: {fmt(s.q1Time)} · Q₃: {fmt(s.q3Time)}</title>
                       </rect>
-                      {/* Median line */}
                       <line x1={Math.min(s.medianTimeSeconds / 240 * 100, 99)} y1={2} x2={Math.min(s.medianTimeSeconds / 240 * 100, 99)} y2={14} stroke="#60a5fa" strokeWidth="2">
                         <title>Median: {fmt(s.medianTimeSeconds)}</title>
                       </line>
-                      {/* Min cap */}
                       <line x1={Math.min(s.minTime / 240 * 100, 99)} y1={5} x2={Math.min(s.minTime / 240 * 100, 99)} y2={11} stroke="#475569" strokeWidth="1">
                         <title>Min: {fmt(s.minTime)}</title>
                       </line>
-                      {/* Max cap */}
                       <line x1={Math.min(s.maxTime / 240 * 100, 99)} y1={5} x2={Math.min(s.maxTime / 240 * 100, 99)} y2={11} stroke="#475569" strokeWidth="1">
                         <title>Max: {fmt(s.maxTime)}</title>
                       </line>
@@ -694,6 +712,42 @@ export default function AnalyticsPage() {
                     <svg viewBox="0 0 16 16" className="w-4 h-4 shrink-0">
                       <circle cx={8} cy={8} r="4" fill="rgba(59,130,246,0.3)" stroke="#60a5fa" strokeWidth="1">
                         <title>Time: {fmt(s.medianTimeSeconds)}</title>
+                      </circle>
+                    </svg>
+                  ) : (
+                    <span className="text-[10px] text-muted">—</span>
+                  )}
+                </div>
+
+                {/* Section-level time box plot (per exam attempt) */}
+                <div className="w-[190px] shrink-0 flex items-center justify-start">
+                  {st.sessionLevelCount >= 2 ? (
+                    <svg viewBox="0 0 100 16" className="w-full h-4 max-w-[100px]" preserveAspectRatio="none">
+                      <line x1={0} y1={8} x2={100} y2={8} stroke="#334155" strokeWidth="1"/>
+                      <rect
+                        x={Math.min(st.q1SectionTime / 7200 * 100, 96)}
+                        y={3}
+                        width={Math.max(Math.min((st.q3SectionTime - st.q1SectionTime) / 7200 * 100, 96), 3)}
+                        height={10} rx={1.5}
+                        fill="rgba(168,85,247,0.15)"
+                        stroke="#a855f7" strokeWidth="1"
+                      >
+                        <title>Q₁: {fmt(st.q1SectionTime)} · Q₃: {fmt(st.q3SectionTime)}</title>
+                      </rect>
+                      <line x1={Math.min(st.medianSectionTime / 7200 * 100, 99)} y1={2} x2={Math.min(st.medianSectionTime / 7200 * 100, 99)} y2={14} stroke="#a855f7" strokeWidth="2">
+                        <title>Median: {fmt(st.medianSectionTime)}</title>
+                      </line>
+                      <line x1={Math.min(st.minSectionTime / 7200 * 100, 99)} y1={5} x2={Math.min(st.minSectionTime / 7200 * 100, 99)} y2={11} stroke="#6b21a8" strokeWidth="1">
+                        <title>Min: {fmt(st.minSectionTime)}</title>
+                      </line>
+                      <line x1={Math.min(st.maxSectionTime / 7200 * 100, 99)} y1={5} x2={Math.min(st.maxSectionTime / 7200 * 100, 99)} y2={11} stroke="#6b21a8" strokeWidth="1">
+                        <title>Max: {fmt(st.maxSectionTime)}</title>
+                      </line>
+                    </svg>
+                  ) : st.sessionLevelCount === 1 ? (
+                    <svg viewBox="0 0 16 16" className="w-4 h-4 shrink-0">
+                      <circle cx={8} cy={8} r="4" fill="rgba(168,85,247,0.2)" stroke="#a855f7" strokeWidth="1">
+                        <title>Time: {fmt(st.medianSectionTime)}</title>
                       </circle>
                     </svg>
                   ) : (
