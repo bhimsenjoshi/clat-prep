@@ -34,6 +34,7 @@ interface AttemptWithScores {
   correct_count: number;
   total_time_seconds: number;
   started_at: string;
+  section_question_times: Record<string, number[]>;
 }
 
 interface PracticeSession {
@@ -218,12 +219,13 @@ export default function AnalyticsPage() {
         const totalTime = rList.reduce((s: number, r: any) => s + (r.time_taken_seconds ?? 0), 0);
 
         const sectionTime: Record<string, number> = {};
-        const sectionCorrect: Record<string, number> = {};
+        const sectionQuestionTimes: Record<string, number[]> = {};
 
         for (const r of rList) {
           const secName = r.questions?.sections?.name as string || 'Unknown';
           sectionTime[secName] = (sectionTime[secName] ?? 0) + (r.time_taken_seconds ?? 0);
-          if (r.is_correct) sectionCorrect[secName] = (sectionCorrect[secName] ?? 0) + 1;
+          if (!sectionQuestionTimes[secName]) sectionQuestionTimes[secName] = [];
+          sectionQuestionTimes[secName].push(r.time_taken_seconds ?? 0);
         }
 
         return {
@@ -240,6 +242,7 @@ export default function AnalyticsPage() {
           correct_count: correct,
           total_time_seconds: totalTime,
           started_at: a.started_at,
+          section_question_times: sectionQuestionTimes,
         };
       });
 
@@ -335,22 +338,76 @@ export default function AnalyticsPage() {
     ? Math.round(completed.reduce((s, a) => s + (a.total_score ?? 0), 0) / completed.length)
     : 0;
 
-  const sectionAggs = SECTION_NAMES.map(name => {
-    const scores = completed
-      .map(a => a.section_scores?.[name])
-      .filter((s): s is number => s !== undefined && s !== null);
-    const avg = scores.length ? Math.round(scores.reduce((s, c) => s + c, 0) / scores.length) : 0;
-    const max = scores.length ? Math.max(...scores) : 0;
-    const totalTime = completed
-      .map(a => a.section_time[name] ?? 0)
-      .reduce((s, t) => s + t, 0);
-    const attemptsWithSection = completed.filter(a => (a.section_time[name] ?? 0) > 0).length;
-    return { name, avg, max, count: scores.length, totalTime, attemptsWithSection };
+  // Test section stats in the SAME format as sectionPracticeStats (for identical rendering)
+  const testSectionStats: SectionPracticeStats[] = SECTION_NAMES.map(name => {
+    // Extract per-section correct/attempted from section_scores jsonb: {raw, attempted}
+    let correct = 0;
+    let totalQ = 0;
+    let sessions = 0;
+    const allTimes: number[] = [];
+
+    for (const a of completed) {
+      const ss = a.section_scores as Record<string, { raw: number; attempted: number }> | null;
+      const sec = ss?.[name];
+      if (sec && sec.attempted > 0) {
+        correct += sec.raw ?? 0;
+        totalQ += sec.attempted ?? 0;
+        sessions++;
+      }
+      // Collect per-question times for this section across all attempts
+      const times = a.section_question_times?.[name] ?? [];
+      if (times.length > 0) {
+        // Get only answered questions' times
+        allTimes.push(...times.filter((t: number) => t > 0));
+      }
+    }
+
+    const sortedTimes = [...allTimes].sort((a, b) => a - b);
+    const tn = sortedTimes.length;
+
+    // Per-session accuracies for median accuracy
+    const accs = completed
+      .map(a => {
+        const ss = a.section_scores as Record<string, { raw: number; attempted: number }> | null;
+        const sec = ss?.[name];
+        if (sec && sec.attempted > 0) {
+          return Math.round((sec.raw / sec.attempted) * 100);
+        }
+        return null;
+      })
+      .filter((a): a is number => a !== null)
+      .sort((a, b) => a - b);
+
+    const n = accs.length;
+
+    const medianAcc = n > 0
+      ? (n % 2 === 1 ? accs[Math.floor(n / 2)] : Math.round((accs[n / 2 - 1] + accs[n / 2]) / 2))
+      : 0;
+    const medianTime = tn > 0
+      ? (tn % 2 === 1 ? sortedTimes[Math.floor(tn / 2)] : Math.round((sortedTimes[tn / 2 - 1] + sortedTimes[tn / 2]) / 2))
+      : 0;
+    const q1 = tn > 0 ? sortedTimes[Math.floor(tn * 0.25)] : 0;
+    const q3 = tn > 0 ? sortedTimes[Math.floor(tn * 0.75)] : 0;
+
+    return {
+      name,
+      icon: SECTION_ICONS[name] || '📝',
+      totalQuestions: totalQ,
+      correct,
+      incorrect: totalQ - correct,
+      accuracy: totalQ > 0 ? Math.round((correct / totalQ) * 100) : 0,
+      medianTimeSeconds: medianTime,
+      q1Time: q1,
+      q3Time: q3,
+      minTime: tn > 0 ? sortedTimes[0] : 0,
+      maxTime: tn > 0 ? sortedTimes[tn - 1] : 0,
+      medianAccuracy: medianAcc,
+      sessions,
+    };
   });
 
-  const maxAvg = Math.max(...sectionAggs.map(s => s.avg), 1);
-  const bestSection = sectionAggs.reduce((best, s) => s.avg > (best?.avg ?? 0) ? s : best, sectionAggs[0]);
-  const weakSection = sectionAggs.reduce((worst, s) => s.avg < (worst?.avg ?? Infinity) ? s : worst, sectionAggs[sectionAggs.length - 1]);
+  const testBestSection = [...testSectionStats].filter(s => s.totalQuestions > 0).sort((a, b) => b.accuracy - a.accuracy)[0];
+  const testWeakSection = [...testSectionStats].filter(s => s.totalQuestions > 0).sort((a, b) => a.accuracy - b.accuracy)[0];
 
   const formatTime = (seconds: number) => {
     if (seconds >= 60) return `${Math.floor(seconds / 60)}m ${seconds % 60}s`;
@@ -535,17 +592,17 @@ export default function AnalyticsPage() {
   );
 
   const TestBestWeakContent = (
-    bestSection && weakSection ? (
+    testBestSection && testWeakSection ? (
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         <div className="bg-tint-success border border-success/50 rounded-xl p-4">
           <p className="text-xs text-success font-medium uppercase tracking-wider">✅ Strongest Section</p>
-          <p className="text-lg font-bold text-primary mt-1">{bestSection.name}</p>
-          <p className="text-sm text-success">Avg {bestSection.avg} · {bestSection.count} attempts</p>
+          <p className="text-lg font-bold text-primary mt-1">{testBestSection.icon} {testBestSection.name}</p>
+          <p className="text-sm text-success">{testBestSection.accuracy}% accuracy · {testBestSection.totalQuestions} questions</p>
         </div>
         <div className="bg-tint-danger border border-danger/50 rounded-xl p-4">
-          <p className="text-xs text-danger font-medium uppercase tracking-wider">🎯 Needs Focus</p>
-          <p className="text-lg font-bold text-primary mt-1">{weakSection.name}</p>
-          <p className="text-sm text-danger">Avg {weakSection.avg} · {weakSection.count} attempts</p>
+          <p className="text-xs text-danger font-medium uppercase tracking-wider">🎯 Needs Practice</p>
+          <p className="text-lg font-bold text-primary mt-1">{testWeakSection.icon} {testWeakSection.name}</p>
+          <p className="text-sm text-danger">{testWeakSection.accuracy}% accuracy · {testWeakSection.totalQuestions} questions</p>
         </div>
       </div>
     ) : null
@@ -554,36 +611,99 @@ export default function AnalyticsPage() {
   const TestSectionPerformanceContent = (
     <div className="bg-card border border-theme rounded-xl shadow-theme-sm">
       <div className="px-6 py-4 border-b border-theme">
-        <h2 className="font-semibold text-primary">📈 Section-wise Performance</h2>
+        <h2 className="font-semibold text-primary">📈 Test by Section</h2>
       </div>
-      <div className="p-6 space-y-5">
-        {sectionAggs.map(s => {
-          const pct = s.count > 0 ? Math.min((s.avg / 100) * 100, 100) : 0;
-          const avgTime = s.attemptsWithSection > 0
-            ? Math.round(s.totalTime / s.attemptsWithSection / 60)
-            : 0;
-          return (
-            <div key={s.name}>
-              <div className="flex items-center justify-between mb-1.5">
-                <span className="text-sm font-medium text-primary">{s.name}</span>
-                <div className="flex items-center gap-3 text-xs text-secondary">
-                  <span className="font-semibold text-accent">{s.avg}<span className="text-muted font-normal"> avg</span></span>
-                  <span className="font-semibold text-success">{s.max}<span className="text-muted font-normal"> best</span></span>
-                  {avgTime > 0 && <span>{avgTime}m avg</span>}
+      {/* Scrollable table on mobile */}
+      <div className="overflow-x-auto">
+        {/* Header row */}
+        <div className="min-w-[780px] px-6 py-2.5 border-b border-theme flex items-center gap-0 text-[11px] text-secondary font-bold uppercase tracking-wider">
+          <span className="w-[28px] shrink-0 text-center"></span>
+          <span className="w-[140px] shrink-0 text-left">Section</span>
+          <span className="w-[80px] shrink-0 text-center">Corr</span>
+          <span className="w-[80px] shrink-0 text-center">Wrong</span>
+          <span className="w-[60px] shrink-0 text-center">Q</span>
+          <span className="w-[80px] shrink-0 text-center">Acc</span>
+          <span className="w-[80px] shrink-0 text-center">Med</span>
+          <span className="w-[190px] shrink-0 text-left">Time Dist.</span>
+        </div>
+        <div className="divide-y divide-theme-light">
+          {testSectionStats.map(s => {
+            const n = s.sessions;
+            const accColor = s.accuracy >= 70
+              ? 'text-success' : s.accuracy >= 40 ? 'text-warning' : 'text-danger';
+            const fmt = (sec: number) => sec >= 60 ? `${Math.floor(sec / 60)}m${sec % 60}s` : `${sec}s`;
+
+            // Abbreviated section names (fixed width)
+            const shortName: Record<string, string> = {
+              'English Language': 'English',
+              'Current Affairs Including General Knowledge': 'Current Affairs',
+              'Legal Reasoning': 'Legal',
+              'Logical Reasoning': 'Logical',
+              'Quantitative Techniques': 'Quant',
+            };
+
+            return (
+              <div key={s.name} className="min-w-[780px] px-6 py-3.5 flex items-center gap-0 hover:bg-elevated transition">
+                {/* Icon */}
+                <span className="text-base shrink-0 w-[28px] text-center">{s.icon}</span>
+                {/* Section name */}
+                <span className="text-sm font-medium text-primary w-[140px] shrink-0 truncate text-left">{shortName[s.name] || s.name}</span>
+
+                {/* Corr */}
+                <span className="text-xs text-success shrink-0 w-[80px] text-center font-medium">{s.correct}</span>
+                {/* Wrong */}
+                <span className="text-xs text-danger shrink-0 w-[80px] text-center font-medium">{s.incorrect}</span>
+                {/* Q */}
+                <span className="text-xs text-muted shrink-0 w-[60px] text-center">{s.totalQuestions}</span>
+                {/* Acc */}
+                <span className={`text-sm font-bold shrink-0 w-[80px] text-center ${accColor}`}>{s.accuracy}%</span>
+                {/* Med */}
+                <span className="text-xs font-semibold text-blue-400 shrink-0 w-[80px] text-center">{n > 0 ? fmt(s.medianTimeSeconds) : '—'}</span>
+
+                {/* Box plot — left-aligned, compact */}
+                <div className="w-[190px] shrink-0 flex items-center justify-start">
+                  {s.totalQuestions >= 2 ? (
+                    <svg viewBox="0 0 100 16" className="w-full h-4 max-w-[100px]" preserveAspectRatio="none">
+                      {/* Whisker line */}
+                      <line x1={0} y1={8} x2={100} y2={8} stroke="#334155" strokeWidth="1"/>
+                      {/* IQR box */}
+                      <rect
+                        x={Math.min(s.q1Time / 240 * 100, 96)}
+                        y={3}
+                        width={Math.max(Math.min((s.q3Time - s.q1Time) / 240 * 100, 96), 3)}
+                        height={10} rx={1.5}
+                        fill="rgba(59,130,246,0.2)"
+                        stroke="#60a5fa" strokeWidth="1"
+                      >
+                        <title>Q₁: {fmt(s.q1Time)} · Q₃: {fmt(s.q3Time)}</title>
+                      </rect>
+                      {/* Median line */}
+                      <line x1={Math.min(s.medianTimeSeconds / 240 * 100, 99)} y1={2} x2={Math.min(s.medianTimeSeconds / 240 * 100, 99)} y2={14} stroke="#60a5fa" strokeWidth="2">
+                        <title>Median: {fmt(s.medianTimeSeconds)}</title>
+                      </line>
+                      {/* Min cap */}
+                      <line x1={Math.min(s.minTime / 240 * 100, 99)} y1={5} x2={Math.min(s.minTime / 240 * 100, 99)} y2={11} stroke="#475569" strokeWidth="1">
+                        <title>Min: {fmt(s.minTime)}</title>
+                      </line>
+                      {/* Max cap */}
+                      <line x1={Math.min(s.maxTime / 240 * 100, 99)} y1={5} x2={Math.min(s.maxTime / 240 * 100, 99)} y2={11} stroke="#475569" strokeWidth="1">
+                        <title>Max: {fmt(s.maxTime)}</title>
+                      </line>
+                    </svg>
+                  ) : s.totalQuestions === 1 ? (
+                    <svg viewBox="0 0 16 16" className="w-4 h-4 shrink-0">
+                      <circle cx={8} cy={8} r="4" fill="rgba(59,130,246,0.3)" stroke="#60a5fa" strokeWidth="1">
+                        <title>Time: {fmt(s.medianTimeSeconds)}</title>
+                      </circle>
+                    </svg>
+                  ) : (
+                    <span className="text-[10px] text-muted">—</span>
+                  )}
                 </div>
               </div>
-              <div className="w-full bg-elevated rounded-full h-2.5">
-                <div
-                  className={`h-2.5 rounded-full transition-all ${
-                    pct >= 70 ? 'bg-success' : pct >= 40 ? 'bg-warning' : 'bg-danger'
-                  }`}
-                  style={{ width: `${Math.min(pct, 100)}%` }}
-                />
-              </div>
-              <p className="text-[10px] text-muted mt-1">{s.count} test{s.count !== 1 ? 's' : ''} attempted</p>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
     </div>
   );
