@@ -193,14 +193,26 @@ export default function AnalyticsPage() {
         return;
       }
 
-      const enriched: AttemptWithScores[] = [];
-      for (const a of rawAttempts as any[]) {
-        const { data: responses } = await supabase
-          .from('responses')
-          .select('*, questions!inner(section_id), sections!inner(name)')
-          .eq('attempt_id', a.id);
+      // Batch-fetch all responses in one query (no N+1)
+      // Chain FK: responses.question_id → questions.id → sections.id
+      const attemptIds = rawAttempts.map((a: any) => a.id);
+      const { data: allResponses } = await supabase
+        .from('responses')
+        .select('*, questions!inner(section_id, sections!inner(name))')
+        .in('attempt_id', attemptIds);
 
-        const rList = responses ?? [];
+      // Group responses by attempt_id
+      const respByAttempt: Record<string, any[]> = {};
+      for (const r of (allResponses ?? []) as any[]) {
+        const aid = r.attempt_id as string;
+        if (!respByAttempt[aid]) respByAttempt[aid] = [];
+        respByAttempt[aid].push(r);
+      }
+
+      const enriched: AttemptWithScores[] = rawAttempts.map((a: any) => {
+        const rList = respByAttempt[a.id] ?? [];
+
+        // Section names from Supabase FK chain: questions → sections
         const answered = rList.filter((r: any) => r.selected_option !== null).length;
         const correct = rList.filter((r: any) => r.is_correct === true).length;
         const totalTime = rList.reduce((s: number, r: any) => s + (r.time_taken_seconds ?? 0), 0);
@@ -209,12 +221,12 @@ export default function AnalyticsPage() {
         const sectionCorrect: Record<string, number> = {};
 
         for (const r of rList) {
-          const secName = r.questions?.section_id || 'Unknown';
+          const secName = r.questions?.sections?.name as string || 'Unknown';
           sectionTime[secName] = (sectionTime[secName] ?? 0) + (r.time_taken_seconds ?? 0);
           if (r.is_correct) sectionCorrect[secName] = (sectionCorrect[secName] ?? 0) + 1;
         }
 
-        enriched.push({
+        return {
           id: a.id,
           test_id: a.test_id,
           test_title: a.tests?.title ?? 'Practice Test',
@@ -228,8 +240,8 @@ export default function AnalyticsPage() {
           correct_count: correct,
           total_time_seconds: totalTime,
           started_at: a.started_at,
-        });
-      }
+        };
+      });
 
       setAttempts(enriched);
       setLoading(false);
