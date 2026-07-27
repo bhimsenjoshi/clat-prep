@@ -461,6 +461,10 @@ export default function StudentDashboard() {
               className="px-3 py-2 rounded-lg text-sm font-medium text-accent hover:bg-card-hover active:scale-[0.97] transition-all duration-150">
               ⚡ Quick Fire
             </Link>
+            <Link href="/student/quant-foundations"
+              className="px-3 py-2 rounded-lg text-sm font-medium text-accent hover:bg-card-hover active:scale-[0.97] transition-all duration-150">
+              🧮 Foundations
+            </Link>
             <Link href="/student/analytics"
               className="px-3 py-2 rounded-lg text-sm font-medium text-secondary hover:bg-card-hover hover:text-primary active:scale-[0.97] transition-all duration-150">
               🏛️ Analytics
@@ -519,6 +523,10 @@ export default function StudentDashboard() {
             <Link href="/student/quick-fire" onClick={() => setMobileMenuOpen(false)}
               className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-secondary hover:bg-card-hover">
               ⚡ Quick Fire
+            </Link>
+            <Link href="/student/quant-foundations" onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-secondary hover:bg-card-hover">
+              🧮 Foundations
             </Link>
             <Link href="/student/analytics" onClick={() => setMobileMenuOpen(false)}
               className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-secondary hover:bg-card-hover">

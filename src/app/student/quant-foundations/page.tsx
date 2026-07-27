@@ -65,6 +65,9 @@ export default function QuantFoundationsPage() {
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
 
   const currentQuestion = questions[currentIndex];
+  const safeOptions = currentQuestion
+    ? (typeof currentQuestion.options === 'string' ? JSON.parse(currentQuestion.options) : currentQuestion.options)
+    : {};
 
   // Timer tick
   useEffect(() => {
@@ -368,7 +371,8 @@ export default function QuantFoundationsPage() {
 
         {/* Options */}
         <div className="grid grid-cols-1 gap-3 mb-6">
-          {Object.entries(currentQuestion.options).map(([key, value]) => {
+          {Object.entries(safeOptions).map(([key, value]) => {
+            const optValue = value as string;
             let borderColor = 'border-theme bg-card';
             let textColor = 'text-primary';
             let ring = '';
@@ -410,7 +414,7 @@ export default function QuantFoundationsPage() {
                   isResult && key === selected && !isCorrect ? 'bg-danger text-white' :
                   key === selected ? 'bg-accent text-white' : 'bg-elevated text-secondary'
                 }`}>{icon}</span>
-                <span className={`flex-1 text-left ${textColor}`}>{value}</span>
+                <span className={`flex-1 text-left ${textColor}`}>{optValue}</span>
               </button>
             );
           })}
