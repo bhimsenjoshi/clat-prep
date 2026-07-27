@@ -22,6 +22,123 @@ const SUBSECTION_ICONS: Record<string, string> = {
   'Data Basics': '📊',
 };
 
+// ─── SVG Visual Models ───
+function VisualModel({ type }: { type: string }) {
+  const baseClass = "w-full max-w-xs mx-auto bg-card rounded-xl p-4 border border-theme";
+
+  switch (type) {
+    case 'grid':
+      return (
+        <div className={baseClass}>
+          <svg viewBox="0 0 200 200" className="w-full" fill="none">
+            <rect x="0" y="0" width="200" height="200" fill="#1e293b" rx="4" />
+            {/* 10×10 grid with ~43% shaded */}
+            {Array.from({ length: 100 }).map((_, i) => {
+              const row = Math.floor(i / 10);
+              const col = i % 10;
+              const shaded = i < 43;
+              return (
+                <rect
+                  key={i}
+                  x={col * 20 + 1} y={row * 20 + 1}
+                  width={18} height={18}
+                  rx={2}
+                  fill={shaded ? '#6366f1' : '#334155'}
+                  stroke={shaded ? '#818cf8' : '#475569'}
+                  strokeWidth="0.5"
+                />
+              );
+            })}
+          </svg>
+          <p className="text-[10px] text-center text-muted mt-2">10×10 Grid · Shaded cells = %</p>
+        </div>
+      );
+
+    case 'pie_chart':
+      return (
+        <div className={baseClass}>
+          <svg viewBox="0 0 200 200" className="w-full">
+            {/* Pie with 4 segments, 3 shaded */}
+            <circle cx="100" cy="100" r="85" fill="#1e293b" />
+            <path d="M100,100 L100,15 A85,85 0 0,1 185,100 Z" fill="#6366f1" stroke="#818cf8" strokeWidth="1" />
+            <path d="M100,100 L185,100 A85,85 0 0,1 100,185 Z" fill="#6366f1" stroke="#818cf8" strokeWidth="1" />
+            <path d="M100,100 L100,185 A85,85 0 0,1 15,100 Z" fill="#6366f1" stroke="#818cf8" strokeWidth="1" />
+            <path d="M100,100 L15,100 A85,85 0 0,1 100,15 Z" fill="#334155" stroke="#475569" strokeWidth="1" />
+            <circle cx="100" cy="100" r="15" fill="#1e293b" stroke="#475569" strokeWidth="1" />
+          </svg>
+          <p className="text-[10px] text-center text-muted mt-2">3 of 4 quarters shaded = 75%</p>
+        </div>
+      );
+
+    case 'bar_diagram':
+      return (
+        <div className={baseClass}>
+          <svg viewBox="0 0 200 160" className="w-full" fill="none">
+            {/* Axis */}
+            <line x1="30" y1="10" x2="30" y2="130" stroke="#475569" strokeWidth="1.5" />
+            <line x1="30" y1="130" x2="190" y2="130" stroke="#475569" strokeWidth="1.5" />
+            {/* 3 bars: heights 64, 40, 56 out of max 130px */}
+            <rect x="45" y="66" width="35" height="64" rx="3" fill="#6366f1" stroke="#818cf8" strokeWidth="1" />
+            <rect x="100" y="90" width="35" height="40" rx="3" fill="#a855f7" stroke="#c084fc" strokeWidth="1" />
+            <rect x="155" y="74" width="35" height="56" rx="3" fill="#3b82f6" stroke="#60a5fa" strokeWidth="1" />
+            {/* Labels */}
+            <text x="62" y="148" textAnchor="middle" fill="#94a3b8" fontSize="10">A</text>
+            <text x="117" y="148" textAnchor="middle" fill="#94a3b8" fontSize="10">B</text>
+            <text x="172" y="148" textAnchor="middle" fill="#94a3b8" fontSize="10">C</text>
+          </svg>
+          <p className="text-[10px] text-center text-muted mt-2">Compare bar heights visually</p>
+        </div>
+      );
+
+    case 'tape_diagram':
+      return (
+        <div className={baseClass}>
+          <svg viewBox="0 0 220 100" className="w-full" fill="none">
+            {/* Tape A — 5 parts */}
+            <text x="5" y="20" fill="#94a3b8" fontSize="10">A</text>
+            {[0,1,2,3,4].map(i => (
+              <rect key={i} x={20 + i*36} y="10" width="34" height="18" rx="2"
+                fill={i < 3 ? '#6366f1' : '#334155'} stroke="#818cf8" strokeWidth="0.8" />
+            ))}
+            {/* Tape B — 3 parts */}
+            <text x="5" y="58" fill="#94a3b8" fontSize="10">B</text>
+            {[0,1,2].map(i => (
+              <rect key={i} x={20 + i*36} y="48" width="34" height="18" rx="2"
+                fill="#a855f7" stroke="#c084fc" strokeWidth="0.8" />
+            ))}
+          </svg>
+          <p className="text-[10px] text-center text-muted mt-2">Equal blocks · find one block first</p>
+        </div>
+      );
+
+    case 'number_line':
+      return (
+        <div className={baseClass}>
+          <svg viewBox="0 0 220 50" className="w-full" fill="none">
+            {/* Number line 0 to 1 with 4 segments */}
+            <line x1="20" y1="25" x2="200" y2="25" stroke="#475569" strokeWidth="2" strokeLinecap="round" />
+            {/* Tick marks */}
+            {[0,1,2,3,4].map(i => (
+              <line key={i} x1={20 + i*45} y1="19" x2={20 + i*45} y2="31" stroke="#64748b" strokeWidth="1.5" />
+            ))}
+            {/* Labels */}
+            <text x="20" y="44" textAnchor="middle" fill="#94a3b8" fontSize="10">0</text>
+            <text x="65" y="44" textAnchor="middle" fill="#94a3b8" fontSize="10">¼</text>
+            <text x="110" y="44" textAnchor="middle" fill="#94a3b8" fontSize="10">½</text>
+            <text x="155" y="44" textAnchor="middle" fill="#94a3b8" fontSize="10">¾</text>
+            <text x="200" y="44" textAnchor="middle" fill="#94a3b8" fontSize="10">1</text>
+            {/* Dot at ¾ */}
+            <circle cx="155" cy="25" r="5" fill="#6366f1" stroke="#818cf8" strokeWidth="1.5" />
+          </svg>
+          <p className="text-[10px] text-center text-muted mt-2">Position on the number line</p>
+        </div>
+      );
+
+    default:
+      return null;
+  }
+}
+
 interface QuestionData {
   id: string;
   subsection: string;
@@ -358,7 +475,9 @@ export default function QuantFoundationsPage() {
             </button>
             {passageExpanded && (
               <div className="px-5 pb-4">
-                <p className="text-sm text-secondary leading-relaxed">{currentQuestion.passage}</p>
+                <p className="text-sm text-secondary leading-relaxed mb-4">{currentQuestion.passage}</p>
+                {/* SVG Visualization based on visual_type */}
+                <VisualModel type={currentQuestion.visual_type} />
               </div>
             )}
           </div>

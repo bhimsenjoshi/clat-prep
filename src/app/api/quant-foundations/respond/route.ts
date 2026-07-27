@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerUser } from '@/lib/supabase/server';
+import { createClient } from '@/lib/supabase/client';
+import { cookies } from 'next/headers';
 
 export async function POST(req: NextRequest) {
   try {
@@ -12,15 +13,31 @@ export async function POST(req: NextRequest) {
 
     // Validate required fields
     if (!session_id || !question_id || !selected_option || time_taken_seconds === undefined) {
-      return NextResponse.json({ error: 'Missing required fields: session_id, question_id, selected_option, time_taken_seconds' }, { status: 400 });
+      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    const { user, supabase } = await getServerUser();
-    if (!user) {
+    // Auth: set up supabase client with cookie session (same pattern as start route)
+    const supabase = createClient();
+    const cookieStore = await cookies();
+    const clatAt = cookieStore.get('clat-at')?.value;
+    const clatRt = cookieStore.get('clat-rt')?.value;
+
+    if (!clatAt) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // ── Step 1: Fetch the question to get correct_option and explanation ──
+    const { data: { user }, error: authError } = await supabase.auth.getUser(clatAt);
+    if (authError || !user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    // Set the session so subsequent queries have auth context for RLS
+    await supabase.auth.setSession({
+      access_token: clatAt,
+      refresh_token: clatRt ?? '',
+    });
+
+    // ── Step 1: Fetch the question ──
     const { data: question, error: questionError } = await supabase
       .from('visual_math_questions')
       .select('id, correct_option, explanation')
@@ -34,7 +51,7 @@ export async function POST(req: NextRequest) {
     // ── Step 2: Compute correctness ──
     const is_correct = selected_option === question.correct_option;
 
-    // ── Step 3: Upsert response (unique on session_id + question_id) ──
+    // ── Step 3: Upsert response ──
     const { error: upsertError } = await supabase
       .from('visual_math_responses')
       .upsert(
@@ -53,12 +70,11 @@ export async function POST(req: NextRequest) {
       );
 
     if (upsertError) {
-      console.error('Upsert response error:', upsertError);
+      console.error('Upsert error:', upsertError);
       return NextResponse.json({ error: 'Failed to record response' }, { status: 500 });
     }
 
     // ── Step 4: Update session counts ──
-    // Fetch current session counts
     const { data: session } = await supabase
       .from('visual_math_sessions')
       .select('questions_answered, correct_count')
@@ -66,13 +82,12 @@ export async function POST(req: NextRequest) {
       .single();
 
     if (session) {
-      const updateData: Record<string, any> = {
-        questions_answered: (session.questions_answered ?? 0) + 1,
-        correct_count: (session.correct_count ?? 0) + (is_correct ? 1 : 0),
-      };
       await supabase
         .from('visual_math_sessions')
-        .update(updateData)
+        .update({
+          questions_answered: (session.questions_answered ?? 0) + 1,
+          correct_count: (session.correct_count ?? 0) + (is_correct ? 1 : 0),
+        })
         .eq('id', session_id);
     }
 
@@ -83,11 +98,7 @@ export async function POST(req: NextRequest) {
       explanation: (() => {
         const raw = question.explanation;
         if (typeof raw === 'string') {
-          try {
-            return JSON.parse(raw);
-          } catch {
-            return raw;
-          }
+          try { return JSON.parse(raw); } catch { return raw; }
         }
         return raw;
       })(),
