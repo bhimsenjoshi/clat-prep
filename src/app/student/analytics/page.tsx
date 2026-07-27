@@ -19,6 +19,15 @@ const SECTION_ICONS: Record<string, string> = {
   'Quantitative Techniques': '📐',
 };
 
+const SUBSECTION_NAMES = ['Percentages', 'Ratios & Proportions', 'Fractions & Decimals', 'Data Basics'] as const;
+
+const SUBSECTION_ICONS_MAP: Record<string, string> = {
+  'Percentages': '💯',
+  'Ratios & Proportions': '📐',
+  'Fractions & Decimals': '🔢',
+  'Data Basics': '📊',
+};
+
 // ─── Types ───
 interface AttemptWithScores {
   id: string;
@@ -107,16 +116,17 @@ export default function AnalyticsPage() {
   const [attempts, setAttempts] = useState<AttemptWithScores[]>([]);
   const [practiceSessions, setPracticeSessions] = useState<PracticeSession[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'practice' | 'quick_fire' | 'tests' | 'editorials'>('practice');
+  const [activeTab, setActiveTab] = useState<'practice' | 'quick_fire' | 'tests' | 'editorials' | 'quant_foundations'>('practice');
   const [editorialStats, setEditorialStats] = useState<any>(null);
   const [editorialStatsLoading, setEditorialStatsLoading] = useState(true);
   const [dailyReadData, setDailyReadData] = useState<{date: string; reads: number}[]>([]);
+  const [vmfSessions, setVmfSessions] = useState<PracticeSession[]>([]);
 
   // ─── Read ?tab= from URL on mount ───
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const tab = params.get('tab') as 'practice' | 'quick_fire' | 'tests' | 'editorials' | null;
-    if (tab && ['practice', 'quick_fire', 'tests', 'editorials'].includes(tab)) {
+    const tab = params.get('tab') as 'practice' | 'quick_fire' | 'tests' | 'editorials' | 'quant_foundations' | null;
+    if (tab && ['practice', 'quick_fire', 'tests', 'editorials', 'quant_foundations'].includes(tab)) {
       setActiveTab(tab);
     }
   }, []);
@@ -179,6 +189,56 @@ export default function AnalyticsPage() {
         });
 
         setPracticeSessions(enriched);
+      }
+
+      // ─── Load Quant Foundations (Visual Math) Data ───
+      const { data: vmfAllSessions } = await supabase
+        .from('visual_math_sessions')
+        .select('*')
+        .eq('student_id', user.id)
+        .order('started_at', { ascending: false })
+        .limit(100);
+
+      if (vmfAllSessions && vmfAllSessions.length > 0) {
+        const vmfSessionIds = vmfAllSessions.map((s: any) => s.id);
+
+        const { data: vmfResponses } = await supabase
+          .from('visual_math_responses')
+          .select('session_id, is_correct, time_taken_seconds')
+          .in('session_id', vmfSessionIds);
+
+        const vmfRespBySession: Record<string, { correct: number; total: number; totalTime: number; questionTimes: number[] }> = {};
+        for (const r of (vmfResponses ?? []) as any[]) {
+          if (!vmfRespBySession[r.session_id]) {
+            vmfRespBySession[r.session_id] = { correct: 0, total: 0, totalTime: 0, questionTimes: [] };
+          }
+          vmfRespBySession[r.session_id].total++;
+          if (r.is_correct) vmfRespBySession[r.session_id].correct++;
+          vmfRespBySession[r.session_id].totalTime += (r.time_taken_seconds ?? 0);
+          vmfRespBySession[r.session_id].questionTimes.push(r.time_taken_seconds ?? 0);
+        }
+
+        const vmfEnriched: PracticeSession[] = vmfAllSessions
+          .filter((s: any) => {
+            const rs = vmfRespBySession[s.id];
+            return rs && rs.total > 0;
+          })
+          .map((s: any) => {
+            const rs = vmfRespBySession[s.id] || { correct: 0, total: 0, totalTime: 0, questionTimes: [] };
+            return {
+              id: s.id,
+              section: s.subsection,  // PracticeSession uses 'section' field
+              questions_answered: rs.total || s.questions_answered,
+              correct_count: rs.correct || s.correct_count,
+              started_at: s.started_at,
+              ended_at: s.ended_at,
+              avg_time_seconds: rs.total > 0 ? Math.round(rs.totalTime / rs.total) : 0,
+              question_times: rs.questionTimes || [],
+              session_type: 'quant_foundations',
+            };
+          });
+
+        setVmfSessions(vmfEnriched);
       }
 
       // ─── Load Test Attempt Data ───
@@ -987,6 +1047,14 @@ export default function AnalyticsPage() {
           >
             Editorials
           </button>
+          <button
+            onClick={() => setActiveTab('quant_foundations')}
+            className={`px-4 py-2 text-sm font-medium border-b-2 ${
+              activeTab === 'quant_foundations' ? 'border-accent text-accent' : 'border-transparent text-secondary hover:text-primary'
+            }`}
+          >
+            🧮 Foundations
+          </button>
         </div>
 
         {activeTab === 'practice' && (
@@ -1090,6 +1158,245 @@ export default function AnalyticsPage() {
                 </Link>
               </div>
             ) : null}
+          </div>
+        )}
+
+        {activeTab === 'quant_foundations' && (
+          <div className="space-y-6">
+            <h2 className="text-xl font-bold text-primary">🧮 Quant Foundations Overview</h2>
+            {/* Summary cards */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="bg-card border border-theme rounded-xl p-4 text-center shadow-theme-sm">
+                <p className="text-4xl font-bold text-accent mb-1">{vmfSessions.reduce((s, p) => s + p.questions_answered, 0)}</p>
+                <p className="text-sm text-secondary">Questions Practiced</p>
+              </div>
+              <div className="bg-card border border-theme rounded-xl p-4 text-center shadow-theme-sm">
+                <p className={`text-4xl font-bold ${
+                  (() => {
+                    const total = vmfSessions.reduce((s, p) => s + p.questions_answered, 0);
+                    const correct = vmfSessions.reduce((s, p) => s + p.correct_count, 0);
+                    const acc = total > 0 ? Math.round((correct / total) * 100) : 0;
+                    return acc >= 70 ? 'text-success' : acc >= 40 ? 'text-warning' : 'text-danger';
+                  })()
+                } mb-1`}>
+                  {(() => {
+                    const total = vmfSessions.reduce((s, p) => s + p.questions_answered, 0);
+                    const correct = vmfSessions.reduce((s, p) => s + p.correct_count, 0);
+                    return total > 0 ? Math.round((correct / total) * 100) : 0;
+                  })()}%
+                </p>
+                <p className="text-sm text-secondary">Accuracy</p>
+              </div>
+              <div className="bg-card border border-theme rounded-xl p-4 text-center shadow-theme-sm">
+                <p className="text-4xl font-bold text-info mb-1">
+                  {(() => {
+                    const total = vmfSessions.reduce((s, p) => s + p.questions_answered, 0);
+                    const totalTime = vmfSessions.reduce((s, p) => s + (p.avg_time_seconds * p.questions_answered), 0);
+                    return total > 0 ? Math.round(totalTime / total) : 0;
+                  })()}s
+                </p>
+                <p className="text-sm text-secondary">Avg Time/Q</p>
+              </div>
+            </div>
+
+            {vmfSessions.length > 0 ? (
+              <>
+                {/* By-subsection breakdown (reuses PracticeBySectionContent lookalike) */}
+                <LockedSection title="Foundation by Topic" icon="📈" isPremium={isPremium}>
+                  <div className="bg-card border border-theme rounded-xl shadow-theme-sm">
+                    <div className="px-6 py-4 border-b border-theme">
+                      <h2 className="font-semibold text-primary">📈 Foundation by Topic</h2>
+                    </div>
+                    <div className="overflow-x-auto">
+                      <div className="min-w-[780px] px-6 py-2.5 border-b border-theme flex items-center gap-0 text-[11px] text-secondary font-bold uppercase tracking-wider">
+                        <span className="w-[28px] shrink-0 text-center"></span>
+                        <span className="w-[140px] shrink-0 text-left">Topic</span>
+                        <span className="w-[80px] shrink-0 text-center">Corr</span>
+                        <span className="w-[80px] shrink-0 text-center">Wrong</span>
+                        <span className="w-[60px] shrink-0 text-center">Q</span>
+                        <span className="w-[80px] shrink-0 text-center">Acc</span>
+                        <span className="w-[80px] shrink-0 text-center">Med</span>
+                        <span className="w-[190px] shrink-0 text-left">Time Dist.</span>
+                      </div>
+                      <div className="divide-y divide-theme-light">
+                        {SUBSECTION_NAMES.map(name => {
+                          const sessions = vmfSessions.filter(p => p.section === name);
+                          const totalQ = sessions.reduce((s, p) => s + p.questions_answered, 0);
+                          const correct = sessions.reduce((s, p) => s + p.correct_count, 0);
+                          const allTimes = sessions.flatMap(p => p.question_times || []).filter(t => t > 0).sort((a, b) => a - b);
+                          const tn = allTimes.length;
+                          const accs = sessions.filter(p => p.questions_answered > 0).map(p => Math.round((p.correct_count / p.questions_answered) * 100)).sort((a, b) => a - b);
+                          const n = accs.length;
+                          const medianTime = tn > 0 ? (tn % 2 === 1 ? allTimes[Math.floor(tn / 2)] : Math.round((allTimes[tn / 2 - 1] + allTimes[tn / 2]) / 2)) : 0;
+                          const q1 = tn > 0 ? allTimes[Math.floor(tn * 0.25)] : 0;
+                          const q3 = tn > 0 ? allTimes[Math.floor(tn * 0.75)] : 0;
+                          const accuracy = totalQ > 0 ? Math.round((correct / totalQ) * 100) : 0;
+                          const accColor = accuracy >= 70 ? 'text-success' : accuracy >= 40 ? 'text-warning' : 'text-danger';
+                          const fmt = (sec: number) => sec >= 60 ? `${Math.floor(sec / 60)}m${sec % 60}s` : `${sec}s`;
+                          const icon = SUBSECTION_ICONS_MAP[name] || '📝';
+                          const shortNameMap: Record<string, string> = {
+                            'Percentages': '%', 'Ratios & Proportions': 'Ratio', 'Fractions & Decimals': 'Frac', 'Data Basics': 'Data',
+                          };
+
+                          return (
+                            <div key={name} className="min-w-[780px] px-6 py-3.5 flex items-center gap-0 hover:bg-elevated transition">
+                              <span className="text-base shrink-0 w-[28px] text-center">{icon}</span>
+                              <span className="text-sm font-medium text-primary w-[140px] shrink-0 truncate text-left">{shortNameMap[name] || name}</span>
+                              <span className="text-xs text-success shrink-0 w-[80px] text-center font-medium">{correct}</span>
+                              <span className="text-xs text-danger shrink-0 w-[80px] text-center font-medium">{totalQ - correct}</span>
+                              <span className="text-xs text-muted shrink-0 w-[60px] text-center">{totalQ}</span>
+                              <span className={`text-sm font-bold shrink-0 w-[80px] text-center ${accColor}`}>{accuracy}%</span>
+                              <span className="text-xs font-semibold text-blue-400 shrink-0 w-[80px] text-center">{n > 0 ? fmt(medianTime) : '—'}</span>
+                              <div className="w-[190px] shrink-0 flex items-center justify-start">
+                                {totalQ >= 2 ? (
+                                  <svg viewBox="0 0 100 16" className="w-full h-4 max-w-[100px]" preserveAspectRatio="none">
+                                    <line x1={0} y1={8} x2={100} y2={8} stroke="#334155" strokeWidth="1"/>
+                                    <rect x={Math.min(q1 / 240 * 100, 96)} y={3} width={Math.max(Math.min((q3 - q1) / 240 * 100, 96), 3)} height={10} rx={1.5} fill="rgba(59,130,246,0.2)" stroke="#60a5fa" strokeWidth="1"><title>Q₁: {fmt(q1)} · Q₃: {fmt(q3)}</title></rect>
+                                    <line x1={Math.min(medianTime / 240 * 100, 99)} y1={2} x2={Math.min(medianTime / 240 * 100, 99)} y2={14} stroke="#60a5fa" strokeWidth="2"><title>Median: {fmt(medianTime)}</title></line>
+                                    <line x1={Math.min((tn > 0 ? allTimes[0] : 0) / 240 * 100, 99)} y1={5} x2={Math.min((tn > 0 ? allTimes[0] : 0) / 240 * 100, 99)} y2={11} stroke="#475569" strokeWidth="1"><title>Min: {fmt(tn > 0 ? allTimes[0] : 0)}</title></line>
+                                    <line x1={Math.min((tn > 0 ? allTimes[tn - 1] : 0) / 240 * 100, 99)} y1={5} x2={Math.min((tn > 0 ? allTimes[tn - 1] : 0) / 240 * 100, 99)} y2={11} stroke="#475569" strokeWidth="1"><title>Max: {fmt(tn > 0 ? allTimes[tn - 1] : 0)}</title></line>
+                                  </svg>
+                                ) : totalQ === 1 ? (
+                                  <svg viewBox="0 0 16 16" className="w-4 h-4 shrink-0"><circle cx={8} cy={8} r="4" fill="rgba(59,130,246,0.3)" stroke="#60a5fa" strokeWidth="1"><title>Time: {fmt(medianTime)}</title></circle></svg>
+                                ) : (<span className="text-[10px] text-muted">—</span>)}
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                </LockedSection>
+
+                {/* Week-over-week progress */}
+                <LockedSection title="Weekly Progress" icon="📅" isPremium={isPremium}>
+                  <div className="bg-card border border-theme rounded-xl shadow-theme-sm">
+                    <div className="px-6 py-4 border-b border-theme">
+                      <h2 className="font-semibold text-primary">📅 Weekly Progress</h2>
+                    </div>
+                    <div className="p-6">
+                      {(() => {
+                        // Group sessions into ISO weeks
+                        const weekMap: Record<string, { total: number; correct: number; sessions: number }> = {};
+                        for (const s of vmfSessions) {
+                          const d = new Date(s.started_at);
+                          // Get Monday of the week
+                          const day = d.getDay();
+                          const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+                          const monday = new Date(d);
+                          monday.setDate(diff);
+                          const weekKey = monday.toISOString().slice(0, 10);
+                          if (!weekMap[weekKey]) weekMap[weekKey] = { total: 0, correct: 0, sessions: 0 };
+                          weekMap[weekKey].total += s.questions_answered;
+                          weekMap[weekKey].correct += s.correct_count;
+                          weekMap[weekKey].sessions++;
+                        }
+
+                        const weeks = Object.entries(weekMap)
+                          .sort(([a], [b]) => a.localeCompare(b))
+                          .slice(-10);
+
+                        if (weeks.length === 0) return <p className="text-center text-muted text-sm">No weekly data yet.</p>;
+
+                        const maxTotal = Math.max(...weeks.map(w => w[1].total), 1);
+                        const maxCorrect = Math.max(...weeks.map(w => w[1].correct), 1);
+
+                        return (
+                          <div className="space-y-4">
+                            {/* Bar chart - questions per week */}
+                            <div>
+                              <p className="text-xs font-medium text-secondary mb-2">Questions per Week</p>
+                              <div className="flex items-end gap-2 h-28">
+                                {weeks.map(w => {
+                                  const [week, v] = w;
+                                  const h = (v.total / maxTotal) * 100;
+                                  return (
+                                    <div key={week} className="flex-1 flex flex-col items-center gap-1">
+                                      <span className="text-[9px] text-muted">{v.total}</span>
+                                      <div className="w-full bg-accent/20 rounded-t" style={{ height: `${Math.max(h, 4)}%` }}>
+                                        <div className="w-full bg-accent rounded-t h-full opacity-70" style={{ height: `${(v.correct / v.total) * 100}%` }} />
+                                      </div>
+                                      <span className="text-[8px] text-muted whitespace-nowrap">
+                                        {new Date(week + 'T00:00:00').toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
+                                      </span>
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            </div>
+
+                            {/* Accuracy trend line */}
+                            <div>
+                              <p className="text-xs font-medium text-secondary mb-2">Accuracy Trend</p>
+                              <svg viewBox="0 0 300 60" className="w-full h-16 overflow-visible" preserveAspectRatio="none">
+                                {(() => {
+                                  const accs = weeks.map((entry) => { const v = entry[1]; return v.total > 0 ? Math.round((v.correct / v.total) * 100) : 0; });
+                                  const pts = accs.map((a, i) => `${(i / (Math.max(accs.length - 1, 1))) * 300},${60 - (a / 100) * 50}`);
+                                  const line = pts.join(' ');
+                                  return (
+                                    <>
+                                      <defs><linearGradient id="vmf-acc-fill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="rgb(99 102 241)" stopOpacity="0.3"/><stop offset="100%" stopColor="rgb(99 102 241)" stopOpacity="0.02"/></linearGradient></defs>
+                                      <path d={`M${line}`} fill="none" stroke="rgb(99 102 241)" strokeWidth="1.5" vectorEffect="non-scaling-stroke" />
+                                      <path d={`M${line} M0,60 L300,60`} fill="none" stroke="rgb(99 102 241)" strokeWidth="0.5" strokeDasharray="3,3" opacity="0.3" />
+                                      {accs.map((a, i) => (
+                                        <circle key={i} cx={(i / (Math.max(accs.length - 1, 1))) * 300} cy={60 - (a / 100) * 50} r="2.5" fill="rgb(99 102 241)" stroke="#fff" strokeWidth="1">
+                                          <title>Week {i + 1}: {a}%</title>
+                                        </circle>
+                                      ))}
+                                    </>
+                                  );
+                                })()}
+                              </svg>
+                            </div>
+                          </div>
+                        );
+                      })()}
+                    </div>
+                  </div>
+                </LockedSection>
+
+                {/* Recent sessions */}
+                <LockedSection title="Recent Sessions" icon="🔄" isPremium={isPremium}>
+                  <div className="bg-card border border-theme rounded-xl shadow-theme-sm">
+                    <div className="px-6 py-4 border-b border-theme flex items-center justify-between">
+                      <h2 className="font-semibold text-primary">🔄 Recent Sessions</h2>
+                      <Link href="/student/quant-foundations" className="text-xs text-accent hover:text-accent/80 font-medium">Practice Now →</Link>
+                    </div>
+                    <div className="divide-y divide-theme-light">
+                      {vmfSessions.slice(0, 15).map(s => {
+                        const pct = s.questions_answered > 0 ? Math.round((s.correct_count / s.questions_answered) * 100) : 0;
+                        const icon = SUBSECTION_ICONS_MAP[s.section] || '📝';
+                        return (
+                          <div key={s.id} className="px-6 py-3 flex items-center justify-between hover:bg-elevated transition">
+                            <div className="flex items-center gap-3 min-w-0 flex-1">
+                              <span className="text-lg shrink-0">{icon}</span>
+                              <div className="min-w-0">
+                                <p className="text-sm font-medium text-primary truncate">{s.section}</p>
+                                <p className="text-[10px] text-secondary">
+                                  {new Date(s.started_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                                  {s.avg_time_seconds > 0 && <> · ⏱ {s.avg_time_seconds}s/q</>}
+                                </p>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-4 shrink-0">
+                              <span className="text-xs text-muted">{s.correct_count}/{s.questions_answered}</span>
+                              <span className={`text-sm font-bold ${pct >= 70 ? 'text-success' : pct >= 40 ? 'text-warning' : 'text-danger'}`}>{pct}%</span>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </LockedSection>
+              </>
+            ) : (
+              <div className="bg-card border border-theme rounded-xl p-10 text-center text-muted">
+                <p>No Quant Foundations data yet. Start practicing to see your analytics!</p>
+                <Link href="/student/quant-foundations" className="mt-4 inline-flex px-6 py-3 rounded-xl font-medium bg-accent text-white hover:bg-accent-hover transition">
+                  Start Foundations 🧮
+                </Link>
+              </div>
+            )}
           </div>
         )}
 
