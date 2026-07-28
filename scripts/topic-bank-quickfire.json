@@ -1,0 +1,252 @@
+[
+  {
+    "section": "English Language",
+    "title": "Inference from Literary Analogies",
+    "domain": "critical-reading"
+  },
+  {
+    "section": "English Language",
+    "title": "Authorial Tone and Attitude Detection",
+    "domain": "reading-comprehension"
+  },
+  {
+    "section": "English Language",
+    "title": "Word Meaning from Contextual Clues",
+    "domain": "vocabulary"
+  },
+  {
+    "section": "English Language",
+    "title": "Identifying Implied Assumptions in Statements",
+    "domain": "logical-language"
+  },
+  {
+    "section": "English Language",
+    "title": "Purpose and Function of a Referenced Idea",
+    "domain": "passage-analysis"
+  },
+  {
+    "section": "English Language",
+    "title": "Logical Extension of a Given Argument",
+    "domain": "critical-reasoning"
+  },
+  {
+    "section": "English Language",
+    "title": "Distinguishing Fact from Opinion in Text",
+    "domain": "comprehension"
+  },
+  {
+    "section": "English Language",
+    "title": "Recognising Rhetorical Devices",
+    "domain": "language-analysis"
+  },
+  {
+    "section": "English Language",
+    "title": "Summarising a Complex Idea",
+    "domain": "synthesis"
+  },
+  {
+    "section": "English Language",
+    "title": "Comparing Two Viewpoints on an Issue",
+    "domain": "comparative-analysis"
+  },
+  {
+    "section": "Current Affairs Including General Knowledge",
+    "title": "Constitutional Amendments and Their Impact",
+    "domain": "indian-polity"
+  },
+  {
+    "section": "Current Affairs Including General Knowledge",
+    "title": "International Organisations and Their Mandates",
+    "domain": "international-relations"
+  },
+  {
+    "section": "Current Affairs Including General Knowledge",
+    "title": "Key Supreme Court Judgments of 2025-26",
+    "domain": "legal-gk"
+  },
+  {
+    "section": "Current Affairs Including General Knowledge",
+    "title": "Government Schemes and Their Objectives",
+    "domain": "indian-polity"
+  },
+  {
+    "section": "Current Affairs Including General Knowledge",
+    "title": "Economic Indicators and Budget Highlights",
+    "domain": "economy"
+  },
+  {
+    "section": "Current Affairs Including General Knowledge",
+    "title": "Environmental Treaties and Climate Commitments",
+    "domain": "environment"
+  },
+  {
+    "section": "Current Affairs Including General Knowledge",
+    "title": "UN Bodies and India's Role in Peacekeeping",
+    "domain": "international-relations"
+  },
+  {
+    "section": "Current Affairs Including General Knowledge",
+    "title": "Science and Technology Milestones of 2026",
+    "domain": "science-tech"
+  },
+  {
+    "section": "Current Affairs Including General Knowledge",
+    "title": "Important Days, Reports, and Index Rankings",
+    "domain": "general-knowledge"
+  },
+  {
+    "section": "Current Affairs Including General Knowledge",
+    "title": "Awards and Honours of 2025-26",
+    "domain": "general-knowledge"
+  },
+  {
+    "section": "Legal Reasoning",
+    "title": "Applying the Doctrine of Precedent",
+    "domain": "legal-principles"
+  },
+  {
+    "section": "Legal Reasoning",
+    "title": "Distinguishing Civil from Criminal Liability",
+    "domain": "legal-classification"
+  },
+  {
+    "section": "Legal Reasoning",
+    "title": "Identifying Void and Voidable Contracts",
+    "domain": "contract-law"
+  },
+  {
+    "section": "Legal Reasoning",
+    "title": "Application of Tort Law Principles",
+    "domain": "torts"
+  },
+  {
+    "section": "Legal Reasoning",
+    "title": "Analysing Criminal Intent and Defence Arguments",
+    "domain": "criminal-law"
+  },
+  {
+    "section": "Legal Reasoning",
+    "title": "Constitutional Rights and Their Limitations",
+    "domain": "constitutional-law"
+  },
+  {
+    "section": "Legal Reasoning",
+    "title": "Resolving Conflicts Between Laws",
+    "domain": "legal-reasoning"
+  },
+  {
+    "section": "Legal Reasoning",
+    "title": "Property Transfer Rules and Exceptions",
+    "domain": "property-law"
+  },
+  {
+    "section": "Legal Reasoning",
+    "title": "Partnership and Agency Liability Scenarios",
+    "domain": "commercial-law"
+  },
+  {
+    "section": "Legal Reasoning",
+    "title": "Fundamental Duties vs Fundamental Rights",
+    "domain": "constitutional-law"
+  },
+  {
+    "section": "Logical Reasoning",
+    "title": "Strengthening and Weakening Arguments",
+    "domain": "critical-reasoning"
+  },
+  {
+    "section": "Logical Reasoning",
+    "title": "Identifying Flaws in Analogical Reasoning",
+    "domain": "logical-flaws"
+  },
+  {
+    "section": "Logical Reasoning",
+    "title": "Drawing Valid Inferences from Premises",
+    "domain": "inference"
+  },
+  {
+    "section": "Logical Reasoning",
+    "title": "Recognising Circular Reasoning",
+    "domain": "logical-flaws"
+  },
+  {
+    "section": "Logical Reasoning",
+    "title": "Causal Reasoning and Correlation vs Causation",
+    "domain": "reasoning"
+  },
+  {
+    "section": "Logical Reasoning",
+    "title": "Conditional Logic: If-Then Statements",
+    "domain": "formal-logic"
+  },
+  {
+    "section": "Logical Reasoning",
+    "title": "Identifying Unstated Assumptions",
+    "domain": "assumptions"
+  },
+  {
+    "section": "Logical Reasoning",
+    "title": "Parallel Reasoning and Argument Structure",
+    "domain": "reasoning-structure"
+  },
+  {
+    "section": "Logical Reasoning",
+    "title": "Evaluating Evidence and Its Sufficiency",
+    "domain": "evidence-evaluation"
+  },
+  {
+    "section": "Logical Reasoning",
+    "title": "Contradiction and Consistency Checks",
+    "domain": "logical-consistency"
+  },
+  {
+    "section": "Quantitative Techniques",
+    "title": "Percentage Change in Mixed Data Sets",
+    "domain": "percentages"
+  },
+  {
+    "section": "Quantitative Techniques",
+    "title": "Ratio and Proportion Application Problems",
+    "domain": "ratios"
+  },
+  {
+    "section": "Quantitative Techniques",
+    "title": "Average and Weighted Average Calculations",
+    "domain": "averages"
+  },
+  {
+    "section": "Quantitative Techniques",
+    "title": "Time and Work Efficiency Problems",
+    "domain": "time-work"
+  },
+  {
+    "section": "Quantitative Techniques",
+    "title": "Profit, Loss, and Discount Scenarios",
+    "domain": "profit-loss"
+  },
+  {
+    "section": "Quantitative Techniques",
+    "title": "Simple and Compound Interest Applications",
+    "domain": "interest"
+  },
+  {
+    "section": "Quantitative Techniques",
+    "title": "Speed, Distance, and Time in Mixed Contexts",
+    "domain": "speed-time"
+  },
+  {
+    "section": "Quantitative Techniques",
+    "title": "Data Sufficiency and Interpretation",
+    "domain": "data-interpretation"
+  },
+  {
+    "section": "Quantitative Techniques",
+    "title": "Number Series and Pattern Recognition",
+    "domain": "sequences"
+  },
+  {
+    "section": "Quantitative Techniques",
+    "title": "Probability and Combinatorics Basics",
+    "domain": "probability"
+  }
+]

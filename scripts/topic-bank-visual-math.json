@@ -1,0 +1,158 @@
+[
+  {
+    "subsection": "Percentages",
+    "concept": "Percentage of a Whole",
+    "difficulty": "easy",
+    "description": "Grid-based percentage problems — shaded cells in a 10x10 grid"
+  },
+  {
+    "subsection": "Percentages",
+    "concept": "Pie Chart Percentages",
+    "difficulty": "easy",
+    "description": "Circle divided into sectors — identifying percentage from shaded portion"
+  },
+  {
+    "subsection": "Percentages",
+    "concept": "Percentage Increase via Tape Diagrams",
+    "difficulty": "medium",
+    "description": "Bar or tape extended by a percentage of itself"
+  },
+  {
+    "subsection": "Percentages",
+    "concept": "Finding the Whole from a Percentage",
+    "difficulty": "medium",
+    "description": "Reverse percentage — given a part and %, find the whole"
+  },
+  {
+    "subsection": "Percentages",
+    "concept": "Successive Percentage Changes",
+    "difficulty": "hard",
+    "description": "Two percentage changes applied sequentially on a number line"
+  },
+  {
+    "subsection": "Percentages",
+    "concept": "Comparing Quantities via Percentage Difference",
+    "difficulty": "medium",
+    "description": "Bar chart comparison — percentage difference between two values"
+  },
+  {
+    "subsection": "Ratios & Proportions",
+    "concept": "Part-to-Whole Ratio from Tape Diagrams",
+    "difficulty": "easy",
+    "description": "Segmented bar showing one part as fraction of total"
+  },
+  {
+    "subsection": "Ratios & Proportions",
+    "concept": "Dividing a Quantity in a Given Ratio",
+    "difficulty": "easy",
+    "description": "Bar split into ratio parts — find each share"
+  },
+  {
+    "subsection": "Ratios & Proportions",
+    "concept": "Equivalent Ratios via Scaling",
+    "difficulty": "easy",
+    "description": "Two tape diagrams scaled proportionally to find equivalence"
+  },
+  {
+    "subsection": "Ratios & Proportions",
+    "concept": "Three-Part Ratio Problems",
+    "difficulty": "medium",
+    "description": "Bar with three components in a given ratio"
+  },
+  {
+    "subsection": "Ratios & Proportions",
+    "concept": "Proportion Scaling in Recipes",
+    "difficulty": "medium",
+    "description": "Scaling a recipe proportionally — changing batch sizes"
+  },
+  {
+    "subsection": "Ratios & Proportions",
+    "concept": "Cross-Multiplication on Double Number Lines",
+    "difficulty": "medium",
+    "description": "Double number line showing equivalent ratios"
+  },
+  {
+    "subsection": "Fractions & Decimals",
+    "concept": "Fraction of a Whole via Area Model",
+    "difficulty": "easy",
+    "description": "Rectangle or circle divided into equal parts, some shaded"
+  },
+  {
+    "subsection": "Fractions & Decimals",
+    "concept": "Equivalent Fractions Using Bar Models",
+    "difficulty": "easy",
+    "description": "Bar split into different numbers of parts — same shaded area"
+  },
+  {
+    "subsection": "Fractions & Decimals",
+    "concept": "Adding Fractions with Like Denominators",
+    "difficulty": "easy",
+    "description": "Bar with two differently-coloured shaded portions"
+  },
+  {
+    "subsection": "Fractions & Decimals",
+    "concept": "Fractions on a Number Line",
+    "difficulty": "easy",
+    "description": "Locating a fraction on a number line from 0 to 1"
+  },
+  {
+    "subsection": "Fractions & Decimals",
+    "concept": "Converting Decimals to Fractions via Grid",
+    "difficulty": "medium",
+    "description": "10x10 grid showing decimal as shaded cells — express as fraction"
+  },
+  {
+    "subsection": "Fractions & Decimals",
+    "concept": "Ordering Decimals on a Number Line",
+    "difficulty": "medium",
+    "description": "Number line with multiple decimal points to order"
+  },
+  {
+    "subsection": "Data Basics",
+    "concept": "Reading Data from Bar Charts",
+    "difficulty": "easy",
+    "description": "Vertical bar chart — compare heights to answer questions"
+  },
+  {
+    "subsection": "Data Basics",
+    "concept": "Interpreting Pie Chart Angles",
+    "difficulty": "easy",
+    "description": "Pie chart with percentage labels — find the sector angle"
+  },
+  {
+    "subsection": "Data Basics",
+    "concept": "Computing the Mean from a Bar Set",
+    "difficulty": "easy",
+    "description": "Bars of different heights — find the balancing point (mean)"
+  },
+  {
+    "subsection": "Data Basics",
+    "concept": "Range and Spread on a Number Line",
+    "difficulty": "easy",
+    "description": "Dots on a number line — find the span between extremes"
+  },
+  {
+    "subsection": "Data Basics",
+    "concept": "Finding the Median Visually",
+    "difficulty": "medium",
+    "description": "Ordered dots on a number line — identify the middle value"
+  },
+  {
+    "subsection": "Data Basics",
+    "concept": "Simple Probability from a Segmented Bar",
+    "difficulty": "easy",
+    "description": "Bar with coloured segments — probability of picking one colour"
+  },
+  {
+    "subsection": "Data Basics",
+    "concept": "Mode and Frequency from Dot Plots",
+    "difficulty": "medium",
+    "description": "Dot plot or tally chart — identify most frequent value"
+  },
+  {
+    "subsection": "Data Basics",
+    "concept": "Comparing Two Data Sets via Bar Pairs",
+    "difficulty": "medium",
+    "description": "Paired bar chart comparing two groups across categories"
+  }
+]

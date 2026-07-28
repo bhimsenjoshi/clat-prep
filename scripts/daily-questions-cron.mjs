@@ -61,6 +61,28 @@ const TOPIC_BANK_FILES = {
   'Logical Reasoning': 'topic-bank-logical.json',
 };
 
+// Quick Fire uses same CLAT sections but a separate topic bank (standalone questions)
+const QUICKFIRE_BANK_FILE = 'topic-bank-quickfire.json';
+let _quickfireBankCache = null;
+function loadQuickFireBank() {
+  if (_quickfireBankCache) return _quickfireBankCache;
+  const filepath = resolve(scriptDir, QUICKFIRE_BANK_FILE);
+  if (!existsSync(filepath)) return null;
+  _quickfireBankCache = JSON.parse(readFileSync(filepath, 'utf-8'));
+  return _quickfireBankCache;
+}
+
+// Visual Math uses subsections as the grouping dimension
+const VISUAL_MATH_BANK_FILE = 'topic-bank-visual-math.json';
+let _visualMathBankCache = null;
+function loadVisualMathBank() {
+  if (_visualMathBankCache) return _visualMathBankCache;
+  const filepath = resolve(scriptDir, VISUAL_MATH_BANK_FILE);
+  if (!existsSync(filepath)) return null;
+  _visualMathBankCache = JSON.parse(readFileSync(filepath, 'utf-8'));
+  return _visualMathBankCache;
+}
+
 // ─── Load a topic bank JSON file ───
 function loadTopicBank(section) {
   const filename = TOPIC_BANK_FILES[section];
@@ -95,7 +117,11 @@ async function pickNextTopic(section) {
 }
 
 const SECTIONS = ['English Language', 'Current Affairs Including General Knowledge', 'Legal Reasoning', 'Logical Reasoning'];
+const QUICKFIRE_SECTIONS = ['English Language', 'Current Affairs Including General Knowledge', 'Legal Reasoning', 'Logical Reasoning', 'Quantitative Techniques'];
+const VISUAL_MATH_SUBSECTIONS = ['Percentages', 'Ratios & Proportions', 'Fractions & Decimals', 'Data Basics'];
 const QS_PER_PASSAGE = 6;
+const QS_PER_QUICKFIRE = 5;
+const QS_PER_VISUAL_MATH = 2;
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
@@ -555,6 +581,390 @@ async function processSection(section) {
   return { passages: sectionPassages, questions: sectionQuestions };
 }
 
+// ─── Quick Fire Topics: pick next unused from topic bank ───
+
+async function pickNextQuickFireTopic(section) {
+  const bank = loadQuickFireBank();
+  if (!bank) return null;
+  const sectionTopics = bank.filter(t => t.section === section);
+  if (sectionTopics.length === 0) return null;
+
+  const baseUrl = `${SUPABASE_URL.replace(/\/$/, '')}/rest/v1/quick_fire_tracker`;
+  const usedUrl = `${baseUrl}?section=eq.${encodeURIComponent(section)}&select=bank_index&order=bank_index`;
+  let usedData;
+  try { usedData = await supabaseGet(usedUrl); } catch { usedData = []; }
+
+  const usedIndices = new Set((usedData || []).map(r => r.bank_index));
+  for (let i = 0; i < sectionTopics.length; i++) {
+    if (!usedIndices.has(i)) {
+      return { index: i, topic: sectionTopics[i] };
+    }
+  }
+  console.log(`    🔄 All QF topics used for ${section}. Resetting.`);
+  return { index: 0, topic: sectionTopics[0] };
+}
+
+// ─── Visual Math Topics: pick next unused concept from topic bank ───
+
+async function pickNextVisualMathTopic(subsection) {
+  const bank = loadVisualMathBank();
+  if (!bank) return null;
+  const subTopics = bank.filter(t => t.subsection === subsection);
+  if (subTopics.length === 0) return null;
+
+  const baseUrl = `${SUPABASE_URL.replace(/\/$/, '')}/rest/v1/visual_math_tracker`;
+  const usedUrl = `${baseUrl}?subsection=eq.${encodeURIComponent(subsection)}&select=bank_index&order=bank_index`;
+  let usedData;
+  try { usedData = await supabaseGet(usedUrl); } catch { usedData = []; }
+
+  const usedIndices = new Set((usedData || []).map(r => r.bank_index));
+  for (let i = 0; i < subTopics.length; i++) {
+    if (!usedIndices.has(i)) {
+      return { index: i, topic: subTopics[i] };
+    }
+  }
+  console.log(`    🔄 All VM topics used for ${subsection}. Resetting.`);
+  return { index: 0, topic: subTopics[0] };
+}
+
+// ─── Build Quick Fire prompt (standalone, no passage) ───
+
+function buildQuickFirePrompt(section) {
+  const prompts = {
+    'English Language': `You are a CLAT English Language expert. Generate ${QS_PER_QUICKFIRE} standalone (no passage) questions that test reading comprehension skills.
+
+Each question must be SELF-CONTAINED — present a short statement, excerpt, or premise (1-3 lines) within the question_text itself, then ask about it. 
+
+CRITICAL RULES:
+- NO external passage required — the stimulus must be part of the question
+- Questions must test: inference, word meaning in context, author's tone, implied meaning, logical extension
+- All 4 options must be distinct and plausible
+- Explanations must explain why the correct answer is right AND why each wrong option is incorrect
+
+Return JSON array of ${QS_PER_QUICKFIRE} objects, each with:
+  - "question_text": string (includes a short self-contained stimulus)
+  - "options": {"A": "...", "B": "...", "C": "...", "D": "..."}
+  - "correct_answer": "A"|"B"|"C"|"D"
+  - "explanation": string
+  - "difficulty": "easy"|"medium"|"hard"
+  - "tags": [string array]`,
+
+    'Current Affairs Including General Knowledge': `You are a CLAT Current Affairs & GK expert. Generate ${QS_PER_QUICKFIRE} standalone (no passage) GK questions.
+
+CRITICAL RULES:
+- NO trivia (dates, launch sites, names of schemes, abbreviations) — these are BANNED
+- Questions must test: understanding of constitutional provisions, international agreements, landmark judgments, institutional structures, historical context, economic concepts
+- All 4 options must be distinct and plausible
+- Explanations must provide factual rationale for the correct answer AND debunk each wrong option
+- The question_text must be a complete, standalone question that doesn't need a passage
+
+Return JSON array of ${QS_PER_QUICKFIRE} objects, each with:
+  - "question_text": string
+  - "options": {"A": "...", "B": "...", "C": "...", "D": "..."}
+  - "correct_answer": "A"|"B"|"C"|"D"
+  - "explanation": string
+  - "difficulty": "easy"|"medium"|"hard"
+  - "tags": [string array]`,
+
+    'Legal Reasoning': `You are a CLAT Legal Reasoning expert. Generate ${QS_PER_QUICKFIRE} standalone (no passage) legal reasoning questions.
+
+Each question must present a SHORT legal principle (1-2 sentences) and a brief fact pattern (1-3 sentences) within the question_text itself, then ask the student to apply the principle.
+
+CRITICAL RULES:
+- Cover: contract, tort, criminal law, constitutional law principles
+- At least 2 questions should present hypothetical variations
+- All 4 options must be distinct and legally plausible
+- Explanations must apply the legal principle to the facts and explain why each option is right/wrong
+
+Return JSON array of ${QS_PER_QUICKFIRE} objects, each with:
+  - "question_text": string (includes principle + facts)
+  - "options": {"A": "...", "B": "...", "C": "...", "D": "..."}
+  - "correct_answer": "A"|"B"|"C"|"D"
+  - "explanation": string
+  - "difficulty": "easy"|"medium"|"hard"
+  - "tags": [string array]`,
+
+    'Logical Reasoning': `You are a CLAT Logical Reasoning expert. Generate ${QS_PER_QUICKFIRE} standalone (no passage) critical reasoning questions.
+
+Each question must present a SHORT argument (2-4 sentences) within the question_text itself, then ask the student to: strengthen, weaken, find the assumption, identify the flaw, draw an inference, or find a parallel argument.
+
+CRITICAL RULES:
+- The argument stimulus must be self-contained within question_text
+- Cover: assumption, weaken, strengthen, flaw, inference, parallel reasoning
+- All 4 options must be distinct and include plausible distractors (Out of Scope, Direct Reversal, Extreme Language)
+- Explanations must reference the argument's structure
+
+Return JSON array of ${QS_PER_QUICKFIRE} objects, each with:
+  - "question_text": string (includes the argument)
+  - "options": {"A": "...", "B": "...", "C": "...", "D": "..."}
+  - "correct_answer": "A"|"B"|"C"|"D"
+  - "explanation": string
+  - "difficulty": "easy"|"medium"|"hard"
+  - "tags": [string array]`,
+
+    'Quantitative Techniques': `You are a CLAT Quantitative Techniques content creator. Generate ${QS_PER_QUICKFIRE} standalone (no passage) quant questions.
+
+Each question must embed ALL necessary data within the question_text itself (2-4 sentences). No external table or passage needed.
+
+CRITICAL RULES:
+- Data must be clean whole numbers
+- Topics: percentage change, ratios, averages, profit/loss, time & work, speed/distance, simple interest
+- Each question must require a 1-2 step calculation — NOT a direct read
+- All 4 options must be plausible (common mistakes as distractors)
+- Explanations must show the step-by-step calculation
+
+Return JSON array of ${QS_PER_QUICKFIRE} objects, each with:
+  - "question_text": string (embeds all data)
+  - "options": {"A": "...", "B": "...", "C": "...", "D": "..."}
+  - "correct_answer": "A"|"B"|"C"|"D"
+  - "explanation": string
+  - "difficulty": "easy"|"medium"|"hard"
+  - "tags": [string array]`,
+  };
+  return prompts[section] || prompts['English Language'];
+}
+
+// ─── Build Visual Math prompt (visual thinking + SVG descriptions) ───
+
+function buildVisualMathPrompt(subsection, topicData) {
+  const basePrompt = `You are a CLAT Quant Foundations content creator. Generate ${QS_PER_VISUAL_MATH} visual-thinking math questions for the "${subsection}" subsection.
+
+Each question must include:
+1. A "passage" field that describes a VISUAL model the student should picture in their mind (grid, pie chart, bar diagram, tape diagram, or number line)
+2. The visual model described must match the data in the question EXACTLY
+3. A question_text that asks about that visual model
+
+VISUAL TYPES available: "grid" (10×10), "pie_chart" (circle sectors), "bar_diagram" (vertical bars), "tape_diagram" (segmented bars), "number_line" (position markers)
+
+CRITICAL RULES:
+- The passage must DESCRIBE a specific visual — numbers, positions, shaded counts, segment sizes — all concrete
+- Questions must be solvable by visualizing the described model
+- Difficulty: ${topicData.difficulty || 'medium'}
+- Options must be {A, B, C, D} as a JSON object
+- All numerical values must be clean whole numbers or simple fractions
+- Explanations must reference the visual model and show the calculation
+
+Return JSON object with:
+  - "questions": array of ${QS_PER_VISUAL_MATH} objects, each with:
+    - "question_text": string
+    - "passage": string (the visual description — 3-5 sentences)
+    - "options": {"A": "...", "B": "...", "C": "...", "D": "..."}
+    - "correct_answer": "A"|"B"|"C"|"D"
+    - "explanation": string
+    - "difficulty": "${topicData.difficulty || 'medium'}"
+    - "visual_type": "grid"|"pie_chart"|"bar_diagram"|"tape_diagram"|"number_line"
+    - "tags": ["${subsection}", "visualization", string array]`;
+
+  return basePrompt;
+}
+
+// ─── Process a single section for Quick Fire (standalone questions) ───
+
+async function processQuickFire(section) {
+  console.log(`  ⚡ Quick Fire ${section}...`);
+  let totalQ = 0;
+
+  // Pick topic
+  const topicPick = await pickNextQuickFireTopic(section);
+  if (!topicPick) {
+    console.log(`    ⚠️ No topic bank for ${section}. Skipping.`);
+    return { questions: 0 };
+  }
+  console.log(`    📋 QF Topic: "${topicPick.topic.title}" (#${topicPick.index})`);
+
+  // Call AI for standalone questions
+  const prompt = buildQuickFirePrompt(section);
+  const { questions: rawQuestions } = await callDeepSeek(
+    prompt,
+    `Generate ${QS_PER_QUICKFIRE} standalone Quick Fire CLAT questions for "${section}" section. Topic focus: ${topicPick.topic.title} (${topicPick.topic.domain}).`
+  );
+
+  if (!rawQuestions || rawQuestions.length === 0) {
+    console.log(`    ⚠️ No Quick Fire questions generated`);
+    return { questions: 0 };
+  }
+
+  // Normalise and validate
+  const validQuestions = [];
+  const seenTexts = new Set();
+  for (let i = 0; i < rawQuestions.length; i++) {
+    const q = rawQuestions[i];
+    // Standalone normalise (no passage_id)
+    let question_text = q.question_text || q.question;
+    const correct_answer = q.correct_option || q.correct_answer || q.correctAnswer || q.answer;
+    let options = q.options;
+    if (!question_text || !options || !correct_answer) continue;
+
+    let parsedOptions = options;
+    if (typeof parsedOptions === 'string') { try { parsedOptions = JSON.parse(parsedOptions); } catch { continue; } }
+    if (Array.isArray(parsedOptions)) {
+      const labels = ['A','B','C','D'];
+      const obj = {};
+      parsedOptions.forEach((opt, idx) => { if (idx < labels.length) obj[labels[idx]] = String(opt); });
+      parsedOptions = obj;
+    }
+
+    let resolvedAnswer = String(correct_answer);
+    if (!['A','B','C','D'].includes(resolvedAnswer) && parsedOptions && typeof parsedOptions === 'object') {
+      for (const [label, value] of Object.entries(parsedOptions)) {
+        if (String(value).trim() === resolvedAnswer.trim()) { resolvedAnswer = label; break; }
+      }
+    }
+
+    if (!['A','B','C','D'].includes(resolvedAnswer)) continue;
+    const optKeys = Object.keys(parsedOptions);
+    if (optKeys.length < 4) continue;
+
+    const normalised = {
+      section,
+      topic: topicPick.topic.title,
+      question_text,
+      passage: null,          // standalone — no passage
+      options: parsedOptions,
+      correct_option: resolvedAnswer,
+      explanation: q.explanation || null,
+      difficulty: (q.difficulty || 'medium').toLowerCase(),
+      source: 'daily_quickfire',
+      marks: 1,
+      negative_marks: 0.25,
+      question_number: i + 1,
+      passage_id: null,       // Quick Fire = standalone
+      tags: q.tags || [],
+      validation_status: 'pending',
+    };
+
+    const key = (normalised.question_text || '').trim().toLowerCase().slice(0, 100);
+    if (seenTexts.has(key)) continue;
+    seenTexts.add(key);
+    validQuestions.push(normalised);
+  }
+
+  if (validQuestions.length === 0) {
+    console.log(`    ❌ No valid Quick Fire questions after normalisation`);
+    return { questions: 0 };
+  }
+
+  // Insert into practice_questions
+  await supabaseInsert('practice_questions', validQuestions);
+  totalQ = validQuestions.length;
+  console.log(`    ✅ ${totalQ} Quick Fire questions inserted (standalone)`);
+
+  // Record topic usage
+  const trackerUrl = `${SUPABASE_URL.replace(/\/$/, '')}/rest/v1/quick_fire_tracker`;
+  await fetch(trackerUrl, {
+    method: 'POST',
+    headers: { ...SUPABASE_HEADERS, 'Prefer': 'resolution=merge-duplicates' },
+    body: JSON.stringify({
+      section,
+      bank_index: topicPick.index,
+      topic_title: topicPick.topic.title,
+      domain: topicPick.topic.domain,
+    }),
+  });
+
+  return { questions: totalQ };
+}
+
+// ─── Process a single subsection for Visual Math ───
+
+async function processVisualMath(subsection) {
+  console.log(`  🧮 Visual Math ${subsection}...`);
+  let totalQ = 0;
+
+  const topicPick = await pickNextVisualMathTopic(subsection);
+  if (!topicPick) {
+    console.log(`    ⚠️ No topic bank for ${subsection}. Skipping.`);
+    return { questions: 0 };
+  }
+  console.log(`    📋 VM Topic: "${topicPick.topic.concept}" (#${topicPick.index})`);
+
+  const prompt = buildVisualMathPrompt(subsection, topicPick.topic);
+  const result = await callDeepSeek(
+    prompt,
+    `Generate ${QS_PER_VISUAL_MATH} visual thinking math questions for "${subsection}" on concept: ${topicPick.topic.concept} — ${topicPick.topic.description}.`
+  );
+
+  const rawQuestions = result?.questions || result || [];
+  if (!rawQuestions || rawQuestions.length === 0) {
+    console.log(`    ⚠️ No Visual Math questions generated`);
+    return { questions: 0 };
+  }
+
+  const validQuestions = [];
+  const seenTexts = new Set();
+  for (let i = 0; i < rawQuestions.length; i++) {
+    const q = rawQuestions[i];
+    if (!q.question_text || !q.options || !q.correct_answer) continue;
+
+    let parsedOptions = q.options;
+    if (typeof parsedOptions === 'string') { try { parsedOptions = JSON.parse(parsedOptions); } catch { continue; } }
+    if (Array.isArray(parsedOptions)) {
+      const labels = ['A','B','C','D'];
+      const obj = {};
+      parsedOptions.forEach((opt, idx) => { if (idx < labels.length) obj[labels[idx]] = String(opt); });
+      parsedOptions = obj;
+    }
+
+    let resolvedAnswer = String(q.correct_answer);
+    if (!['A','B','C','D'].includes(resolvedAnswer) && parsedOptions && typeof parsedOptions === 'object') {
+      for (const [label, value] of Object.entries(parsedOptions)) {
+        if (String(value).trim() === resolvedAnswer.trim()) { resolvedAnswer = label; break; }
+      }
+    }
+
+    if (!['A','B','C','D'].includes(resolvedAnswer)) continue;
+    const optKeys = Object.keys(parsedOptions);
+    if (optKeys.length < 4) continue;
+
+    const validVisualTypes = ['grid', 'pie_chart', 'bar_diagram', 'tape_diagram', 'number_line'];
+    const visualType = validVisualTypes.includes(q.visual_type) ? q.visual_type : 'none';
+
+    const normalised = {
+      subsection,
+      topic: topicPick.topic.concept,
+      question_text: q.question_text,
+      passage: q.passage || null,
+      options: parsedOptions,
+      correct_option: resolvedAnswer,
+      explanation: q.explanation || null,
+      difficulty: (q.difficulty || topicPick.topic.difficulty || 'medium').toLowerCase(),
+      source: 'daily_visual_math',
+      visual_type: visualType,
+      tags: q.tags || [subsection, 'visualization', 'foundational'],
+    };
+
+    const key = (normalised.question_text || '').trim().toLowerCase().slice(0, 100);
+    if (seenTexts.has(key)) continue;
+    seenTexts.add(key);
+    validQuestions.push(normalised);
+  }
+
+  if (validQuestions.length === 0) {
+    console.log(`    ❌ No valid Visual Math questions after normalisation`);
+    return { questions: 0 };
+  }
+
+  // Insert into visual_math_questions
+  await supabaseInsert('visual_math_questions', validQuestions);
+  totalQ = validQuestions.length;
+  console.log(`    ✅ ${totalQ} Visual Math questions inserted`);
+
+  // Record topic usage
+  const trackerUrl = `${SUPABASE_URL.replace(/\/$/, '')}/rest/v1/visual_math_tracker`;
+  await fetch(trackerUrl, {
+    method: 'POST',
+    headers: { ...SUPABASE_HEADERS, 'Prefer': 'resolution=merge-duplicates' },
+    body: JSON.stringify({
+      subsection,
+      bank_index: topicPick.index,
+      concept: topicPick.topic.concept,
+      difficulty: topicPick.topic.difficulty,
+    }),
+  });
+
+  return { questions: totalQ };
+}
+
 // ─── Main ───
 
 async function main() {
@@ -567,24 +977,69 @@ async function main() {
     process.exit(1);
   }
 
-  console.log(`📅 Generating 1 passage + ${QS_PER_PASSAGE} questions per section (${SECTIONS.length} sections)...`);
+  console.log(`📅 Generating passage-based questions (${SECTIONS.length} sections) + Quick Fire (${QUICKFIRE_SECTIONS.length} sections) + Visual Math (${VISUAL_MATH_SUBSECTIONS.length} subsections)...`);
 
-  // Run all sections in parallel — keeps total time ~max(1 section) < 120s
-  const sectionResults = await Promise.allSettled(
-    SECTIONS.map(async (section) => {
-      try {
-        return await processSection(section);
-      } catch (err) {
-        console.log(`    ❌ ${section} error: ${err.message}`);
-        return { passages: 0, questions: 0 };
-      }
-    })
-  );
+  // Run ALL generators in parallel — passage, quickfire, visual math
+  const allPromises = [];
 
-  const totalPassages = sectionResults.reduce((s, r) => s + (r.status === 'fulfilled' ? r.value.passages : 0), 0);
-  const totalQuestions = sectionResults.reduce((s, r) => s + (r.status === 'fulfilled' ? r.value.questions : 0), 0);
+  // 1. Passage-based sections
+  for (const section of SECTIONS) {
+    allPromises.push(
+      (async () => {
+        try { return { type: 'passage', section, result: await processSection(section) }; }
+        catch (err) { console.log(`    ❌ ${section} error: ${err.message}`); return { type: 'passage', section, result: { passages: 0, questions: 0 } }; }
+      })()
+    );
+  }
 
-  // Step 5: Run auto-validation on newly inserted questions
+  // 2. Quick Fire sections
+  for (const section of QUICKFIRE_SECTIONS) {
+    allPromises.push(
+      (async () => {
+        try { return { type: 'quickfire', section, result: await processQuickFire(section) }; }
+        catch (err) { console.log(`    ❌ Quick Fire ${section} error: ${err.message}`); return { type: 'quickfire', section, result: { questions: 0 } }; }
+      })()
+    );
+  }
+
+  // 3. Visual Math subsections
+  for (const subsection of VISUAL_MATH_SUBSECTIONS) {
+    allPromises.push(
+      (async () => {
+        try { return { type: 'visual_math', subsection, result: await processVisualMath(subsection) }; }
+        catch (err) { console.log(`    ❌ Visual Math ${subsection} error: ${err.message}`); return { type: 'visual_math', subsection, result: { questions: 0 } }; }
+      })()
+    );
+  }
+
+  const allResults = await Promise.allSettled(allPromises);
+
+  let totalPassages = 0;
+  let totalPassageQ = 0;
+  let totalQuickFireQ = 0;
+  let totalVisualMathQ = 0;
+
+  for (const r of allResults) {
+    if (r.status !== 'fulfilled') continue;
+    const { type, result } = r.value;
+    if (type === 'passage') {
+      totalPassages += result.passages || 0;
+      totalPassageQ += result.questions || 0;
+    } else if (type === 'quickfire') {
+      totalQuickFireQ += result.questions || 0;
+    } else if (type === 'visual_math') {
+      totalVisualMathQ += result.questions || 0;
+    }
+  }
+
+  const totalQuestions = totalPassageQ + totalQuickFireQ + totalVisualMathQ;
+  console.log(`\n📊 Daily Summary:`);
+  console.log(`   📄 Passage: ${totalPassages} passages + ${totalPassageQ} questions`);
+  console.log(`   ⚡ Quick Fire: ${totalQuickFireQ} questions`);
+  console.log(`   🧮 Visual Math: ${totalVisualMathQ} questions`);
+  console.log(`   📝 Total: ${totalQuestions} questions`);
+
+  // Step 5: Run auto-validation on newly inserted questions (practice_questions only)
   try {
     if (!validatePendingQuestions) {
       const validatorModule = await import('./validate-questions.mjs');
