@@ -320,7 +320,12 @@ export default function AnalyticsPage() {
         };
       });
 
-      setAttempts(enriched);
+      setAttempts(enriched.filter(a => {
+        // Permanent rule — only meaningful attempts: submitted with duration ≥ 60 min
+        if (!a.submitted_at) return false;
+        const dur = new Date(a.submitted_at).getTime() - new Date(a.started_at).getTime();
+        return !isNaN(dur) && dur >= 60 * 60 * 1000;
+      }));
       setLoading(false);
     };
     load();

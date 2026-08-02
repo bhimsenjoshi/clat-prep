@@ -15,6 +15,7 @@ interface Test {
 interface Attempt {
   test_id: string;
   submitted_at: string | null;
+  started_at: string;
 }
 
 export default function StudentTestsPage() {
@@ -39,11 +40,24 @@ export default function StudentTestsPage() {
       if (authUser) {
         const { data: attemptsData } = await supabase
           .from('attempts')
-          .select('test_id, submitted_at')
+          .select('test_id, submitted_at, started_at')
           .eq('student_id', authUser.id);
 
+        // Permanent rule — only meaningful attempts count:
+        // submitted with duration ≥ 60 min, or active in-progress (< 150 min)
+        const nowMs = Date.now();
+        const meaningfulAttempts = ((attemptsData ?? []) as Attempt[]).filter((a: Attempt) => {
+          const started = new Date(a.started_at).getTime();
+          if (isNaN(started)) return false;
+          if (a.submitted_at !== null) {
+            const dur = new Date(a.submitted_at).getTime() - started;
+            return !isNaN(dur) && dur >= 60 * 60 * 1000;
+          }
+          return (nowMs - started) <= 150 * 60 * 1000;
+        });
+
         const map = new Map<string, boolean | 'in_progress'>(
-          (attemptsData ?? []).map((a: Attempt) => [a.test_id, a.submitted_at !== null ? true : 'in_progress'])
+          meaningfulAttempts.map((a: Attempt) => [a.test_id, a.submitted_at !== null ? true : 'in_progress'])
         );
         setAttemptedMap(map);
       }

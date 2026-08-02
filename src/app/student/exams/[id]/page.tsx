@@ -115,6 +115,17 @@ export default function ExamTakingPage({ params }: TestPageProps) {
         .eq('student_id', user.id)
         .order('started_at', { ascending: false });
 
+      // Auto-clean junk attempts: submitted but spent < 60 min (accidental submits)
+      for (const a of (existingAttempts ?? [])) {
+        if (a.submitted_at && a.started_at) {
+          const dur = new Date(a.submitted_at).getTime() - new Date(a.started_at).getTime();
+          if (!isNaN(dur) && dur < 60 * 60 * 1000) {
+            await supabase.from('responses').delete().eq('attempt_id', a.id);
+            await supabase.from('attempts').delete().eq('id', a.id);
+          }
+        }
+      }
+
       const unsubmitted = (existingAttempts ?? []).find((a: any) => !a.submitted_at);
 
       if (unsubmitted) {
