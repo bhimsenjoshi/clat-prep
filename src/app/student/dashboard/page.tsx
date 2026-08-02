@@ -48,6 +48,35 @@ const LEGAL_MAXIMS = [
   { maxim: 'Volenti non fit injuria', meaning: 'Injury cannot be done to a willing person' },
 ];
 
+// ─── Thoughts of the Day (determination & ambition — EN + HI) ───
+const THOUGHTS_OF_THE_DAY = [
+  { en: "The future belongs to those who believe in the beauty of their dreams.", hi: "भविष्य उन्हीं का होता है जो अपने सपनों की सुंदरता पर विश्वास करते हैं।", author: "Eleanor Roosevelt" },
+  { en: "Success is not final, failure is not fatal: it is the courage to continue that counts.", hi: "सफलता अंतिम नहीं, असफलता घातक नहीं — आगे बढ़ते रहने का साहस ही मायने रखता है।", author: "Winston Churchill" },
+  { en: "The harder you work for something, the greater you'll feel when you achieve it.", hi: "जितनी मेहनत करोगे, सफलता मिलने पर उतनी ही खुशी महसूस होगी।" },
+  { en: "Dream big. Work hard. Stay focused.", hi: "बड़े सपने देखो, कड़ी मेहनत करो, और फोकस बनाए रखो।" },
+  { en: "Your only limit is your mind.", hi: "तुम्हारी एकमात्र सीमा तुम्हारा मन है।" },
+  { en: "It always seems impossible until it's done.", hi: "जब तक काम पूरा न हो, तब तक सब असंभव लगता है।", author: "Nelson Mandela" },
+  { en: "The secret of getting ahead is getting started.", hi: "आगे बढ़ने का राज़ है — शुरुआत कर देना।", author: "Mark Twain" },
+  { en: "Don't watch the clock; do what it does. Keep going.", hi: "घड़ी मत देखो, वही करो जो घड़ी करती है — चलते रहो।", author: "Sam Levenson" },
+  { en: "Strength grows in the moments when you think you can't go on but you keep going anyway.", hi: "ताकत उन्हीं पलों में बढ़ती है जब लगता है अब नहीं हो पाएगा, फिर भी तुम चलते रहते हो।" },
+  { en: "Aim for the moon. If you miss, you'll land among the stars.", hi: "चाँद को निशाना बनाओ। चूक भी जाओ तो सितारों के बीच उतरोगी।" },
+  { en: "Determination is the wake-up call to the human will.", hi: "दृढ़ संकल्प इंसानी इरादों की सुबह की पुकार है।" },
+  { en: "Believe you can and you're halfway there.", hi: "विश्वास करो कि तुम कर सकते हो, और आधी मंज़िल तय हो गई।", author: "Theodore Roosevelt" },
+  { en: "Every expert was once a beginner.", hi: "हर विशेषज्ञ कभी शुरुआत करने वाला ही था।" },
+  { en: "Push yourself, because no one else is going to do it for you.", hi: "खुद को आगे बढ़ाओ, क्योंकि तुम्हारी जगह कोई और नहीं बढ़ेगा।" },
+  { en: "Small daily improvements are the key to staggering long-term results.", hi: "रोज़ की छोटी-छोटी सुधार ही बड़े दीर्घकालिक परिणामों की कुंजी है।" },
+  { en: "Do something today that your future self will thank you for.", hi: "आज कुछ ऐसा करो, जिस पर कल तुम्हें गर्व हो।" },
+  { en: "The only way to do great work is to love what you do.", hi: "महान काम करने का एकमात्र तरीका है — अपने काम से प्यार करना।", author: "Steve Jobs" },
+  { en: "Don't stop when you're tired. Stop when you're done.", hi: "थक जाने पर मत रुको, काम पूरा होने पर रुको।" },
+  { en: "Ambitious hearts never settle for less than their best.", hi: "महत्वाकांक्षी दिल कभी अपने सर्वश्रेष्ठ से कम पर संतोष नहीं करते।" },
+  { en: "One step at a time is still moving forward.", hi: "एक-एक कदम चलना भी आगे बढ़ना ही है।" },
+  { en: "Your determination today decides your destination tomorrow.", hi: "आज का आपका संकल्प ही कल की मंज़िल तय करता है।" },
+  { en: "Difficult roads often lead to beautiful destinations.", hi: "कठिन रास्ते ही अक्सर सुंदर मंज़िलों तक ले जाते हैं।" },
+  { en: "The best time to plant a tree was 20 years ago. The second best time is now.", hi: "पेड़ लगाने का सबसे अच्छा समय 20 साल पहले था, और दूसरा सबसे अच्छा समय अभी है।" },
+  { en: "Focus on your goal. Don't look in any direction but ahead.", hi: "अपने लक्ष्य पर ध्यान रखो — आगे के अलावा किसी और दिशा में मत देखो।" },
+  { en: "Discipline is the bridge between goals and accomplishment.", hi: "अनुशासन ही लक्ष्य और उपलब्धि के बीच का पुल है।", author: "Jim Rohn" },
+];
+
 // ─── Announcements ───
 const ANNOUNCEMENTS = [
   {
@@ -95,6 +124,7 @@ export default function StudentDashboard() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [countdown, setCountdown] = useState<Countdown>({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [maximIndex, setMaximIndex] = useState(0);
+  const [thoughtIndex, setThoughtIndex] = useState(0);
   const [dismissedAnnouncements, setDismissedAnnouncements] = useState<Set<string>>(new Set());
   const [editorialItems, setEditorialItems] = useState<any[]>([]);
   const [editorialsLoading, setEditorialsLoading] = useState(true);
@@ -141,6 +171,13 @@ export default function StudentDashboard() {
     const today = new Date().toISOString().split('T')[0];
     const dayNum = today.split('-').reduce((s, n) => s + parseInt(n), 0);
     setMaximIndex(dayNum % LEGAL_MAXIMS.length);
+  }, []);
+
+  // ─── Thought of the day (deterministic per date) ───
+  useEffect(() => {
+    const today = new Date().toISOString().split('T')[0];
+    const dayNum = today.split('-').reduce((s, n) => s + parseInt(n), 0);
+    setThoughtIndex(dayNum % THOUGHTS_OF_THE_DAY.length);
   }, []);
 
   // ─── Load data ───
@@ -404,6 +441,7 @@ export default function StudentDashboard() {
   );
 
   const maxim = LEGAL_MAXIMS[maximIndex];
+  const thought = THOUGHTS_OF_THE_DAY[thoughtIndex];
   const noActivity = attempts.length === 0 && practiceSessions.length === 0;
 
   return (
@@ -557,29 +595,42 @@ export default function StudentDashboard() {
       <main className="max-w-6xl mx-auto px-4 py-6 space-y-5">
 
         {/* ════════════════════════════════════════════ */}
-        {/* #1 — CLAT 2026 COUNTDOWN                     */}
-        {/* #1 — CLAT 2027 COUNTDOWN                     */}
-        <div className="bg-elevated border border-theme rounded-2xl p-6 md:p-8 text-center shadow-lg shadow-theme-sm">
-          <div className="flex items-center justify-center gap-2 mb-1">
-            <span className="text-2xl">⌛</span>
-            <span className="text-xs font-semibold text-accent uppercase tracking-widest">CLAT 2027</span>
-          </div>
-          <p className="text-xl md:text-2xl font-bold text-primary mb-1">
-            {countdown.days > 0
-              ? `${countdown.days} days ${countdown.hours}h ${countdown.minutes}m ${countdown.seconds}s`
-              : 'Exam Day! 🚀'}
-          </p>
-          <p className="text-xs text-accent/70">Sunday, 6 December 2026</p>
-          <div className="mt-3 flex items-center justify-center gap-2">
-            <div className="h-1.5 bg-tint-indigo rounded-full max-w-xs w-full overflow-hidden">
-              <div
-                className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full transition-all"
-                style={{ width: `${Math.max(0, Math.min(100, ((CLAT_DATE.getTime() - Date.now()) / (CLAT_DATE.getTime() - new Date('2025-07-01').getTime())) * 100))}%` }}
-              />
+        {/* #1 — CLAT 2027 COUNTDOWN + THOUGHT OF THE DAY */}
+        {/* ════════════════════════════════════════════ */}
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
+          <div className="bg-elevated border border-theme rounded-2xl p-6 md:p-8 text-center shadow-lg shadow-theme-sm md:col-span-3">
+            <div className="flex items-center justify-center gap-2 mb-1">
+              <span className="text-2xl">⌛</span>
+              <span className="text-xs font-semibold text-accent uppercase tracking-widest">CLAT 2027</span>
             </div>
-            <span className="text-[10px] text-accent/60 shrink-0">
-              {countdown.days > 0 ? `${countdown.days}d left` : 'D-Day!'}
-            </span>
+            <p className="text-xl md:text-2xl font-bold text-primary mb-1">
+              {countdown.days > 0
+                ? `${countdown.days} days ${countdown.hours}h ${countdown.minutes}m ${countdown.seconds}s`
+                : 'Exam Day! 🚀'}
+            </p>
+            <p className="text-xs text-accent/70">Sunday, 6 December 2026</p>
+            <div className="mt-3 flex items-center justify-center gap-2">
+              <div className="h-1.5 bg-tint-indigo rounded-full max-w-xs w-full overflow-hidden">
+                <div
+                  className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full transition-all"
+                  style={{ width: `${Math.max(0, Math.min(100, ((CLAT_DATE.getTime() - Date.now()) / (CLAT_DATE.getTime() - new Date('2025-07-01').getTime())) * 100))}%` }}
+                />
+              </div>
+              <span className="text-[10px] text-accent/60 shrink-0">
+                {countdown.days > 0 ? `${countdown.days}d left` : 'D-Day!'}
+              </span>
+            </div>
+          </div>
+          <div className="bg-elevated border border-theme rounded-2xl p-5 md:p-6 shadow-lg shadow-theme-sm md:col-span-2 flex flex-col justify-center text-center">
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <span className="text-xl">💭</span>
+              <span className="text-[10px] font-semibold text-accent uppercase tracking-widest">Thought of the Day</span>
+            </div>
+            <p className="text-sm md:text-base font-bold text-primary italic leading-snug">&ldquo;{thought.en}&rdquo;</p>
+            <p className="text-xs text-secondary mt-2 leading-relaxed">{thought.hi}</p>
+            {thought.author && (
+              <p className="text-[10px] text-accent/60 mt-2">— {thought.author}</p>
+            )}
           </div>
         </div>
 
