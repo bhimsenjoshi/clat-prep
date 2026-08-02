@@ -1009,32 +1009,47 @@ export default function AnalyticsPage() {
             .filter(a => a.submitted_at)
             .sort((a, b) => new Date(a.submitted_at!).getTime() - new Date(b.submitted_at!).getTime());
           if (data.length === 0) return <p className="text-sm text-muted text-center py-6">No completed attempts yet.</p>;
+
+          // Absolute (raw) score per attempt — exact from section_scores
+          const rawOf = (d: AttemptWithScores) => {
+            const ss = (d.section_scores ?? {}) as Record<string, { raw: number; attempted: number }>;
+            const raw = Object.values(ss).reduce((s, v) => s + (v?.raw ?? 0), 0);
+            if (raw > 0) return Math.round(raw * 100) / 100;
+            const total = Object.values(d.section_totals ?? {}).reduce((s, v) => s + v, 0) || 120;
+            return Math.round(((d.total_score ?? 0) / 100) * total * 100) / 100;
+          };
+          const maxOf = (d: AttemptWithScores) => Object.values(d.section_totals ?? {}).reduce((s, v) => s + v, 0) || 120;
+          const maxPossible = Math.max(...data.map(maxOf), 1);
+          const minV = 0, range = maxPossible - minV;
+
           const W = 640, H = 240, PL = 46, PR = 20, PT = 20, PB = 42;
-          const maxV = 100, minV = 0, range = maxV - minV;
           const x = (i: number) => PL + (i * (W - PL - PR)) / Math.max(1, data.length - 1);
-          const y = (s: number) => PT + (maxV - Math.max(minV, Math.min(maxV, s))) / range * (H - PT - PB);
-          const line = data.map((d, i) => `${x(i)},${y(d.total_score ?? 0)}`).join(' ');
-          const gridVals = [0, 25, 50, 75, 100];
+          const y = (s: number) => PT + (maxPossible - Math.max(minV, Math.min(maxPossible, s))) / range * (H - PT - PB);
+          const line = data.map((d, i) => `${x(i)},${y(rawOf(d))}`).join(' ');
+          const gridVals = [0, 0.25, 0.5, 0.75, 1].map(f => Math.round(maxPossible * f));
           return (
             <div className="overflow-x-auto">
+              <p className="text-[10px] text-secondary mb-2">📏 Absolute score — correct − 0.25 × wrong (max {maxPossible})</p>
               <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-auto min-w-[440px]">
                 {gridVals.map(g => (
                   <g key={g}>
                     <line x1={PL} y1={y(g)} x2={W - PR} y2={y(g)} stroke="#334155" strokeWidth="0.5" strokeDasharray="4 4" />
-                    <text x={PL - 8} y={y(g) + 4} textAnchor="end" fontSize="11" fill="#94a3b8">{g}%</text>
+                    <text x={PL - 8} y={y(g) + 4} textAnchor="end" fontSize="11" fill="#94a3b8">{g}</text>
                   </g>
                 ))}
                 <polygon points={`${PL},${y(minV)} ${line} ${x(data.length - 1)},${y(minV)}`} fill="rgba(59,130,246,0.12)" />
                 <polyline points={line} fill="none" stroke="#60a5fa" strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round" />
                 {data.map((d, i) => {
-                  const sc = d.total_score ?? 0;
-                  const dotColor = sc >= 70 ? '#34d399' : sc >= 40 ? '#fbbf24' : '#fb7185';
+                  const raw = rawOf(d);
+                  const total = maxOf(d);
+                  const pct = (raw / total) * 100;
+                  const dotColor = pct >= 70 ? '#34d399' : pct >= 40 ? '#fbbf24' : '#fb7185';
                   return (
                     <g key={d.id}>
-                      <circle cx={x(i)} cy={y(sc)} r="5" fill="#0f172a" stroke={dotColor} strokeWidth="2.5">
-                        <title>{d.test_title} · Attempt #{d.attempt_number} · {new Date(d.submitted_at!).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })} · {sc}%</title>
+                      <circle cx={x(i)} cy={y(raw)} r="5" fill="#0f172a" stroke={dotColor} strokeWidth="2.5">
+                        <title>{d.test_title} · Attempt #{d.attempt_number} · {new Date(d.submitted_at!).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })} · {raw}/{total} ({Math.round(pct)}%)</title>
                       </circle>
-                      <text x={x(i)} y={Math.max(y(sc) - 10, 12)} textAnchor="middle" fontSize="11" fontWeight="bold" fill="#e2e8f0">{sc}%</text>
+                      <text x={x(i)} y={Math.max(y(raw) - 10, 12)} textAnchor="middle" fontSize="11" fontWeight="bold" fill="#e2e8f0">{raw}</text>
                       <text x={x(i)} y={H - 16} textAnchor="middle" fontSize="10" fill="#94a3b8">
                         {new Date(d.submitted_at!).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
                       </text>
