@@ -36,9 +36,11 @@ interface AttemptWithScores {
   attempt_number: number;
   submitted_at: string | null;
   total_score: number | null;
-  section_scores: Record<string, number> | null;
+  section_scores: Record<string, { raw: number; attempted: number }> | null;
   section_time: Record<string, number>;
   section_totals: Record<string, number>;
+  section_correct: Record<string, number>;
+  section_answered: Record<string, number>;
   answered_count: number;
   correct_count: number;
   total_time_seconds: number;
@@ -114,6 +116,7 @@ export default function AnalyticsPage() {
   const supabase = createClient();
   const [profile, setProfile] = useState<any>(null);
   const [attempts, setAttempts] = useState<AttemptWithScores[]>([]);
+  const [expandedAttempt, setExpandedAttempt] = useState<string | null>(null);
   const [practiceSessions, setPracticeSessions] = useState<PracticeSession[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<'practice' | 'quick_fire' | 'tests' | 'editorials' | 'quant_foundations'>('practice');
@@ -274,18 +277,27 @@ export default function AnalyticsPage() {
         const rList = respByAttempt[a.id] ?? [];
 
         // Section names from Supabase FK chain: questions → sections
-        const answered = rList.filter((r: any) => r.selected_option !== null).length;
+        const answered = rList.filter((r: any) => r.selected_option).length;
         const correct = rList.filter((r: any) => r.is_correct === true).length;
         const totalTime = rList.reduce((s: number, r: any) => s + (r.time_taken_seconds ?? 0), 0);
 
         const sectionTime: Record<string, number> = {};
         const sectionQuestionTimes: Record<string, number[]> = {};
+        const sectionTotals: Record<string, Set<string>> = {};
+        const sectionCorrect: Record<string, number> = {};
+        const sectionAnswered: Record<string, number> = {};
 
         for (const r of rList) {
           const secName = r.questions?.sections?.name as string || 'Unknown';
           sectionTime[secName] = (sectionTime[secName] ?? 0) + (r.time_taken_seconds ?? 0);
           if (!sectionQuestionTimes[secName]) sectionQuestionTimes[secName] = [];
           sectionQuestionTimes[secName].push(r.time_taken_seconds ?? 0);
+          if (!sectionTotals[secName]) sectionTotals[secName] = new Set();
+          sectionTotals[secName].add(r.question_id);
+          if (r.selected_option) {
+            sectionAnswered[secName] = (sectionAnswered[secName] ?? 0) + 1;
+            if (r.is_correct === true) sectionCorrect[secName] = (sectionCorrect[secName] ?? 0) + 1;
+          }
         }
 
         return {
@@ -297,7 +309,9 @@ export default function AnalyticsPage() {
           total_score: a.total_score,
           section_scores: a.section_scores,
           section_time: sectionTime,
-          section_totals: {},
+          section_totals: Object.fromEntries(Object.entries(sectionTotals).map(([k, v]) => [k, v.size])),
+          section_correct: sectionCorrect,
+          section_answered: sectionAnswered,
           answered_count: answered,
           correct_count: correct,
           total_time_seconds: totalTime,
@@ -822,6 +836,67 @@ export default function AnalyticsPage() {
     </div>
   );
 
+  const renderAttemptDetail = (a: AttemptWithScores) => {
+    const ss = (a.section_scores ?? {}) as Record<string, { raw: number; attempted: number }>;
+    const totals = a.section_totals ?? {};
+    const corrects = a.section_correct ?? {};
+    const answered = a.section_answered ?? {};
+    const attemptTotalQ = Object.values(totals).reduce((s, v) => s + v, 0) || a.answered_count;
+    const shortName: Record<string, string> = {
+      'English Language': 'English',
+      'Current Affairs Including General Knowledge': 'CA',
+      'Legal Reasoning': 'Legal',
+      'Logical Reasoning': 'Logical',
+      'Quantitative Techniques': 'Quant',
+    };
+    return (
+      <div className="border-t border-theme-light bg-elevated/40 px-6 py-4 space-y-3">
+        {/* Summary chips */}
+        <div className="flex flex-wrap items-center gap-2 text-[11px]">
+          <span className="px-2 py-1 rounded-md bg-card border border-theme text-success">✅ {a.correct_count} correct</span>
+          <span className="px-2 py-1 rounded-md bg-card border border-theme text-danger">❌ {Math.max(0, a.answered_count - a.correct_count)} wrong</span>
+          <span className="px-2 py-1 rounded-md bg-card border border-theme text-muted">⭕ {Math.max(0, attemptTotalQ - a.answered_count)} unanswered</span>
+          <span className="px-2 py-1 rounded-md bg-card border border-theme text-info">⏱ {formatTime(a.total_time_seconds)}</span>
+        </div>
+        {/* Per-section score bars */}
+        <div className="space-y-2">
+          {SECTION_NAMES.map(name => {
+            const sec = ss[name];
+            const total = totals[name] ?? 0;
+            const raw = sec?.raw ?? null;
+            const att = sec?.attempted ?? 0;
+            const cor = corrects[name] ?? 0;
+            const ans = answered[name] ?? 0;
+            const time = a.section_time?.[name] ?? 0;
+            if (raw === null && total === 0) return null;
+            const pct = total > 0 ? Math.max(0, Math.min(100, ((raw ?? 0) / total) * 100)) : 0;
+            const acc = ans > 0 ? Math.round((cor / ans) * 100) : 0;
+            const barColor = pct >= 70 ? 'from-emerald-500 to-green-400' : pct >= 40 ? 'from-amber-500 to-yellow-400' : 'from-rose-500 to-red-400';
+            const accColor = acc >= 70 ? 'text-success' : acc >= 40 ? 'text-warning' : 'text-danger';
+            return (
+              <div key={name} className="flex items-center gap-3">
+                <span className="text-sm w-6 shrink-0 text-center">{SECTION_ICONS[name]}</span>
+                <span className="text-xs w-16 shrink-0 font-medium text-primary truncate">{shortName[name] || name}</span>
+                <div className="flex-1 h-3.5 bg-elevated rounded-full overflow-hidden">
+                  <div className={`h-full rounded-full bg-gradient-to-r ${barColor}`} style={{ width: `${pct}%` }} />
+                </div>
+                <span className="text-xs font-bold text-primary w-20 shrink-0 text-right">{raw !== null ? `${raw}/${total}` : '—'}</span>
+                <span className={`text-xs font-semibold w-10 shrink-0 text-right ${accColor}`}>{ans > 0 ? `${acc}%` : '—'}</span>
+                <span className="text-[10px] text-muted w-16 shrink-0 text-right">{time > 0 ? formatTime(time) : '—'}</span>
+              </div>
+            );
+          })}
+        </div>
+        <div className="flex items-center justify-between text-[10px] text-muted">
+          <span>Score = correct − 0.25 × wrong · Acc = correct ÷ answered</span>
+          <Link href={`/student/exams/${a.test_id}/review?attempt=${a.id}`} className="text-accent hover:text-accent/80 font-medium shrink-0">
+            Full Review →
+          </Link>
+        </div>
+      </div>
+    );
+  };
+
   const TestHistoryContent = (
     <div className="bg-card border border-theme rounded-xl shadow-theme-sm">
       <div className="px-6 py-4 border-b border-theme flex items-center justify-between">
@@ -831,32 +906,38 @@ export default function AnalyticsPage() {
         </Link>
       </div>
       <div className="divide-y divide-theme-light">
-        {completed.slice(0, 20).map(a => (
-          <div key={a.id} className="px-6 py-3 flex items-center justify-between hover:bg-elevated transition">
-            <div className="min-w-0 flex-1">
-              <p className="text-sm font-medium text-primary truncate">
-                {a.test_title}
-              </p>
-              <p className="text-[10px] text-secondary">
-                Attempt #{a.attempt_number} · {new Date(a.started_at).toLocaleDateString('en-IN', {
-                  day: 'numeric', month: 'short', year: 'numeric'
-                })}
-              </p>
+        {completed.slice(0, 20).map(a => {
+          const isOpen = expandedAttempt === a.id;
+          return (
+            <div key={a.id}>
+              <button
+                onClick={() => setExpandedAttempt(isOpen ? null : a.id)}
+                className="w-full px-6 py-3 flex items-center justify-between hover:bg-elevated transition text-left cursor-pointer"
+              >
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-medium text-primary truncate">
+                    {a.test_title}
+                  </p>
+                  <p className="text-[10px] text-secondary">
+                    Attempt #{a.attempt_number} · {new Date(a.started_at).toLocaleDateString('en-IN', {
+                      day: 'numeric', month: 'short', year: 'numeric'
+                    })}
+                  </p>
+                </div>
+                <div className="flex items-center gap-4 shrink-0">
+                  <span className={`text-sm font-bold ${
+                    (a.total_score ?? 0) >= 70 ? 'text-success' :
+                    (a.total_score ?? 0) >= 40 ? 'text-warning' : 'text-danger'
+                  }`}>
+                    {a.total_score ?? '—'}%
+                  </span>
+                  <span className={`text-[10px] text-secondary transition-transform duration-150 ${isOpen ? 'rotate-180' : ''}`}>▾</span>
+                </div>
+              </button>
+              {isOpen && renderAttemptDetail(a)}
             </div>
-            <div className="flex items-center gap-4 shrink-0">
-              <span className={`text-sm font-bold ${
-                (a.total_score ?? 0) >= 70 ? 'text-success' :
-                (a.total_score ?? 0) >= 40 ? 'text-warning' : 'text-danger'
-              }`}>
-                {a.total_score ?? '—'}%
-              </span>
-              <Link href={`/student/exams/${a.test_id}/review?attempt=${a.id}`}
-                className="text-xs text-accent hover:text-accent/80 font-medium">
-                Review →
-              </Link>
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
@@ -913,6 +994,60 @@ export default function AnalyticsPage() {
           {avgScore}%
         </p>
         <p className="text-sm text-secondary">Average Test Score</p>
+      </div>
+    </div>
+  );
+
+  const TestProgressContent = (
+    <div className="bg-card border border-theme rounded-xl shadow-theme-sm">
+      <div className="px-6 py-4 border-b border-theme">
+        <h2 className="font-semibold text-primary">📈 Progress Over Time</h2>
+      </div>
+      <div className="p-6">
+        {(() => {
+          const data = [...completed]
+            .filter(a => a.submitted_at)
+            .sort((a, b) => new Date(a.submitted_at!).getTime() - new Date(b.submitted_at!).getTime());
+          if (data.length === 0) return <p className="text-sm text-muted text-center py-6">No completed attempts yet.</p>;
+          const W = 640, H = 240, PL = 46, PR = 20, PT = 20, PB = 42;
+          const maxV = 100, minV = 0, range = maxV - minV;
+          const x = (i: number) => PL + (i * (W - PL - PR)) / Math.max(1, data.length - 1);
+          const y = (s: number) => PT + (maxV - Math.max(minV, Math.min(maxV, s))) / range * (H - PT - PB);
+          const line = data.map((d, i) => `${x(i)},${y(d.total_score ?? 0)}`).join(' ');
+          const gridVals = [0, 25, 50, 75, 100];
+          return (
+            <div className="overflow-x-auto">
+              <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-auto min-w-[440px]">
+                {gridVals.map(g => (
+                  <g key={g}>
+                    <line x1={PL} y1={y(g)} x2={W - PR} y2={y(g)} stroke="#334155" strokeWidth="0.5" strokeDasharray="4 4" />
+                    <text x={PL - 8} y={y(g) + 4} textAnchor="end" fontSize="11" fill="#94a3b8">{g}%</text>
+                  </g>
+                ))}
+                <polygon points={`${PL},${y(minV)} ${line} ${x(data.length - 1)},${y(minV)}`} fill="rgba(59,130,246,0.12)" />
+                <polyline points={line} fill="none" stroke="#60a5fa" strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round" />
+                {data.map((d, i) => {
+                  const sc = d.total_score ?? 0;
+                  const dotColor = sc >= 70 ? '#34d399' : sc >= 40 ? '#fbbf24' : '#fb7185';
+                  return (
+                    <g key={d.id}>
+                      <circle cx={x(i)} cy={y(sc)} r="5" fill="#0f172a" stroke={dotColor} strokeWidth="2.5">
+                        <title>{d.test_title} · Attempt #{d.attempt_number} · {new Date(d.submitted_at!).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })} · {sc}%</title>
+                      </circle>
+                      <text x={x(i)} y={Math.max(y(sc) - 10, 12)} textAnchor="middle" fontSize="11" fontWeight="bold" fill="#e2e8f0">{sc}%</text>
+                      <text x={x(i)} y={H - 16} textAnchor="middle" fontSize="10" fill="#94a3b8">
+                        {new Date(d.submitted_at!).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
+                      </text>
+                    </g>
+                  );
+                })}
+              </svg>
+              {data.length === 1 && (
+                <p className="text-xs text-muted text-center mt-3">📌 Complete more tests — your score trend will appear here.</p>
+              )}
+            </div>
+          );
+        })()}
       </div>
     </div>
   );
@@ -1123,6 +1258,9 @@ export default function AnalyticsPage() {
             </LockedSection>
             {hasTestData ? (
               <>
+                <LockedSection title="Progress Over Time" icon="📈" isPremium={isPremium}>
+                  {TestProgressContent}
+                </LockedSection>
                 <LockedSection title="Section-wise Performance" icon="📊" isPremium={isPremium}>
                   {TestSectionPerformanceContent}
                 </LockedSection>
