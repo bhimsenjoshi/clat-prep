@@ -1,17 +1,26 @@
 import { createClient as createSupabaseClient } from '@supabase/supabase-js';
 import type { SupabaseClient } from '@supabase/supabase-js';
 
+let browserClient: SupabaseClient | null = null;
+
 /**
- * Browser-side Supabase client.
+ * Browser-side Supabase client — memoized SINGLETON.
+ * Creating a fresh client per render caused effects with `supabase` in their
+ * dependency array to re-run on every render (new object identity), producing
+ * an infinite getUser() + profiles.fetch() loop on the profile page
+ * (~111 auth + 111 REST calls per page view).
  * Session is stored in localStorage by default.
  * After sign-in, the access token is also saved to a cookie so the
  * server/middleware can read it during the next page load.
  */
 export function createClient() {
-  return createSupabaseClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  );
+  if (!browserClient) {
+    browserClient = createSupabaseClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    );
+  }
+  return browserClient;
 }
 
 /**
