@@ -595,21 +595,23 @@ export default function StudentDashboard() {
       <main className="max-w-6xl mx-auto px-4 py-6 space-y-5">
 
         {/* ════════════════════════════════════════════ */}
-        {/* #1 — CLAT 2027 COUNTDOWN + THOUGHT OF THE DAY */}
+        {/* #1 — CLAT 2027 COUNTDOWN                     */}
         {/* ════════════════════════════════════════════ */}
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
-          <div className="bg-elevated border border-theme rounded-2xl p-6 md:p-8 text-center shadow-lg shadow-theme-sm md:col-span-3">
-            <div className="flex items-center justify-center gap-2 mb-1">
+        <div className="bg-elevated border border-theme rounded-2xl p-5 md:p-6 shadow-lg shadow-theme-sm">
+          <div className="flex flex-col md:flex-row md:items-center gap-3 md:gap-6">
+            <div className="flex items-center justify-center gap-2 shrink-0">
               <span className="text-2xl">⌛</span>
               <span className="text-xs font-semibold text-accent uppercase tracking-widest">CLAT 2027</span>
             </div>
-            <p className="text-xl md:text-2xl font-bold text-primary mb-1">
-              {countdown.days > 0
-                ? `${countdown.days} days ${countdown.hours}h ${countdown.minutes}m ${countdown.seconds}s`
-                : 'Exam Day! 🚀'}
-            </p>
-            <p className="text-xs text-accent/70">Sunday, 6 December 2026</p>
-            <div className="mt-3 flex items-center justify-center gap-2">
+            <div className="text-center md:text-left">
+              <p className="text-xl md:text-2xl font-bold text-primary">
+                {countdown.days > 0
+                  ? `${countdown.days} days ${countdown.hours}h ${countdown.minutes}m ${countdown.seconds}s`
+                  : 'Exam Day! 🚀'}
+              </p>
+              <p className="text-xs text-accent/70 mt-0.5">Sunday, 6 December 2026</p>
+            </div>
+            <div className="flex-1 flex items-center justify-center gap-2 min-w-[160px]">
               <div className="h-1.5 bg-tint-indigo rounded-full max-w-xs w-full overflow-hidden">
                 <div
                   className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full transition-all"
@@ -621,7 +623,14 @@ export default function StudentDashboard() {
               </span>
             </div>
           </div>
-          <div className="bg-elevated border border-theme rounded-2xl p-5 md:p-6 shadow-lg shadow-theme-sm md:col-span-2 flex flex-col justify-center text-center">
+        </div>
+
+        {/* ════════════════════════════════════════════ */}
+        {/* #1b — THOUGHT OF THE DAY + LEGAL MAXIM       */}
+        {/* (side by side)                                */}
+        {/* ════════════════════════════════════════════ */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div className="bg-elevated border border-theme rounded-2xl p-5 md:p-6 shadow-lg shadow-theme-sm flex flex-col justify-center text-center">
             <div className="flex items-center justify-center gap-2 mb-2">
               <span className="text-xl">💭</span>
               <span className="text-[10px] font-semibold text-accent uppercase tracking-widest">Thought of the Day</span>
@@ -631,6 +640,14 @@ export default function StudentDashboard() {
             {thought.author && (
               <p className="text-[10px] text-accent/60 mt-2">— {thought.author}</p>
             )}
+          </div>
+          <div className="bg-elevated border border-theme rounded-2xl p-5 md:p-6 shadow-lg shadow-theme-sm flex flex-col justify-center text-center">
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <span className="text-xl">⚖️</span>
+              <span className="text-[10px] font-semibold text-accent uppercase tracking-widest">Legal Maxim of the Day</span>
+            </div>
+            <p className="text-sm md:text-base font-bold text-primary italic leading-snug">&ldquo;{maxim.maxim}&rdquo;</p>
+            <p className="text-xs text-secondary mt-2 leading-relaxed">{maxim.meaning}</p>
           </div>
         </div>
 
@@ -706,20 +723,8 @@ export default function StudentDashboard() {
         </SectionCard>
 
         {/* ════════════════════════════════════════════ */}
-        {/* #4 — LEGAL MAXIM OF THE DAY                   */}
+        {/* #4 — (moved to top: Thought + Legal Maxim)   */}
         {/* ════════════════════════════════════════════ */}
-        <SectionCard title="Legal Maxim of the Day" icon="⚖️" collapsible defaultExpanded={false}>
-          <div className="flex items-start gap-4">
-            <div className="w-10 h-10 rounded-lg bg-tint-amber flex items-center justify-center text-xl shrink-0">
-              ⚖️
-            </div>
-            <div className="min-w-0 flex-1">
-              <p className="text-[10px] text-amber-400/70 font-semibold uppercase tracking-wider">Legal Maxim of the Day</p>
-              <p className="text-sm font-bold text-primary mt-0.5 italic">&ldquo;{maxim.maxim}&rdquo;</p>
-              <p className="text-xs text-primary mt-1">{maxim.meaning}</p>
-            </div>
-          </div>
-        </SectionCard>
 
         {/* ════════════════════════════════════════════ */}
         {/* #5 — TODAY'S FOCUS (smart recommendation)    */}
