@@ -38,7 +38,7 @@ export default function LeaderboardPage() {
         .map(([_, v], i) => ({ rank: i + 1, ...v }));
       setRanked(rankedData);
 
-      // Per-test leaderboards — use the view
+      // Per-test leaderboards — ONE batched query instead of N+1
       const { data: testsData } = await supabase
         .from('tests')
         .select('id, title')
@@ -46,17 +46,17 @@ export default function LeaderboardPage() {
         .order('created_at', { ascending: false });
       setTests(testsData ?? []);
 
-      // Pre-fetch top 5 per test
+      // Pre-fetch top 5 per test in a single round-trip, group client-side
       const leaderboards: Record<string, any[]> = {};
-      if (testsData) {
+      if (testsData && testsData.length > 0) {
+        const testIds = testsData.map((t) => t.id);
+        const { data: allRanks } = await supabase
+          .from('leaderboard')
+          .select('*')
+          .in('test_id', testIds)
+          .order('test_rank');
         for (const test of testsData) {
-          const { data: ranks } = await supabase
-            .from('leaderboard')
-            .select('*')
-            .eq('test_id', test.id)
-            .order('test_rank')
-            .limit(5);
-          leaderboards[test.id] = ranks ?? [];
+          leaderboards[test.id] = (allRanks ?? []).filter((r: any) => r.test_id === test.id).slice(0, 5);
         }
       }
       setPerTestLeaderboards(leaderboards);

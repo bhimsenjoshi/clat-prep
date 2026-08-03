@@ -34,25 +34,32 @@ export default function AdminStudentsPage() {
       const studentsData = profiles ?? [];
       setStudents(studentsData);
 
-      // For each student, get their attempt stats
-      const stats = await Promise.all(
-        studentsData.map(async (student: any) => {
-          const { data: attempts } = await supabase
+      // For each student, get their attempt stats — ONE batched query
+      const studentIds = studentsData.map((s: any) => s.id);
+      const { data: allAttemptsForStats } = studentIds.length
+        ? await supabase
             .from('attempts')
-            .select('total_score,submitted_at,test_id')
-            .eq('student_id', student.id)
+            .select('student_id,total_score,submitted_at,test_id')
+            .in('student_id', studentIds)
             .not('submitted_at', 'is', null)
-            .order('started_at', { ascending: false });
+            .order('started_at', { ascending: false })
+        : { data: [] };
 
-          const completed = attempts ?? [];
-          const avgScore = completed.length
-            ? Math.round(completed.reduce((s: number, a: any) => s + (a.total_score ?? 0), 0) / completed.length)
-            : 0;
-          const bestScore = completed.length ? Math.max(...completed.map((a: any) => a.total_score ?? 0)) : 0;
+      const attemptsByStudent = new Map<string, any[]>();
+      (allAttemptsForStats ?? []).forEach((a: any) => {
+        const list = attemptsByStudent.get(a.student_id) ?? [];
+        list.push(a);
+        attemptsByStudent.set(a.student_id, list);
+      });
 
-          return { ...student, testsTaken: completed.length, avgScore, bestScore };
-        })
-      );
+      const stats = studentsData.map((student: any) => {
+        const completed = attemptsByStudent.get(student.id) ?? [];
+        const avgScore = completed.length
+          ? Math.round(completed.reduce((s: number, a: any) => s + (a.total_score ?? 0), 0) / completed.length)
+          : 0;
+        const bestScore = completed.length ? Math.max(...completed.map((a: any) => a.total_score ?? 0)) : 0;
+        return { ...student, testsTaken: completed.length, avgScore, bestScore };
+      });
       setStudentStats(stats);
 
       const total = stats.reduce((s, st) => s + st.testsTaken, 0);
