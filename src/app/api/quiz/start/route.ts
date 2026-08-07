@@ -131,7 +131,10 @@ export async function POST(req: NextRequest) {
       // else: duplicate title, skip this older passage
     }
 
-    // Build final passage map: exclude passages where ANY question is answered
+    // Build final passage map: keep unanswered questions from every passage.
+    // (Previously: a passage was excluded if ANY question in it was answered,
+    // which starved active users down to 1–2 passages → "session over after 1
+    // question". Partial passages are fine — serve the unanswered ones.)
     let passageMap: Record<string, any[]> = {};
     let debug_excluded = 0;
     let debug_total = Object.keys(tempMap).length;
@@ -139,16 +142,21 @@ export async function POST(req: NextRequest) {
     let isRepeat = false;
     for (const [pid, qs] of Object.entries(tempMap)) {
       if (!keptPassageIds.has(pid)) continue;
-      const hasAnyAnswered = qs.some((q: any) => answeredQuestionIds.has(q.id));
-      if (!hasAnyAnswered) {
-        passageMap[pid] = qs; // All questions for this passage (none answered yet)
+      const freshQs = qs.filter((q: any) => !answeredQuestionIds.has(q.id));
+      if (freshQs.length > 0) {
+        passageMap[pid] = freshQs; // Only the unanswered questions from this passage
       } else {
-        debug_excluded++;
+        debug_excluded++; // Fully answered passage — skip
       }
     }
 
-    // If all passages exhausted, repeat all questions with repeat flag
-    if (Object.keys(passageMap).length === 0) {
+    // If the fresh pool is empty OR nearly empty (< 12 questions ≈ 2 passages),
+    // recycle everything with the repeat flag so a session never feels broken
+    // ("session over after 1 question") even for users who have seen almost all
+    // questions in a section.
+    const FRESH_MIN_QUESTIONS = 12;
+    const freshCount = Object.values(passageMap).reduce((s: number, arr: any[]) => s + arr.length, 0);
+    if (Object.keys(passageMap).length === 0 || freshCount < FRESH_MIN_QUESTIONS) {
       for (const [pid, qs] of Object.entries(tempMap)) {
         if (!keptPassageIds.has(pid)) continue;
         passageMap[pid] = qs; // Return all questions (ignore answered status)
