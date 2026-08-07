@@ -200,29 +200,40 @@ const MECHANICAL_CHECKS = [
 
 // ─── Main validation function ───
 
-async function callDeepSeek(systemPrompt, userPrompt, retries = 2) {
+async function callDeepSeek(systemPrompt, userPrompt, retries = 3) {
   const DEEPSEEK_KEY = process.env.DEEPSEEK_API_KEY;
   if (!DEEPSEEK_KEY) throw new Error('DEEPSEEK_API_KEY not set — AI validation requires it');
 
   for (let attempt = 1; attempt <= retries; attempt++) {
     try {
-      const res = await fetch('https://api.deepseek.com/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${DEEPSEEK_KEY}`,
-        },
-        body: JSON.stringify({
-          model: 'deepseek-v4-flash',
-          messages: [
-            { role: 'system', content: systemPrompt },
-            { role: 'user', content: userPrompt },
-          ],
-          temperature: 0.1,
-          max_tokens: 8192,
-          response_format: { type: 'json_object' },
-        }),
-      });
+      // Hard timeout — without this, a hung connection blocks forever and
+      // the whole cron job times out at the scheduler level.
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 90000);
+
+      let res;
+      try {
+        res = await fetch('https://api.deepseek.com/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${DEEPSEEK_KEY}`,
+          },
+          body: JSON.stringify({
+            model: 'deepseek-v4-flash',
+            messages: [
+              { role: 'system', content: systemPrompt },
+              { role: 'user', content: userPrompt },
+            ],
+            temperature: 0.1,
+            max_tokens: 8192,
+            response_format: { type: 'json_object' },
+          }),
+          signal: controller.signal,
+        });
+      } finally {
+        clearTimeout(timer);
+      }
 
       if (!res.ok) {
         const text = await res.text();
@@ -363,7 +374,7 @@ export async function validatePendingQuestions() {
     });
   }
 
-  // ─── AI Validation — send mechanically-passed questions to DeepSeek ───
+  // ─── AI Validation — send mechanically-passed questions to DeepSeek in chunks ───
   const mechanicallyPassed = results.filter(r => r.status_after === 'passed');
   let aiFlaggedCount = 0;
 
@@ -376,21 +387,47 @@ export async function validatePendingQuestions() {
       questionById[q.id] = q;
     }
 
-    try {
-      const { system, user } = buildAiValidationPrompt(
-        mechanicallyPassed.map(r => questionById[r.id]).filter(Boolean)
-      );
-      const aiResult = await callDeepSeek(system, user);
+    const mechanicallyPassedQuestions = mechanicallyPassed
+      .map(r => questionById[r.id])
+      .filter(Boolean);
+
+    // Chunk the AI calls — a single giant prompt (100+ questions) makes
+    // DeepSeek return empty/truncated responses, which previously caused a
+    // fail-open fallback that marked everything "passed" WITHOUT AI review.
+    const CHUNK_SIZE = 10;
+    const chunks = [];
+    for (let i = 0; i < mechanicallyPassedQuestions.length; i += CHUNK_SIZE) {
+      chunks.push(mechanicallyPassedQuestions.slice(i, i + CHUNK_SIZE));
+    }
+
+    let aiFailures = 0;
+    for (let c = 0; c < chunks.length; c++) {
+      const chunk = chunks[c];
+      let aiResult = null;
+      try {
+        const { system, user } = buildAiValidationPrompt(chunk);
+        aiResult = await callDeepSeek(system, user);
+      } catch (aiErr) {
+        aiFailures++;
+        console.log(`  ⚠️ Chunk ${c + 1}/${chunks.length} AI validation failed: ${aiErr.message}`);
+        // FAIL-CLOSED: keep these pending so they get re-reviewed next run,
+        // do NOT silently mark them passed.
+        for (const qData of chunk) {
+          const resultItem = results.find(r => r.id === qData.id);
+          if (resultItem) {
+            resultItem.status_after = 'pending';
+            resultItem.checks_failed.push('ai_review_failed');
+            resultItem.notes = `AI review failed (${aiErr.message}) — pending retry`;
+          }
+        }
+        continue;
+      }
 
       if (aiResult && aiResult.results && Array.isArray(aiResult.results)) {
-        // Map AI results back to questions using the index
-        const mechanicallyPassedQuestions = mechanicallyPassed
-          .map(r => questionById[r.id])
-          .filter(Boolean);
-
+        // Map AI results back to questions using the chunk-local index
         for (const aiCheck of aiResult.results) {
           if (aiCheck.passed === false && aiCheck.reasons && aiCheck.reasons.length > 0) {
-            const qData = mechanicallyPassedQuestions[aiCheck.index];
+            const qData = chunk[aiCheck.index];
             if (qData) {
               const resultItem = results.find(r => r.id === qData.id);
               if (resultItem) {
@@ -402,13 +439,20 @@ export async function validatePendingQuestions() {
             }
           }
         }
-        console.log(`  🤖 AI flagged ${aiFlaggedCount} questions out of ${mechanicallyPassed.length}`);
       } else {
-        console.log(`  🤖 AI validation returned unexpected format — treating all as passed`);
+        aiFailures++;
+        console.log(`  ⚠️ Chunk ${c + 1}/${chunks.length} returned unexpected format — keeping pending`);
+        for (const qData of chunk) {
+          const resultItem = results.find(r => r.id === qData.id);
+          if (resultItem) {
+            resultItem.status_after = 'pending';
+            resultItem.checks_failed.push('ai_review_failed');
+            resultItem.notes = 'AI review returned unexpected format — pending retry';
+          }
+        }
       }
-    } catch (aiErr) {
-      console.log(`  ⚠️ AI validation error: ${aiErr.message} — all mechanically-passed questions will be marked passed`);
     }
+    console.log(`  🤖 AI flagged ${aiFlaggedCount} questions out of ${mechanicallyPassed.length}${aiFailures ? ` (${aiFailures} chunks failed → kept pending)` : ''}`);
   } else if (mechanicallyPassed.length > 0 && !process.env.DEEPSEEK_API_KEY) {
     console.log(`  ⚠️ No DEEPSEEK_API_KEY set — skipping AI validation. All mechanically-passed questions marked passed.`);
   }

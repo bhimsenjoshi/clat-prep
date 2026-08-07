@@ -136,26 +136,37 @@ const SUPABASE_HEADERS = {
 
 // ─── DeepSeek API ───
 
-async function callDeepSeek(systemPrompt, userPrompt, retries = 2) {
+async function callDeepSeek(systemPrompt, userPrompt, retries = 3) {
   for (let attempt = 1; attempt <= retries; attempt++) {
     try {
-      const res = await fetch('https://api.deepseek.com/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${DEEPSEEK_KEY}`,
-        },
-        body: JSON.stringify({
-          model: 'deepseek-v4-flash',
-          messages: [
-            { role: 'system', content: systemPrompt },
-            { role: 'user', content: userPrompt },
-          ],
-          temperature: 0.7,
-          max_tokens: 16384,
-          response_format: { type: 'json_object' },
-        }),
-      });
+      // Hard timeout — a hung DeepSeek connection would otherwise block the
+      // whole cron until the scheduler kills it (300s) mid-generation.
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 90000);
+
+      let res;
+      try {
+        res = await fetch('https://api.deepseek.com/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${DEEPSEEK_KEY}`,
+          },
+          body: JSON.stringify({
+            model: 'deepseek-v4-flash',
+            messages: [
+              { role: 'system', content: systemPrompt },
+              { role: 'user', content: userPrompt },
+            ],
+            temperature: 0.7,
+            max_tokens: 16384,
+            response_format: { type: 'json_object' },
+          }),
+          signal: controller.signal,
+        });
+      } finally {
+        clearTimeout(timer);
+      }
 
       if (!res.ok) {
         const text = await res.text();
