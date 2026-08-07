@@ -234,6 +234,27 @@ async function supabaseGet(url) {
   return await res.json();
 }
 
+// ─── Option length parity guard ───
+// Rejects questions where the correct answer is conspicuously longer/shorter
+// than the distractors — students can game a "longest option = answer" pattern
+// (measured 57% in English, 67% in Legal vs 25% random). Returns false if skewed.
+function hasLengthParity(options, correctOption) {
+  if (!options || typeof options !== 'object') return false;
+  const labels = Object.keys(options);
+  if (!labels.includes(correctOption) || labels.length < 3) return false;
+  const lens = {};
+  for (const l of labels) lens[l] = String(options[l] ?? '').length;
+  const others = labels.filter(l => l !== correctOption);
+  const othersMax = Math.max(...others.map(l => lens[l]));
+  const othersMin = Math.min(...others.map(l => lens[l]));
+  const c = lens[correctOption];
+  // Flag if correct is ≥20% AND ≥15 chars longer than the longest distractor
+  // (or symmetrically shorter) — skips numeric options where small diffs are fine.
+  if (c > othersMax * 1.2 && c > othersMax + 15) return false;
+  if (c < othersMin * 0.8 && c < othersMin - 15) return false;
+  return true;
+}
+
 // ─── Normalise a question from AI response ───
 
 function normalise(q, passageId, questionNumber) {
@@ -272,6 +293,12 @@ function normalise(q, passageId, questionNumber) {
 
   const passage = q.passage || null;
 
+  // Length-parity gate: drop questions where the correct answer sticks out by length
+  if (!hasLengthParity(parsedOptions, resolvedAnswer)) {
+    console.log(`    ⚠️ Dropping q${questionNumber}: correct option length sticks out (${JSON.stringify(parsedOptions).slice(0, 120)})`);
+    return null;
+  }
+
   return {
     question_text,
     passage: passageId ? null : passage,
@@ -289,6 +316,10 @@ function normalise(q, passageId, questionNumber) {
 }
 
 // ─── Build AI prompts for passage-based generation ───
+
+// Shared rule appended to every generation user prompt: prevents the
+// "correct answer is the longest option" pattern students can game.
+const OPTION_LENGTH_RULE = ' OPTION LENGTH RULE: Write all 4 options so they have SIMILAR length. The correct answer must NOT be conspicuously longer or shorter than the other three options — length must never reveal the answer.';
 
 function buildPassagePrompt(section) {
   const prompts = {
@@ -468,7 +499,7 @@ async function processSection(section) {
   // Step 1: Call AI for passage + questions together — with topic guidance
   const { passageData, questions: rawQuestions } = await callDeepSeek(
     buildPassagePrompt(section),
-    `Generate 1 passage and ${QS_PER_PASSAGE} CLAT practice questions for the "${section}" section.${topicInstruction}`
+    `Generate 1 passage and ${QS_PER_PASSAGE} CLAT practice questions for the "${section}" section.${topicInstruction}${OPTION_LENGTH_RULE}`
   );
 
   if (!rawQuestions || rawQuestions.length === 0) {
@@ -484,7 +515,7 @@ async function processSection(section) {
     console.log(`    ⚠️ No passage returned by AI — retrying section "${section}" once...`);
     const retry = await callDeepSeek(
       buildPassagePrompt(section),
-      `Generate 1 passage and ${QS_PER_PASSAGE} CLAT practice questions for the "${section}" section.${topicInstruction || ''} CRITICAL: The response MUST include a valid "passage" object with a "content" field.`
+      `Generate 1 passage and ${QS_PER_PASSAGE} CLAT practice questions for the "${section}" section.${topicInstruction || ''} CRITICAL: The response MUST include a valid "passage" object with a "content" field.${OPTION_LENGTH_RULE}`
     );
     if (retry.passageData && retry.passageData.content) {
       finalPassageData = retry.passageData;
@@ -787,7 +818,7 @@ async function processQuickFire(section) {
   const prompt = buildQuickFirePrompt(section);
   const { questions: rawQuestions } = await callDeepSeek(
     prompt,
-    `Generate ${QS_PER_QUICKFIRE} standalone Quick Fire CLAT questions for "${section}" section. Topic focus: ${topicPick.topic.title} (${topicPick.topic.domain}).`
+    `Generate ${QS_PER_QUICKFIRE} standalone Quick Fire CLAT questions for "${section}" section. Topic focus: ${topicPick.topic.title} (${topicPick.topic.domain}).${OPTION_LENGTH_RULE}`
   );
 
   if (!rawQuestions || rawQuestions.length === 0) {
@@ -825,6 +856,12 @@ async function processQuickFire(section) {
     if (!['A','B','C','D'].includes(resolvedAnswer)) continue;
     const optKeys = Object.keys(parsedOptions);
     if (optKeys.length < 4) continue;
+
+    // Length-parity gate (same as passage flow)
+    if (!hasLengthParity(parsedOptions, resolvedAnswer)) {
+      console.log(`    ⚠️ Dropping QF q${i + 1}: correct option length sticks out`);
+      continue;
+    }
 
     const normalised = {
       section,
@@ -892,7 +929,7 @@ async function processVisualMath(subsection) {
   const prompt = buildVisualMathPrompt(subsection, topicPick.topic);
   const result = await callDeepSeek(
     prompt,
-    `Generate ${QS_PER_VISUAL_MATH} visual thinking math questions for "${subsection}" on concept: ${topicPick.topic.concept} — ${topicPick.topic.description}.`
+    `Generate ${QS_PER_VISUAL_MATH} visual thinking math questions for "${subsection}" on concept: ${topicPick.topic.concept} — ${topicPick.topic.description}.${OPTION_LENGTH_RULE}`
   );
 
   const rawQuestions = result?.questions || result || [];
@@ -926,6 +963,12 @@ async function processVisualMath(subsection) {
     if (!['A','B','C','D'].includes(resolvedAnswer)) continue;
     const optKeys = Object.keys(parsedOptions);
     if (optKeys.length < 4) continue;
+
+    // Length-parity gate (same as passage flow)
+    if (!hasLengthParity(parsedOptions, resolvedAnswer)) {
+      console.log(`    ⚠️ Dropping VM q${i + 1}: correct option length sticks out`);
+      continue;
+    }
 
     const validVisualTypes = ['grid', 'pie_chart', 'bar_diagram', 'tape_diagram', 'number_line'];
     const visualType = validVisualTypes.includes(q.visual_type) ? q.visual_type : 'none';

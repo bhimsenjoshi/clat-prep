@@ -301,6 +301,7 @@ For each question check:
 4. PASSAGE RELEVANCE: If there's a passage, does the question genuinely relate to its content? 
 5. CLAT APPROPRIATENESS: Is this a CLAT-quality question (tests reasoning/knowledge, not trivia)? For Current Affairs, does it require external knowledge beyond what's in the passage?
 6. ARITHMETIC VERIFICATION (QUANT/MATH QUESTIONS): Independently recompute the answer from the question and passage data. If the true computed answer is NOT among the listed options, or if the marked correct_answer differs from your computed answer, FLAG IT. This is a critical check — many broken questions pass with plausible-sounding explanations that contain wrong arithmetic (e.g. claiming 4700-4200=400).
+7. OPTION LENGTH PARITY: Flag any question where the correct answer is conspicuously longer or shorter than the other three options (e.g. the correct option is a full detailed sentence while distractors are short fragments). Students can game a "longest option = answer" pattern, so options must be similar in length.
 
 Be conservative — only flag questions that have CLEAR issues. If everything looks reasonable, pass it.
 Return JSON: { "results": [{ "index": 0, "passed": true, "reasons": [] }, { "index": 1, "passed": false, "reasons": ["Explanation contradicts correct answer"] }] }`,
